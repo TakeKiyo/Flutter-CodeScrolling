@@ -1,57 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:my_app/detail_page.dart';
 
 void main() => runApp(MyApp());
-
-class CounterModel extends ChangeNotifier {
-  int count = 0;
-
-  void increment() {
-    count++;
-    notifyListeners();
-  }
-}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: ChangeNotifierProvider<CounterModel>(
-        create: (_) => CounterModel(),
-        child: Scaffold(
-          appBar: AppBar(title: Text('Flutter Demo Home Page')),
+      title: 'Code Scrolling',
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
+      home: MyHomePage(),
+    );
+  }
+}
+class MyHomePage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+          appBar: AppBar(
+              centerTitle: true,
+              title: Text('main menu'),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: (){
+                    //addボタンを押したら反応
+                  }
+                ),
+                IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: (){
+                    //shareボタンを押したら反応
+                  }
+                ),
+              ],
+          ),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  'You have pushed the button this many times:',
-                ),
-                CounterText(),
+                TextButton(onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return DetailPage();
+                    }),
+                  );
+                },
+                    child: Text('次のページへ')),
               ],
             ),
           ),
-          floatingActionButton: Consumer<CounterModel>(builder: (_, model, __) {
-            return FloatingActionButton(
-              onPressed: model.increment,
-              tooltip: 'Increment',
-              child: Icon(Icons.add),
-            );
-          }), // This trailing comma makes auto-formatting nicer for build methods.
-        ),
-      ),
-    );
-  }
-}
-
-class CounterText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      Provider.of<CounterModel>(context).count.toString(),
-      style: Theme.of(context).textTheme.headline4,
-    );
+          );
   }
 }
