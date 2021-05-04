@@ -1,7 +1,15 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class CounterModel extends ChangeNotifier {
   int count = 0;
@@ -9,6 +17,15 @@ class CounterModel extends ChangeNotifier {
   void increment() {
     count++;
     notifyListeners();
+    checkFirebase();
+  }
+
+  void checkFirebase() {
+    print('firebase test');
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference testRef = firestore.collection('test');
+    var doc = testRef.doc('Cw0TbgK0w0FtA3vt2XRo');
+    doc.get().then((value) => print(value.data()));
   }
 }
 
