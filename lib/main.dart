@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +24,9 @@ class CounterModel extends ChangeNotifier {
     print('firebase test');
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference testRef = firestore.collection('test');
-    var doc= testRef.doc('Cw0TbgK0w0FtA3vt2XRo');
-    doc.get().then((value) => print(value.data()));}
+    var doc = testRef.doc('Cw0TbgK0w0FtA3vt2XRo');
+    doc.get().then((value) => print(value.data()));
+  }
 }
 
 class MyApp extends StatelessWidget {
