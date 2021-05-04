@@ -44,3 +44,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+local.properties
+# http://softcommu-blog.com/?eid=14 これで解決できると思う
+
