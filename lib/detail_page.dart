@@ -6,55 +6,82 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<CounterModel>(
       create: (_) => CounterModel(),
-        child:Scaffold(
-          appBar: AppBar(
-              title: Text('Code Scrolling'),
-          ),
-          body: Consumer<CounterModel>(builder: (_, model, __) {
-            return Center(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  IconButton(
-                    icon: Icon(Icons.remove),
-                    tooltip: 'Decrement',
-                    onPressed: model.decrement
-                  ),
-                  Column(
+        child:Consumer<CounterModel>(builder: (_, model, __) {
+          return Scaffold(
+              appBar: AppBar(
+                title: Text('Code Scrolling'),
+              ),
+              body:
+              Center(
+                child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                    Text(
-                    'BPM:',
-                    ),
-                    CounterText(),
+                    children: [
+                      IconButton(
+                          icon: Icon(Icons.remove),
+                          tooltip: 'Decrement',
+                          onPressed: model.decrement
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'BPM:',
+                          ),
+                          CounterText(),
+                        ],
+                      ),
+                      IconButton(
+                          icon: Icon(Icons.add),
+                          tooltip: 'Increment',
+                          onPressed: model.increment
+                      ),
                     ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    tooltip: 'Increment',
-                    onPressed: model.increment
-                  ),
-                  ],
-            ),
-          );
-          }),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-            icon: Icon(Icons.music_note),
-            label: "BPM",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.play_arrow),
-              label: "PLAY"
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.stop),
-                label:"STOP"
-            ),
-        ],
-        ),
-    ),
+
+                ),
+              persistentFooterButtons: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height:60,
+                  child:Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    children:[
+                      Expanded(
+                        child: TextButton(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("BPM:"),
+                                CounterText(),
+                              ],
+                            ),
+                              onPressed: () {
+                                //
+                              },
+                            ),
+                      ),
+                      Expanded(
+                        child: IconButton(
+                            icon: Icon(Icons.play_arrow),
+                          iconSize: 36,
+                            onPressed: (){
+                              //
+                            },
+                        ),
+                      ),
+                      Expanded(
+                        child: IconButton(
+                            icon: Icon(Icons.stop),
+                          iconSize: 36,
+                            onPressed: (){
+                              //
+                            },
+                        ),
+                      ),
+                  ]))],
+
+              );
+        }),
     );
   }
 }
@@ -64,7 +91,7 @@ class CounterText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       Provider.of<CounterModel>(context).count.toString(),
-      style: Theme.of(context).textTheme.headline4,
+      style: TextStyle(fontSize: 20),
     );
   }
 }
