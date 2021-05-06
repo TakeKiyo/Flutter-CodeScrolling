@@ -61,10 +61,7 @@ class DetailPage extends StatelessWidget {
                             ),
                       ),
                       Expanded(
-                        child: ChangeNotifierProvider<BoolSwitch>(
-                          create: (_) => BoolSwitch(),
-                          child: Consumer<BoolSwitch>(builder: (_, model, __) {
-                            return model.switchBool ? IconButton(
+                        child: model._switchBool ? IconButton(
                                 icon: Icon(Icons.play_arrow),
                               iconSize: 36,
                                 onPressed: (){
@@ -78,15 +75,14 @@ class DetailPage extends StatelessWidget {
                                 model.switcher();
                                 print("Pressed: Pause");
                               },
-                            );
-                          }),
-                        ),
+                            ),
                       ),
                       Expanded(
                         child: IconButton(
                           icon: Icon(Icons.stop),
                           iconSize: 36,
                           onPressed: (){
+                            model.maketrue();
                             print("Pressed: Stop");
                           },
                         ),
@@ -103,30 +99,33 @@ class CounterText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      Provider.of<CounterModel>(context).count.toString(),
+      Provider.of<CounterModel>(context)._count.toString(),
       style: TextStyle(fontSize: 20),
     );
   }
 }
 
 class CounterModel extends ChangeNotifier {
-  int count = 60;
+  int _count = 60;
+  bool _switchBool = true;
 
   void increment() {
-    count++;
+    _count++;
     notifyListeners();
   }
+
   void decrement() {
-    count--;
+    _count--;
     notifyListeners();
   }
-}
 
-class BoolSwitch extends ChangeNotifier {
-  bool switchBool = true;
-
-    void switcher(){
-    switchBool = !switchBool;
+  void switcher() {
+    _switchBool = !_switchBool;
     notifyListeners();
-    }
+  }
+
+  void maketrue(){
+    _switchBool = true;
+    notifyListeners();
+  }
 }
