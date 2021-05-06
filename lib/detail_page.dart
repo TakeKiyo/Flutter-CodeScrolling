@@ -61,21 +61,34 @@ class DetailPage extends StatelessWidget {
                             ),
                       ),
                       Expanded(
-                        child: IconButton(
-                            icon: Icon(Icons.play_arrow),
-                          iconSize: 36,
-                            onPressed: (){
-                              print("Pressed: Play");
-                            },
+                        child: ChangeNotifierProvider<BoolSwitch>(
+                          create: (_) => BoolSwitch(),
+                          child: Consumer<BoolSwitch>(builder: (_, model, __) {
+                            return model.switchBool ? IconButton(
+                                icon: Icon(Icons.play_arrow),
+                              iconSize: 36,
+                                onPressed: (){
+                                  model.switcher();
+                                  print("Pressed: Play");
+                                },
+                            ) : IconButton(
+                              icon: Icon(Icons.pause),
+                              iconSize: 36,
+                              onPressed: (){
+                                model.switcher();
+                                print("Pressed: Pause");
+                              },
+                            );
+                          }),
                         ),
                       ),
                       Expanded(
                         child: IconButton(
-                            icon: Icon(Icons.stop),
+                          icon: Icon(Icons.stop),
                           iconSize: 36,
-                            onPressed: (){
-                              print("Pressed: Stop");
-                            },
+                          onPressed: (){
+                            print("Pressed: Stop");
+                          },
                         ),
                       ),
                   ]))],
@@ -107,4 +120,13 @@ class CounterModel extends ChangeNotifier {
     count--;
     notifyListeners();
   }
+}
+
+class BoolSwitch extends ChangeNotifier {
+  bool switchBool = true;
+
+    void switcher(){
+    switchBool = !switchBool;
+    notifyListeners();
+    }
 }
