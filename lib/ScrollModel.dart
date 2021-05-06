@@ -5,6 +5,7 @@ class ScrollModel extends ChangeNotifier {
   int _tempoCount = 60;
   bool _isPlaying = false;
   get isPlaying => _isPlaying;
+  get tempoCount => _tempoCount;
 
   void increment() {
     _tempoCount++;
