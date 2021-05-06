@@ -56,7 +56,7 @@ class DetailPage extends StatelessWidget {
                               ],
                             ),
                               onPressed: () {
-                                //
+                                print("Pressed: BPM");
                               },
                             ),
                       ),
@@ -65,7 +65,7 @@ class DetailPage extends StatelessWidget {
                             icon: Icon(Icons.play_arrow),
                           iconSize: 36,
                             onPressed: (){
-                              //
+                              print("Pressed: Play");
                             },
                         ),
                       ),
@@ -74,7 +74,7 @@ class DetailPage extends StatelessWidget {
                             icon: Icon(Icons.stop),
                           iconSize: 36,
                             onPressed: (){
-                              //
+                              print("Pressed: Stop");
                             },
                         ),
                       ),
