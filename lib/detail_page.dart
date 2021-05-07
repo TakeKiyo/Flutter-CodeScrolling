@@ -101,7 +101,7 @@ class DetailPage extends StatelessWidget {
                                   icon: Icon(Icons.play_arrow),
                                   iconSize: 36,
                                   onPressed: () {
-                                    model.switcher();
+                                    model.switchPlayStatus();
                                     print("Pressed: Play");
                                   },
                                 )
@@ -109,7 +109,7 @@ class DetailPage extends StatelessWidget {
                                   icon: Icon(Icons.pause),
                                   iconSize: 36,
                                   onPressed: () {
-                                    model.switcher();
+                                    model.switchPlayStatus();
                                     print("Pressed: Pause");
                                   },
                                 ),

@@ -17,7 +17,7 @@ class ScrollModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void switcher() {
+  void switchPlayStatus() {
     _isPlaying = !_isPlaying;
     notifyListeners();
   }
