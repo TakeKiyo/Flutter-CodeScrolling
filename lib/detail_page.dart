@@ -5,42 +5,41 @@ import './ScrollModel.dart';
 class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ScrollModel>(
-        create: (_) => ScrollModel(),
-        child: Consumer<ScrollModel>(builder: (_, model, __) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Code Scrolling'),
-            ),
-            body: Center(
-              child: Row(
+    return Consumer<ScrollModel>(builder: (_, model, __) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Code Scrolling'),
+        ),
+        body: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                  icon: Icon(Icons.remove),
+                  tooltip: 'Decrement',
+                  onPressed: model.decrement),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                      icon: Icon(Icons.remove),
-                      tooltip: 'Decrement',
-                      onPressed: model.decrement),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'BPM:',
-                      ),
-                      CounterText(),
-                    ],
+                children: <Widget>[
+                  Text(
+                    'BPM:',
                   ),
-                  IconButton(
-                      icon: Icon(Icons.add),
-                      tooltip: 'Increment',
-                      onPressed: model.increment),
+                  CounterText(),
                 ],
               ),
-            ),
-            persistentFooterButtons: <Widget>[
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 60,
-                  child: Row(
+              IconButton(
+                  icon: Icon(Icons.add),
+                  tooltip: 'Increment',
+                  onPressed: model.increment),
+            ],
+          ),
+        ),
+        persistentFooterButtons: <Widget>[
+          Container(
+              width: MediaQuery.of(context).size.width,
+              height: 60,
+              child:
+                  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
@@ -54,44 +53,12 @@ class DetailPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               print("Pressed: BPM");
-                              return Container(
-                                    height: 500,
-                                    color: Colors.white,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                    icon: Icon(Icons.remove),
-                                                    tooltip: 'Decrement',
-                                                    onPressed: model.decrement),
-                                                Text(model.tempoCount.toString()),
-                                                IconButton(
-                                                    icon: Icon(Icons.add),
-                                                    tooltip: 'Increment',
-                                                    onPressed: model.increment),
-                                              ],
-                                            ),
-                                          ),
-                                          const Text('BottomSheet'),
-                                          ElevatedButton(
-                                              child: const Text(
-                                                  'Close BottomSheet'),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              }),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-
+                              showDialog<void>(
+                                context: context,
+                                builder: (_) {
+                                  return BpmSetting();
+                                },
+                              );
                             },
                           ),
                         ),
@@ -124,9 +91,90 @@ class DetailPage extends StatelessWidget {
                             },
                           ),
                         ),
-                      ])),
+              ])),
+        ],
+      );
+    });
+  }
+}
+
+class BpmSetting extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ScrollModel>(builder: (_, model, __) {
+      return Dialog(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 2 / 3,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                flex: 3,
+                child: Text(
+                  "Tempo",
+                  style: TextStyle(
+                    fontSize: 32,
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 6,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: Icon(Icons.remove),
+                            iconSize: 36,
+                            tooltip: 'Decrement',
+                            onPressed: model.decrement),
+                        Text(
+                          Provider.of<ScrollModel>(context)
+                              .tempoCount
+                              .toString(),
+                          style: TextStyle(fontSize: 64),
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.add),
+                            iconSize: 36,
+                            tooltip: 'Increment',
+                            onPressed: model.increment),
+                      ],
+                    ),
+                    Slider(
+                      label: null,
+                      value: model.tempoCount.toDouble(),
+                      divisions: 270,
+                      min: 30,
+                      max: 300,
+                      onChanged: model.changeSlider,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          print("Tapped");
+                        },
+                        child: Text("TAP", style: TextStyle(fontSize: 24))),
+                  ],
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Column(
+                  children: [
+                    TextButton(
+                      child: Text("Example"),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
             ],
-          );
-        }));
+          ),
+        ),
+      );
+    });
   }
 }

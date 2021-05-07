@@ -22,8 +22,13 @@ class ScrollModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void forceStop(){
+  void forceStop() {
     _isPlaying = false;
+    notifyListeners();
+  }
+
+  void changeSlider(double e){
+    _tempoCount = e.toInt();
     notifyListeners();
   }
 }
