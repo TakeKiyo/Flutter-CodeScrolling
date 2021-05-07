@@ -1,53 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './ScrollModel.dart';
 
 class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CounterModel>(
-      create: (_) => CounterModel(),
-        child:Consumer<CounterModel>(builder: (_, model, __) {
+    return ChangeNotifierProvider<ScrollModel>(
+        create: (_) => ScrollModel(),
+        child: Consumer<ScrollModel>(builder: (_, model, __) {
           return Scaffold(
-              appBar: AppBar(
-                title: Text('Code Scrolling'),
-              ),
-              body:
-              Center(
-                child: Row(
+            appBar: AppBar(
+              title: Text('Code Scrolling'),
+            ),
+            body: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.remove),
+                      tooltip: 'Decrement',
+                      onPressed: model.decrement),
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          icon: Icon(Icons.remove),
-                          tooltip: 'Decrement',
-                          onPressed: model.decrement
+                    children: <Widget>[
+                      Text(
+                        'BPM:',
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'BPM:',
-                          ),
-                          CounterText(),
-                        ],
-                      ),
-                      IconButton(
-                          icon: Icon(Icons.add),
-                          tooltip: 'Increment',
-                          onPressed: model.increment
-                      ),
+                      CounterText(),
                     ],
                   ),
-
-                ),
-              persistentFooterButtons: [
-                Container(
+                  IconButton(
+                      icon: Icon(Icons.add),
+                      tooltip: 'Increment',
+                      onPressed: model.increment),
+                ],
+              ),
+            ),
+            persistentFooterButtons: <Widget>[
+              Container(
                   width: MediaQuery.of(context).size.width,
-                  height:60,
-                  child:Row(
+                  height: 60,
+                  child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                    children:[
-                      Expanded(
-                        child: TextButton(
+                      children: [
+                        Expanded(
+                          child: TextButton(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -55,56 +52,81 @@ class DetailPage extends StatelessWidget {
                                 CounterText(),
                               ],
                             ),
-                              onPressed: () {
-                                print("Pressed: BPM");
-                              },
-                            ),
-                      ),
-                      Expanded(
-                        child: IconButton(
-                            icon: Icon(Icons.play_arrow),
-                          iconSize: 36,
-                            onPressed: (){
-                              print("Pressed: Play");
+                            onPressed: () {
+                              print("Pressed: BPM");
+                              return Container(
+                                    height: 500,
+                                    color: Colors.white,
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                    icon: Icon(Icons.remove),
+                                                    tooltip: 'Decrement',
+                                                    onPressed: model.decrement),
+                                                Text(model.tempoCount.toString()),
+                                                IconButton(
+                                                    icon: Icon(Icons.add),
+                                                    tooltip: 'Increment',
+                                                    onPressed: model.increment),
+                                              ],
+                                            ),
+                                          ),
+                                          const Text('BottomSheet'),
+                                          ElevatedButton(
+                                              child: const Text(
+                                                  'Close BottomSheet'),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              }),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+
                             },
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: IconButton(
+                        Expanded(
+                          child: !model.isPlaying
+                              ? IconButton(
+                                  icon: Icon(Icons.play_arrow),
+                                  iconSize: 36,
+                                  onPressed: () {
+                                    model.switchPlayStatus();
+                                    print("Pressed: Play");
+                                  },
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.pause),
+                                  iconSize: 36,
+                                  onPressed: () {
+                                    model.switchPlayStatus();
+                                    print("Pressed: Pause");
+                                  },
+                                ),
+                        ),
+                        Expanded(
+                          child: IconButton(
                             icon: Icon(Icons.stop),
-                          iconSize: 36,
-                            onPressed: (){
+                            iconSize: 36,
+                            onPressed: () {
+                              model.forceStop();
                               print("Pressed: Stop");
                             },
+                          ),
                         ),
-                      ),
-                  ]))],
-
-              );
-        }),
-    );
-  }
-}
-
-class CounterText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      Provider.of<CounterModel>(context).count.toString(),
-      style: TextStyle(fontSize: 20),
-    );
-  }
-}
-
-class CounterModel extends ChangeNotifier {
-  int count = 60;
-
-  void increment() {
-    count++;
-    notifyListeners();
-  }
-  void decrement() {
-    count--;
-    notifyListeners();
+                      ])),
+            ],
+          );
+        }));
   }
 }
