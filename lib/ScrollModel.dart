@@ -6,8 +6,8 @@ class ScrollModel extends ChangeNotifier {
   bool _isPlaying = false;
   get isPlaying => _isPlaying;
   get tempoCount => _tempoCount;
-  bool _muteSwitch = false;
-  get muteSwitch => _muteSwitch;
+  bool _muteStatus = false;
+  get muteStatus => _muteStatus;
   DateTime _bpmTapStartTime;
   int _bpmTapCount = 0;
 
@@ -40,9 +40,9 @@ class ScrollModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeMuteSwitch(bool _muteSwitchValue){
-    _muteSwitch = _muteSwitchValue;
-    print("MUTE BUTTON IS $_muteSwitch");
+  void changeMuteStatus(bool _muteStatusValue){
+    _muteStatus = _muteStatusValue;
+    print("MUTE BUTTON IS $_muteStatus");
     notifyListeners();
     }
 

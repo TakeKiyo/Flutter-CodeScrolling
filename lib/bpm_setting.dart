@@ -69,8 +69,8 @@ class BpmSetting extends StatelessWidget {
                 child: Column(
                   children: [
                     SwitchListTile(
-                      value: model.muteSwitch,
-                      onChanged: model.changeMuteSwitch,
+                      value: model.muteStatus,
+                      onChanged: model.changeMuteStatus,
                       title: Text("メトロノームをミュートする"),
                     ),
                   ],
