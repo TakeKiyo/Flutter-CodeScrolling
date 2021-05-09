@@ -1,46 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './ScrollModel.dart';
+import './bpm_setting.dart';
 
 class DetailPage extends StatelessWidget {
+  final double bottomIconSIze = 36;
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ScrollModel>(
-        create: (_) => ScrollModel(),
-        child: Consumer<ScrollModel>(builder: (_, model, __) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Code Scrolling'),
-            ),
-            body: Center(
-              child: Row(
+    return Consumer<ScrollModel>(builder: (_, model, __) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Code Scrolling'),
+        ),
+        body: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                  icon: Icon(Icons.remove),
+                  tooltip: 'Decrement',
+                  onPressed: model.decrement),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                      icon: Icon(Icons.remove),
-                      tooltip: 'Decrement',
-                      onPressed: model.decrement),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        'BPM:',
-                      ),
-                      CounterText(),
-                    ],
+                children: <Widget>[
+                  Text(
+                    'BPM:',
                   ),
-                  IconButton(
-                      icon: Icon(Icons.add),
-                      tooltip: 'Increment',
-                      onPressed: model.increment),
+                  CounterText(),
                 ],
               ),
-            ),
-            persistentFooterButtons: <Widget>[
-              Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 60,
-                  child: Row(
+              IconButton(
+                  icon: Icon(Icons.add),
+                  tooltip: 'Increment',
+                  onPressed: model.increment),
+            ],
+          ),
+        ),
+        persistentFooterButtons: <Widget>[
+          Container(
+              width: MediaQuery.of(context).size.width,
+              height: 60,
+              child:
+                  Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
@@ -54,44 +56,12 @@ class DetailPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               print("Pressed: BPM");
-                              return Container(
-                                    height: 500,
-                                    color: Colors.white,
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                    icon: Icon(Icons.remove),
-                                                    tooltip: 'Decrement',
-                                                    onPressed: model.decrement),
-                                                Text(model.tempoCount.toString()),
-                                                IconButton(
-                                                    icon: Icon(Icons.add),
-                                                    tooltip: 'Increment',
-                                                    onPressed: model.increment),
-                                              ],
-                                            ),
-                                          ),
-                                          const Text('BottomSheet'),
-                                          ElevatedButton(
-                                              child: const Text(
-                                                  'Close BottomSheet'),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              }),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-
+                              showDialog<void>(
+                                context: context,
+                                builder: (_) {
+                                  return BpmSetting();
+                                },
+                              ).then((_) => model.resetBpmTapCount());
                             },
                           ),
                         ),
@@ -99,7 +69,7 @@ class DetailPage extends StatelessWidget {
                           child: !model.isPlaying
                               ? IconButton(
                                   icon: Icon(Icons.play_arrow),
-                                  iconSize: 36,
+                                  iconSize: bottomIconSIze,
                                   onPressed: () {
                                     model.switchPlayStatus();
                                     print("Pressed: Play");
@@ -107,7 +77,7 @@ class DetailPage extends StatelessWidget {
                                 )
                               : IconButton(
                                   icon: Icon(Icons.pause),
-                                  iconSize: 36,
+                                  iconSize: bottomIconSIze,
                                   onPressed: () {
                                     model.switchPlayStatus();
                                     print("Pressed: Pause");
@@ -117,16 +87,17 @@ class DetailPage extends StatelessWidget {
                         Expanded(
                           child: IconButton(
                             icon: Icon(Icons.stop),
-                            iconSize: 36,
+                            iconSize: bottomIconSIze,
                             onPressed: () {
                               model.forceStop();
                               print("Pressed: Stop");
                             },
                           ),
                         ),
-                      ])),
-            ],
-          );
-        }));
+              ])),
+        ],
+
+      );
+    });
   }
 }

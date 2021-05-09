@@ -6,14 +6,22 @@ class ScrollModel extends ChangeNotifier {
   bool _isPlaying = false;
   get isPlaying => _isPlaying;
   get tempoCount => _tempoCount;
+  bool _muteStatus = false;
+  get muteStatus => _muteStatus;
+  DateTime _bpmTapStartTime;
+  int _bpmTapCount = 0;
 
   void increment() {
-    _tempoCount++;
+    if (_tempoCount < 300) {
+      _tempoCount++;
+    }
     notifyListeners();
   }
 
   void decrement() {
-    _tempoCount--;
+    if (_tempoCount > 30) {
+      _tempoCount--;
+    }
     notifyListeners();
   }
 
@@ -22,10 +30,45 @@ class ScrollModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void forceStop(){
+  void forceStop() {
     _isPlaying = false;
     notifyListeners();
   }
+
+  void changeSlider(double _slideValue) {
+    _tempoCount = _slideValue.toInt();
+    notifyListeners();
+  }
+
+  void changeMuteStatus(bool _muteStatusValue){
+    _muteStatus = _muteStatusValue;
+    print("MUTE BUTTON IS $_muteStatus");
+    notifyListeners();
+    }
+
+  void bpmTapDetector(){
+
+    if (_bpmTapCount == 0) {
+      _bpmTapStartTime = DateTime.now();
+      _bpmTapCount = 1;
+    }
+    else{
+      var _bpmDetectNow = DateTime.now();
+      var _bpmDetectDiff = _bpmDetectNow.difference(_bpmTapStartTime).inMilliseconds;
+      _bpmTapStartTime = _bpmDetectNow;
+      int _detectedBpm =  (60000 / _bpmDetectDiff).floor();
+      _tempoCount = _detectedBpm;
+      if (_tempoCount < 30){_tempoCount = 30;}
+      if (_tempoCount > 300){_tempoCount = 300;}
+      print("$_bpmDetectDiff");
+      notifyListeners();
+    }
+  }
+
+  void resetBpmTapCount(){
+    _bpmTapCount = 0;
+  }
+
 }
 
 class CounterText extends StatelessWidget {
