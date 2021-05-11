@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './ScrollModel.dart';
+
+import '../models/ScrollModel.dart';
 
 class BpmSetting extends StatelessWidget {
   final double tempoIconSize = 32;
@@ -38,8 +39,10 @@ class BpmSetting extends StatelessWidget {
                             tooltip: 'Decrement',
                             onPressed: model.decrement),
                         Text(
-                          Provider.of<ScrollModel>(context).tempoCount.toString(),
-                          style: TextStyle(fontSize: tempoIconSize *2),
+                          Provider.of<ScrollModel>(context)
+                              .tempoCount
+                              .toString(),
+                          style: TextStyle(fontSize: tempoIconSize * 2),
                         ),
                         IconButton(
                             icon: Icon(Icons.add),
@@ -57,11 +60,13 @@ class BpmSetting extends StatelessWidget {
                       onChanged: model.changeSlider,
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          model.bpmTapDetector();
-                        },
-                        child: Text("TAP", style: TextStyle(fontSize: tempoIconSize * 0.75)),
-                    )],
+                      onPressed: () {
+                        model.bpmTapDetector();
+                      },
+                      child: Text("TAP",
+                          style: TextStyle(fontSize: tempoIconSize * 0.75)),
+                    )
+                  ],
                 ),
               ),
               Flexible(
@@ -75,7 +80,7 @@ class BpmSetting extends StatelessWidget {
                     ),
                   ],
                 ),
-                ),
+              ),
             ],
           ),
         ),
