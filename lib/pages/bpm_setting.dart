@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/ScrollModel.dart';
+import '../models/scroll_model.dart';
 
 class BpmSetting extends StatelessWidget {
   final double tempoIconSize = 32;
