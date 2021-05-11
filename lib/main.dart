@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/detail_page.dart';
-import 'package:my_app/ScrollModel.dart';
+import 'package:my_app/models/ScrollModel.dart';
+import 'package:my_app/pages/detail_page.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -26,11 +26,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ScrollModel>(
         create: (_) => ScrollModel(),
-    child: MaterialApp(
-      title: 'Code Scrolling',
-      theme: ThemeData(primarySwatch: Colors.blueGrey),
-      home: MyHomePage(),
-    ));
+        child: MaterialApp(
+          title: 'Code Scrolling',
+          theme: ThemeData(primarySwatch: Colors.blueGrey),
+          home: MyHomePage(),
+        ));
   }
 }
 
