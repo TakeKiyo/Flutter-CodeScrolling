@@ -46,9 +46,6 @@ class _LoginFormState extends State<LoginForm> {
               ),
               TextButton(
                   onPressed: () async {
-                    print('ボタンが押された');
-                    print(_email);
-                    print(_password);
                     try {
                       if (await model.login(_email, _password)) {
                         await Navigator.of(context).push(
