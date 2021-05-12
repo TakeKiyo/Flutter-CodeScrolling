@@ -110,6 +110,19 @@ class DetailPage extends StatelessWidget {
                     },
                   ),
                 ),
+                Expanded(
+                  child: TextButton(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("ログアウト"),
+                      ],
+                    ),
+                    onPressed: () {
+                      context.read<AuthModel>().logout();
+                    },
+                  ),
+                ),
               ])),
         ],
       );

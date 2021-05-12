@@ -20,5 +20,10 @@ class AuthModel extends ChangeNotifier {
   }
 
   // ログアウト処理
-  Future<void> logout() async {}
+  Future<void> logout() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    _user = null;
+    await _auth.signOut();
+    notifyListeners();
+  }
 }
