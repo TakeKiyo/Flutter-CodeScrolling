@@ -26,6 +26,10 @@ dependencies:
 
   # Add the dependency for the Firebase Core Flutter SDK
   firebase_core: ^1.1.0
+  firebase_auth: ^1.1.4
+  google_sign_in: ^5.0.2
+
+  sign_button: ^2.0.0
 
   # Add the dependencies for any other Firebase products you want to use in your app
   # For example, to use Firebase Authentication and Cloud Firestore

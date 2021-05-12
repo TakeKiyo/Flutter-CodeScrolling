@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/pages/detail_page.dart';
+import 'package:my_app/pages/login_form.dart';
 
 import '../utils/firebase.dart';
 
@@ -29,6 +30,15 @@ class MyHomePage extends StatelessWidget {
           children: <Widget>[
             TextButton(
                 onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return LoginForm();
+                    }),
+                  );
+                },
+                child: Text('ログインする')),
+            TextButton(
+                onPressed: () {
                   checkFirebase();
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
@@ -36,7 +46,7 @@ class MyHomePage extends StatelessWidget {
                     }),
                   );
                 },
-                child: Text('次のページへ')),
+                child: Text('ログインなしで使う')),
           ],
         ),
       ),
