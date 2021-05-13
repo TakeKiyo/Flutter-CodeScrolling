@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'dart:async';
+import 'dart:io';
 
-class ScrollModel extends ChangeNotifier {
+void audioPlayerHandler(AudioPlayerState value) => null;
+
+class MetronomeModel extends ChangeNotifier {
   int _tempoCount = 60;
   get tempoCount => _tempoCount;
 
@@ -18,6 +24,10 @@ class ScrollModel extends ChangeNotifier {
   get bpmTapCount => _bpmTapCount;
   get bpmTapText => _bpmTapText;
 
+  AudioCache _metronomePlayer = AudioCache();
+  AudioPlayer _audioPlayer = AudioPlayer();
+  DateTime _metronomeCheck;
+  String _metronomeSound = "metronome_digital1.wav";
 
   void increment() {
     if (_tempoCount < 300) {
@@ -91,13 +101,35 @@ class ScrollModel extends ChangeNotifier {
     _bpmTapText = "TAPで計測開始";
   }
 
+  void metronomeLoad() {
+    _metronomePlayer.load(_metronomeSound);
+  }
+
+  void metronomeClear() {
+    _metronomePlayer.clear(_metronomeSound);
+  }
+
+  void metronomeModel(Timer _metronomeTimer){
+    print(DateTime.now().difference(_metronomeCheck).inMicroseconds);
+    _metronomeCheck = DateTime.now();
+    if (!_isPlaying) _metronomeTimer.cancel();
+    else _metronomePlayer.play(_metronomeSound);
+    if (Platform.isIOS) {_audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);}
+  }
+
+  void metronomeStart(){
+    _metronomeCheck = DateTime.now();
+    var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
+    _metronomePlayer.play(_metronomeSound);
+    Timer.periodic(_metronomeDuration, (Timer _metronomeTimer) => metronomeModel(_metronomeTimer));
+  }
 }
 
 class CounterText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      Provider.of<ScrollModel>(context)._tempoCount.toString(),
+      Provider.of<MetronomeModel>(context)._tempoCount.toString(),
       style: TextStyle(fontSize: 20),
     );
   }

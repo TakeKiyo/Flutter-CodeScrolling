@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/scroll_model.dart';
+import '../models/bpm_model.dart';
 
 class BpmSetting extends StatelessWidget {
   final double tempoIconSize = 32;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ScrollModel>(builder: (_, model, __) {
+    return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Dialog(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 2 / 3,
+          height: MediaQuery.of(context).size.height / 2,
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -39,7 +39,7 @@ class BpmSetting extends StatelessWidget {
                             tooltip: 'Decrement',
                             onPressed: model.decrement),
                         Text(
-                          Provider.of<ScrollModel>(context)
+                          Provider.of<MetronomeModel>(context)
                               .tempoCount
                               .toString(),
                           style: TextStyle(fontSize: tempoIconSize * 2),
@@ -69,18 +69,6 @@ class BpmSetting extends StatelessWidget {
                         ? ElevatedButton.styleFrom(primary: Colors.red)
                           : ElevatedButton.styleFrom()
                     )
-                  ],
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: Column(
-                  children: [
-                    SwitchListTile(
-                      value: model.muteStatus,
-                      onChanged: model.changeMuteStatus,
-                      title: Text("メトロノームをミュートする"),
-                    ),
                   ],
                 ),
               ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/auth_model.dart';
-import '../models/scroll_model.dart';
+import '../models/bpm_model.dart';
 import 'bpm_setting.dart';
 
 class DetailPage extends StatelessWidget {
@@ -17,7 +17,7 @@ class DetailPage extends StatelessWidget {
     } else {
       message = 'ログインしてない';
     }
-    return Consumer<ScrollModel>(builder: (_, model, __) {
+    return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Code Scrolling'),
@@ -88,6 +88,8 @@ class DetailPage extends StatelessWidget {
                           iconSize: bottomIconSIze,
                           onPressed: () {
                             model.switchPlayStatus();
+                            model.metronomeLoad();
+                            model.metronomeStart();
                             print("Pressed: Play");
                           },
                         )
@@ -96,6 +98,7 @@ class DetailPage extends StatelessWidget {
                           iconSize: bottomIconSIze,
                           onPressed: () {
                             model.switchPlayStatus();
+                            model.metronomeClear();
                             print("Pressed: Pause");
                           },
                         ),
@@ -106,6 +109,7 @@ class DetailPage extends StatelessWidget {
                     iconSize: bottomIconSIze,
                     onPressed: () {
                       model.forceStop();
+                      model.metronomeClear();
                       print("Pressed: Stop");
                     },
                   ),
