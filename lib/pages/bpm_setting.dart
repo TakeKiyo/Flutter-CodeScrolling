@@ -63,8 +63,11 @@ class BpmSetting extends StatelessWidget {
                       onPressed: () {
                         model.bpmTapDetector();
                       },
-                      child: Text("TAP",
-                          style: TextStyle(fontSize: tempoIconSize * 0.75)),
+                      child:Text(model.bpmTapText,
+                              style: TextStyle(fontSize: tempoIconSize * 0.75)),
+                      style: model.bpmTapCount % 5 != 0
+                        ? ElevatedButton.styleFrom(primary: Colors.red)
+                          : ElevatedButton.styleFrom()
                     )
                   ],
                 ),
