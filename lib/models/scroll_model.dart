@@ -74,9 +74,9 @@ class ScrollModel extends ChangeNotifier {
       }
     }
     else{
-      int _bpmCalculateAve = _bpmCalculateList.reduce(
+      int _bpmCalculateAverage = _bpmCalculateList.reduce(
           (_bpmDiffValue, _bpmDiffElement) => _bpmDiffValue + _bpmDiffElement) ~/ _bpmCalculateList.length;
-      _tempoCount =  (60000 / _bpmCalculateAve).floor();
+      _tempoCount =  (60000 / _bpmCalculateAverage).floor();
       if (_tempoCount < 30){_tempoCount = 30;}
       if (_tempoCount > 300){_tempoCount = 300;}
       print("$_bpmCalculateList");
