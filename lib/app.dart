@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
-import 'package:my_app/models/bpm_model.dart';
+import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import './pages/my_home_page.dart';

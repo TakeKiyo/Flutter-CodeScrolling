@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/auth_model.dart';
-import '../models/bpm_model.dart';
+import '../models/metronome_model.dart';
 import 'bpm_setting.dart';
 
 class DetailPage extends StatelessWidget {
