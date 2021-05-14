@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:async';
-import 'dart:io';
 
 void audioPlayerHandler(AudioPlayerState value) => null;
 
@@ -28,6 +27,8 @@ class MetronomeModel extends ChangeNotifier {
   AudioPlayer _audioPlayer = AudioPlayer();
   DateTime _metronomeCheck;
   String _metronomeSound = "metronome_digital1.wav";
+  var _metronomeDuration;
+  Timer _metronomeTimer;
 
   void increment() {
     if (_tempoCount < 300) {
@@ -55,6 +56,7 @@ class MetronomeModel extends ChangeNotifier {
 
   void changeSlider(double _slideValue) {
     _tempoCount = _slideValue.toInt();
+    metronomeReflect();
     notifyListeners();
   }
 
@@ -92,6 +94,7 @@ class MetronomeModel extends ChangeNotifier {
       print("$_bpmCalculateList");
       resetBpmTapCount();
       notifyListeners();
+      metronomeReflect();
     }
   }
 
@@ -103,25 +106,30 @@ class MetronomeModel extends ChangeNotifier {
 
   void metronomeLoad() {
     _metronomePlayer.load(_metronomeSound);
+    _metronomePlayer.play(_metronomeSound);
   }
 
   void metronomeClear() {
+    _metronomeTimer.cancel();
     _metronomePlayer.clear(_metronomeSound);
   }
 
-  void metronomeModel(Timer _metronomeTimer){
+  void metronomeModel(Timer metronomeTimer){
     print(DateTime.now().difference(_metronomeCheck).inMicroseconds);
     _metronomeCheck = DateTime.now();
-    if (!_isPlaying) _metronomeTimer.cancel();
-    else _metronomePlayer.play(_metronomeSound);
-    if (Platform.isIOS) {_audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);}
+    _metronomePlayer.play(_metronomeSound);
+    _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
 
   void metronomeStart(){
     _metronomeCheck = DateTime.now();
-    var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
-    _metronomePlayer.play(_metronomeSound);
-    Timer.periodic(_metronomeDuration, (Timer _metronomeTimer) => metronomeModel(_metronomeTimer));
+    _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
+    _metronomeTimer = Timer.periodic(_metronomeDuration, (Timer metronomeTimer) => metronomeModel(metronomeTimer));
+  }
+
+  void metronomeReflect(){
+    _metronomeTimer.cancel();
+    metronomeStart();
   }
 }
 

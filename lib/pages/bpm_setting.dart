@@ -37,7 +37,10 @@ class BpmSetting extends StatelessWidget {
                             icon: Icon(Icons.remove),
                             iconSize: tempoIconSize,
                             tooltip: 'Decrement',
-                            onPressed: model.decrement),
+                            onPressed: (){
+                              model.decrement();
+                              model.metronomeReflect();
+                            }),
                         Text(
                           Provider.of<MetronomeModel>(context)
                               .tempoCount
@@ -48,7 +51,10 @@ class BpmSetting extends StatelessWidget {
                             icon: Icon(Icons.add),
                             iconSize: tempoIconSize,
                             tooltip: 'Increment',
-                            onPressed: model.increment),
+                            onPressed: (){
+                              model.increment();
+                              model.metronomeReflect();
+                            }),
                       ],
                     ),
                     Slider(
