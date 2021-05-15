@@ -134,8 +134,10 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void metronomeReflect() {
-    _metronomeTimer.cancel();
-    metronomeStart();
+    if (_isPlaying) {
+      _metronomeTimer.cancel();
+      metronomeStart();
+    }
   }
 }
 
