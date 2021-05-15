@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:async';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void audioPlayerHandler(AudioPlayerState value) => null;
 
@@ -29,6 +30,13 @@ class MetronomeModel extends ChangeNotifier {
   String _metronomeSound = "metronome_digital1.wav";
   var _metronomeDuration;
   Timer _metronomeTimer;
+
+  void metronomeModel(Timer metronomeTimer) {
+    print(DateTime.now().difference(_metronomeCheck).inMicroseconds);
+    _metronomeCheck = DateTime.now();
+    _metronomePlayer.play(_metronomeSound);
+    _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
+  }
 
   void increment() {
     if (_tempoCount < 300) {
@@ -60,37 +68,41 @@ class MetronomeModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeMuteStatus(bool _muteStatusValue){
+  void changeMuteStatus(bool _muteStatusValue) {
     _muteStatus = _muteStatusValue;
     print("MUTE BUTTON IS $_muteStatus");
     notifyListeners();
-    }
+  }
 
-  void bpmTapDetector(){
-
+  void bpmTapDetector() {
     if (_bpmTapCount == 0) {
       _bpmTapStartTime = DateTime.now();
-      _bpmTapCount ++;
+      _bpmTapCount++;
       _bpmTapText = "BPM計測中...";
       notifyListeners();
-    }
-    else if (_bpmTapCount % 5 != 0){
+    } else if (_bpmTapCount % 5 != 0) {
       var _bpmDetectNow = DateTime.now();
-      var _bpmDetectDiff = _bpmDetectNow.difference(_bpmTapStartTime).inMilliseconds;
+      var _bpmDetectDiff =
+          _bpmDetectNow.difference(_bpmTapStartTime).inMilliseconds;
       _bpmCalculateList.add(_bpmDetectDiff);
       _bpmTapStartTime = _bpmDetectNow;
-      _bpmTapCount ++;
+      _bpmTapCount++;
       if (_bpmTapCount == 5) {
         _bpmTapText = "計測終了";
         notifyListeners();
       }
-    }
-    else{
+    } else {
       int _bpmCalculateAverage = _bpmCalculateList.reduce(
-          (_bpmDiffValue, _bpmDiffElement) => _bpmDiffValue + _bpmDiffElement) ~/ _bpmCalculateList.length;
-      _tempoCount =  (60000 / _bpmCalculateAverage).floor();
-      if (_tempoCount < 30){_tempoCount = 30;}
-      if (_tempoCount > 300){_tempoCount = 300;}
+              (_bpmDiffValue, _bpmDiffElement) =>
+                  _bpmDiffValue + _bpmDiffElement) ~/
+          _bpmCalculateList.length;
+      _tempoCount = (60000 / _bpmCalculateAverage).floor();
+      if (_tempoCount < 30) {
+        _tempoCount = 30;
+      }
+      if (_tempoCount > 300) {
+        _tempoCount = 300;
+      }
       print("$_bpmCalculateList");
       resetBpmTapCount();
       notifyListeners();
@@ -98,7 +110,7 @@ class MetronomeModel extends ChangeNotifier {
     }
   }
 
-  void resetBpmTapCount(){
+  void resetBpmTapCount() {
     _bpmTapCount = 0;
     _bpmCalculateList = <int>[];
     _bpmTapText = "TAPで計測開始";
@@ -114,20 +126,14 @@ class MetronomeModel extends ChangeNotifier {
     _metronomePlayer.clear(_metronomeSound);
   }
 
-  void metronomeModel(Timer metronomeTimer){
-    print(DateTime.now().difference(_metronomeCheck).inMicroseconds);
-    _metronomeCheck = DateTime.now();
-    _metronomePlayer.play(_metronomeSound);
-    _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
-  }
-
-  void metronomeStart(){
+  void metronomeStart() {
     _metronomeCheck = DateTime.now();
     _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
-    _metronomeTimer = Timer.periodic(_metronomeDuration, (Timer metronomeTimer) => metronomeModel(metronomeTimer));
+    _metronomeTimer = Timer.periodic(_metronomeDuration,
+        (Timer metronomeTimer) => metronomeModel(metronomeTimer));
   }
 
-  void metronomeReflect(){
+  void metronomeReflect() {
     _metronomeTimer.cancel();
     metronomeStart();
   }
