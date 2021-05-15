@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
-import 'package:my_app/pages/detail_page.dart';
 import 'package:provider/provider.dart';
+
+import 'songs_list.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -47,10 +48,10 @@ class _LoginFormState extends State<LoginForm> {
               TextButton(
                   onPressed: () async {
                     try {
-                      if (await model.login(_email, _password)) {
+                      if (await model.login("test2@gmail.com", "password")) {
                         await Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) {
-                            return DetailPage();
+                            return SongsList();
                           }),
                         );
                       } else {
