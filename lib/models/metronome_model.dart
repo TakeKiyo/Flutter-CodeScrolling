@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:quiver/async.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,9 @@ class MetronomeModel extends ChangeNotifier {
   DateTime _metronomeCheck;
   String _metronomeSound = "metronome_digital1.wav";
   var _metronomeDuration;
-  Timer _metronomeTimer;
+  StreamSubscription<DateTime> _metronomeTimer;
 
-  void metronomeModel(Timer metronomeTimer) {
+  void metronomeModel() {
     print(DateTime.now().difference(_metronomeCheck).inMicroseconds);
     _metronomeCheck = DateTime.now();
     _metronomePlayer.play(_metronomeSound);
@@ -129,8 +130,7 @@ class MetronomeModel extends ChangeNotifier {
   void metronomeStart() {
     _metronomeCheck = DateTime.now();
     _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
-    _metronomeTimer = Timer.periodic(_metronomeDuration,
-        (Timer metronomeTimer) => metronomeModel(metronomeTimer));
+    _metronomeTimer = Metronome.periodic(_metronomeDuration).listen((metronomeTimer) => metronomeModel());
   }
 
   void metronomeReflect() {
