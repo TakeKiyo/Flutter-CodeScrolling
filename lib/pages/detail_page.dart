@@ -21,6 +21,12 @@ class DetailPage extends StatelessWidget {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.of(context).pop();
+                model.forceStop();
+              }),
           title: Text('Code Scrolling'),
         ),
         body: Center(
