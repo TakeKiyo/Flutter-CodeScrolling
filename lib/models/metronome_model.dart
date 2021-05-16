@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:quiver/async.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -30,14 +29,8 @@ class MetronomeModel extends ChangeNotifier {
   DateTime _metronomeCheck;
   String _metronomeSound = "metronome_digital1.wav";
   var _metronomeDuration;
-  StreamSubscription<DateTime> _metronomeTimer;
+  Timer _metronomeTimer;
 
-  void metronomeModel() {
-    print(DateTime.now().difference(_metronomeCheck).inMicroseconds);
-    _metronomeCheck = DateTime.now();
-    _metronomePlayer.play(_metronomeSound);
-    _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
-  }
 
   void increment() {
     if (_tempoCount < 300) {
@@ -65,7 +58,6 @@ class MetronomeModel extends ChangeNotifier {
 
   void changeSlider(double _slideValue) {
     _tempoCount = _slideValue.toInt();
-    metronomeReflect();
     notifyListeners();
   }
 
@@ -107,7 +99,6 @@ class MetronomeModel extends ChangeNotifier {
       print("$_bpmCalculateList");
       resetBpmTapCount();
       notifyListeners();
-      metronomeReflect();
     }
   }
 
@@ -117,9 +108,10 @@ class MetronomeModel extends ChangeNotifier {
     _bpmTapText = "TAPで計測開始";
   }
 
-  void metronomeLoad() {
-    _metronomePlayer.load(_metronomeSound);
-    _metronomePlayer.play(_metronomeSound);
+  void metronomeLoad() async{
+    _metronomeCheck = DateTime.now();
+    await _metronomePlayer.load(_metronomeSound);
+    metronomePlay();
   }
 
   void metronomeClear() {
@@ -127,17 +119,13 @@ class MetronomeModel extends ChangeNotifier {
     _metronomePlayer.clear(_metronomeSound);
   }
 
-  void metronomeStart() {
+  void metronomePlay() {
+    print(DateTime.now().difference(_metronomeCheck).inMicroseconds);
     _metronomeCheck = DateTime.now();
     _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
-    _metronomeTimer = Metronome.periodic(_metronomeDuration).listen((metronomeTimer) => metronomeModel());
-  }
-
-  void metronomeReflect() {
-    if (_isPlaying) {
-      _metronomeTimer.cancel();
-      metronomeStart();
-    }
+    _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
+    _metronomePlayer.play(_metronomeSound);
+    _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
 }
 

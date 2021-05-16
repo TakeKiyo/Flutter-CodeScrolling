@@ -39,7 +39,6 @@ class BpmSetting extends StatelessWidget {
                             tooltip: 'Decrement',
                             onPressed: (){
                               model.decrement();
-                              model.metronomeReflect();
                             }),
                         Text(
                           Provider.of<MetronomeModel>(context)
@@ -53,7 +52,6 @@ class BpmSetting extends StatelessWidget {
                             tooltip: 'Increment',
                             onPressed: (){
                               model.increment();
-                              model.metronomeReflect();
                             }),
                       ],
                     ),

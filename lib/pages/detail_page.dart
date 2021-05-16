@@ -89,7 +89,6 @@ class DetailPage extends StatelessWidget {
                           onPressed: () {
                             model.switchPlayStatus();
                             model.metronomeLoad();
-                            model.metronomeStart();
                             print("Pressed: Play");
                           },
                         )
