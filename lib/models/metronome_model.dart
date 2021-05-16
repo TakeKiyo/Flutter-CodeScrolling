@@ -3,34 +3,31 @@ import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 void audioPlayerHandler(AudioPlayerState value) => null;
 
 class MetronomeModel extends ChangeNotifier {
   int _tempoCount = 60;
+
   get tempoCount => _tempoCount;
 
   bool _isPlaying = false;
-  get isPlaying => _isPlaying;
 
-  bool _muteStatus = false;
-  get muteStatus => _muteStatus;
+  get isPlaying => _isPlaying;
 
   DateTime _bpmTapStartTime;
   int _bpmTapCount = 0;
   var _bpmCalculateList = <int>[];
   String _bpmTapText = "TAPで計測開始";
+
   get bpmTapCount => _bpmTapCount;
+
   get bpmTapText => _bpmTapText;
 
   AudioCache _metronomePlayer = AudioCache();
   AudioPlayer _audioPlayer = AudioPlayer();
-  DateTime _metronomeCheck;
   String _metronomeSound = "metronome_digital1.wav";
-  var _metronomeDuration;
   Timer _metronomeTimer;
-
 
   void increment() {
     if (_tempoCount < 300) {
@@ -52,18 +49,13 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void forceStop() {
+    metronomeClear();
     _isPlaying = false;
     notifyListeners();
   }
 
   void changeSlider(double _slideValue) {
     _tempoCount = _slideValue.toInt();
-    notifyListeners();
-  }
-
-  void changeMuteStatus(bool _muteStatusValue) {
-    _muteStatus = _muteStatusValue;
-    print("MUTE BUTTON IS $_muteStatus");
     notifyListeners();
   }
 
@@ -92,8 +84,7 @@ class MetronomeModel extends ChangeNotifier {
       _tempoCount = (60000 / _bpmCalculateAverage).floor();
       if (_tempoCount < 30) {
         _tempoCount = 30;
-      }
-      if (_tempoCount > 300) {
+      } else if (_tempoCount > 300) {
         _tempoCount = 300;
       }
       print("$_bpmCalculateList");
@@ -108,33 +99,22 @@ class MetronomeModel extends ChangeNotifier {
     _bpmTapText = "TAPで計測開始";
   }
 
-  void metronomeLoad() async{
-    _metronomeCheck = DateTime.now();
+  void metronomeLoad() async {
     await _metronomePlayer.load(_metronomeSound);
     metronomePlay();
   }
 
-  void metronomeClear() {
-    _metronomeTimer.cancel();
-    _metronomePlayer.clear(_metronomeSound);
-  }
-
   void metronomePlay() {
-    print(DateTime.now().difference(_metronomeCheck).inMicroseconds);
-    _metronomeCheck = DateTime.now();
-    _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
+    var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
     _metronomePlayer.play(_metronomeSound);
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
-}
 
-class CounterText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      Provider.of<MetronomeModel>(context)._tempoCount.toString(),
-      style: TextStyle(fontSize: 20),
-    );
+  void metronomeClear() {
+    if (_isPlaying) {
+      _metronomeTimer.cancel();
+      _metronomePlayer.clear(_metronomeSound);
+    }
   }
 }

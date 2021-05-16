@@ -11,13 +11,13 @@ class BpmSetting extends StatelessWidget {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Dialog(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height / 2,
+          height: MediaQuery.of(context).size.width,
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
-                flex: 3,
+                flex: 2,
                 child: Text(
                   "Tempo",
                   style: TextStyle(
@@ -26,7 +26,7 @@ class BpmSetting extends StatelessWidget {
                 ),
               ),
               Flexible(
-                flex: 6,
+                flex: 3,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

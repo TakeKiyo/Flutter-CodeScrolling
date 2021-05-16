@@ -8,6 +8,7 @@ import 'bpm_setting.dart';
 
 class DetailPage extends StatelessWidget {
   final double bottomIconSIze = 36;
+
   @override
   Widget build(BuildContext context) {
     final User _user = context.select((AuthModel _auth) => _auth.user);
@@ -23,35 +24,13 @@ class DetailPage extends StatelessWidget {
           title: Text('Code Scrolling'),
         ),
         body: Center(
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                  icon: Icon(Icons.remove),
-                  tooltip: 'Decrement',
-                  onPressed: model.decrement),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'BPM:',
-                  ),
-                  CounterText(),
-                ],
+            children: <Widget>[
+              Text(
+                'ログイン',
               ),
-              IconButton(
-                  icon: Icon(Icons.add),
-                  tooltip: 'Increment',
-                  onPressed: model.increment),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'ログイン',
-                  ),
-                  Text(message),
-                ],
-              ),
+              Text(message),
             ],
           ),
         ),
@@ -67,7 +46,12 @@ class DetailPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("BPM:"),
-                        CounterText(),
+                        Text(
+                          Provider.of<MetronomeModel>(context)
+                              .tempoCount
+                              .toString(),
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ],
                     ),
                     onPressed: () {
@@ -108,7 +92,6 @@ class DetailPage extends StatelessWidget {
                     iconSize: bottomIconSIze,
                     onPressed: () {
                       model.forceStop();
-                      model.metronomeClear();
                       print("Pressed: Stop");
                     },
                   ),
