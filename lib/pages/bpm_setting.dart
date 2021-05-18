@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/scroll_model.dart';
+import '../models/metronome_model.dart';
 
 class BpmSetting extends StatelessWidget {
   final double tempoIconSize = 32;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ScrollModel>(builder: (_, model, __) {
+    return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Dialog(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 2 / 3,
+          height: MediaQuery.of(context).size.width,
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
-                flex: 3,
+                flex: 2,
                 child: Text(
                   "Tempo",
                   style: TextStyle(
@@ -26,7 +26,7 @@ class BpmSetting extends StatelessWidget {
                 ),
               ),
               Flexible(
-                flex: 6,
+                flex: 3,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -37,9 +37,11 @@ class BpmSetting extends StatelessWidget {
                             icon: Icon(Icons.remove),
                             iconSize: tempoIconSize,
                             tooltip: 'Decrement',
-                            onPressed: model.decrement),
+                            onPressed: (){
+                              model.decrement();
+                            }),
                         Text(
-                          Provider.of<ScrollModel>(context)
+                          Provider.of<MetronomeModel>(context)
                               .tempoCount
                               .toString(),
                           style: TextStyle(fontSize: tempoIconSize * 2),
@@ -48,7 +50,9 @@ class BpmSetting extends StatelessWidget {
                             icon: Icon(Icons.add),
                             iconSize: tempoIconSize,
                             tooltip: 'Increment',
-                            onPressed: model.increment),
+                            onPressed: (){
+                              model.increment();
+                            }),
                       ],
                     ),
                     Slider(
@@ -69,18 +73,6 @@ class BpmSetting extends StatelessWidget {
                         ? ElevatedButton.styleFrom(primary: Colors.red)
                           : ElevatedButton.styleFrom()
                     )
-                  ],
-                ),
-              ),
-              Flexible(
-                flex: 1,
-                child: Column(
-                  children: [
-                    SwitchListTile(
-                      value: model.muteStatus,
-                      onChanged: model.changeMuteStatus,
-                      title: Text("メトロノームをミュートする"),
-                    ),
                   ],
                 ),
               ),
