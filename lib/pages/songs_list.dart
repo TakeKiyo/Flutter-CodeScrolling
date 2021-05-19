@@ -37,9 +37,9 @@ class SongsList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextButton(
-                child: Text('曲を選択してください'),
-              onPressed:(){
-
+              child: Text('曲を選択してください'),
+              onPressed: () {
+                // todo add function
               },
             ),
             Expanded(
