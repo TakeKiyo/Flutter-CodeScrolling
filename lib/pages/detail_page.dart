@@ -32,16 +32,32 @@ class DetailPage extends StatelessWidget {
               }),
           title: Text('Code Scrolling'),
           actions: <Widget>[
-            ElevatedButton(
-              child: Text(
-                "ログアウト",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                context.read<AuthModel>().logout();
-              },
+            PopupMenuButton(
+              padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+              icon: Icon(Icons.person),
+                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                  PopupMenuItem(
+                      child: InkWell(
+                          onTap: (){
+
+                          },
+                          child: Text(message),
+                      ),
+                  ),
+                  PopupMenuItem(
+                      child: InkWell(
+                        onTap: (){
+                          context.read<AuthModel>().logout();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.logout, color: Colors.black87),
+                              Text("ログアウト"),
+                            ],
+                          )
+                      ),
+                      ),
+                ],
             ),
           ],
         ),
@@ -128,7 +144,7 @@ class DetailPage extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: IconButton(
-                        icon: Icon(Icons.volume_up),
+                        icon: VolumeIcon(),
                         iconSize: bottomIconSIze,
                         onPressed: () {
                           print("VolumeSetting");

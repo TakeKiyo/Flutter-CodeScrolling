@@ -31,9 +31,7 @@ class VolumeSetting extends StatelessWidget {
                     children: [
                       IconButton(
                         icon: Icon(Icons.volume_down),
-                        onPressed: (){
-
-                        },
+                        onPressed: model.volumeDown,
                       ),
                       Slider(
                         label: model.soundVolume.toString(),
@@ -45,16 +43,41 @@ class VolumeSetting extends StatelessWidget {
                       ),
                       IconButton(
                         icon: Icon(Icons.volume_up),
-                        onPressed: (){
-
-                        },
+                        onPressed: model.volumeUp,
                       ),
                     ],
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: TextButton(
+                    child: Text("return to Default",
+                        style: TextStyle(fontSize: 14),
+                    ),
+                    onPressed:model.volumeDefault,
                   ),
                 ),
               ],
             ),
           ));
+    });
+  }
+}
+
+class VolumeIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MetronomeModel>(builder: (_, model, __)
+    {
+      if (model.soundVolume == 0) {
+        return Icon(Icons.volume_off);
+      }
+      else if (model.soundVolume < 1) {
+        return Icon(Icons.volume_down);
+      }
+      else {
+        return Icon(Icons.volume_up);
+      }
     });
   }
 }

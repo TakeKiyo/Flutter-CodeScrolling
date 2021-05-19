@@ -122,4 +122,25 @@ class MetronomeModel extends ChangeNotifier {
     _audioPlayer.setVolume(_volumeValue);
     notifyListeners();
   }
+
+  void volumeUp(){
+    if (_soundVolume <= 1.9) {
+      _soundVolume = _soundVolume + 0.1;
+    }
+    else{_soundVolume = 2;}
+    notifyListeners();
+  }
+
+  void volumeDown(){
+    if (_soundVolume >= 0.1) {
+      _soundVolume = _soundVolume - 0.1;
+    }
+    else{_soundVolume = 0;}
+    notifyListeners();
+  }
+
+  void volumeDefault(){
+    _soundVolume = 1;
+    notifyListeners();
+  }
 }
