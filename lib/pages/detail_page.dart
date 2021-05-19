@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/auth_model.dart';
 import '../models/metronome_model.dart';
 import 'bpm_setting.dart';
+import 'volume_setting.dart';
 
 class DetailPage extends StatelessWidget {
   final double bottomIconSIze = 36;
@@ -21,6 +23,7 @@ class DetailPage extends StatelessWidget {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
@@ -28,6 +31,19 @@ class DetailPage extends StatelessWidget {
                 model.forceStop();
               }),
           title: Text('Code Scrolling'),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text(
+                "ログアウト",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                context.read<AuthModel>().logout();
+              },
+            ),
+          ],
         ),
         body: Center(
           child: Column(
@@ -44,78 +60,88 @@ class DetailPage extends StatelessWidget {
           Container(
               width: MediaQuery.of(context).size.width,
               height: 60,
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Expanded(
-                  child: TextButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("BPM:"),
-                        Text(
-                          Provider.of<MetronomeModel>(context)
-                              .tempoCount
-                              .toString(),
-                          style: TextStyle(fontSize: 20),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          shape: CircleBorder(),
                         ),
-                      ],
-                    ),
-                    onPressed: () {
-                      print("Pressed: BPM");
-                      showDialog<void>(
-                        context: context,
-                        builder: (_) {
-                          return BpmSetting();
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("BPM"),
+                            Text(
+                              Provider.of<MetronomeModel>(context)
+                                  .tempoCount
+                                  .toString(),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {
+                          print("Pressed: BPM");
+                          showDialog<void>(
+                            context: context,
+                            builder: (_) {
+                              return BpmSetting();
+                            },
+                          ).then((_) => model.resetBpmTapCount());
                         },
-                      ).then((_) => model.resetBpmTapCount());
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: !model.isPlaying
-                      ? IconButton(
-                          icon: Icon(Icons.play_arrow),
-                          iconSize: bottomIconSIze,
-                          onPressed: () {
-                            model.switchPlayStatus();
-                            model.metronomeLoad();
-                            print("Pressed: Play");
-                          },
-                        )
-                      : IconButton(
-                          icon: Icon(Icons.pause),
-                          iconSize: bottomIconSIze,
-                          onPressed: () {
-                            model.switchPlayStatus();
-                            model.metronomeClear();
-                            print("Pressed: Pause");
-                          },
-                        ),
-                ),
-                Expanded(
-                  child: IconButton(
-                    icon: Icon(Icons.stop),
-                    iconSize: bottomIconSIze,
-                    onPressed: () {
-                      model.forceStop();
-                      print("Pressed: Stop");
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("ログアウト"),
-                      ],
+                      ),
                     ),
-                    onPressed: () {
-                      context.read<AuthModel>().logout();
-                    },
-                  ),
-                ),
-              ])),
+                    Expanded(
+                      flex: 1,
+                      child: !model.isPlaying
+                          ? IconButton(
+                              icon: Icon(Icons.play_arrow_rounded),
+                              iconSize: bottomIconSIze,
+                              onPressed: () {
+                                model.switchPlayStatus();
+                                model.metronomeLoad();
+                                print("Pressed: Play");
+                              },
+                            )
+                          : IconButton(
+                              icon: Icon(Icons.pause_rounded),
+                              iconSize: bottomIconSIze,
+                              onPressed: () {
+                                model.metronomeClear();
+                                model.switchPlayStatus();
+                                print("Pressed: Pause");
+                              },
+                            ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        icon: Icon(Icons.stop_rounded),
+                        iconSize: bottomIconSIze,
+                        onPressed: () {
+                          model.forceStop();
+                          print("Pressed: Stop");
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: IconButton(
+                        icon: Icon(Icons.volume_up),
+                        iconSize: bottomIconSIze,
+                        onPressed: () {
+                          print("VolumeSetting");
+                          showDialog<void>(
+                            context: context,
+                            builder: (_) {
+                              return VolumeSetting();
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ])),
         ],
       );
     });

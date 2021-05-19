@@ -8,26 +8,25 @@ void audioPlayerHandler(AudioPlayerState value) => null;
 
 class MetronomeModel extends ChangeNotifier {
   int _tempoCount = 60;
-
   get tempoCount => _tempoCount;
 
   bool _isPlaying = false;
-
   get isPlaying => _isPlaying;
 
   DateTime _bpmTapStartTime;
   int _bpmTapCount = 0;
   var _bpmCalculateList = <int>[];
   String _bpmTapText = "TAPで計測開始";
-
   get bpmTapCount => _bpmTapCount;
-
   get bpmTapText => _bpmTapText;
 
+  AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
   AudioCache _metronomePlayer = AudioCache();
-  AudioPlayer _audioPlayer = AudioPlayer();
   String _metronomeSound = "metronome_digital1.wav";
   Timer _metronomeTimer;
+
+  double _soundVolume = 1;
+  get soundVolume => _soundVolume;
 
   void increment() {
     if (_tempoCount < 300) {
@@ -107,7 +106,7 @@ class MetronomeModel extends ChangeNotifier {
   void metronomePlay() {
     var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
-    _metronomePlayer.play(_metronomeSound);
+    _metronomePlayer.play(_metronomeSound, volume:_soundVolume, isNotification: true);
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
 
@@ -116,5 +115,11 @@ class MetronomeModel extends ChangeNotifier {
       _metronomeTimer.cancel();
       _metronomePlayer.clear(_metronomeSound);
     }
+  }
+
+  void volumeChange(double _volumeValue) {
+    _soundVolume = _volumeValue;
+    _audioPlayer.setVolume(_volumeValue);
+    notifyListeners();
   }
 }
