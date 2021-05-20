@@ -142,7 +142,9 @@ class DetailPage extends StatelessWidget {
                   child: PopupMenuButton(
                     icon: VolumeIcon(),
                     iconSize: bottomIconSIze,
-                    elevation: 1,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
                     itemBuilder: (context) => [
                       PopupMenuItem(
                         enabled: false,
