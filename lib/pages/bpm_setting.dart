@@ -10,6 +10,9 @@ class BpmSetting extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Dialog(
+        insetPadding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
         child: SizedBox(
           height: MediaQuery.of(context).size.width,
           width: MediaQuery.of(context).size.width,

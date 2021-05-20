@@ -24,10 +24,14 @@ class MetronomeModel extends ChangeNotifier {
 
   get bpmTapText => _bpmTapText;
 
+  AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
   AudioCache _metronomePlayer = AudioCache();
-  AudioPlayer _audioPlayer = AudioPlayer();
   String _metronomeSound = "metronome_digital1.wav";
   Timer _metronomeTimer;
+
+  double _soundVolume = 1;
+
+  get soundVolume => _soundVolume;
 
   void increment() {
     if (_tempoCount < 300) {
@@ -107,7 +111,8 @@ class MetronomeModel extends ChangeNotifier {
   void metronomePlay() {
     var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
-    _metronomePlayer.play(_metronomeSound);
+    _metronomePlayer.play(_metronomeSound,
+        volume: _soundVolume, isNotification: true);
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
 
@@ -116,5 +121,34 @@ class MetronomeModel extends ChangeNotifier {
       _metronomeTimer.cancel();
       _metronomePlayer.clear(_metronomeSound);
     }
+  }
+
+  void volumeChange(double _volumeValue) {
+    _soundVolume = _volumeValue;
+    _audioPlayer.setVolume(_volumeValue);
+    notifyListeners();
+  }
+
+  void volumeUp() {
+    if (_soundVolume <= 1.9) {
+      _soundVolume = _soundVolume + 0.1;
+    } else {
+      _soundVolume = 2;
+    }
+    notifyListeners();
+  }
+
+  void volumeDown() {
+    if (_soundVolume >= 0.1) {
+      _soundVolume = _soundVolume - 0.1;
+    } else {
+      _soundVolume = 0;
+    }
+    notifyListeners();
+  }
+
+  void volumeDefault() {
+    _soundVolume = 1;
+    notifyListeners();
   }
 }
