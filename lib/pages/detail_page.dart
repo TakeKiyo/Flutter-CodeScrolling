@@ -8,6 +8,8 @@ import 'volume_setting.dart';
 
 class DetailPage extends StatelessWidget {
   final double bottomIconSIze = 36;
+  final int respectiveBpm;
+  DetailPage({Key key, this.respectiveBpm}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +25,6 @@ class DetailPage extends StatelessWidget {
               }),
           title: Text('Code Scrolling'),
           actions: <Widget>[
-            PopupMenuButton(
-              padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              icon: Icon(Icons.person),
-              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                PopupMenuItem(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Text("テキスト"),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
         body: Center(
@@ -44,6 +34,7 @@ class DetailPage extends StatelessWidget {
               Text(
                 'テキスト',
               ),
+              Text(respectiveBpm.toString()),
             ],
           ),
         ),

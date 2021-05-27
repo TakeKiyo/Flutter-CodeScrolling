@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'detail_page.dart';
 import 'package:flutter/material.dart';
 
 class SongsList extends StatelessWidget {
@@ -25,12 +26,7 @@ class SongsList extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextButton(
-              child: Text('曲を選択してください'),
-              onPressed: () {
-                // todo add function
-              },
-            ),
+            Text('曲を選択してください'),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream:
@@ -43,6 +39,11 @@ class SongsList extends StatelessWidget {
                             .map((doc) => TextButton(
                                 onPressed: () {
                                   print(doc["bpm"]);
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) {
+                                      return DetailPage(respectiveBpm: doc["bpm"]);
+                                    }),
+                                  );
                                 },
                                 child: Text(doc["Title"])))
                             .toList());
