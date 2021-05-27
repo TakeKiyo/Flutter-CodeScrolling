@@ -25,7 +25,12 @@ class SongsList extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextButton(child: Text('曲を選択してください')),
+            TextButton(
+              child: Text('曲を選択してください'),
+              onPressed: () {
+                // todo add function
+              },
+            ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream:

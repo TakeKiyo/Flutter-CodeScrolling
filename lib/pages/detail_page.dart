@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/metronome_model.dart';
 import 'bpm_setting.dart';
+import 'volume_setting.dart';
 
 class DetailPage extends StatelessWidget {
   final double bottomIconSIze = 36;
@@ -12,6 +14,7 @@ class DetailPage extends StatelessWidget {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
@@ -19,6 +22,20 @@ class DetailPage extends StatelessWidget {
                 model.forceStop();
               }),
           title: Text('Code Scrolling'),
+          actions: <Widget>[
+            PopupMenuButton(
+              padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+              icon: Icon(Icons.person),
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                PopupMenuItem(
+                  child: InkWell(
+                    onTap: () {},
+                    child: Text("テキスト"),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
         body: Center(
           child: Column(
@@ -37,11 +54,15 @@ class DetailPage extends StatelessWidget {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Expanded(
+                  flex: 1,
                   child: TextButton(
-                    child: Row(
+                    style: TextButton.styleFrom(
+                      shape: CircleBorder(),
+                    ),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("BPM:"),
+                        Text("BPM"),
                         Text(
                           Provider.of<MetronomeModel>(context)
                               .tempoCount
@@ -62,9 +83,10 @@ class DetailPage extends StatelessWidget {
                   ),
                 ),
                 Expanded(
+                  flex: 1,
                   child: !model.isPlaying
                       ? IconButton(
-                          icon: Icon(Icons.play_arrow),
+                          icon: Icon(Icons.play_arrow_rounded),
                           iconSize: bottomIconSIze,
                           onPressed: () {
                             model.switchPlayStatus();
@@ -73,23 +95,41 @@ class DetailPage extends StatelessWidget {
                           },
                         )
                       : IconButton(
-                          icon: Icon(Icons.pause),
+                          icon: Icon(Icons.pause_rounded),
                           iconSize: bottomIconSIze,
                           onPressed: () {
-                            model.switchPlayStatus();
                             model.metronomeClear();
+                            model.switchPlayStatus();
                             print("Pressed: Pause");
                           },
                         ),
                 ),
                 Expanded(
+                  flex: 1,
                   child: IconButton(
-                    icon: Icon(Icons.stop),
+                    icon: Icon(Icons.stop_rounded),
                     iconSize: bottomIconSIze,
                     onPressed: () {
                       model.forceStop();
                       print("Pressed: Stop");
                     },
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: PopupMenuButton(
+                    icon: VolumeIcon(),
+                    iconSize: bottomIconSIze,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        enabled: false,
+                        child: VolumeSetting(),
+                      ),
+                    ],
+                    offset: Offset(0, -180),
                   ),
                 ),
               ])),
