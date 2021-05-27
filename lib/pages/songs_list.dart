@@ -1,20 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../models/auth_model.dart';
 
 class SongsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final User _user = context.select((AuthModel _auth) => _auth.user);
-    String uid;
-    if (_user != null) {
-      uid = _user.uid;
-    } else {
-      Navigator.of(context).pop();
-    }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -39,10 +28,8 @@ class SongsList extends StatelessWidget {
             TextButton(child: Text('曲を選択してください')),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('Songs')
-                    .where("userID", isEqualTo: uid)
-                    .snapshots(),
+                stream:
+                    FirebaseFirestore.instance.collection('Songs').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final List<DocumentSnapshot> documents = snapshot.data.docs;
