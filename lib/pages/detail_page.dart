@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/auth_model.dart';
 import '../models/metronome_model.dart';
 import 'bpm_setting.dart';
 import 'volume_setting.dart';
@@ -13,13 +11,6 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User _user = context.select((AuthModel _auth) => _auth.user);
-    String message;
-    if (_user != null) {
-      message = _user.email;
-    } else {
-      message = 'ログインしてない';
-    }
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
         appBar: AppBar(
@@ -39,20 +30,8 @@ class DetailPage extends StatelessWidget {
                 PopupMenuItem(
                   child: InkWell(
                     onTap: () {},
-                    child: Text(message),
+                    child: Text("テキスト"),
                   ),
-                ),
-                PopupMenuItem(
-                  child: InkWell(
-                      onTap: () {
-                        context.read<AuthModel>().logout();
-                      },
-                      child: Row(
-                        children: [
-                          Icon(Icons.logout, color: Colors.black87),
-                          Text("ログアウト"),
-                        ],
-                      )),
                 ),
               ],
             ),
@@ -63,9 +42,8 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'ログイン',
+                'テキスト',
               ),
-              Text(message),
             ],
           ),
         ),
