@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 
 import '../utils/firebase.dart';
 import 'songs_list.dart';
 
 class MyHomePage extends StatelessWidget {
+  void getUdid() async {
+    String udid = await FlutterUdid.udid;
+    print(udid);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +36,7 @@ class MyHomePage extends StatelessWidget {
             TextButton(
                 onPressed: () {
                   checkFirebase();
+                  getUdid();
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
                       return SongsList();
