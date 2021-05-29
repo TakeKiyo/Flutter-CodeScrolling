@@ -7,9 +7,14 @@ import 'package:flutter/material.dart';
 void audioPlayerHandler(AudioPlayerState value) => null;
 
 class MetronomeModel extends ChangeNotifier {
-  int _tempoCount = 60;
-
+  int _tempoCount;
   get tempoCount => _tempoCount;
+
+  MetronomeModel({int bpm}){
+    _tempoCount = bpm;
+    print(_tempoCount);
+    notifyListeners();
+  }
 
   bool _isPlaying = false;
 
@@ -32,20 +37,6 @@ class MetronomeModel extends ChangeNotifier {
   double _soundVolume = 1;
 
   get soundVolume => _soundVolume;
-
-  void receiveRespectiveBpm(int streamReceivedBpm){
-    if (streamReceivedBpm < 30){
-      _tempoCount = 30;
-    }
-    else if (streamReceivedBpm > 300){
-      _tempoCount = 300;
-    }
-    else {
-      _tempoCount = streamReceivedBpm;
-    }
-    print(_tempoCount);
-    notifyListeners();
-  }
 
   void increment() {
     if (_tempoCount < 300) {

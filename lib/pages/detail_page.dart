@@ -8,8 +8,8 @@ import 'volume_setting.dart';
 
 class DetailPage extends StatelessWidget {
   final double bottomIconSIze = 36;
-  final int respectiveBpm;
-  DetailPage({Key key, this.respectiveBpm}) : super(key: key);
+  final int receivedBpm;
+  DetailPage({Key key, this.receivedBpm}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class DetailPage extends StatelessWidget {
               Text(
                 'テキスト',
               ),
-              Text(respectiveBpm.toString()),
+              Text(receivedBpm.toString()),
             ],
           ),
         ),

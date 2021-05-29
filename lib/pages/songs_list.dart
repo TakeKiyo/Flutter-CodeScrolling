@@ -40,13 +40,12 @@ class SongsList extends StatelessWidget {
                             .map((doc) => TextButton(
                                 onPressed: () {
                                   print(doc["bpm"]);
+                                  MetronomeModel(bpm: doc["bpm"]);
                                   Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) {
-                                      return DetailPage(respectiveBpm: doc["bpm"]);
+                                      return DetailPage(receivedBpm: doc["bpm"]);
                                     }),
                                   );
-                                  MetronomeModel metronomeModel = MetronomeModel();
-                                  metronomeModel.receiveRespectiveBpm(doc["bpm"]);
                                 },
                                 child: Text(doc["Title"])))
                             .toList());
