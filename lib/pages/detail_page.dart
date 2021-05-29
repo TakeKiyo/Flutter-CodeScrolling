@@ -9,6 +9,7 @@ import 'volume_setting.dart';
 class DetailPage extends StatelessWidget {
   final double bottomIconSIze = 36;
   final int receivedBpm;
+
   DetailPage({Key key, this.receivedBpm}) : super(key: key);
 
   @override
@@ -24,8 +25,7 @@ class DetailPage extends StatelessWidget {
                 model.forceStop();
               }),
           title: Text('Code Scrolling'),
-          actions: <Widget>[
-          ],
+          actions: <Widget>[],
         ),
         body: Center(
           child: Column(

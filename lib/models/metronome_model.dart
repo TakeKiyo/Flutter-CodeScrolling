@@ -8,12 +8,16 @@ void audioPlayerHandler(AudioPlayerState value) => null;
 
 class MetronomeModel extends ChangeNotifier {
   int _tempoCount;
+
   get tempoCount => _tempoCount;
 
-  MetronomeModel({int bpm}){
-    _tempoCount = bpm;
-    print(_tempoCount);
-    notifyListeners();
+  set tempoCount(int bpm) {
+    if (bpm < 30)
+      _tempoCount = 30;
+    else if (bpm > 300)
+      _tempoCount = 300;
+    else
+      _tempoCount = bpm;
   }
 
   bool _isPlaying = false;
