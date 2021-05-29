@@ -11,18 +11,6 @@ class MetronomeModel extends ChangeNotifier {
 
   get tempoCount => _tempoCount;
 
-  set tempoCount(int streamReceivedBpm){
-    if (streamReceivedBpm < 30){
-      _tempoCount = 30;
-    }
-    else if (streamReceivedBpm > 300){
-      _tempoCount = 300;
-    }
-    else {
-      _tempoCount = streamReceivedBpm;
-    }
-  }
-
   bool _isPlaying = false;
 
   get isPlaying => _isPlaying;
@@ -44,6 +32,20 @@ class MetronomeModel extends ChangeNotifier {
   double _soundVolume = 1;
 
   get soundVolume => _soundVolume;
+
+  void receiveRespectiveBpm(int streamReceivedBpm){
+    if (streamReceivedBpm < 30){
+      _tempoCount = 30;
+    }
+    else if (streamReceivedBpm > 300){
+      _tempoCount = 300;
+    }
+    else {
+      _tempoCount = streamReceivedBpm;
+    }
+    print(_tempoCount);
+    notifyListeners();
+  }
 
   void increment() {
     if (_tempoCount < 300) {

@@ -46,7 +46,7 @@ class SongsList extends StatelessWidget {
                                     }),
                                   );
                                   MetronomeModel metronomeModel = MetronomeModel();
-                                  metronomeModel.tempoCount = doc["bpm"];
+                                  metronomeModel.receiveRespectiveBpm(doc["bpm"]);
                                 },
                                 child: Text(doc["Title"])))
                             .toList());

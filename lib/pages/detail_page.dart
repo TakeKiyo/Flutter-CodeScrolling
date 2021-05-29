@@ -55,9 +55,7 @@ class DetailPage extends StatelessWidget {
                       children: [
                         Text("BPM"),
                         Text(
-                          Provider.of<MetronomeModel>(context)
-                              .tempoCount
-                              .toString(),
+                          model.tempoCount.toString(),
                           style: TextStyle(fontSize: 20),
                         ),
                       ],
