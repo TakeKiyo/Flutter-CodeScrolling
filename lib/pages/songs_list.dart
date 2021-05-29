@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'detail_page.dart';
 import 'package:flutter/material.dart';
+import '../models/metronome_model.dart';
 
 class SongsList extends StatelessWidget {
   @override
@@ -44,6 +45,8 @@ class SongsList extends StatelessWidget {
                                       return DetailPage(respectiveBpm: doc["bpm"]);
                                     }),
                                   );
+                                  MetronomeModel metronomeModel = MetronomeModel();
+                                  metronomeModel.tempoCount = doc["bpm"];
                                 },
                                 child: Text(doc["Title"])))
                             .toList());
