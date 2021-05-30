@@ -44,9 +44,7 @@ class BpmSetting extends StatelessWidget {
                               model.decrement();
                             }),
                         Text(
-                          Provider.of<MetronomeModel>(context)
-                              .tempoCount
-                              .toString(),
+                          model.tempoCount.toString(),
                           style: TextStyle(fontSize: tempoIconSize * 2),
                         ),
                         IconButton(

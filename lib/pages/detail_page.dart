@@ -8,6 +8,10 @@ import 'volume_setting.dart';
 
 class DetailPage extends StatelessWidget {
   final double bottomIconSIze = 36;
+  final int bpm;
+  final String title;
+
+  DetailPage({Key key, this.bpm, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,21 +25,8 @@ class DetailPage extends StatelessWidget {
                 Navigator.of(context).pop();
                 model.forceStop();
               }),
-          title: Text('Code Scrolling'),
-          actions: <Widget>[
-            PopupMenuButton(
-              padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              icon: Icon(Icons.person),
-              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                PopupMenuItem(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Text("テキスト"),
-                  ),
-                ),
-              ],
-            ),
-          ],
+          title: Text(title),
+          actions: <Widget>[],
         ),
         body: Center(
           child: Column(
@@ -44,6 +35,7 @@ class DetailPage extends StatelessWidget {
               Text(
                 'テキスト',
               ),
+              Text(bpm.toString()),
             ],
           ),
         ),
@@ -64,9 +56,7 @@ class DetailPage extends StatelessWidget {
                       children: [
                         Text("BPM"),
                         Text(
-                          Provider.of<MetronomeModel>(context)
-                              .tempoCount
-                              .toString(),
+                          model.tempoCount.toString(),
                           style: TextStyle(fontSize: 20),
                         ),
                       ],
