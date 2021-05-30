@@ -1,7 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 
 class SongsList extends StatelessWidget {
+  // String _udid;
+
+  // SongsList() {
+  //   Future<String> futureUdid = getUdid();
+  //   futureUdid.then((value) => {print(value)});
+  //   print(_udid);
+  // }
+
+  // Future<String> getUdid() async {
+  //   String udid = await FlutterUdid.udid;
+  //   return udid;
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +47,10 @@ class SongsList extends StatelessWidget {
             ),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection('Songs').snapshots(),
+                stream: FirebaseFirestore.instance
+                    .collection('Songs')
+                    // .where("userID", isEqualTo: _udid)
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final List<DocumentSnapshot> documents = snapshot.data.docs;
