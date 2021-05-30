@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'detail_page.dart';
 import 'package:flutter/material.dart';
+import '../models/metronome_model.dart';
+import 'package:provider/provider.dart';
 
 class SongsList extends StatelessWidget {
   @override
@@ -25,12 +28,7 @@ class SongsList extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextButton(
-              child: Text('曲を選択してください'),
-              onPressed: () {
-                // todo add function
-              },
-            ),
+            Text('曲を選択してください'),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream:
@@ -43,6 +41,17 @@ class SongsList extends StatelessWidget {
                             .map((doc) => TextButton(
                                 onPressed: () {
                                   print(doc["bpm"]);
+                                  Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .tempoCount = doc["bpm"];
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) {
+                                      return DetailPage(
+                                        bpm: doc["bpm"],
+                                        title: doc["Title"],
+                                      );
+                                    }),
+                                  );
                                 },
                                 child: Text(doc["Title"])))
                             .toList());

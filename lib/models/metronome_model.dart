@@ -7,9 +7,18 @@ import 'package:flutter/material.dart';
 void audioPlayerHandler(AudioPlayerState value) => null;
 
 class MetronomeModel extends ChangeNotifier {
-  int _tempoCount = 60;
+  int _tempoCount;
 
   get tempoCount => _tempoCount;
+
+  set tempoCount(int bpm) {
+    if (bpm < 30)
+      _tempoCount = 30;
+    else if (bpm > 300)
+      _tempoCount = 300;
+    else
+      _tempoCount = bpm;
+  }
 
   bool _isPlaying = false;
 
