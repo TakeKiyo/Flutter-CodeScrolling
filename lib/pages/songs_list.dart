@@ -47,8 +47,8 @@ class SongsList extends StatelessWidget {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) {
                                       return DetailPage(
-                                        receivedBpm: doc["bpm"],
-                                        receivedTitle: doc["Title"],
+                                        bpm: doc["bpm"],
+                                        title: doc["Title"],
                                       );
                                     }),
                                   );
