@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'detail_page.dart';
+import 'DetailPage/detail_page.dart';
 import 'package:flutter/material.dart';
 import '../models/metronome_model.dart';
 import 'package:provider/provider.dart';

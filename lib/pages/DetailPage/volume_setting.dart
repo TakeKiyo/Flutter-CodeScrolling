@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/metronome_model.dart';
+import '../../models/metronome_model.dart';
 
 class VolumeSetting extends StatelessWidget {
   @override
