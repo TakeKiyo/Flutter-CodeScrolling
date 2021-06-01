@@ -31,7 +31,7 @@ class BpmSetting extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    color: textColor,
+                      color: textColor,
                       icon: Icon(Icons.remove),
                       iconSize: tempoIconSize,
                       tooltip: 'Decrement',
@@ -40,11 +40,13 @@ class BpmSetting extends StatelessWidget {
                       }),
                   Text(
                     model.tempoCount.toString(),
-                    style: TextStyle(fontSize: tempoIconSize * 2,
-                      color: textColor,),
+                    style: TextStyle(
+                      fontSize: tempoIconSize * 2,
+                      color: textColor,
+                    ),
                   ),
                   IconButton(
-                    color: textColor,
+                      color: textColor,
                       icon: Icon(Icons.add),
                       iconSize: tempoIconSize,
                       tooltip: 'Increment',
