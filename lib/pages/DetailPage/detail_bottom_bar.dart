@@ -7,6 +7,7 @@ import 'volume_setting.dart';
 
 Container detailBottomBar(BuildContext context, MetronomeModel model) {
   final double bottomIconSIze = 36;
+  final Color textColor = Colors.white;
 
   return Container(
       color: Theme.of(context).primaryColor,
@@ -23,24 +24,21 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("BPM", style: TextStyle(color: Colors.white)),
+                Text("BPM", style: TextStyle(color: textColor)),
                 Text(
                   model.tempoCount.toString(),
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: TextStyle(fontSize: 20, color: textColor),
                 ),
               ],
             ),
             onPressed: () {
               print("Pressed: BPM");
               showModalBottomSheet<void>(
-                useRootNavigator: false,
+                backgroundColor: Theme.of(context).primaryColor,
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 context: context,
-                builder: (context) => Navigator(
-                    onGenerateRoute: (context) => MaterialPageRoute<BpmSetting>(
-                          builder: (context) => BpmSetting(),
-                        )),
+                builder: (context) => BpmSetting(),
               ).then((_) => model.resetBpmTapCount());
             },
           ),
@@ -49,7 +47,7 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
           flex: 1,
           child: !model.isPlaying
               ? IconButton(
-                  color: Colors.white,
+                  color: textColor,
                   icon: Icon(Icons.play_arrow_rounded),
                   iconSize: bottomIconSIze,
                   onPressed: () {
@@ -59,7 +57,7 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
                   },
                 )
               : IconButton(
-                  color: Colors.white,
+                  color: textColor,
                   icon: Icon(Icons.pause_rounded),
                   iconSize: bottomIconSIze,
                   onPressed: () {
@@ -72,7 +70,7 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
         Expanded(
           flex: 1,
           child: IconButton(
-            color: Colors.white,
+            color: textColor,
             icon: Icon(Icons.stop_rounded),
             iconSize: bottomIconSIze,
             onPressed: () {

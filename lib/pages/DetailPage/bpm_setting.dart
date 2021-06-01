@@ -5,12 +5,13 @@ import '../../models/metronome_model.dart';
 
 class BpmSetting extends StatelessWidget {
   final double tempoIconSize = 32;
+  final Color textColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
-      return Container(
-        height: MediaQuery.of(context).size.height / 3,
+      return SizedBox(
+        height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -19,7 +20,10 @@ class BpmSetting extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   "Tempo",
-                  style: TextStyle(fontSize: 32),
+                  style: TextStyle(
+                    fontSize: 32,
+                    color: textColor,
+                  ),
                 )),
             Flexible(
               flex: 1,
@@ -27,6 +31,7 @@ class BpmSetting extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
+                    color: textColor,
                       icon: Icon(Icons.remove),
                       iconSize: tempoIconSize,
                       tooltip: 'Decrement',
@@ -35,9 +40,11 @@ class BpmSetting extends StatelessWidget {
                       }),
                   Text(
                     model.tempoCount.toString(),
-                    style: TextStyle(fontSize: tempoIconSize * 2),
+                    style: TextStyle(fontSize: tempoIconSize * 2,
+                      color: textColor,),
                   ),
                   IconButton(
+                    color: textColor,
                       icon: Icon(Icons.add),
                       iconSize: tempoIconSize,
                       tooltip: 'Increment',
@@ -50,6 +57,8 @@ class BpmSetting extends StatelessWidget {
             Flexible(
               flex: 1,
               child: Slider(
+                activeColor: textColor,
+                inactiveColor: Theme.of(context).primaryColorDark,
                 label: null,
                 value: model.tempoCount.toDouble(),
                 divisions: 270,
