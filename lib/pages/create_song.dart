@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CreateSong extends StatelessWidget {
   @override
@@ -20,24 +21,81 @@ class CreateSong extends StatelessWidget {
               }),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextButton(onPressed: () {}, child: Text('曲追加')),
-            new TextField(
-              enabled: true,
-              // 入力数
-              maxLength: 10,
-              maxLengthEnforced: false,
-              style: TextStyle(color: Colors.black),
-              obscureText: false,
-              maxLines: 1,
-              //パスワード
-              // onChanged: {},
+      body: Center(child: CreateSongForm()),
+    );
+  }
+}
+
+class CreateSongForm extends StatefulWidget {
+  @override
+  _CreateSongFormState createState() => _CreateSongFormState();
+}
+
+class _CreateSongFormState extends State<CreateSongForm> {
+  String _title = "";
+  int _bpm = 120;
+  void _handleTitle(String inputText) {
+    setState(() {
+      _title = inputText;
+    });
+  }
+
+  void _handleBpm(String inputText) {
+    setState(() {
+      _bpm = int.parse(inputText);
+    });
+  }
+
+  void submitSong() {
+    print(_title);
+    print(_bpm);
+    // print()
+  }
+
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(50),
+      child: Column(
+        children: <Widget>[
+          Text(
+            "タイトル $_title",
+            style: TextStyle(
+              color: Colors.blueAccent,
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
             ),
-          ],
-        ),
+          ),
+          TextField(
+            maxLengthEnforced: true,
+            style: TextStyle(color: Colors.black),
+            maxLines: 1,
+            onChanged: _handleTitle,
+          ),
+          Text(
+            "bpm $_bpm",
+            // "タイトルを入力",
+            style: TextStyle(
+              color: Colors.blueAccent,
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          TextField(
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            style: TextStyle(color: Colors.black),
+            maxLines: 1,
+            onChanged: _handleBpm,
+          ),
+          RaisedButton(
+            child: const Text('曲を追加'),
+            color: Colors.orange,
+            textColor: Colors.white,
+            onPressed: () {
+              submitSong();
+            },
+          ),
+        ],
       ),
     );
   }
