@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/metronome_model.dart';
+import '../../models/metronome_model.dart';
 
 class VolumeSetting extends StatelessWidget {
   @override
@@ -73,11 +73,11 @@ class VolumeIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       if (model.soundVolume == 0) {
-        return Icon(Icons.volume_off);
+        return Icon(Icons.volume_off, color: Colors.white);
       } else if (model.soundVolume < 1) {
-        return Icon(Icons.volume_down);
+        return Icon(Icons.volume_down, color: Colors.white);
       } else {
-        return Icon(Icons.volume_up);
+        return Icon(Icons.volume_up, color: Colors.white);
       }
     });
   }
