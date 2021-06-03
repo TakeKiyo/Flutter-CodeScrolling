@@ -41,6 +41,7 @@ dependencies:
   provider: ^5.0.0
 
   audioplayers: ^0.15.1
+  flutter_udid: ^1.0.1
 
 dev_dependencies:
   flutter_test:
