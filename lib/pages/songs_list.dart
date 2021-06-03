@@ -79,13 +79,13 @@ class SongsList extends StatelessWidget {
                                                     builder: (context) {
                                                       return DetailPage(
                                                         bpm: doc["bpm"],
-                                                        title: doc["Title"],
+                                                        title: doc["title"],
                                                       );
                                                     },
                                                   ),
                                                 );
                                               },
-                                              child: Text(doc["Title"])))
+                                              child: Text(doc["title"])))
                                           .toList());
                                 }
                               } else {
