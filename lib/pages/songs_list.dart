@@ -54,34 +54,36 @@ class SongsList extends StatelessWidget {
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                final List<DocumentSnapshot> documents =
-                                    snapshot.data.docs;
-                                return ListView(
-                                    children: documents
-                                        .map((doc) => TextButton(
-                                            onPressed: () {
-                                              print(doc["bpm"]);
-                                              Provider.of<MetronomeModel>(
-                                                      context,
-                                                      listen: false)
-                                                  .tempoCount = doc["bpm"];
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return DetailPage(
-                                                      bpm: doc["bpm"],
-                                                      title: doc["Title"],
-                                                    );
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                            child: Text(doc["Title"])))
-                                        .toList());
-                              } else if (snapshot.hasError) {
-                                return Text('エラーが発生しました');
+                                if (snapshot.data.docs.length == 0) {
+                                  return Text('保存された曲はありません');
+                                } else {
+                                  final List<DocumentSnapshot> documents =
+                                      snapshot.data.docs;
+                                  return ListView(
+                                      children: documents
+                                          .map((doc) => TextButton(
+                                              onPressed: () {
+                                                print(doc["bpm"]);
+                                                Provider.of<MetronomeModel>(
+                                                        context,
+                                                        listen: false)
+                                                    .tempoCount = doc["bpm"];
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return DetailPage(
+                                                        bpm: doc["bpm"],
+                                                        title: doc["Title"],
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                              },
+                                              child: Text(doc["Title"])))
+                                          .toList());
+                                }
                               } else {
-                                return Text('保存された曲はありません');
+                                return Text('エラーが発生しました');
                               }
                             },
                           ),
