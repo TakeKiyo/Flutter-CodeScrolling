@@ -4,6 +4,7 @@ import 'package:flutter_udid/flutter_udid.dart';
 import 'package:provider/provider.dart';
 
 import '../models/metronome_model.dart';
+import 'create_song.dart';
 import 'detail_page/detail_page.dart';
 
 class SongsList extends StatelessWidget {
@@ -23,6 +24,11 @@ class SongsList extends StatelessWidget {
               icon: Icon(Icons.add),
               onPressed: () {
                 //addボタンを押したら反応
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return CreateSong();
+                  }),
+                );
               }),
           IconButton(
               icon: Icon(Icons.share),
@@ -73,13 +79,13 @@ class SongsList extends StatelessWidget {
                                                     builder: (context) {
                                                       return DetailPage(
                                                         bpm: doc["bpm"],
-                                                        title: doc["Title"],
+                                                        title: doc["title"],
                                                       );
                                                     },
                                                   ),
                                                 );
                                               },
-                                              child: Text(doc["Title"])))
+                                              child: Text(doc["title"])))
                                           .toList());
                                 }
                               } else {
