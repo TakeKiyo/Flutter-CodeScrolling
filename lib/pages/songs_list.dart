@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../models/metronome_model.dart';
 import 'create_song.dart';
-import 'detail_page.dart';
+import 'detail_page/detail_page.dart';
 
 class SongsList extends StatelessWidget {
   Future<String> getUdid() async {
