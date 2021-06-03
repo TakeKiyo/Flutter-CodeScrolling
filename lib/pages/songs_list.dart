@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'detail_page.dart';
 import 'package:flutter/material.dart';
-import '../models/metronome_model.dart';
 import 'package:provider/provider.dart';
+
+import '../models/metronome_model.dart';
+import 'create_song.dart';
+import 'detail_page.dart';
 
 class SongsList extends StatelessWidget {
   @override
@@ -16,6 +18,11 @@ class SongsList extends StatelessWidget {
               icon: Icon(Icons.add),
               onPressed: () {
                 //addボタンを押したら反応
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return CreateSong();
+                  }),
+                );
               }),
           IconButton(
               icon: Icon(Icons.share),
