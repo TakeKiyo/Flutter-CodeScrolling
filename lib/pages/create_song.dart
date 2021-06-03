@@ -60,7 +60,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
       "createdAt": DateTime.now(),
       "updatedAt": DateTime.now(),
     });
-    Navigator.of(context).push(
+    Navigator.of(context).pop(
       MaterialPageRoute(builder: (context) {
         return SongsList();
       }),
