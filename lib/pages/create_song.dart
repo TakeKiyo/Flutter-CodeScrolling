@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_udid/flutter_udid.dart';
+
+import 'songs_list.dart';
 
 class CreateSong extends StatelessWidget {
   @override
@@ -46,9 +50,22 @@ class _CreateSongFormState extends State<CreateSongForm> {
     });
   }
 
-  void submitSong() {
-    print(_title);
-    print(_bpm);
+  void submitSong() async {
+    String udid = await FlutterUdid.udid;
+
+    FirebaseFirestore.instance.collection("Songs").add({
+      "title": _title,
+      "bpm": _bpm,
+      "userID": udid,
+      "createdAt": DateTime.now(),
+      "updatedAt": DateTime.now(),
+    });
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) {
+        return SongsList();
+      }),
+    );
+
     // print()
   }
 
