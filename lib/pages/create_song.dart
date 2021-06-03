@@ -65,8 +65,6 @@ class _CreateSongFormState extends State<CreateSongForm> {
         return SongsList();
       }),
     );
-
-    // print()
   }
 
   Widget build(BuildContext context) {
@@ -90,7 +88,6 @@ class _CreateSongFormState extends State<CreateSongForm> {
           ),
           Text(
             "bpm $_bpm",
-            // "タイトルを入力",
             style: TextStyle(
               color: Colors.blueAccent,
               fontSize: 30.0,
