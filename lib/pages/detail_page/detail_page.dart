@@ -30,9 +30,6 @@ class DetailPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                'テキスト',
-              ),
               Text(bpm.toString()),
             ],
           ),
