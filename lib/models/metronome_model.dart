@@ -42,7 +42,7 @@ class MetronomeModel extends ChangeNotifier {
 
   get soundVolume => _soundVolume;
 
-  bool _metronomeContainerStatus = false;
+  int _metronomeContainerStatus = 0;
 
   get metronomeContainerStatus => _metronomeContainerStatus;
 
@@ -68,7 +68,7 @@ class MetronomeModel extends ChangeNotifier {
   void forceStop() {
     metronomeClear();
     _isPlaying = false;
-    _metronomeContainerStatus = false;
+    _metronomeContainerStatus = 0;
     notifyListeners();
   }
 
@@ -169,7 +169,7 @@ class MetronomeModel extends ChangeNotifier {
 
   void changeMetronomeContainerStatus() {
     if (_isPlaying) {
-      _metronomeContainerStatus = !_metronomeContainerStatus;
+      _metronomeContainerStatus++;
       notifyListeners();
     }
   }
