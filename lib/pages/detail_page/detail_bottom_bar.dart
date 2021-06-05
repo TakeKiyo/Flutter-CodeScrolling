@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/metronome_model.dart';
+import '../../pages/detail_page/metronome_container.dart';
 import 'bpm_setting.dart';
 import 'volume_setting.dart';
 
@@ -15,6 +16,10 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
       height: 100,
       padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Expanded(
+          flex: 1,
+          child: MetronomeContainer(),
+        ),
         Expanded(
           flex: 1,
           child: TextButton(

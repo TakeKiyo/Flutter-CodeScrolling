@@ -42,6 +42,10 @@ class MetronomeModel extends ChangeNotifier {
 
   get soundVolume => _soundVolume;
 
+  int _metronomeContainerStatus = 0;
+
+  get metronomeContainerStatus => _metronomeContainerStatus;
+
   void increment() {
     if (_tempoCount < 300) {
       _tempoCount++;
@@ -64,6 +68,7 @@ class MetronomeModel extends ChangeNotifier {
   void forceStop() {
     metronomeClear();
     _isPlaying = false;
+    _metronomeContainerStatus = 0;
     notifyListeners();
   }
 
@@ -123,6 +128,7 @@ class MetronomeModel extends ChangeNotifier {
     _metronomePlayer.play(_metronomeSound,
         volume: _soundVolume, isNotification: true);
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
+    changeMetronomeContainerStatus();
   }
 
   void metronomeClear() {
@@ -159,5 +165,12 @@ class MetronomeModel extends ChangeNotifier {
   void volumeDefault() {
     _soundVolume = 1;
     notifyListeners();
+  }
+
+  void changeMetronomeContainerStatus() {
+    if (_isPlaying) {
+      _metronomeContainerStatus++;
+      notifyListeners();
+    }
   }
 }
