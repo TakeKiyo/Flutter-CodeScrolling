@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
 import 'detail_bottom_bar.dart';
+import 'metronome_container.dart';
 
 class DetailPage extends StatelessWidget {
   final int bpm;
@@ -27,11 +28,24 @@ class DetailPage extends StatelessWidget {
           actions: <Widget>[],
         ),
         body: Center(
+          /*
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(bpm.toString()),
             ],
+          ),
+           */
+          child: ListView(
+            padding: EdgeInsets.all(10),
+            scrollDirection: Axis.horizontal,
+            children: List.generate(model.countInTimes, (cNum) => cNum)
+                .map((cNum) => Container(
+                      padding: EdgeInsets.all(5),
+                      child: MetronomeContainerWidget(
+                          contentState: cNum, contentNum: model.countInTimes),
+                    ))
+                .toList(),
           ),
         ),
         bottomNavigationBar: detailBottomBar(context, model),

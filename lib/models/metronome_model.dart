@@ -42,9 +42,13 @@ class MetronomeModel extends ChangeNotifier {
 
   get soundVolume => _soundVolume;
 
-  int _metronomeContainerStatus = 0;
+  int _metronomeContainerStatus = -1;
 
   get metronomeContainerStatus => _metronomeContainerStatus;
+
+  int _countInTimes = 4;
+
+  get countInTimes => _countInTimes;
 
   void increment() {
     if (_tempoCount < 300) {
@@ -68,7 +72,7 @@ class MetronomeModel extends ChangeNotifier {
   void forceStop() {
     metronomeClear();
     _isPlaying = false;
-    _metronomeContainerStatus = 0;
+    _metronomeContainerStatus = -1;
     notifyListeners();
   }
 
@@ -119,16 +123,20 @@ class MetronomeModel extends ChangeNotifier {
 
   void metronomeLoad() async {
     await _metronomePlayer.load(_metronomeSound);
-    metronomePlay();
+    countInPlay();
   }
 
   void metronomePlay() {
     var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
+    metronomeSoundPlay();
+    changeMetronomeContainerStatus();
+  }
+
+  void metronomeSoundPlay() {
     _metronomePlayer.play(_metronomeSound,
         volume: _soundVolume, isNotification: true);
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
-    changeMetronomeContainerStatus();
   }
 
   void metronomeClear() {
@@ -171,6 +179,18 @@ class MetronomeModel extends ChangeNotifier {
     if (_isPlaying) {
       _metronomeContainerStatus++;
       notifyListeners();
+    }
+  }
+
+  void countInPlay() {
+    var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
+    if (_metronomeContainerStatus < _countInTimes - 1) {
+      _metronomeTimer = Timer(_metronomeDuration, countInPlay);
+      metronomeSoundPlay();
+      changeMetronomeContainerStatus();
+      print(_metronomeContainerStatus);
+    } else {
+      metronomePlay();
     }
   }
 }
