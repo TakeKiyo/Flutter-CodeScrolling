@@ -127,7 +127,9 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void countInPlay() {
-    var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
+    const microseconds = 60000000;
+    var _metronomeDuration =
+        Duration(microseconds: (microseconds ~/ _tempoCount));
     if (_metronomeContainerStatus < _countInTimes - 1) {
       _metronomeTimer = Timer(_metronomeDuration, countInPlay);
       metronomeRingSound();
@@ -146,9 +148,10 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   Future waitUntilCountInEnds() {
+    const microseconds = 60000000;
     return Future.delayed(Duration(
         microseconds:
-            (60000000 / _tempoCount * (_countInTimes - 0.5)).toInt()));
+            (microseconds / _tempoCount * (_countInTimes - 0.5)).toInt()));
   }
 
   void metronomePlay() {
