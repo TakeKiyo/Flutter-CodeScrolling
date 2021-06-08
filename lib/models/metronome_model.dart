@@ -126,6 +126,31 @@ class MetronomeModel extends ChangeNotifier {
     countInPlay();
   }
 
+  void countInPlay() {
+    var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
+    if (_metronomeContainerStatus < _countInTimes - 1) {
+      _metronomeTimer = Timer(_metronomeDuration, countInPlay);
+      metronomeSoundPlay();
+      changeMetronomeContainerStatus();
+      print(_metronomeContainerStatus);
+    } else {
+      metronomePlay();
+    }
+  }
+
+  void changeMetronomeContainerStatus() {
+    if (_isPlaying) {
+      _metronomeContainerStatus++;
+      notifyListeners();
+    }
+  }
+
+  Future closeDialog() {
+    return Future.delayed(Duration(
+        microseconds:
+            (60000000 / _tempoCount * (_countInTimes - 0.5)).toInt()));
+  }
+
   void metronomePlay() {
     var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
@@ -173,24 +198,5 @@ class MetronomeModel extends ChangeNotifier {
   void volumeDefault() {
     _soundVolume = 1;
     notifyListeners();
-  }
-
-  void changeMetronomeContainerStatus() {
-    if (_isPlaying) {
-      _metronomeContainerStatus++;
-      notifyListeners();
-    }
-  }
-
-  void countInPlay() {
-    var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
-    if (_metronomeContainerStatus < _countInTimes - 1) {
-      _metronomeTimer = Timer(_metronomeDuration, countInPlay);
-      metronomeSoundPlay();
-      changeMetronomeContainerStatus();
-      print(_metronomeContainerStatus);
-    } else {
-      metronomePlay();
-    }
   }
 }

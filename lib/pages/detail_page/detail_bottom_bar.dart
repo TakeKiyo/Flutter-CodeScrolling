@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../models/metronome_model.dart';
 import '../../pages/detail_page/metronome_container.dart';
 import 'bpm_setting.dart';
+import 'countin_dialog.dart';
 import 'volume_setting.dart';
 
 Container detailBottomBar(BuildContext context, MetronomeModel model) {
@@ -55,10 +56,21 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
                   color: textColor,
                   icon: Icon(Icons.play_arrow_rounded),
                   iconSize: bottomIconSIze,
-                  onPressed: () {
+                  onPressed: () async {
                     model.switchPlayStatus();
                     model.metronomeLoad();
                     print("Pressed: Play");
+                    if (model.metronomeContainerStatus <
+                        model.countInTimes - 1) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CountInDialog();
+                          });
+                      await model
+                          .closeDialog()
+                          .then((_) => Navigator.of(context).pop());
+                    }
                   },
                 )
               : IconButton(
