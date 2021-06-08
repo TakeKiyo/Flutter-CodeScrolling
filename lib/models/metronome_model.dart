@@ -130,22 +130,22 @@ class MetronomeModel extends ChangeNotifier {
     var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
     if (_metronomeContainerStatus < _countInTimes - 1) {
       _metronomeTimer = Timer(_metronomeDuration, countInPlay);
-      metronomeSoundPlay();
-      changeMetronomeContainerStatus();
+      metronomeRingSound();
+      countInChangeStatus();
       print(_metronomeContainerStatus);
     } else {
       metronomePlay();
     }
   }
 
-  void changeMetronomeContainerStatus() {
+  void countInChangeStatus() {
     if (_isPlaying) {
       _metronomeContainerStatus++;
       notifyListeners();
     }
   }
 
-  Future closeDialog() {
+  Future waitUntilCountInEnds() {
     return Future.delayed(Duration(
         microseconds:
             (60000000 / _tempoCount * (_countInTimes - 0.5)).toInt()));
@@ -154,11 +154,11 @@ class MetronomeModel extends ChangeNotifier {
   void metronomePlay() {
     var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
-    metronomeSoundPlay();
-    changeMetronomeContainerStatus();
+    metronomeRingSound();
+    countInChangeStatus();
   }
 
-  void metronomeSoundPlay() {
+  void metronomeRingSound() {
     _metronomePlayer.play(_metronomeSound,
         volume: _soundVolume, isNotification: true);
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);

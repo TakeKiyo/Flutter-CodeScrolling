@@ -68,7 +68,7 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
                             return CountInDialog();
                           });
                       await model
-                          .closeDialog()
+                          .waitUntilCountInEnds()
                           .then((_) => Navigator.of(context).pop());
                     }
                   },
