@@ -42,6 +42,7 @@ class MetronomeModel extends ChangeNotifier {
 
   get soundVolume => _soundVolume;
 
+  ///初期値を-1にするとメトロノームが鳴る１回目に一番左(mod CountIn == 0になる)がフラッシュする
   int _metronomeContainerStatus = -1;
 
   get metronomeContainerStatus => _metronomeContainerStatus;
@@ -82,6 +83,10 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void bpmTapDetector() {
+    const bpmMin = 30;
+    const bpmMax = 300;
+    const milliSeconds = 60000;
+
     if (_bpmTapCount == 0) {
       _bpmTapStartTime = DateTime.now();
       _bpmTapCount++;
@@ -103,11 +108,11 @@ class MetronomeModel extends ChangeNotifier {
               (_bpmDiffValue, _bpmDiffElement) =>
                   _bpmDiffValue + _bpmDiffElement) ~/
           _bpmCalculateList.length;
-      _tempoCount = (60000 / _bpmCalculateAverage).floor();
-      if (_tempoCount < 30) {
-        _tempoCount = 30;
-      } else if (_tempoCount > 300) {
-        _tempoCount = 300;
+      _tempoCount = (milliSeconds / _bpmCalculateAverage).floor();
+      if (_tempoCount < bpmMin) {
+        _tempoCount = bpmMin;
+      } else if (_tempoCount > bpmMax) {
+        _tempoCount = bpmMax;
       }
       print("$_bpmCalculateList");
       resetBpmTapCount();
@@ -130,6 +135,8 @@ class MetronomeModel extends ChangeNotifier {
     const microseconds = 60000000;
     var _metronomeDuration =
         Duration(microseconds: (microseconds ~/ _tempoCount));
+
+    ///カウントインを規定回数繰り返したらmetronomePlay()を呼び出す。一定Durationでメトロノームを鳴らしたいのでwhileで実装できない。
     if (_metronomeContainerStatus < _countInTimes - 1) {
       _metronomeTimer = Timer(_metronomeDuration, countInPlay);
       metronomeRingSound();
@@ -151,11 +158,15 @@ class MetronomeModel extends ChangeNotifier {
     const microseconds = 60000000;
     return Future.delayed(Duration(
         microseconds:
+
+            ///カウントイン回数xBPM分の時間。ー0.5がないと一瞬だけカウントイン回数+1回目のFlashが起きてしまう
             (microseconds / _tempoCount * (_countInTimes - 0.5)).toInt()));
   }
 
   void metronomePlay() {
-    var _metronomeDuration = Duration(microseconds: (60000000 ~/ _tempoCount));
+    const microseconds = 60000000;
+    var _metronomeDuration =
+        Duration(microseconds: (microseconds ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
     metronomeRingSound();
     countInChangeStatus();
@@ -164,6 +175,8 @@ class MetronomeModel extends ChangeNotifier {
   void metronomeRingSound() {
     _metronomePlayer.play(_metronomeSound,
         volume: _soundVolume, isNotification: true);
+
+    ///下記のコードが無いとiOSでのみエラーを吐く。
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
 
