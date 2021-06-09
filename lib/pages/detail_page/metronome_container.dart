@@ -10,11 +10,11 @@ class MetronomeContainer extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MetronomeContainerWidget(contentState: 1),
+          MetronomeContainerWidget(contentState: 0, contentNum: 2),
           Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
           ),
-          MetronomeContainerWidget(contentState: 0),
+          MetronomeContainerWidget(contentState: 1, contentNum: 2),
         ],
       );
     });
@@ -23,8 +23,10 @@ class MetronomeContainer extends StatelessWidget {
 
 class MetronomeContainerWidget extends StatelessWidget {
   final int contentState;
+  final int contentNum;
 
-  MetronomeContainerWidget({Key key, this.contentState}) : super(key: key);
+  MetronomeContainerWidget({Key key, this.contentState, this.contentNum})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +40,11 @@ class MetronomeContainerWidget extends StatelessWidget {
               width: 0.1,
             ),
             shape: BoxShape.circle,
-            color: (!model.isPlaying)
+            color: !model.isPlaying
                 ? Colors.white
-                : (model.metronomeContainerStatus % 2 == contentState
-                    ? Colors.white
-                    : Colors.orange)),
+                : (model.metronomeContainerStatus % contentNum == contentState
+                    ? Colors.orange
+                    : Colors.white)),
       );
     });
   }
