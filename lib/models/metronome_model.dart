@@ -1,10 +1,10 @@
 import 'dart:async';
 
-// import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
-// void audioPlayerHandler(AudioPlayerState value) => null;
+void audioPlayerHandler(AudioPlayerState value) => null;
 
 class MetronomeModel extends ChangeNotifier {
   int _tempoCount;
@@ -177,13 +177,13 @@ class MetronomeModel extends ChangeNotifier {
         volume: _soundVolume, isNotification: true);
 
     ///下記のコードが無いとiOSでのみエラーを吐く。
-    // _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
+    _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
 
   void metronomeClear() {
     if (_isPlaying) {
       _metronomeTimer.cancel();
-      // _metronomePlayer.clear(_metronomeSound);
+      _metronomePlayer.clear(_metronomeSound);
     }
   }
 
