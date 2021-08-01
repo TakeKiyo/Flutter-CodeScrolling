@@ -38,6 +38,8 @@ class MetronomeModel extends ChangeNotifier {
   String _metronomeSound = "metronome_digital1.wav";
   Timer _metronomeTimer;
 
+  Color metronomeContainerColor;
+
   double _soundVolume = 1;
 
   get soundVolume => _soundVolume;
@@ -170,6 +172,7 @@ class MetronomeModel extends ChangeNotifier {
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
     metronomeRingSound();
     countInChangeStatus();
+    metronomeContainerColorChange();
   }
 
   void metronomeRingSound() {
@@ -178,6 +181,14 @@ class MetronomeModel extends ChangeNotifier {
 
     ///下記のコードが無いとiOSでのみエラーを吐く。
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
+  }
+
+  void metronomeContainerColorChange() async {
+    metronomeContainerColor = Colors.orange;
+    notifyListeners();
+    await Future.delayed(Duration(microseconds: 30000000 ~/ _tempoCount));
+    metronomeContainerColor = null;
+    notifyListeners();
   }
 
   void metronomeClear() {
