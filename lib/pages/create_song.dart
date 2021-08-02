@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -50,7 +51,25 @@ class _CreateSongFormState extends State<CreateSongForm> {
     });
   }
 
-  void submitSong() async {
+  void createButtonClicked() {
+    // TODO バリデーションが満たされてなかったwarning いけてたら確認ダイアログ
+    showDialog(
+        context: context,
+        builder: (_) => new CupertinoAlertDialog(
+              title: new Text("Cupertino Dialog"),
+              content: new Text("Hey! I'm Coflutter!"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Close me!'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
+  }
+
+  void createSong() async {
     String udid = await FlutterUdid.udid;
 
     FirebaseFirestore.instance.collection("Songs").add({
@@ -106,7 +125,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
             color: Colors.orange,
             textColor: Colors.white,
             onPressed: () {
-              submitSong();
+              createButtonClicked();
             },
           ),
         ],
