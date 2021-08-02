@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthModel extends ChangeNotifier {
+  String _udid;
+  AuthModel(String s) {
+    this._udid = s;
+  }
+  String get udid => _udid;
+
   User _user;
   User get user => _user;
-
-  String _udid;
-  String get udid => _udid;
-  set udid(String s) {
-    _udid = s;
-  }
 
   // ログイン処理
   Future<bool> login(String email, String password) async {
