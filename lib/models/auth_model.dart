@@ -5,6 +5,12 @@ class AuthModel extends ChangeNotifier {
   User _user;
   User get user => _user;
 
+  String _udid;
+  String get udid => _udid;
+  set udid(String s) {
+    _udid = s;
+  }
+
   // ログイン処理
   Future<bool> login(String email, String password) async {
     try {
