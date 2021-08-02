@@ -172,7 +172,7 @@ class MetronomeModel extends ChangeNotifier {
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
     metronomeRingSound();
     countInChangeStatus();
-    metronomeContainerColorChange();
+    changeMetronomeContainerColor();
   }
 
   void metronomeRingSound() {
@@ -183,10 +183,12 @@ class MetronomeModel extends ChangeNotifier {
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
 
-  void metronomeContainerColorChange() async {
+  void changeMetronomeContainerColor() async {
+    /// flashDuration=100000　はbpm=300（最大時）に合わせた数値
+    const flashDuration = 100000;
     metronomeContainerColor = Colors.orange;
     notifyListeners();
-    await Future.delayed(Duration(microseconds: 30000000 ~/ _tempoCount));
+    await Future.delayed(Duration(microseconds: flashDuration));
     metronomeContainerColor = null;
     notifyListeners();
   }
