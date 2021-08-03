@@ -38,8 +38,20 @@ class _DetailEditForm extends State<DetailEditPage> {
   }
 
   void editCodeList(String docId) async {
+    List<String> formattedCodeList = [];
+    for (int i = 0; i < codeListState.length; i++) {
+      List<String> oneLineCodeList = codeListState[i];
+      String tmp = "";
+      for (int j = 0; j < oneLineCodeList.length; j++) {
+        tmp += oneLineCodeList[j];
+        if (j != oneLineCodeList.length - 1) {
+          tmp += ",";
+        }
+      }
+      formattedCodeList.add(tmp);
+    }
     FirebaseFirestore.instance.collection("Songs").doc(docId).update({
-      "codeList": ["C,F,G A,C", "A,C,D,E"],
+      "codeList": formattedCodeList,
     });
     Navigator.of(context).pop(
       MaterialPageRoute(builder: (context) {
