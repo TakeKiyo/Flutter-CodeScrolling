@@ -41,8 +41,8 @@ class _DetailEditForm extends State<DetailEditPage> {
 
   List<String> formatCodeList(List<List<String>> codeList) {
     List<String> formattedCodeList = [];
-    for (int i = 0; i < _codeListState.length; i++) {
-      List<String> oneLineCodeList = _codeListState[i];
+    for (int i = 0; i < codeListState.length; i++) {
+      List<String> oneLineCodeList = codeListState[i];
       String tmp = "";
       for (int j = 0; j < oneLineCodeList.length; j++) {
         tmp += oneLineCodeList[j];
@@ -57,7 +57,7 @@ class _DetailEditForm extends State<DetailEditPage> {
 
   void editCodeList(String docId) async {
     FirebaseFirestore.instance.collection("Songs").doc(docId).update({
-      "codeList": formatCodeList(_codeListState),
+      "codeList": formatCodeList(codeListState),
     });
     Navigator.of(context).pop(
       MaterialPageRoute(builder: (context) {
