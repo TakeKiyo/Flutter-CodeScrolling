@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,14 +10,39 @@ class DetailEditPage extends StatefulWidget {
   final int bpm;
   final String title;
   final String docId;
+  final String codeList;
 
-  DetailEditPage({this.bpm, this.title, this.docId});
+  DetailEditPage({this.bpm, this.title, this.docId, this.codeList});
   _DetailEditForm createState() => _DetailEditForm();
 }
 
 class _DetailEditForm extends State<DetailEditPage> {
+  Widget getTextWidgets(List<String> strings) {
+    List<Widget> list = [];
+    for (var i = 0; i < strings.length; i++) {
+      list.add(Flexible(
+          child: TextField(
+        textAlign: TextAlign.center,
+        controller: TextEditingController(text: strings[i]), //ここに初期値
+      )));
+      list.add(Text("|"));
+    }
+    return new Row(children: list);
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<List<String>> codeListState = [];
+    List<String> splittedCodeList = widget.codeList.split("¥");
+    splittedCodeList = splittedCodeList.sublist(0, splittedCodeList.length - 1);
+    for (int i = 0; i < splittedCodeList.length; i++) {
+      List<String> oneLineCode = splittedCodeList[i].split(",");
+      List<String> tmp = [];
+      for (int j = 0; j < oneLineCode.length; j++) {
+        tmp.add(oneLineCode[j]);
+      }
+      codeListState.add(tmp);
+    }
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
         appBar: AppBar(
@@ -37,44 +61,8 @@ class _DetailEditForm extends State<DetailEditPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text("コードの編集"),
-              Expanded(
-                  child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('Songs')
-                          .doc(widget.docId)
-                          .snapshots(),
-                      builder:
-                          // ignore: missing_return
-                          (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Text("Loading");
-                        }
-                        var songDocument = snapshot.data;
-                        if (songDocument["codeList"].length == 0) {
-                          return Text("まだコードは追加されていません");
-                        } else {
-                          var codeList = songDocument["codeList"];
-                          String concatenatedCode = "";
-
-                          for (int idx = 0; idx < codeList.length; idx++) {
-                            String oneLineCode = codeList[idx];
-                            List<String> splitedOneLineCode =
-                                oneLineCode.split(",");
-                            print(splitedOneLineCode);
-                            for (int i = 0;
-                                i < splitedOneLineCode.length;
-                                i++) {
-                              concatenatedCode += splitedOneLineCode[i];
-                              if (i == splitedOneLineCode.length - 1) {
-                                concatenatedCode += "\n";
-                              } else {
-                                concatenatedCode += " | ";
-                              }
-                            }
-                          }
-                          return Text(concatenatedCode);
-                        }
-                      }))
+              for (int idx = 0; idx < codeListState.length; idx++)
+                getTextWidgets(codeListState[idx])
             ],
           ),
         ),
