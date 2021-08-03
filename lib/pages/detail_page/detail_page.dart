@@ -33,23 +33,6 @@ class DetailPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextButton(
-                  onPressed: () {
-                    Provider.of<MetronomeModel>(context, listen: false)
-                        .tempoCount = bpm;
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return DetailEditPage(
-                            bpm: bpm,
-                            title: title,
-                            docId: docId,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  child: Text("コードを編集する")),
               Expanded(
                   child: StreamBuilder(
                       stream: FirebaseFirestore.instance
@@ -68,6 +51,7 @@ class DetailPage extends StatelessWidget {
                         } else {
                           var codeList = songDocument["codeList"];
                           String concatenatedCode = "";
+                          String codeListState = "";
 
                           for (int idx = 0; idx < codeList.length; idx++) {
                             String oneLineCode = codeList[idx];
@@ -77,14 +61,40 @@ class DetailPage extends StatelessWidget {
                                 i < splitedOneLineCode.length;
                                 i++) {
                               concatenatedCode += splitedOneLineCode[i];
+                              codeListState += splitedOneLineCode[i];
                               if (i == splitedOneLineCode.length - 1) {
                                 concatenatedCode += "\n";
+                                codeListState += "¥";
                               } else {
                                 concatenatedCode += " | ";
+                                codeListState += ",";
                               }
                             }
                           }
-                          return Text(concatenatedCode);
+                          return Column(
+                            children: <Widget>[
+                              TextButton(
+                                  onPressed: () {
+                                    Provider.of<MetronomeModel>(context,
+                                            listen: false)
+                                        .tempoCount = bpm;
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return DetailEditPage(
+                                            bpm: bpm,
+                                            title: title,
+                                            docId: docId,
+                                            codeList: codeListState,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Text("コードを編集する")),
+                              Text(concatenatedCode),
+                            ],
+                          );
                         }
                       }))
             ],
