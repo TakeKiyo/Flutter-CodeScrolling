@@ -122,7 +122,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
             ),
           ),
           TextField(
-            maxLengthEnforced: true,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             style: TextStyle(color: Colors.black),
             maxLines: 1,
             onChanged: _handleTitle,
@@ -142,10 +142,9 @@ class _CreateSongFormState extends State<CreateSongForm> {
             maxLines: 1,
             onChanged: _handleBpm,
           ),
-          RaisedButton(
-            child: const Text('曲を追加'),
-            color: Colors.orange,
-            textColor: Colors.white,
+          ElevatedButton(
+            child: const Text('曲を追加', style: TextStyle(color: Colors.white)),
+            style: ElevatedButton.styleFrom(primary: Colors.orange),
             onPressed: () {
               createButtonClicked();
             },

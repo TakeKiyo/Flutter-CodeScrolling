@@ -8,13 +8,14 @@ import 'detail_bottom_bar.dart';
 import 'detail_page.dart';
 
 class DetailEditPage extends StatefulWidget {
-  @override
   final int bpm;
   final String title;
   final String docId;
   final String codeList;
 
   DetailEditPage({this.bpm, this.title, this.docId, this.codeList});
+
+  @override
   _DetailEditForm createState() => _DetailEditForm();
 }
 
@@ -115,18 +116,18 @@ class _DetailEditForm extends State<DetailEditPage> {
               Text("コードの編集"),
               for (int idx = 0; idx < codeListState.length; idx++)
                 getCodeListWidgets(codeListState[idx], idx),
-              RaisedButton(
-                child: const Text('小節を追加'),
-                color: Colors.orange,
-                textColor: Colors.white,
+              ElevatedButton(
+                child:
+                    const Text('小節を追加', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(primary: Colors.orange),
                 onPressed: () {
                   addLine();
                 },
               ),
-              RaisedButton(
-                child: const Text('編集を終了'),
-                color: Colors.orange,
-                textColor: Colors.white,
+              ElevatedButton(
+                child:
+                    const Text('編集を終了', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(primary: Colors.orange),
                 onPressed: () {
                   editCodeList(widget.docId);
                 },
