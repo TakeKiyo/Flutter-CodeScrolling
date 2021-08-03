@@ -19,7 +19,9 @@ class DetailEditPage extends StatefulWidget {
 }
 
 class _DetailEditForm extends State<DetailEditPage> {
-  List<List<String>> codeListState;
+  List<List<String>> _codeListState;
+  List<List<String>> get codeListState => _codeListState;
+  List<List<String>> addedList = [];
 
   Widget getCodeListWidgets(List<String> strings, int listIndex) {
     List<Widget> list = [];
@@ -29,7 +31,7 @@ class _DetailEditForm extends State<DetailEditPage> {
         textAlign: TextAlign.center,
         controller: TextEditingController(text: strings[i]),
         onChanged: (text) {
-          codeListState[listIndex][i] = text;
+          _codeListState[listIndex][i] = text;
         },
       )));
       list.add(Text("|"));
@@ -37,10 +39,10 @@ class _DetailEditForm extends State<DetailEditPage> {
     return new Row(children: list);
   }
 
-  void editCodeList(String docId) async {
+  List<String> formatCodeList(List<List<String>> codeList) {
     List<String> formattedCodeList = [];
-    for (int i = 0; i < codeListState.length; i++) {
-      List<String> oneLineCodeList = codeListState[i];
+    for (int i = 0; i < _codeListState.length; i++) {
+      List<String> oneLineCodeList = _codeListState[i];
       String tmp = "";
       for (int j = 0; j < oneLineCodeList.length; j++) {
         tmp += oneLineCodeList[j];
@@ -50,8 +52,12 @@ class _DetailEditForm extends State<DetailEditPage> {
       }
       formattedCodeList.add(tmp);
     }
+    return formattedCodeList;
+  }
+
+  void editCodeList(String docId) async {
     FirebaseFirestore.instance.collection("Songs").doc(docId).update({
-      "codeList": formattedCodeList,
+      "codeList": formatCodeList(_codeListState),
     });
     Navigator.of(context).pop(
       MaterialPageRoute(builder: (context) {
@@ -60,9 +66,15 @@ class _DetailEditForm extends State<DetailEditPage> {
     );
   }
 
+  void addLine() {
+    setState(() {
+      addedList.add(["", "", "", ""]);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    codeListState = [];
+    _codeListState = [];
     List<String> splittedCodeList = widget.codeList.split("¥");
     splittedCodeList = splittedCodeList.sublist(0, splittedCodeList.length - 1);
     for (int i = 0; i < splittedCodeList.length; i++) {
@@ -71,7 +83,15 @@ class _DetailEditForm extends State<DetailEditPage> {
       for (int j = 0; j < oneLineCode.length; j++) {
         tmp.add(oneLineCode[j]);
       }
-      codeListState.add(tmp);
+      _codeListState.add(tmp);
+    }
+    for (int i = 0; i < addedList.length; i++) {
+      List<String> oneLineCode = addedList[i];
+      List<String> tmp = [];
+      for (int j = 0; j < oneLineCode.length; j++) {
+        tmp.add(oneLineCode[j]);
+      }
+      _codeListState.add(tmp);
     }
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
@@ -93,6 +113,14 @@ class _DetailEditForm extends State<DetailEditPage> {
               Text("コードの編集"),
               for (int idx = 0; idx < codeListState.length; idx++)
                 getCodeListWidgets(codeListState[idx], idx),
+              RaisedButton(
+                child: const Text('小節を追加'),
+                color: Colors.orange,
+                textColor: Colors.white,
+                onPressed: () {
+                  addLine();
+                },
+              ),
               RaisedButton(
                 child: const Text('編集を終了'),
                 color: Colors.orange,
