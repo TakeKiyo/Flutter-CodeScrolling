@@ -4,12 +4,14 @@ import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
 import 'detail_bottom_bar.dart';
+import 'detail_edit_page.dart';
 
 class DetailPage extends StatelessWidget {
   final int bpm;
   final String title;
+  final String docId;
 
-  DetailPage({Key key, this.bpm, this.title}) : super(key: key);
+  DetailPage({Key key, this.bpm, this.title, this.docId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,22 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(bpm.toString()),
+              TextButton(
+                  onPressed: () {
+                    Provider.of<MetronomeModel>(context, listen: false)
+                        .tempoCount = bpm;
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return DetailEditPage(
+                            bpm: bpm,
+                            title: title,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  child: Text("コードや歌詞を編集する"))
             ],
           ),
         ),
