@@ -5,15 +5,18 @@ import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
 import 'detail_bottom_bar.dart';
-import 'detail_edit_page.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailEditPage extends StatefulWidget {
+  @override
   final int bpm;
   final String title;
   final String docId;
 
-  DetailPage({Key key, this.bpm, this.title, this.docId}) : super(key: key);
+  DetailEditPage({this.bpm, this.title, this.docId});
+  _DetailEditForm createState() => _DetailEditForm();
+}
 
+class _DetailEditForm extends State<DetailEditPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
@@ -26,35 +29,19 @@ class DetailPage extends StatelessWidget {
                 Navigator.of(context).pop();
                 model.forceStop();
               }),
-          title: Text(title),
+          title: Text("編集ページ"),
           actions: <Widget>[],
         ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextButton(
-                  onPressed: () {
-                    Provider.of<MetronomeModel>(context, listen: false)
-                        .tempoCount = bpm;
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return DetailEditPage(
-                            bpm: bpm,
-                            title: title,
-                            docId: docId,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                  child: Text("コードを編集する")),
+              Text("コードの編集"),
               Expanded(
                   child: StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('Songs')
-                          .doc(docId)
+                          .doc(widget.docId)
                           .snapshots(),
                       builder:
                           // ignore: missing_return
@@ -73,6 +60,7 @@ class DetailPage extends StatelessWidget {
                             String oneLineCode = codeList[idx];
                             List<String> splitedOneLineCode =
                                 oneLineCode.split(",");
+                            print(splitedOneLineCode);
                             for (int i = 0;
                                 i < splitedOneLineCode.length;
                                 i++) {
