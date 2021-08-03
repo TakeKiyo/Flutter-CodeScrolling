@@ -56,9 +56,9 @@ class _CreateSongFormState extends State<CreateSongForm> {
     if (_title == "") {
       showDialog(
           context: context,
-          builder: (_) => new CupertinoAlertDialog(
-                title: new Text("エラー"),
-                content: new Text("タイトルを入力してください"),
+          builder: (_) => CupertinoAlertDialog(
+                title: Text("エラー"),
+                content: Text("タイトルを入力してください"),
                 actions: <Widget>[
                   TextButton(
                     child: Text('OK'),
@@ -71,9 +71,9 @@ class _CreateSongFormState extends State<CreateSongForm> {
     } else {
       showDialog(
           context: context,
-          builder: (_) => new CupertinoAlertDialog(
-                title: new Text("確認"),
-                content: new Text(
+          builder: (_) => CupertinoAlertDialog(
+                title: Text("確認"),
+                content: Text(
                     "以下の曲を作成します\nタイトル: ${_title.toString()}\nBPM: ${_bpm.toString()}"),
                 actions: <Widget>[
                   TextButton(
