@@ -6,6 +6,7 @@ import '../../models/metronome_model.dart';
 Drawer settingsDrawer(
     BuildContext context, MetronomeModel model, int bpm, String title) {
   final double titleTextFont = 16;
+  final insertPadding = Padding(padding: EdgeInsets.all(10));
 
   return Drawer(
     child: Container(
@@ -35,7 +36,7 @@ Drawer settingsDrawer(
               //TODO ボタンを押したら情報変更画面
             },
           ),
-          Padding(padding: EdgeInsets.all(10)),
+          insertPadding,
           Text(
             "メトロノームのサウンド",
             style: TextStyle(
@@ -51,6 +52,32 @@ Drawer settingsDrawer(
                 print("Metronome Sound");
                 //TODO
               }),
+          insertPadding,
+          Text(
+            "カウントイン",
+            style: TextStyle(
+              fontSize: titleTextFont,
+              color: Colors.white,
+            ),
+          ),
+          ListTile(
+              tileColor: Theme.of(context).primaryColorDark,
+              title: Text("回数：" + model.countInTimes.toString(),
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                print("Count-in Times");
+                //TODO
+              }),
+          insertPadding,
+          ElevatedButton(
+            child: Text("曲を削除する", style: TextStyle(color: Colors.red)),
+            style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColorLight),
+            onPressed: () {
+              //TODO
+              print("deleted");
+            },
+          ),
         ],
       ),
     ),
