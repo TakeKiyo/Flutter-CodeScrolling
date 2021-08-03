@@ -64,6 +64,7 @@ class SongsList extends StatelessWidget {
                                         return DetailPage(
                                           bpm: doc["bpm"],
                                           title: doc["title"],
+                                          docId: doc.id,
                                         );
                                       },
                                     ),
