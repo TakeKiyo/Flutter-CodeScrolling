@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,6 @@ class DetailPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(bpm.toString()),
               TextButton(
                   onPressed: () {
                     Provider.of<MetronomeModel>(context, listen: false)
@@ -48,7 +48,45 @@ class DetailPage extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Text("コードや歌詞を編集する"))
+                  child: Text("コードを編集する")),
+              Expanded(
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('Songs')
+                          .doc(docId)
+                          .snapshots(),
+                      builder:
+                          // ignore: missing_return
+                          (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text("Loading");
+                        }
+                        var songDocument = snapshot.data;
+                        if (songDocument["codeList"].length == 0) {
+                          return Text("まだコードは追加されていません");
+                        } else {
+                          var codeList = songDocument["codeList"];
+                          String concatenatedCode = "";
+
+                          for (int idx = 0; idx < codeList.length; idx++) {
+                            String oneLineCode = codeList[idx];
+                            List<String> splitedOneLineCode =
+                                oneLineCode.split(",");
+                            print(splitedOneLineCode);
+                            for (int i = 0;
+                                i < splitedOneLineCode.length;
+                                i++) {
+                              concatenatedCode += splitedOneLineCode[i];
+                              if (i == splitedOneLineCode.length - 1) {
+                                concatenatedCode += "\n";
+                              } else {
+                                concatenatedCode += " | ";
+                              }
+                            }
+                          }
+                          return Text(concatenatedCode);
+                        }
+                      }))
             ],
           ),
         ),
