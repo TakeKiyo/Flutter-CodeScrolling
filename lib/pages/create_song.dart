@@ -96,6 +96,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
       "title": _title,
       "bpm": _bpm,
       "userID": udid,
+      "codeList": [],
       "createdAt": DateTime.now(),
       "updatedAt": DateTime.now(),
     });
