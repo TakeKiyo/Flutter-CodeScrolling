@@ -53,20 +53,40 @@ class _CreateSongFormState extends State<CreateSongForm> {
 
   void createButtonClicked() {
     // TODO バリデーションが満たされてなかったwarning いけてたら確認ダイアログ
-    showDialog(
-        context: context,
-        builder: (_) => new CupertinoAlertDialog(
-              title: new Text("Cupertino Dialog"),
-              content: new Text("Hey! I'm Coflutter!"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Close me!'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
+    if (_title == "") {
+      showDialog(
+          context: context,
+          builder: (_) => new CupertinoAlertDialog(
+                title: new Text("エラー"),
+                content: new Text("タイトルを入力してください"),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ));
+    } else {
+      showDialog(
+          context: context,
+          builder: (_) => new CupertinoAlertDialog(
+                title: new Text("確認"),
+                content: new Text(
+                    "以下の曲を作成します\nタイトル: ${_title.toString()}\nBPM: ${_bpm.toString()}"),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text("Cancel"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  TextButton(
+                    child: Text("OK"),
+                    onPressed: () async => createSong(),
+                  ),
+                ],
+              ));
+    }
   }
 
   void createSong() async {
@@ -79,7 +99,8 @@ class _CreateSongFormState extends State<CreateSongForm> {
       "createdAt": DateTime.now(),
       "updatedAt": DateTime.now(),
     });
-    Navigator.of(context).pop(
+    // 　ここはいずれ詳細ページにそのまま飛ばしたい
+    Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return SongsList();
       }),
