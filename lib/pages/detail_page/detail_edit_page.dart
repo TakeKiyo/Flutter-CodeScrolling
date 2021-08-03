@@ -74,6 +74,7 @@ class _DetailEditForm extends State<DetailEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    //親から受け取ったコードの文字列と、新たに加えたコードを結合する
     _codeListState = [];
     List<String> splittedCodeList = widget.codeList.split("¥");
     splittedCodeList = splittedCodeList.sublist(0, splittedCodeList.length - 1);
@@ -93,6 +94,7 @@ class _DetailEditForm extends State<DetailEditPage> {
       }
       _codeListState.add(tmp);
     }
+
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
         appBar: AppBar(
