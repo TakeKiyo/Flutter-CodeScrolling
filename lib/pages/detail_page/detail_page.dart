@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/pages/settings_drawer.dart';
+import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
@@ -43,7 +43,7 @@ class DetailPage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: detailBottomBar(context, model),
-        endDrawer: SettingsDrawer(),
+        endDrawer: settingsDrawer(context, model, bpm, title),
       );
     });
   }
