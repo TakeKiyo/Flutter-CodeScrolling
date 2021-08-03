@@ -47,7 +47,30 @@ class DetailPage extends StatelessWidget {
                         }
                         var songDocument = snapshot.data;
                         if (songDocument["codeList"].length == 0) {
-                          return Text("まだコードは追加されていません");
+                          return Column(
+                            children: <Widget>[
+                              TextButton(
+                                  onPressed: () {
+                                    Provider.of<MetronomeModel>(context,
+                                            listen: false)
+                                        .tempoCount = bpm;
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return DetailEditPage(
+                                            bpm: bpm,
+                                            title: title,
+                                            docId: docId,
+                                            codeList: "",
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Text("コードを編集する")),
+                              Text("まだコードは追加されていません")
+                            ],
+                          );
                         } else {
                           var codeList = songDocument["codeList"];
                           String concatenatedCode = "";
