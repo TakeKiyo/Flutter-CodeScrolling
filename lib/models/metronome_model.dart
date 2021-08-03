@@ -38,6 +38,8 @@ class MetronomeModel extends ChangeNotifier {
   String _metronomeSound = "metronome_digital1.wav";
   Timer _metronomeTimer;
 
+  get metronomeSound => _metronomeSound;
+
   Color metronomeContainerColor;
 
   double _soundVolume = 1;

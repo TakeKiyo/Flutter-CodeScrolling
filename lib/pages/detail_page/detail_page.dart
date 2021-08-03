@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
@@ -12,12 +13,15 @@ class DetailPage extends StatelessWidget {
   final String title;
   final String docId;
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   DetailPage({Key key, this.bpm, this.title, this.docId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           centerTitle: true,
           leading: IconButton(
@@ -27,7 +31,13 @@ class DetailPage extends StatelessWidget {
                 model.forceStop();
               }),
           title: Text(title),
-          actions: <Widget>[],
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: () {
+                  _scaffoldKey.currentState.openEndDrawer();
+                }),
+          ],
         ),
         body: Center(
           child: Column(
@@ -124,6 +134,7 @@ class DetailPage extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: detailBottomBar(context, model),
+        endDrawer: settingsDrawer(context, model, bpm, title),
       );
     });
   }
