@@ -75,13 +75,11 @@ class MetronomeModel extends ChangeNotifier {
       }
       _codeList.add(tmp);
     }
-    print(_codeList);
   }
 
-  String _selectedSongId;
-  get selectedSongId => _selectedSongId;
-  set selectedSongId(String s) {
-    _selectedSongId = s;
+  void editCodeList(String code, int barIdx, int timeIdx) {
+    _codeList[barIdx][timeIdx] = code;
+    notifyListeners();
   }
 
   void increment() {

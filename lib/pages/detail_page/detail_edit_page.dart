@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
 import 'detail_bottom_bar.dart';
+import 'detail_page.dart';
 
 class DetailEditPage extends StatelessWidget {
   final int bpm;
@@ -13,59 +15,53 @@ class DetailEditPage extends StatelessWidget {
 
   DetailEditPage({this.bpm, this.title, this.docId, this.codeList});
 
-  Widget getCodeListWidgets(List<String> strings, int listIndex) {
-    List<Widget> list = [];
-    for (var i = 0; i < strings.length; i++) {
-      list.add(Flexible(
-          child: TextField(
-        textAlign: TextAlign.center,
-        controller: TextEditingController(text: strings[i]),
-        onChanged: (text) {
-          // _codeListState[listIndex][i] = text;
-        },
-      )));
-      list.add(Text("|"));
-    }
-    return new Row(children: list);
-  }
-
   List<String> formatCodeList(List<List<String>> codeList) {
-    // List<String> formattedCodeList = [];
-    // for (int i = 0; i < codeListState.length; i++) {
-    //   List<String> oneLineCodeList = codeListState[i];
-    //   String tmp = "";
-    //   for (int j = 0; j < oneLineCodeList.length; j++) {
-    //     tmp += oneLineCodeList[j];
-    //     if (j != oneLineCodeList.length - 1) {
-    //       tmp += ",";
-    //     }
-    //   }
-    //   formattedCodeList.add(tmp);
-    // }
-    // return formattedCodeList;
+    List<String> formattedCodeList = [];
+    for (int i = 0; i < codeList.length; i++) {
+      List<String> oneLineCodeList = codeList[i];
+      String tmp = "";
+      for (int j = 0; j < oneLineCodeList.length; j++) {
+        tmp += oneLineCodeList[j];
+        if (j != oneLineCodeList.length - 1) {
+          tmp += ",";
+        }
+      }
+      formattedCodeList.add(tmp);
+    }
+    return formattedCodeList;
   }
-
-  void editCodeList(String docId) async {
-    // FirebaseFirestore.instance.collection("Songs").doc(docId).update({
-    //   "codeList": formatCodeList(codeListState),
-    // });
-    // Navigator.of(context).pop(
-    //   MaterialPageRoute(builder: (context) {
-    //     return DetailPage();
-    //   }),
-    // );
-  }
-
-  // void addLine() {
-  //   setState(() {
-  //     addedList.add(["", "", "", ""]);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
-    print("build");
-    print(Provider.of<MetronomeModel>(context).codeList);
+    Widget getCodeListWidgets(List<String> strings, int listIndex) {
+      List<Widget> list = [];
+      for (var i = 0; i < strings.length; i++) {
+        list.add(Flexible(
+            child: TextField(
+          textAlign: TextAlign.center,
+          controller: TextEditingController(text: strings[i]),
+          onChanged: (text) {
+            Provider.of<MetronomeModel>(context, listen: false)
+                .editCodeList(text, listIndex, i);
+          },
+        )));
+        list.add(Text("|"));
+      }
+      return new Row(children: list);
+    }
+
+    void submitCodeList(String docId) async {
+      FirebaseFirestore.instance.collection("Songs").doc(docId).update({
+        "codeList": formatCodeList(
+            Provider.of<MetronomeModel>(context, listen: false).codeList),
+        "updatedAt": DateTime.now(),
+      });
+      Navigator.of(context).pop(
+        MaterialPageRoute(builder: (context) {
+          return DetailPage();
+        }),
+      );
+    }
 
     return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
@@ -100,7 +96,7 @@ class DetailEditPage extends StatelessWidget {
                     const Text('編集を終了', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(primary: Colors.orange),
                 onPressed: () {
-                  editCodeList(docId);
+                  submitCodeList(docId);
                 },
               ),
             ],
