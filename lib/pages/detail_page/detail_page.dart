@@ -64,6 +64,9 @@ class DetailPage extends StatelessWidget {
                                     Provider.of<MetronomeModel>(context,
                                             listen: false)
                                         .tempoCount = bpm;
+                                    Provider.of<MetronomeModel>(context,
+                                            listen: false)
+                                        .codeList = "";
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) {
@@ -111,6 +114,9 @@ class DetailPage extends StatelessWidget {
                                     Provider.of<MetronomeModel>(context,
                                             listen: false)
                                         .tempoCount = bpm;
+                                    Provider.of<MetronomeModel>(context,
+                                            listen: false)
+                                        .codeList = codeListState;
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) {

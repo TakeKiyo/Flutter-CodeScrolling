@@ -55,6 +55,35 @@ class MetronomeModel extends ChangeNotifier {
 
   get countInTimes => _countInTimes;
 
+  List<List<String>> _codeList = [];
+  get codeList => _codeList;
+  void addEmptyList() {
+    _codeList.add(["", "", "", ""]);
+    notifyListeners();
+  }
+
+  // 曲の詳細画面から、編集画面に遷移するときに呼ばれる
+  set codeList(String codeList) {
+    _codeList = [];
+    List<String> splitedCodeList = codeList.split("¥");
+    splitedCodeList = splitedCodeList.sublist(0, splitedCodeList.length - 1);
+    for (int i = 0; i < splitedCodeList.length; i++) {
+      List<String> oneLineCode = splitedCodeList[i].split(",");
+      List<String> tmp = [];
+      for (int j = 0; j < oneLineCode.length; j++) {
+        tmp.add(oneLineCode[j]);
+      }
+      _codeList.add(tmp);
+    }
+    print(_codeList);
+  }
+
+  String _selectedSongId;
+  get selectedSongId => _selectedSongId;
+  set selectedSongId(String s) {
+    _selectedSongId = s;
+  }
+
   void increment() {
     if (_tempoCount < 300) {
       _tempoCount++;
