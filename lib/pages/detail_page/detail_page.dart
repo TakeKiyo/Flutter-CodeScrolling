@@ -66,7 +66,7 @@ class DetailPage extends StatelessWidget {
                                         .tempoCount = bpm;
                                     Provider.of<MetronomeModel>(context,
                                             listen: false)
-                                        .codeList = "";
+                                        .codeList = [];
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) {
@@ -86,7 +86,6 @@ class DetailPage extends StatelessWidget {
                         } else {
                           var codeList = songDocument["codeList"];
                           String concatenatedCode = "";
-                          String codeListState = "";
 
                           for (int idx = 0; idx < codeList.length; idx++) {
                             String oneLineCode = codeList[idx];
@@ -96,13 +95,10 @@ class DetailPage extends StatelessWidget {
                                 i < splitedOneLineCode.length;
                                 i++) {
                               concatenatedCode += splitedOneLineCode[i];
-                              codeListState += splitedOneLineCode[i];
                               if (i == splitedOneLineCode.length - 1) {
                                 concatenatedCode += "\n";
-                                codeListState += "¥";
                               } else {
                                 concatenatedCode += " | ";
-                                codeListState += ",";
                               }
                             }
                           }
@@ -115,7 +111,8 @@ class DetailPage extends StatelessWidget {
                                         .tempoCount = bpm;
                                     Provider.of<MetronomeModel>(context,
                                             listen: false)
-                                        .codeList = codeListState;
+                                        .codeList = codeList.cast<String>();
+                                    ;
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) {

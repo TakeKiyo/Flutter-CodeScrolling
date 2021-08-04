@@ -63,12 +63,11 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   // 曲の詳細画面から、編集画面に遷移するときに呼ばれる
-  set codeList(String codeList) {
+  set codeList(List<String> fetchedCodeList) {
     _codeList = [];
-    List<String> splitedCodeList = codeList.split("¥");
-    splitedCodeList = splitedCodeList.sublist(0, splitedCodeList.length - 1);
-    for (int i = 0; i < splitedCodeList.length; i++) {
-      List<String> oneLineCode = splitedCodeList[i].split(",");
+    print(fetchedCodeList);
+    for (int i = 0; i < fetchedCodeList.length; i++) {
+      List<String> oneLineCode = fetchedCodeList[i].split(",");
       List<String> tmp = [];
       for (int j = 0; j < oneLineCode.length; j++) {
         tmp.add(oneLineCode[j]);
