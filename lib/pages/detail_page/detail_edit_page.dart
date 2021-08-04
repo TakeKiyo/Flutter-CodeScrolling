@@ -77,10 +77,10 @@ class _DetailEditForm extends State<DetailEditPage> {
   Widget build(BuildContext context) {
     //親から受け取ったコードの文字列と、新たに加えたコードを結合する
     _codeListState = [];
-    List<String> splittedCodeList = widget.codeList.split("¥");
-    splittedCodeList = splittedCodeList.sublist(0, splittedCodeList.length - 1);
-    for (int i = 0; i < splittedCodeList.length; i++) {
-      List<String> oneLineCode = splittedCodeList[i].split(",");
+    List<String> splitedCodeList = widget.codeList.split("¥");
+    splitedCodeList = splitedCodeList.sublist(0, splitedCodeList.length - 1);
+    for (int i = 0; i < splitedCodeList.length; i++) {
+      List<String> oneLineCode = splitedCodeList[i].split(",");
       List<String> tmp = [];
       for (int j = 0; j < oneLineCode.length; j++) {
         tmp.add(oneLineCode[j]);
