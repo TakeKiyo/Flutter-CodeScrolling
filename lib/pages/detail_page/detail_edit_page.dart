@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/metronome_model.dart';
-import 'detail_bottom_bar.dart';
 import 'detail_page.dart';
 
 class DetailEditPage extends StatelessWidget {
@@ -40,7 +39,7 @@ class DetailEditPage extends StatelessWidget {
           textAlign: TextAlign.center,
           controller: TextEditingController(text: strings[i]),
           onChanged: (text) {
-            Provider.of<MetronomeModel>(context, listen: false)
+            Provider.of<EditingSongModel>(context, listen: false)
                 .editCodeList(text, listIndex, i);
           },
         )));
@@ -52,7 +51,7 @@ class DetailEditPage extends StatelessWidget {
     void submitCodeList(String docId) async {
       FirebaseFirestore.instance.collection("Songs").doc(docId).update({
         "codeList": formatCodeList(
-            Provider.of<MetronomeModel>(context, listen: false).codeList),
+            Provider.of<EditingSongModel>(context, listen: false).codeList),
         "updatedAt": DateTime.now(),
       });
       Navigator.of(context).pop(
@@ -62,7 +61,7 @@ class DetailEditPage extends StatelessWidget {
       );
     }
 
-    return Consumer<MetronomeModel>(builder: (_, model, __) {
+    return Consumer<EditingSongModel>(builder: (_, model, __) {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -70,7 +69,6 @@ class DetailEditPage extends StatelessWidget {
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.of(context).pop();
-                model.forceStop();
               }),
           title: Text("編集ページ"),
           actions: <Widget>[],
@@ -101,7 +99,6 @@ class DetailEditPage extends StatelessWidget {
             ],
           ),
         ),
-        bottomNavigationBar: detailBottomBar(context, model),
       );
     });
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +65,7 @@ class DetailPage extends StatelessWidget {
                                     Provider.of<MetronomeModel>(context,
                                             listen: false)
                                         .tempoCount = bpm;
-                                    Provider.of<MetronomeModel>(context,
+                                    Provider.of<EditingSongModel>(context,
                                             listen: false)
                                         .codeList = [];
                                     Navigator.of(context).push(
@@ -109,7 +110,7 @@ class DetailPage extends StatelessWidget {
                                     Provider.of<MetronomeModel>(context,
                                             listen: false)
                                         .tempoCount = bpm;
-                                    Provider.of<MetronomeModel>(context,
+                                    Provider.of<EditingSongModel>(context,
                                             listen: false)
                                         .codeList = codeList.cast<String>();
                                     ;

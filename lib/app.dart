@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
+import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:my_app/pages/songs_list.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider<AuthModel>(
             create: (_) => AuthModel(udid),
+          ),
+          ChangeNotifierProvider<EditingSongModel>(
+            create: (_) => EditingSongModel(),
           ),
         ],
         child: MaterialApp(
