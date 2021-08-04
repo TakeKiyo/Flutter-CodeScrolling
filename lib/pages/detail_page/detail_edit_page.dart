@@ -79,7 +79,8 @@ class DetailEditPage extends StatelessWidget {
                   thickness: 8.0,
                   hoverThickness: 12.0,
                   child: SingleChildScrollView(
-                    child: Column(
+                    child: Center(
+                        child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text("コードの編集"),
@@ -104,7 +105,7 @@ class DetailEditPage extends StatelessWidget {
                           },
                         ),
                       ],
-                    ),
+                    )),
                   ))));
     });
   }
