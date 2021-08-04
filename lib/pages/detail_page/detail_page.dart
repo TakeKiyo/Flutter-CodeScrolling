@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -64,6 +65,9 @@ class DetailPage extends StatelessWidget {
                                     Provider.of<MetronomeModel>(context,
                                             listen: false)
                                         .tempoCount = bpm;
+                                    Provider.of<EditingSongModel>(context,
+                                            listen: false)
+                                        .codeList = [];
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) {
@@ -71,7 +75,6 @@ class DetailPage extends StatelessWidget {
                                             bpm: bpm,
                                             title: title,
                                             docId: docId,
-                                            codeList: "",
                                           );
                                         },
                                       ),
@@ -84,7 +87,6 @@ class DetailPage extends StatelessWidget {
                         } else {
                           var codeList = songDocument["codeList"];
                           String concatenatedCode = "";
-                          String codeListState = "";
 
                           for (int idx = 0; idx < codeList.length; idx++) {
                             String oneLineCode = codeList[idx];
@@ -94,13 +96,10 @@ class DetailPage extends StatelessWidget {
                                 i < splitedOneLineCode.length;
                                 i++) {
                               concatenatedCode += splitedOneLineCode[i];
-                              codeListState += splitedOneLineCode[i];
                               if (i == splitedOneLineCode.length - 1) {
                                 concatenatedCode += "\n";
-                                codeListState += "¥";
                               } else {
                                 concatenatedCode += " | ";
-                                codeListState += ",";
                               }
                             }
                           }
@@ -111,6 +110,10 @@ class DetailPage extends StatelessWidget {
                                     Provider.of<MetronomeModel>(context,
                                             listen: false)
                                         .tempoCount = bpm;
+                                    Provider.of<EditingSongModel>(context,
+                                            listen: false)
+                                        .codeList = codeList.cast<String>();
+                                    ;
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) {
@@ -118,7 +121,6 @@ class DetailPage extends StatelessWidget {
                                             bpm: bpm,
                                             title: title,
                                             docId: docId,
-                                            codeList: codeListState,
                                           );
                                         },
                                       ),
