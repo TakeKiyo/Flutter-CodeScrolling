@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/editing_song.dart';
+import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
+import 'detail_bottom_bar.dart';
 import 'detail_edit_page.dart';
 
 class DetailPage extends StatelessWidget {
@@ -77,8 +79,8 @@ class DetailPage extends StatelessWidget {
                             }
                             var songDocument = snapshot.data;
                             if (songDocument["codeList"].length == 0) {
-                              // return Center(
-                              return Column(
+                              return Center(
+                                  child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   TextButton(
@@ -104,7 +106,7 @@ class DetailPage extends StatelessWidget {
                                       child: Text("コードを編集する")),
                                   Text("まだコードは追加されていません")
                                 ],
-                              );
+                              ));
                             } else {
                               var codeList =
                                   songDocument["codeList"].cast<String>();
@@ -120,6 +122,7 @@ class DetailPage extends StatelessWidget {
                               }
 
                               return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   TextButton(
                                       onPressed: () {
@@ -151,8 +154,8 @@ class DetailPage extends StatelessWidget {
                             }
                           })))),
         ),
-        // bottomNavigationBar: detailBottomBar(context, model),
-        // endDrawer: settingsDrawer(context, model, bpm, title),
+        bottomNavigationBar: detailBottomBar(context, model),
+        endDrawer: settingsDrawer(context, model, bpm, title),
       );
     });
   }
