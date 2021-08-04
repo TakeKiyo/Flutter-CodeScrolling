@@ -74,7 +74,6 @@ class DetailPage extends StatelessWidget {
                                             bpm: bpm,
                                             title: title,
                                             docId: docId,
-                                            codeList: "",
                                           );
                                         },
                                       ),
@@ -124,7 +123,6 @@ class DetailPage extends StatelessWidget {
                                             bpm: bpm,
                                             title: title,
                                             docId: docId,
-                                            codeList: codeListState,
                                           );
                                         },
                                       ),

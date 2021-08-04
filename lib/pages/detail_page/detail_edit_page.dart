@@ -11,9 +11,8 @@ class DetailEditPage extends StatelessWidget {
   final int bpm;
   final String title;
   final String docId;
-  final String codeList;
 
-  DetailEditPage({this.bpm, this.title, this.docId, this.codeList});
+  DetailEditPage({this.bpm, this.title, this.docId});
 
   List<String> formatCodeList(List<List<String>> codeList) {
     List<String> formattedCodeList = [];
