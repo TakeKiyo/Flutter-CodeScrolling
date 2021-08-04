@@ -113,7 +113,6 @@ class DetailPage extends StatelessWidget {
                                     Provider.of<EditingSongModel>(context,
                                             listen: false)
                                         .codeList = codeList.cast<String>();
-                                    ;
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) {

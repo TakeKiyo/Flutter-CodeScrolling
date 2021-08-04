@@ -45,6 +45,12 @@ class DetailEditPage extends StatelessWidget {
         )));
         list.add(Text("|"));
       }
+      list.add(IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            Provider.of<EditingSongModel>(context, listen: false)
+                .deleteOneLine(listIndex);
+          }));
       return new Row(children: list);
     }
 

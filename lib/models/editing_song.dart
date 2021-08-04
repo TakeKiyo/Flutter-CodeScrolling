@@ -21,6 +21,11 @@ class EditingSongModel extends ChangeNotifier {
     }
   }
 
+  void deleteOneLine(int listIndex) {
+    _codeList.removeAt(listIndex);
+    notifyListeners();
+  }
+
   void editCodeList(String code, int barIdx, int timeIdx) {
     _codeList[barIdx][timeIdx] = code;
     notifyListeners();
