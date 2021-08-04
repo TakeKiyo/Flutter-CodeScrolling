@@ -69,43 +69,50 @@ class DetailEditPage extends StatelessWidget {
 
     return Consumer<EditingSongModel>(builder: (_, model, __) {
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
-          title: Text("編集ページ"),
-          actions: <Widget>[],
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("コードの編集"),
-              for (int idx = 0; idx < model.codeList.length; idx++)
-                getCodeListWidgets(model.codeList[idx], idx),
-              ElevatedButton(
-                child:
-                    const Text('小節を追加', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(primary: Colors.orange),
+          appBar: AppBar(
+            centerTitle: true,
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios),
                 onPressed: () {
-                  model.addEmptyList();
-                },
-              ),
-              ElevatedButton(
-                child:
-                    const Text('編集を終了', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(primary: Colors.orange),
-                onPressed: () {
-                  submitCodeList(docId);
-                },
-              ),
-            ],
+                  Navigator.of(context).pop();
+                }),
+            title: Text("編集ページ"),
+            actions: <Widget>[],
           ),
-        ),
-      );
+          body: Container(
+              child: Scrollbar(
+                  isAlwaysShown: true,
+                  thickness: 8.0,
+                  hoverThickness: 12.0,
+                  child: SingleChildScrollView(
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("コードの編集"),
+                        for (int idx = 0; idx < model.codeList.length; idx++)
+                          getCodeListWidgets(model.codeList[idx], idx),
+                        ElevatedButton(
+                          child: const Text('小節を追加',
+                              style: TextStyle(color: Colors.white)),
+                          style:
+                              ElevatedButton.styleFrom(primary: Colors.orange),
+                          onPressed: () {
+                            model.addEmptyList();
+                          },
+                        ),
+                        ElevatedButton(
+                          child: const Text('編集を終了',
+                              style: TextStyle(color: Colors.white)),
+                          style:
+                              ElevatedButton.styleFrom(primary: Colors.orange),
+                          onPressed: () {
+                            submitCodeList(docId);
+                          },
+                        ),
+                      ],
+                    )),
+                  ))));
     });
   }
 }
