@@ -12,7 +12,6 @@ class SongsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void deleteButtonClicked(String docId) {
-      print(docId);
       FirebaseFirestore.instance.collection('Songs').doc(docId).delete();
       Navigator.pop(context);
     }
