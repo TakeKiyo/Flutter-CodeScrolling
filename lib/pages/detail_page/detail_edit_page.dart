@@ -1,49 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/metronome_model.dart';
-import 'detail_bottom_bar.dart';
 import 'detail_page.dart';
 
-class DetailEditPage extends StatefulWidget {
+class DetailEditPage extends StatelessWidget {
   final int bpm;
   final String title;
   final String docId;
-  final String codeList;
 
-  DetailEditPage({this.bpm, this.title, this.docId, this.codeList});
-
-  @override
-  _DetailEditForm createState() => _DetailEditForm();
-}
-
-class _DetailEditForm extends State<DetailEditPage> {
-  List<List<String>> _codeListState;
-  List<List<String>> get codeListState => _codeListState;
-  List<List<String>> addedList = [];
-
-  Widget getCodeListWidgets(List<String> strings, int listIndex) {
-    List<Widget> list = [];
-    for (var i = 0; i < strings.length; i++) {
-      list.add(Flexible(
-          child: TextField(
-        textAlign: TextAlign.center,
-        controller: TextEditingController(text: strings[i]),
-        onChanged: (text) {
-          _codeListState[listIndex][i] = text;
-        },
-      )));
-      list.add(Text("|"));
-    }
-    return new Row(children: list);
-  }
+  DetailEditPage({this.bpm, this.title, this.docId});
 
   List<String> formatCodeList(List<List<String>> codeList) {
     List<String> formattedCodeList = [];
-    for (int i = 0; i < codeListState.length; i++) {
-      List<String> oneLineCodeList = codeListState[i];
+    for (int i = 0; i < codeList.length; i++) {
+      List<String> oneLineCodeList = codeList[i];
       String tmp = "";
       for (int j = 0; j < oneLineCodeList.length; j++) {
         tmp += oneLineCodeList[j];
@@ -56,87 +29,90 @@ class _DetailEditForm extends State<DetailEditPage> {
     return formattedCodeList;
   }
 
-  void editCodeList(String docId) async {
-    FirebaseFirestore.instance.collection("Songs").doc(docId).update({
-      "codeList": formatCodeList(codeListState),
-    });
-    Navigator.of(context).pop(
-      MaterialPageRoute(builder: (context) {
-        return DetailPage();
-      }),
-    );
-  }
-
-  void addLine() {
-    setState(() {
-      addedList.add(["", "", "", ""]);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    //親から受け取ったコードの文字列と、新たに加えたコードを結合する
-    _codeListState = [];
-    List<String> splittedCodeList = widget.codeList.split("¥");
-    splittedCodeList = splittedCodeList.sublist(0, splittedCodeList.length - 1);
-    for (int i = 0; i < splittedCodeList.length; i++) {
-      List<String> oneLineCode = splittedCodeList[i].split(",");
-      List<String> tmp = [];
-      for (int j = 0; j < oneLineCode.length; j++) {
-        tmp.add(oneLineCode[j]);
+    Widget getCodeListWidgets(List<String> strings, int listIndex) {
+      List<Widget> list = [];
+      for (var i = 0; i < strings.length; i++) {
+        list.add(Flexible(
+            child: TextField(
+          textAlign: TextAlign.center,
+          controller: TextEditingController(text: strings[i]),
+          onChanged: (text) {
+            Provider.of<EditingSongModel>(context, listen: false)
+                .editCodeList(text, listIndex, i);
+          },
+        )));
+        list.add(Text("|"));
       }
-      _codeListState.add(tmp);
-    }
-    for (int i = 0; i < addedList.length; i++) {
-      List<String> oneLineCode = addedList[i];
-      List<String> tmp = [];
-      for (int j = 0; j < oneLineCode.length; j++) {
-        tmp.add(oneLineCode[j]);
-      }
-      _codeListState.add(tmp);
+      list.add(IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            Provider.of<EditingSongModel>(context, listen: false)
+                .deleteOneLine(listIndex);
+          }));
+      return new Row(children: list);
     }
 
-    return Consumer<MetronomeModel>(builder: (_, model, __) {
-      return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.of(context).pop();
-                model.forceStop();
-              }),
-          title: Text("編集ページ"),
-          actions: <Widget>[],
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("コードの編集"),
-              for (int idx = 0; idx < codeListState.length; idx++)
-                getCodeListWidgets(codeListState[idx], idx),
-              ElevatedButton(
-                child:
-                    const Text('小節を追加', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(primary: Colors.orange),
-                onPressed: () {
-                  addLine();
-                },
-              ),
-              ElevatedButton(
-                child:
-                    const Text('編集を終了', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(primary: Colors.orange),
-                onPressed: () {
-                  editCodeList(widget.docId);
-                },
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: detailBottomBar(context, model),
+    void submitCodeList(String docId) async {
+      FirebaseFirestore.instance.collection("Songs").doc(docId).update({
+        "codeList": formatCodeList(
+            Provider.of<EditingSongModel>(context, listen: false).codeList),
+        "updatedAt": DateTime.now(),
+      });
+      Navigator.of(context).pop(
+        MaterialPageRoute(builder: (context) {
+          return DetailPage();
+        }),
       );
+    }
+
+    return Consumer<EditingSongModel>(builder: (_, model, __) {
+      return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }),
+            title: Text("編集ページ"),
+            actions: <Widget>[],
+          ),
+          body: Container(
+              child: Scrollbar(
+                  isAlwaysShown: true,
+                  thickness: 8.0,
+                  hoverThickness: 12.0,
+                  child: SingleChildScrollView(
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("コードの編集"),
+                        for (int idx = 0; idx < model.codeList.length; idx++)
+                          getCodeListWidgets(model.codeList[idx], idx),
+                        ElevatedButton(
+                          child: const Text('小節を追加',
+                              style: TextStyle(color: Colors.white)),
+                          style:
+                              ElevatedButton.styleFrom(primary: Colors.orange),
+                          onPressed: () {
+                            model.addEmptyList();
+                          },
+                        ),
+                        ElevatedButton(
+                          child: const Text('編集を終了',
+                              style: TextStyle(color: Colors.white)),
+                          style:
+                              ElevatedButton.styleFrom(primary: Colors.orange),
+                          onPressed: () {
+                            submitCodeList(docId);
+                          },
+                        ),
+                      ],
+                    )),
+                  ))));
     });
   }
 }
