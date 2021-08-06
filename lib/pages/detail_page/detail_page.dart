@@ -156,7 +156,7 @@ class DetailPage extends StatelessWidget {
                           })))),
         ),
         bottomNavigationBar: detailBottomBar(context, model),
-        endDrawer: settingsDrawer(context, model, bpm, title),
+        endDrawer: settingsDrawer(context, model, bpm, title, docId),
       );
     });
   }

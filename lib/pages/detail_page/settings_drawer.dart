@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/metronome_model.dart';
 
-Drawer settingsDrawer(
-    BuildContext context, MetronomeModel model, int bpm, String title) {
+Drawer settingsDrawer(BuildContext context, MetronomeModel model, int bpm,
+    String title, String docId) {
   final double titleTextFont = 16;
   final insertPadding = Padding(padding: EdgeInsets.all(10));
 
@@ -74,8 +75,28 @@ Drawer settingsDrawer(
             style: ElevatedButton.styleFrom(
                 primary: Theme.of(context).primaryColorLight),
             onPressed: () {
-              //TODO
-              print("deleted");
+              showDialog(
+                  context: context,
+                  builder: (_) => CupertinoAlertDialog(
+                        title: Text("確認"),
+                        content: Text(title + "を削除してもよいですか？"),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text("キャンセル"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                FirebaseFirestore.instance
+                                    .collection('Songs')
+                                    .doc(docId)
+                                    .delete();
+                                Navigator.popUntil(context,
+                                    (Route<dynamic> route) => route.isFirst);
+                              }),
+                        ],
+                      ));
             },
           ),
         ],
