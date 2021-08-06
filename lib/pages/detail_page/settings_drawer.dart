@@ -87,13 +87,13 @@ Drawer settingsDrawer(BuildContext context, MetronomeModel model, int bpm,
                           ),
                           TextButton(
                               child: Text("OK"),
-                              onPressed: () {
+                              onPressed: () async {
+                                await Navigator.popUntil(context,
+                                    (Route<dynamic> route) => route.isFirst);
                                 FirebaseFirestore.instance
                                     .collection('Songs')
                                     .doc(docId)
                                     .delete();
-                                Navigator.popUntil(context,
-                                    (Route<dynamic> route) => route.isFirst);
                               }),
                         ],
                       ));
