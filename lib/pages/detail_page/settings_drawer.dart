@@ -87,9 +87,10 @@ Drawer settingsDrawer(BuildContext context, MetronomeModel model, int bpm,
                           ),
                           TextButton(
                               child: Text("OK"),
-                              onPressed: () {
+                              onPressed: () async {
                                 Navigator.of(context)
                                     .popUntil((route) => route.isFirst);
+                                await Future.delayed(Duration(seconds: 1));
                                 FirebaseFirestore.instance
                                     .collection('Songs')
                                     .doc(docId)
