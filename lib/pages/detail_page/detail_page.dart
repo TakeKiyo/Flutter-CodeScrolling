@@ -64,8 +64,7 @@ class DetailPage extends StatelessWidget {
               thickness: 8.0,
               hoverThickness: 12.0,
               child: SingleChildScrollView(
-                  child: Container(
-                      height: MediaQuery.of(context).size.height,
+                  child: Center(
                       child: StreamBuilder(
                           stream: FirebaseFirestore.instance
                               .collection('Songs')
