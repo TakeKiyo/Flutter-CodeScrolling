@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/editing_song.dart';
+import 'package:my_app/pages/detail_page/scrollable_page.dart';
 import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,8 @@ class DetailPage extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   DetailPage({Key key, this.bpm, this.title, this.docId}) : super(key: key);
+  final ScrollController _scrollController =
+      ScrollController(initialScrollOffset: 50.0);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class DetailPage extends StatelessWidget {
         )));
         list.add(Text("|"));
       }
-      return new Row(children: list);
+      return Row(children: list);
     }
 
     return Consumer<MetronomeModel>(builder: (_, model, __) {
@@ -59,103 +62,120 @@ class DetailPage extends StatelessWidget {
           ],
         ),
         body: Container(
-          child: Scrollbar(
-              isAlwaysShown: true,
-              thickness: 8.0,
-              hoverThickness: 12.0,
-              child: SingleChildScrollView(
-                  child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('Songs')
-                          .doc(docId)
-                          .snapshots(),
-                      builder:
-                          // ignore: missing_return
-                          (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Text("Loading");
-                        }
-                        var songDocument = snapshot.data;
-                        if (songDocument["codeList"].length == 0) {
-                          return Center(
-                              child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              TextButton(
-                                  onPressed: () {
-                                    Provider.of<MetronomeModel>(context,
-                                            listen: false)
-                                        .tempoCount = bpm;
-                                    Provider.of<EditingSongModel>(context,
-                                            listen: false)
-                                        .codeList = [];
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return DetailEditPage(
-                                            bpm: bpm,
-                                            title: title,
-                                            docId: docId,
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                  child: Text("コードを編集する")),
-                              Text("まだコードは追加されていません")
-                            ],
-                          ));
-                        } else {
-                          var codeList =
-                              songDocument["codeList"].cast<String>();
-                          List<List<String>> codeListState = [];
-                          for (int i = 0; i < codeList.length; i++) {
-                            List<String> oneLineCode = codeList[i].split(",");
-                            List<String> tmp = [];
-                            for (int j = 0; j < oneLineCode.length; j++) {
-                              tmp.add(oneLineCode[j]);
-                            }
-                            codeListState.add(tmp);
-                          }
-                          return Center(
+            child: SingleChildScrollView(
+                child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('Songs')
+                        .doc(docId)
+                        .snapshots(),
+                    builder:
+                        // ignore: missing_return
+                        (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Text("Loading");
+                      }
+                      var songDocument = snapshot.data;
+                      if (songDocument["codeList"].length == 0) {
+                        return Center(
                             child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            TextButton(
+                                onPressed: () {
+                                  Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .tempoCount = bpm;
+                                  Provider.of<EditingSongModel>(context,
+                                          listen: false)
+                                      .codeList = [];
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return DetailEditPage(
+                                          bpm: bpm,
+                                          title: title,
+                                          docId: docId,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Text("コードを編集する")),
+                            Text("まだコードは追加されていません")
+                          ],
+                        ));
+                      } else {
+                        var codeList = songDocument["codeList"].cast<String>();
+                        List<List<String>> codeListState = [];
+                        for (int i = 0; i < codeList.length; i++) {
+                          List<String> oneLineCode = codeList[i].split(",");
+                          List<String> tmp = [];
+                          for (int j = 0; j < oneLineCode.length; j++) {
+                            tmp.add(oneLineCode[j]);
+                          }
+                          codeListState.add(tmp);
+                        }
+                        return ScrollablePage();
+                        return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              TextButton(
-                                  onPressed: () {
-                                    print("clicked");
-                                  },
-                                  child: Text("スクロール")),
-                              TextButton(
-                                  onPressed: () {
-                                    Provider.of<MetronomeModel>(context,
-                                            listen: false)
-                                        .tempoCount = bpm;
-                                    Provider.of<EditingSongModel>(context,
-                                            listen: false)
-                                        .codeList = codeList;
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return DetailEditPage(
-                                            bpm: bpm,
-                                            title: title,
-                                            docId: docId,
+                            children: [
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextButton(
+                                        onPressed: () {
+                                          print("clicked");
+                                          if (_scrollController.hasClients) {
+                                            _scrollController.animateTo(
+                                              30.0,
+                                              curve: Curves.easeOut,
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                            );
+                                          }
+                                        },
+                                        child: Text("スクロール")),
+                                    TextButton(
+                                        onPressed: () {
+                                          Provider.of<MetronomeModel>(context,
+                                                  listen: false)
+                                              .tempoCount = bpm;
+                                          Provider.of<EditingSongModel>(context,
+                                                  listen: false)
+                                              .codeList = codeList;
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return DetailEditPage(
+                                                  bpm: bpm,
+                                                  title: title,
+                                                  docId: docId,
+                                                );
+                                              },
+                                            ),
                                           );
                                         },
-                                      ),
-                                    );
-                                  },
-                                  child: Text("コードを編集する")),
-                              for (int idx = 0;
-                                  idx < codeListState.length;
-                                  idx++)
-                                getCodeListWidgets(codeListState[idx], idx),
-                            ],
-                          ));
-                        }
-                      }))),
-        ),
+                                        child: Text("コードを編集する")),
+                                  ]),
+                              Container(
+                                  height: MediaQuery.of(context).size.height -
+                                      200, // 高さ指定
+                                  child: Scrollbar(
+                                    controller: _scrollController,
+                                    // isAlwaysShown: true,
+                                    thickness: 8.0,
+                                    hoverThickness: 12.0,
+                                    child: ListView.builder(
+                                        itemCount: codeListState.length,
+                                        itemBuilder:
+                                            (BuildContext context, int idx) {
+                                          return (getCodeListWidgets(
+                                              codeListState[idx], idx));
+                                        }),
+                                  )),
+                            ]);
+                      }
+                    }))),
         bottomNavigationBar: detailBottomBar(context, model),
         endDrawer: settingsDrawer(context, model, bpm, title),
       );
