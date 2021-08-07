@@ -38,9 +38,12 @@ class DetailEditPage extends StatelessWidget {
         FocusNode _focusNode = FocusNode();
         _focusNode.addListener(() {
           if (_focusNode.hasFocus) {
-            print(i.toString());
             Provider.of<EditingSongModel>(context, listen: false).controller =
                 strings[i];
+            Provider.of<EditingSongModel>(context, listen: false)
+                .controlBarIdx = listIndex;
+            Provider.of<EditingSongModel>(context, listen: false)
+                .controlTimeIdx = i;
           }
         });
         list.add(Flexible(
@@ -128,7 +131,6 @@ class DetailEditPage extends StatelessWidget {
                                 .showBottomSheet((BuildContext context) {
                               return CustomKeyboard(
                                 onTextInput: (myText) {
-                                  print(myText);
                                   Provider.of<EditingSongModel>(context,
                                           listen: false)
                                       .insertText(myText);

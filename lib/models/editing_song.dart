@@ -39,13 +39,18 @@ class EditingSongModel extends ChangeNotifier {
     _controller = TextEditingController(text: inputText);
   }
 
+  int controlBarIdx;
+  int controlTimeIdx;
+
   void insertText(String myText) {
     final text = _controller.text;
     final textSelection = _controller.selection;
-    print(myText);
+    print(text);
+
+    ///ここまではちゃんと出力されてる＝Controllerは設定されてる
     final newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
+      textSelection.start + 1,
+      textSelection.end + 1,
       myText,
     );
     final myTextLength = myText.length;
@@ -54,8 +59,8 @@ class EditingSongModel extends ChangeNotifier {
       baseOffset: textSelection.start + myTextLength,
       extentOffset: textSelection.start + myTextLength,
     );
+    editCodeList(newText, controlBarIdx, controlTimeIdx);
     notifyListeners();
-    print(text);
   }
 
   void backspace() {
