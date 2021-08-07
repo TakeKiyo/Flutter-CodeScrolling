@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/metronome_model.dart';
+import '../../pages/custom_keyboard.dart';
 
 Drawer settingsDrawer(
     BuildContext context, MetronomeModel model, int bpm, String title) {
@@ -50,6 +51,16 @@ Drawer settingsDrawer(
               onTap: () {
                 print("Metronome Sound");
                 //TODO
+              }),
+          Padding(padding: EdgeInsets.all(10)),
+          TextButton(
+              child: Text("CustomKey", style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return KeyboardDemo();
+                  }),
+                );
               }),
         ],
       ),
