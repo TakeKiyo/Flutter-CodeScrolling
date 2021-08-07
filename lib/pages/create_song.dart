@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 
-import 'songs_list.dart';
-
 class CreateSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -101,11 +99,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
       "updatedAt": DateTime.now(),
     });
     // 　ここはいずれ詳細ページにそのまま飛ばしたい
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) {
-        return SongsList();
-      }),
-    );
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   Widget build(BuildContext context) {

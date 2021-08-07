@@ -1,12 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/metronome_model.dart';
 import '../../pages/custom_keyboard.dart';
 
-Drawer settingsDrawer(
-    BuildContext context, MetronomeModel model, int bpm, String title) {
+Drawer settingsDrawer(BuildContext context, MetronomeModel model, int bpm,
+    String title, String docId) {
   final double titleTextFont = 16;
+  final insertPadding = Padding(padding: EdgeInsets.all(10));
 
   return Drawer(
     child: Container(
@@ -36,7 +38,7 @@ Drawer settingsDrawer(
               //TODO ボタンを押したら情報変更画面
             },
           ),
-          Padding(padding: EdgeInsets.all(10)),
+          insertPadding,
           Text(
             "メトロノームのサウンド",
             style: TextStyle(
@@ -52,7 +54,7 @@ Drawer settingsDrawer(
                 print("Metronome Sound");
                 //TODO
               }),
-          Padding(padding: EdgeInsets.all(10)),
+          insertPadding,
           TextButton(
               child: Text("CustomKey", style: TextStyle(color: Colors.white)),
               onPressed: () {
@@ -62,6 +64,54 @@ Drawer settingsDrawer(
                   }),
                 );
               }),
+          insertPadding,
+          Text(
+            "カウントイン",
+            style: TextStyle(
+              fontSize: titleTextFont,
+              color: Colors.white,
+            ),
+          ),
+          ListTile(
+              tileColor: Theme.of(context).primaryColorDark,
+              title: Text("回数：" + model.countInTimes.toString(),
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                print("Count-in Times");
+                //TODO
+              }),
+          insertPadding,
+          ElevatedButton(
+            child: Text("曲を削除する", style: TextStyle(color: Colors.red)),
+            style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColorLight),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => CupertinoAlertDialog(
+                        title: Text("確認"),
+                        content: Text(title + "を削除してもよいですか？"),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text("キャンセル"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                              child: Text("OK"),
+                              onPressed: () async {
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
+                                await Future.delayed(Duration(seconds: 1));
+                                FirebaseFirestore.instance
+                                    .collection('Songs')
+                                    .doc(docId)
+                                    .delete();
+                                //TODO FirstPageへの値渡しで画面遷移後に削除
+                              }),
+                        ],
+                      ));
+            },
+          ),
         ],
       ),
     ),
