@@ -42,6 +42,7 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
           CustomKeyboard(
             onTextInput: (myText) {
               _insertText(myText);
+              print(myText);
             },
             onBackspace: () {
               _backspace();

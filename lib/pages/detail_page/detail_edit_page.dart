@@ -35,10 +35,19 @@ class DetailEditPage extends StatelessWidget {
     Widget getCodeListWidgets(List<String> strings, int listIndex) {
       List<Widget> list = [];
       for (var i = 0; i < strings.length; i++) {
+        FocusNode _focusNode = FocusNode();
+        _focusNode.addListener(() {
+          if (_focusNode.hasFocus) {
+            print(i.toString());
+            Provider.of<EditingSongModel>(context, listen: false).controller =
+                strings[i];
+          }
+        });
         list.add(Flexible(
             child: TextField(
           textAlign: TextAlign.center,
           controller: TextEditingController(text: strings[i]),
+          focusNode: _focusNode,
           onChanged: (text) {
             Provider.of<EditingSongModel>(context, listen: false)
                 .editCodeList(text, listIndex, i);
@@ -117,7 +126,18 @@ class DetailEditPage extends StatelessWidget {
                                 style: TextStyle(color: Colors.black)),
                             onPressed: () => Scaffold.of(context)
                                 .showBottomSheet((BuildContext context) {
-                              return CustomKeyboard();
+                              return CustomKeyboard(
+                                onTextInput: (myText) {
+                                  print(myText);
+                                  Provider.of<EditingSongModel>(context,
+                                          listen: false)
+                                      .insertText(myText);
+                                },
+                                onBackspace: Provider.of<EditingSongModel>(
+                                        context,
+                                        listen: false)
+                                    .backspace,
+                              );
                             }),
                           ),
                         ],
