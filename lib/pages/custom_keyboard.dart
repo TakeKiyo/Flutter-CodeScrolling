@@ -14,6 +14,7 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(),
       body: Column(
         children: [
           SizedBox(height: 50),
@@ -123,6 +124,7 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
 class CustomKeyboard extends StatelessWidget {
   final ValueSetter<String> onTextInput;
   final VoidCallback onBackspace;
+  final Padding insertPadding = Padding(padding: const EdgeInsets.all(2.0));
 
   CustomKeyboard({Key key, this.onTextInput, this.onBackspace})
       : super(key: key);
@@ -140,12 +142,13 @@ class CustomKeyboard extends StatelessWidget {
         top: false,
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.all(2.0)),
+            insertPadding,
             buildRowOne(),
-            Padding(padding: EdgeInsets.all(2.0)),
+            insertPadding,
             buildRowTwo(),
-            Padding(padding: const EdgeInsets.all(2.0)),
+            insertPadding,
             buildRowThree(),
+            insertPadding,
             buildRowFour(),
           ],
         ),
