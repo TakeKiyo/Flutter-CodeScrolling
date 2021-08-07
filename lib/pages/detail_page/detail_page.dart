@@ -64,95 +64,97 @@ class DetailPage extends StatelessWidget {
               thickness: 8.0,
               hoverThickness: 12.0,
               child: SingleChildScrollView(
-                  child: Center(
-                      child: StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('Songs')
-                              .doc(docId)
-                              .snapshots(),
-                          builder:
-                              // ignore: missing_return
-                              (context,
-                                  AsyncSnapshot<DocumentSnapshot> snapshot) {
-                            if (!snapshot.hasData) {
-                              return Text("Loading");
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('Songs')
+                          .doc(docId)
+                          .snapshots(),
+                      builder:
+                          // ignore: missing_return
+                          (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text("Loading");
+                        }
+                        var songDocument = snapshot.data;
+                        if (songDocument["codeList"].length == 0) {
+                          return Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              TextButton(
+                                  onPressed: () {
+                                    Provider.of<MetronomeModel>(context,
+                                            listen: false)
+                                        .tempoCount = bpm;
+                                    Provider.of<EditingSongModel>(context,
+                                            listen: false)
+                                        .codeList = [];
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return DetailEditPage(
+                                            bpm: bpm,
+                                            title: title,
+                                            docId: docId,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Text("コードを編集する")),
+                              Text("まだコードは追加されていません")
+                            ],
+                          ));
+                        } else {
+                          var codeList =
+                              songDocument["codeList"].cast<String>();
+                          List<List<String>> codeListState = [];
+                          for (int i = 0; i < codeList.length; i++) {
+                            List<String> oneLineCode = codeList[i].split(",");
+                            List<String> tmp = [];
+                            for (int j = 0; j < oneLineCode.length; j++) {
+                              tmp.add(oneLineCode[j]);
                             }
-                            var songDocument = snapshot.data;
-                            if (songDocument["codeList"].length == 0) {
-                              return Center(
-                                  child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  TextButton(
-                                      onPressed: () {
-                                        Provider.of<MetronomeModel>(context,
-                                                listen: false)
-                                            .tempoCount = bpm;
-                                        Provider.of<EditingSongModel>(context,
-                                                listen: false)
-                                            .codeList = [];
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return DetailEditPage(
-                                                bpm: bpm,
-                                                title: title,
-                                                docId: docId,
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                      child: Text("コードを編集する")),
-                                  Text("まだコードは追加されていません")
-                                ],
-                              ));
-                            } else {
-                              var codeList =
-                                  songDocument["codeList"].cast<String>();
-                              List<List<String>> codeListState = [];
-                              for (int i = 0; i < codeList.length; i++) {
-                                List<String> oneLineCode =
-                                    codeList[i].split(",");
-                                List<String> tmp = [];
-                                for (int j = 0; j < oneLineCode.length; j++) {
-                                  tmp.add(oneLineCode[j]);
-                                }
-                                codeListState.add(tmp);
-                              }
-
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  TextButton(
-                                      onPressed: () {
-                                        Provider.of<MetronomeModel>(context,
-                                                listen: false)
-                                            .tempoCount = bpm;
-                                        Provider.of<EditingSongModel>(context,
-                                                listen: false)
-                                            .codeList = codeList;
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return DetailEditPage(
-                                                bpm: bpm,
-                                                title: title,
-                                                docId: docId,
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                      child: Text("コードを編集する")),
-                                  for (int idx = 0;
-                                      idx < codeListState.length;
-                                      idx++)
-                                    getCodeListWidgets(codeListState[idx], idx),
-                                ],
-                              );
-                            }
-                          })))),
+                            codeListState.add(tmp);
+                          }
+                          return Center(
+                            child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              TextButton(
+                                  onPressed: () {
+                                    print("clicked");
+                                  },
+                                  child: Text("スクロール")),
+                              TextButton(
+                                  onPressed: () {
+                                    Provider.of<MetronomeModel>(context,
+                                            listen: false)
+                                        .tempoCount = bpm;
+                                    Provider.of<EditingSongModel>(context,
+                                            listen: false)
+                                        .codeList = codeList;
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return DetailEditPage(
+                                            bpm: bpm,
+                                            title: title,
+                                            docId: docId,
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Text("コードを編集する")),
+                              for (int idx = 0;
+                                  idx < codeListState.length;
+                                  idx++)
+                                getCodeListWidgets(codeListState[idx], idx),
+                            ],
+                          ));
+                        }
+                      }))),
         ),
         bottomNavigationBar: detailBottomBar(context, model),
         endDrawer: settingsDrawer(context, model, bpm, title),
