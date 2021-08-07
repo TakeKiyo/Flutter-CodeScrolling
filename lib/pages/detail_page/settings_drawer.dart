@@ -87,13 +87,14 @@ Drawer settingsDrawer(BuildContext context, MetronomeModel model, int bpm,
                           ),
                           TextButton(
                               child: Text("OK"),
-                              onPressed: () async {
-                                await Navigator.popUntil(context,
-                                    (Route<dynamic> route) => route.isFirst);
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
                                 FirebaseFirestore.instance
                                     .collection('Songs')
                                     .doc(docId)
                                     .delete();
+                                //TODO FirstPageへの値渡しで画面遷移後に削除
                               }),
                         ],
                       ));
