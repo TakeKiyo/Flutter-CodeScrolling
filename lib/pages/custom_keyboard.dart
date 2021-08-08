@@ -9,9 +9,12 @@ class CustomKeyboard extends StatelessWidget {
   final double safeAreaHeight;
   final Padding insertPadding = Padding(padding: const EdgeInsets.all(2.0));
 
-  CustomKeyboard(
-      {Key key, this.onTextInput, this.onBackspace, this.safeAreaHeight})
-      : super(key: key);
+  CustomKeyboard({
+    Key key,
+    this.onTextInput,
+    this.onBackspace,
+    this.safeAreaHeight,
+  }) : super(key: key);
 
   void _textInputHandler(String text) => onTextInput?.call(text);
 
@@ -20,7 +23,7 @@ class CustomKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 300,
       color: Colors.grey[800],
       child: Column(
         children: [
@@ -31,6 +34,8 @@ class CustomKeyboard extends StatelessWidget {
           buildRowTwo(),
           insertPadding,
           buildRowThree(),
+          insertPadding,
+          buildRowFour(),
           Padding(padding: EdgeInsets.only(bottom: safeAreaHeight))
         ],
       ),
@@ -85,49 +90,51 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowOne() {
-    final rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "♭", "♯", "M", "m"];
+    final rowTwoElem = ["1", "2", "3", "4", "5", "6", "7", "9", "♭", "♯"];
 
     return Expanded(
       child: Row(
-          children: rowOneElem
-              .map((elm) => TextKey(text: elm, onTextInput: _textInputHandler))
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: rowTwoElem
+              .map((elm) => TextKey(
+                    text: elm,
+                    onTextInput: _textInputHandler,
+                  ))
               .toList()),
     );
   }
 
   Expanded buildRowTwo() {
-    final rowTwoElem = [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "9",
-      "dim",
-      "sus",
-      "add",
-      "alt",
-    ];
+    final rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "M", "m"];
 
     return Expanded(
       child: Row(
-          children: rowTwoElem
-              .map((elm) => TextKey(text: elm, onTextInput: _textInputHandler))
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: rowOneElem
+              .map((elm) => TextKey(
+                    text: elm,
+                    onTextInput: _textInputHandler,
+                  ))
               .toList()),
     );
   }
 
   Expanded buildRowThree() {
+    final rowThreeElem = ["dim", "sus", "add", "alt", "/", "N.C."];
+
     return Expanded(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextKey(
-            text: ' ',
-            flex: 4,
-            onTextInput: _textInputHandler,
-          ),
+          SpacerWidget(),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: rowThreeElem
+                  .map((elm) => TextKey(
+                        text: elm,
+                        onTextInput: _textInputHandler,
+                      ))
+                  .toList()),
           BackspaceKey(
             onBackspace: _backspaceHandler,
           ),
@@ -135,19 +142,47 @@ class CustomKeyboard extends StatelessWidget {
       ),
     );
   }
+
+  Expanded buildRowFour() {
+    return Expanded(
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        FunctionKey(
+          label: "abc",
+          keyWidth: 4,
+        ),
+        TextKey(
+          text: " ",
+          label: "space",
+          keyWidth: 2,
+          onTextInput: _textInputHandler,
+        ),
+        FunctionKey(
+          label: "Done",
+          keyWidth: 4,
+        ),
+      ]),
+    );
+  }
 }
 
 class TextKey extends StatelessWidget {
   final String text;
+  final String label;
   final ValueSetter<String> onTextInput;
-  final int flex;
+  final int keyWidth;
 
-  const TextKey({Key key, @required this.text, this.onTextInput, this.flex = 1})
-      : super(key: key);
+  const TextKey({
+    Key key,
+    @required this.text,
+    this.label = "",
+    this.onTextInput,
+    this.keyWidth = 10,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: flex,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / keyWidth,
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
@@ -161,10 +196,16 @@ class TextKey extends StatelessWidget {
             },
             child: Container(
               child: Center(
-                  child: Text(
-                text,
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              )),
+                child: (label == "")
+                    ? Text(
+                        text,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      )
+                    : Text(
+                        label,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+              ),
             ),
           ),
         ),
@@ -182,8 +223,8 @@ class BackspaceKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: flex,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 6,
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
@@ -198,6 +239,60 @@ class BackspaceKey extends StatelessWidget {
             child: Container(
               child: Center(
                 child: Icon(Icons.backspace_outlined, color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SpacerWidget extends StatelessWidget {
+  final double spaceWidth;
+
+  const SpacerWidget({Key key, this.spaceWidth = 6}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / spaceWidth,
+      child: Padding(padding: const EdgeInsets.all(2.0)),
+    );
+  }
+}
+
+class FunctionKey extends StatelessWidget {
+  final String label;
+  final int keyWidth;
+
+  const FunctionKey({
+    Key key,
+    this.label = "",
+    this.keyWidth = 10,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / keyWidth,
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Material(
+          color: Colors.grey[500],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: InkWell(
+            onTap: () {
+              print("Tapped");
+            },
+            child: Container(
+              child: Center(
+                child: Text(
+                  label,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
               ),
             ),
           ),
