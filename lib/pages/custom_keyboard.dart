@@ -38,15 +38,14 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Container buildRowSetting(BuildContext context) {
-    final eModel = Provider.of<EditingSongModel>(context, listen: false);
-
     return Container(
       height: 40,
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         IconButton(
             icon: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.grey),
             onPressed: () {
-              eModel.closeKeyboard();
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .closeKeyboard();
               Navigator.of(context).pop();
             }),
         Expanded(
@@ -65,7 +64,9 @@ class CustomKeyboard extends StatelessWidget {
                         Provider.of<EditingSongModel>(context).controller,
                     style: TextStyle(color: Colors.white),
                     onChanged: (text) {
-                      eModel.controller.text = text;
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .controller
+                          .text = text;
                     }))),
         IconButton(
             icon: Icon(Icons.keyboard_arrow_left_outlined, color: Colors.grey),

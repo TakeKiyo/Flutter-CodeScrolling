@@ -49,7 +49,6 @@ class DetailEditPage extends StatelessWidget {
     }
 
     Widget getCodeListWidgets(context, List<String> strings, int listIndex) {
-      final eModel = Provider.of<EditingSongModel>(context, listen: false);
       List<Widget> list = [];
 
       for (var i = 0; i < strings.length; i++) {
@@ -58,18 +57,24 @@ class DetailEditPage extends StatelessWidget {
         list.add(Flexible(
             child: TextField(
           onTap: () {
-            if (!eModel.keyboardIsOpening) {
+            if (!Provider.of<EditingSongModel>(context, listen: false)
+                .keyboardIsOpening) {
               _showCustomKeyboard(context);
-              eModel.openKeyboard();
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .openKeyboard();
             }
-            eModel.changeTextController(_controller);
-            eModel.controlBarIdx = listIndex;
-            eModel.controlTimeIdx = i;
+            Provider.of<EditingSongModel>(context, listen: false)
+                .changeTextController(_controller);
+            Provider.of<EditingSongModel>(context, listen: false)
+                .controlBarIdx = listIndex;
+            Provider.of<EditingSongModel>(context, listen: false)
+                .controlTimeIdx = i;
           },
           textAlign: TextAlign.center,
           controller: _controller,
           onChanged: (text) {
-            eModel.editCodeList(text, listIndex, i);
+            Provider.of<EditingSongModel>(context, listen: false)
+                .editCodeList(text, listIndex, i);
           },
         )));
         list.add(Text("|"));
@@ -77,7 +82,8 @@ class DetailEditPage extends StatelessWidget {
       list.add(IconButton(
           icon: Icon(Icons.delete),
           onPressed: () {
-            eModel.deleteOneLine(listIndex);
+            Provider.of<EditingSongModel>(context, listen: false)
+                .deleteOneLine(listIndex);
           }));
       return new Row(children: list);
     }
