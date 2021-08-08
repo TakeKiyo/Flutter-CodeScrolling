@@ -95,7 +95,6 @@ Drawer settingsDrawer(BuildContext context, MetronomeModel model, int bpm,
                                     .collection('Songs')
                                     .doc(docId)
                                     .delete();
-                                //TODO FirstPageへの値渡しで画面遷移後に削除
                               }),
                         ],
                       ));
