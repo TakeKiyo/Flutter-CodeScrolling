@@ -45,14 +45,16 @@ class EditingSongModel extends ChangeNotifier {
   void insertText(String myText) {
     final text = _controller.text;
     final textSelection = _controller.selection;
-    print(text);
-
-    ///ここまではちゃんと出力されてる＝Controllerは設定されてる
+    print(textSelection.start);
+    print(textSelection.end);
     final newText = text.replaceRange(
-      textSelection.start + 1,
-      textSelection.end + 1,
+      textSelection.start,
+      textSelection.end,
       myText,
     );
+    print(text);
+    print(textSelection.start);
+    print(textSelection.end);
     final myTextLength = myText.length;
     _controller.text = newText;
     _controller.selection = textSelection.copyWith(

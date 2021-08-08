@@ -62,6 +62,8 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
       myText,
     );
     final myTextLength = myText.length;
+    print(textSelection.start);
+    print(textSelection.end);
     _controller.text = newText;
     _controller.selection = textSelection.copyWith(
       baseOffset: textSelection.start + myTextLength,
@@ -125,9 +127,11 @@ class _KeyboardDemoState extends State<KeyboardDemo> {
 class CustomKeyboard extends StatelessWidget {
   final ValueSetter<String> onTextInput;
   final VoidCallback onBackspace;
+  final double safeAreaHeight;
   final Padding insertPadding = Padding(padding: const EdgeInsets.all(2.0));
 
-  CustomKeyboard({Key key, this.onTextInput, this.onBackspace})
+  CustomKeyboard(
+      {Key key, this.onTextInput, this.onBackspace, this.safeAreaHeight})
       : super(key: key);
 
   void _textInputHandler(String text) => onTextInput?.call(text);
@@ -139,39 +143,24 @@ class CustomKeyboard extends StatelessWidget {
     return Container(
       height: 250,
       color: Colors.grey[800],
-      child: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            insertPadding,
-            buildRowOne(),
-            insertPadding,
-            buildRowTwo(),
-            insertPadding,
-            buildRowThree(),
-            insertPadding,
-            buildRowFour(),
-          ],
-        ),
+      child: Column(
+        children: [
+          insertPadding,
+          buildRowOne(),
+          insertPadding,
+          buildRowTwo(),
+          insertPadding,
+          buildRowThree(),
+          insertPadding,
+          buildRowFour(),
+          Padding(padding: EdgeInsets.only(bottom: safeAreaHeight))
+        ],
       ),
     );
   }
 
   Expanded buildRowOne() {
-    final rowOneElem = [
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "A",
-      "B",
-      "A",
-      "♭",
-      "♯",
-      "M",
-      "m"
-    ];
+    final rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "♭", "♯", "M", "m"];
 
     return Expanded(
       child: Row(

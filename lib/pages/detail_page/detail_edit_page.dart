@@ -32,18 +32,20 @@ class DetailEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _safeAreaHeight = MediaQuery.of(context).padding.bottom;
+
     Widget getCodeListWidgets(List<String> strings, int listIndex) {
+      final eModel = Provider.of<EditingSongModel>(context, listen: false);
       List<Widget> list = [];
+
       for (var i = 0; i < strings.length; i++) {
         FocusNode _focusNode = FocusNode();
         _focusNode.addListener(() {
           if (_focusNode.hasFocus) {
-            Provider.of<EditingSongModel>(context, listen: false).controller =
-                strings[i];
-            Provider.of<EditingSongModel>(context, listen: false)
-                .controlBarIdx = listIndex;
-            Provider.of<EditingSongModel>(context, listen: false)
-                .controlTimeIdx = i;
+            eModel.controller = strings[i];
+            eModel.controlBarIdx = listIndex;
+            eModel.controlTimeIdx = i;
+            print(strings[i]);
           }
         });
         list.add(Flexible(
@@ -52,8 +54,7 @@ class DetailEditPage extends StatelessWidget {
           controller: TextEditingController(text: strings[i]),
           focusNode: _focusNode,
           onChanged: (text) {
-            Provider.of<EditingSongModel>(context, listen: false)
-                .editCodeList(text, listIndex, i);
+            eModel.editCodeList(text, listIndex, i);
           },
         )));
         list.add(Text("|"));
@@ -61,8 +62,7 @@ class DetailEditPage extends StatelessWidget {
       list.add(IconButton(
           icon: Icon(Icons.delete),
           onPressed: () {
-            Provider.of<EditingSongModel>(context, listen: false)
-                .deleteOneLine(listIndex);
+            eModel.deleteOneLine(listIndex);
           }));
       return new Row(children: list);
     }
@@ -128,7 +128,7 @@ class DetailEditPage extends StatelessWidget {
                             child: Text("CustomKeyを表示",
                                 style: TextStyle(color: Colors.black)),
                             onPressed: () => Scaffold.of(context)
-                                .showBottomSheet((BuildContext context) {
+                                .showBottomSheet<void>((BuildContext context) {
                               return CustomKeyboard(
                                 onTextInput: (myText) {
                                   Provider.of<EditingSongModel>(context,
@@ -139,6 +139,7 @@ class DetailEditPage extends StatelessWidget {
                                         context,
                                         listen: false)
                                     .backspace,
+                                safeAreaHeight: _safeAreaHeight,
                               );
                             }),
                           ),
