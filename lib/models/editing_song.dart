@@ -54,6 +54,27 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeSelectionToLeft() {
+    final textSelection = controller.selection;
+    if (textSelection.start > 0) {
+      controller.selection = TextSelection(
+          baseOffset: textSelection.start - 1,
+          extentOffset: textSelection.start - 1);
+      notifyListeners();
+    }
+  }
+
+  void changeSelectionToRight() {
+    final text = controller.text;
+    final textSelection = controller.selection;
+    if (text.length > textSelection.end) {
+      controller.selection = TextSelection(
+          baseOffset: textSelection.end + 1,
+          extentOffset: textSelection.end + 1);
+      notifyListeners();
+    }
+  }
+
   void insertText(String myText) {
     final text = controller.text;
     final textSelection = controller.selection;
@@ -94,12 +115,13 @@ class EditingSongModel extends ChangeNotifier {
         baseOffset: textSelection.start,
         extentOffset: textSelection.start,
       );
-      return;
+      editCodeList(newText, controlBarIdx, controlTimeIdx);
+      notifyListeners();
     }
 
     // The cursor is at the beginning.
     if (textSelection.start == 0) {
-      return;
+      return null;
     }
 
     // Delete the previous character
@@ -117,6 +139,7 @@ class EditingSongModel extends ChangeNotifier {
       baseOffset: newStart,
       extentOffset: newStart,
     );
+    editCodeList(newText, controlBarIdx, controlTimeIdx);
     notifyListeners();
   }
 

@@ -70,10 +70,16 @@ class CustomKeyboard extends StatelessWidget {
                     }))),
         IconButton(
             icon: Icon(Icons.keyboard_arrow_left_outlined, color: Colors.grey),
-            onPressed: () {}),
+            onPressed: () {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .changeSelectionToLeft();
+            }),
         IconButton(
             icon: Icon(Icons.keyboard_arrow_right_outlined, color: Colors.grey),
-            onPressed: () {}),
+            onPressed: () {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .changeSelectionToRight();
+            }),
       ]),
     );
   }
