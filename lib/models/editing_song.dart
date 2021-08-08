@@ -36,6 +36,23 @@ class EditingSongModel extends ChangeNotifier {
   TextEditingController controller;
   int controlBarIdx;
   int controlTimeIdx;
+  bool _keyboardIsOpening = false;
+  get keyboardIsOpening => _keyboardIsOpening;
+
+  void openKeyboard() {
+    _keyboardIsOpening = true;
+    notifyListeners();
+  }
+
+  void closeKeyboard() {
+    _keyboardIsOpening = false;
+    notifyListeners();
+  }
+
+  void changeTextController(TextEditingController controller) {
+    this.controller = controller;
+    notifyListeners();
+  }
 
   void insertText(String myText) {
     final text = controller.text;

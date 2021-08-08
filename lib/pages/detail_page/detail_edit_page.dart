@@ -34,7 +34,21 @@ class DetailEditPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _safeAreaHeight = MediaQuery.of(context).padding.bottom;
 
-    Widget getCodeListWidgets(List<String> strings, int listIndex) {
+    void _showCustomKeyboard(context) {
+      Scaffold.of(context).showBottomSheet((BuildContext context) {
+        return CustomKeyboard(
+          onTextInput: (myText) {
+            Provider.of<EditingSongModel>(context, listen: false)
+                .insertText(myText);
+          },
+          onBackspace:
+              Provider.of<EditingSongModel>(context, listen: false).backspace,
+          safeAreaHeight: _safeAreaHeight,
+        );
+      });
+    }
+
+    Widget getCodeListWidgets(context, List<String> strings, int listIndex) {
       final eModel = Provider.of<EditingSongModel>(context, listen: false);
       List<Widget> list = [];
 
@@ -44,10 +58,13 @@ class DetailEditPage extends StatelessWidget {
         list.add(Flexible(
             child: TextField(
           onTap: () {
-            eModel.controller = _controller;
+            if (!eModel.keyboardIsOpening) {
+              _showCustomKeyboard(context);
+              eModel.openKeyboard();
+            }
+            eModel.changeTextController(_controller);
             eModel.controlBarIdx = listIndex;
             eModel.controlTimeIdx = i;
-            print(eModel.controller.text);
           },
           textAlign: TextAlign.center,
           controller: _controller,
@@ -80,17 +97,18 @@ class DetailEditPage extends StatelessWidget {
 
     return Consumer<EditingSongModel>(builder: (_, model, __) {
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
-          title: Text("編集ページ"),
-          actions: <Widget>[],
-        ),
-        body: Builder(
+          appBar: AppBar(
+            centerTitle: true,
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  model.closeKeyboard();
+                  Navigator.of(context).pop();
+                }),
+            title: Text("編集ページ"),
+            actions: <Widget>[],
+          ),
+          body: Builder(
             builder: (context) => Container(
                 child: Scrollbar(
                     isAlwaysShown: true,
@@ -103,7 +121,8 @@ class DetailEditPage extends StatelessWidget {
                         children: <Widget>[
                           Text("コードの編集"),
                           for (int idx = 0; idx < model.codeList.length; idx++)
-                            getCodeListWidgets(model.codeList[idx], idx),
+                            getCodeListWidgets(
+                                context, model.codeList[idx], idx),
                           ElevatedButton(
                             child: const Text('小節を追加',
                                 style: TextStyle(color: Colors.white)),
@@ -119,33 +138,15 @@ class DetailEditPage extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.orange),
                             onPressed: () {
+                              model.closeKeyboard();
                               submitCodeList(docId);
                             },
                           ),
-                          TextButton(
-                            child: Text("CustomKeyを表示",
-                                style: TextStyle(color: Colors.black)),
-                            onPressed: () => Scaffold.of(context)
-                                .showBottomSheet<void>((BuildContext context) {
-                              return CustomKeyboard(
-                                onTextInput: (myText) {
-                                  Provider.of<EditingSongModel>(context,
-                                          listen: false)
-                                      .insertText(myText);
-                                },
-                                onBackspace: Provider.of<EditingSongModel>(
-                                        context,
-                                        listen: false)
-                                    .backspace,
-                                safeAreaHeight: _safeAreaHeight,
-                              );
-                            }),
-                          ),
                         ],
                       )),
-                    )))),
-        //bottomSheet: CustomKeyboard(),
-      );
+                    ))),
+            //bottomSheet: CustomKeyboard(),
+          ));
     });
   }
 }

@@ -1,128 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-class KeyboardDemo extends StatefulWidget {
-  @override
-  _KeyboardDemoState createState() => _KeyboardDemoState();
-}
-
-class _KeyboardDemoState extends State<KeyboardDemo> {
-  TextEditingController _controller = TextEditingController();
-  bool _readOnly = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          SizedBox(height: 50),
-          TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(3),
-              ),
-            ),
-            style: TextStyle(fontSize: 24),
-            autofocus: true,
-            showCursor: true,
-            readOnly: _readOnly,
-          ),
-          IconButton(
-            icon: Icon(Icons.keyboard),
-            onPressed: () {
-              setState(() {
-                _readOnly = !_readOnly;
-              });
-            },
-          ),
-          Spacer(),
-          CustomKeyboard(
-            onTextInput: (myText) {
-              _insertText(myText);
-              print(myText);
-            },
-            onBackspace: () {
-              _backspace();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _insertText(String myText) {
-    final text = _controller.text;
-    final textSelection = _controller.selection;
-    final newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
-      myText,
-    );
-    final myTextLength = myText.length;
-    print(textSelection.start);
-    print(textSelection.end);
-    _controller.text = newText;
-    _controller.selection = textSelection.copyWith(
-      baseOffset: textSelection.start + myTextLength,
-      extentOffset: textSelection.start + myTextLength,
-    );
-  }
-
-  void _backspace() {
-    final text = _controller.text;
-    final textSelection = _controller.selection;
-    final selectionLength = textSelection.end - textSelection.start;
-
-    // There is a selection.
-    if (selectionLength > 0) {
-      final newText = text.replaceRange(
-        textSelection.start,
-        textSelection.end,
-        '',
-      );
-      _controller.text = newText;
-      _controller.selection = textSelection.copyWith(
-        baseOffset: textSelection.start,
-        extentOffset: textSelection.start,
-      );
-      return;
-    }
-
-    // The cursor is at the beginning.
-    if (textSelection.start == 0) {
-      return;
-    }
-
-    // Delete the previous character
-    final previousCodeUnit = text.codeUnitAt(textSelection.start - 1);
-    final offset = _isUtf16Surrogate(previousCodeUnit) ? 2 : 1;
-    final newStart = textSelection.start - offset;
-    final newEnd = textSelection.start;
-    final newText = text.replaceRange(
-      newStart,
-      newEnd,
-      '',
-    );
-    _controller.text = newText;
-    _controller.selection = textSelection.copyWith(
-      baseOffset: newStart,
-      extentOffset: newStart,
-    );
-  }
-
-  bool _isUtf16Surrogate(int value) {
-    return value & 0xF800 == 0xD800;
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-}
+import 'package:my_app/models/editing_song.dart';
+import 'package:provider/provider.dart';
 
 class CustomKeyboard extends StatelessWidget {
   final ValueSetter<String> onTextInput;
@@ -145,17 +24,56 @@ class CustomKeyboard extends StatelessWidget {
       color: Colors.grey[800],
       child: Column(
         children: [
+          buildRowSetting(context),
           insertPadding,
           buildRowOne(),
           insertPadding,
           buildRowTwo(),
           insertPadding,
           buildRowThree(),
-          insertPadding,
-          buildRowFour(),
           Padding(padding: EdgeInsets.only(bottom: safeAreaHeight))
         ],
       ),
+    );
+  }
+
+  Container buildRowSetting(BuildContext context) {
+    final eModel = Provider.of<EditingSongModel>(context, listen: false);
+
+    return Container(
+      height: 40,
+      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        IconButton(
+            icon: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.grey),
+            onPressed: () {
+              eModel.closeKeyboard();
+              Navigator.of(context).pop();
+            }),
+        Expanded(
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 2.0),
+                child: TextField(
+                    cursorColor: Colors.white,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        fillColor: Colors.grey[600],
+                        filled: true),
+                    textAlign: TextAlign.center,
+                    controller:
+                        Provider.of<EditingSongModel>(context).controller,
+                    style: TextStyle(color: Colors.white),
+                    onChanged: (text) {
+                      eModel.controller.text = text;
+                    }))),
+        IconButton(
+            icon: Icon(Icons.keyboard_arrow_left_outlined, color: Colors.grey),
+            onPressed: () {}),
+        IconButton(
+            icon: Icon(Icons.keyboard_arrow_right_outlined, color: Colors.grey),
+            onPressed: () {}),
+      ]),
     );
   }
 
@@ -180,10 +98,10 @@ class CustomKeyboard extends StatelessWidget {
       "6",
       "7",
       "9",
-      "Φ",
+      "dim",
       "sus",
       "add",
-      "alt"
+      "alt",
     ];
 
     return Expanded(
@@ -210,30 +128,6 @@ class CustomKeyboard extends StatelessWidget {
       ),
     );
   }
-
-  Expanded buildRowFour() {
-    final rowOneElem = [
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "A",
-      "B",
-      "A",
-      "♭",
-      "♯",
-      "M",
-      "m"
-    ];
-
-    return Expanded(
-      child: Row(
-          children: rowOneElem
-              .map((elm) => TextKey(text: elm, onTextInput: _textInputHandler))
-              .toList()),
-    );
-  }
 }
 
 class TextKey extends StatelessWidget {
@@ -249,9 +143,9 @@ class TextKey extends StatelessWidget {
       flex: flex,
       child: Padding(
         padding: const EdgeInsets.all(2.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.grey,
+        child: Material(
+          color: Colors.grey[500],
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
           child: InkWell(
@@ -259,7 +153,11 @@ class TextKey extends StatelessWidget {
               onTextInput?.call(text);
             },
             child: Container(
-              child: Center(child: Text(text)),
+              child: Center(
+                  child: Text(
+                text,
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              )),
             ),
           ),
         ),
@@ -280,16 +178,19 @@ class BackspaceKey extends StatelessWidget {
     return Expanded(
       flex: flex,
       child: Padding(
-        padding: const EdgeInsets.all(1.0),
+        padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.blue.shade300,
+          color: Colors.grey[600],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
           child: InkWell(
             onTap: () {
               onBackspace?.call();
             },
             child: Container(
               child: Center(
-                child: Icon(Icons.backspace),
+                child: Icon(Icons.backspace_outlined, color: Colors.white),
               ),
             ),
           ),

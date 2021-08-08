@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/pages/custom_keyboard.dart';
 
 import '../../models/metronome_model.dart';
 
@@ -96,26 +95,9 @@ Drawer settingsDrawer(BuildContext context, MetronomeModel model, int bpm,
                                     .collection('Songs')
                                     .doc(docId)
                                     .delete();
-                                //TODO FirstPageへの値渡しで画面遷移後に削除
                               }),
                         ],
                       ));
-            },
-          ),
-          insertPadding,
-          TextButton(
-            child: Text(
-              "Keyboard",
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return KeyboardDemo();
-                  },
-                ),
-              );
             },
           ),
         ],
