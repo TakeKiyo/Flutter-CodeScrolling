@@ -32,19 +32,14 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  TextEditingController _controller = TextEditingController();
-  get controller => _controller;
-
-  set controller(String inputText) {
-    _controller = TextEditingController(text: inputText);
-  }
-
+  ///detail_edit_pageでTextFieldをTapする度に対応したTextEditingControllerを代入する
+  TextEditingController controller;
   int controlBarIdx;
   int controlTimeIdx;
 
   void insertText(String myText) {
-    final text = _controller.text;
-    final textSelection = _controller.selection;
+    final text = controller.text;
+    final textSelection = controller.selection;
     print(textSelection.start);
     print(textSelection.end);
     final newText = text.replaceRange(
@@ -56,8 +51,8 @@ class EditingSongModel extends ChangeNotifier {
     print(textSelection.start);
     print(textSelection.end);
     final myTextLength = myText.length;
-    _controller.text = newText;
-    _controller.selection = textSelection.copyWith(
+    controller.text = newText;
+    controller.selection = textSelection.copyWith(
       baseOffset: textSelection.start + myTextLength,
       extentOffset: textSelection.start + myTextLength,
     );
@@ -66,8 +61,8 @@ class EditingSongModel extends ChangeNotifier {
   }
 
   void backspace() {
-    final text = _controller.text;
-    final textSelection = _controller.selection;
+    final text = controller.text;
+    final textSelection = controller.selection;
     final selectionLength = textSelection.end - textSelection.start;
 
     // There is a selection.
@@ -77,8 +72,8 @@ class EditingSongModel extends ChangeNotifier {
         textSelection.end,
         '',
       );
-      _controller.text = newText;
-      _controller.selection = textSelection.copyWith(
+      controller.text = newText;
+      controller.selection = textSelection.copyWith(
         baseOffset: textSelection.start,
         extentOffset: textSelection.start,
       );
@@ -100,8 +95,8 @@ class EditingSongModel extends ChangeNotifier {
       newEnd,
       '',
     );
-    _controller.text = newText;
-    _controller.selection = textSelection.copyWith(
+    controller.text = newText;
+    controller.selection = textSelection.copyWith(
       baseOffset: newStart,
       extentOffset: newStart,
     );
@@ -114,7 +109,7 @@ class EditingSongModel extends ChangeNotifier {
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 }

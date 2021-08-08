@@ -39,20 +39,18 @@ class DetailEditPage extends StatelessWidget {
       List<Widget> list = [];
 
       for (var i = 0; i < strings.length; i++) {
-        FocusNode _focusNode = FocusNode();
-        _focusNode.addListener(() {
-          if (_focusNode.hasFocus) {
-            eModel.controller = strings[i];
-            eModel.controlBarIdx = listIndex;
-            eModel.controlTimeIdx = i;
-            print(strings[i]);
-          }
-        });
+        final _controller = TextEditingController(text: strings[i]);
+
         list.add(Flexible(
             child: TextField(
+          onTap: () {
+            eModel.controller = _controller;
+            eModel.controlBarIdx = listIndex;
+            eModel.controlTimeIdx = i;
+            print(eModel.controller.text);
+          },
           textAlign: TextAlign.center,
-          controller: TextEditingController(text: strings[i]),
-          focusNode: _focusNode,
+          controller: _controller,
           onChanged: (text) {
             eModel.editCodeList(text, listIndex, i);
           },
