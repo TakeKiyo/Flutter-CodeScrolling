@@ -129,15 +129,43 @@ class DetailEditPage extends StatelessWidget {
                           for (int idx = 0; idx < model.codeList.length; idx++)
                             getCodeListWidgets(
                                 context, model.codeList[idx], idx),
-                          ElevatedButton(
-                            child: const Text('小節を追加',
-                                style: TextStyle(color: Colors.white)),
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.orange),
-                            onPressed: () {
-                              model.addEmptyList();
-                            },
-                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 5),
+                                    child: ButtonTheme(
+                                        alignedDropdown: true,
+                                        child: DropdownButton<int>(
+                                          value: model.selectedBeatCount,
+                                          elevation: 16,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                          onChanged: (int newValue) {
+                                            model
+                                                .setSelectedBeatCount(newValue);
+                                          },
+                                          items: <int>[1, 2, 3, 4, 5, 6]
+                                              .map<DropdownMenuItem<int>>(
+                                                  (int value) {
+                                            return DropdownMenuItem<int>(
+                                                value: value,
+                                                child: Text(
+                                                    value.toString() + '拍'));
+                                          }).toList(),
+                                        ))),
+                                ElevatedButton(
+                                  child: const Text('小節を追加',
+                                      style: TextStyle(color: Colors.white)),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.orange),
+                                  onPressed: () {
+                                    model.addEmptyList();
+                                  },
+                                ),
+                              ]),
                           ElevatedButton(
                             child: const Text('編集を終了',
                                 style: TextStyle(color: Colors.white)),

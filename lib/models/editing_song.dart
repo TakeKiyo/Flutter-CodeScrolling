@@ -4,8 +4,17 @@ class EditingSongModel extends ChangeNotifier {
   List<List<String>> _codeList = [];
   get codeList => _codeList;
 
+  int _selectedBeatCount = 4;
+  get selectedBeatCount => _selectedBeatCount;
+
+  void setSelectedBeatCount(int selectedCount) {
+    _selectedBeatCount = selectedCount;
+    notifyListeners();
+  }
+
   void addEmptyList() {
-    _codeList.add(["", "", "", ""]);
+    var emptyList = List.filled(_selectedBeatCount, "");
+    _codeList.add(emptyList);
     notifyListeners();
   }
 
