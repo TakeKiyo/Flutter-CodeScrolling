@@ -133,16 +133,14 @@ class DetailEditPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Padding(
-                                    padding: EdgeInsets.symmetric(),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 5),
                                     child: ButtonTheme(
                                         alignedDropdown: true,
                                         child: DropdownButton<int>(
                                           value: model.selectedBeatCount,
                                           elevation: 16,
                                           style: const TextStyle(
-                                              color: Colors.black),
-                                          underline: Container(
-                                            height: 2,
                                             color: Colors.black,
                                           ),
                                           onChanged: (int newValue) {
