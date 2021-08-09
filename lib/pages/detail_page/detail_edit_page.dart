@@ -133,8 +133,7 @@ class DetailEditPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        15.0, 5.0, 15.0, 5.0),
+                                    padding: EdgeInsets.symmetric(),
                                     child: ButtonTheme(
                                         alignedDropdown: true,
                                         child: DropdownButton<int>(
