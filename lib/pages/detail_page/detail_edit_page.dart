@@ -14,8 +14,6 @@ class DetailEditPage extends StatelessWidget {
 
   DetailEditPage({this.bpm, this.title, this.docId});
 
-  final int defaultBeatCount = 4;
-
   List<String> formatCodeList(List<List<String>> codeList) {
     List<String> formattedCodeList = [];
     for (int i = 0; i < codeList.length; i++) {

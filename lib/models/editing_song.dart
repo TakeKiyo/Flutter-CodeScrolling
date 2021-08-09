@@ -13,7 +13,7 @@ class EditingSongModel extends ChangeNotifier {
   }
 
   void addEmptyList() {
-    var emptyList = new List.filled(_selectedBeatCount, "");
+    var emptyList = List.filled(_selectedBeatCount, "");
     _codeList.add(emptyList);
     notifyListeners();
   }
