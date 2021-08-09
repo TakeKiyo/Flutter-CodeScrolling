@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
+import '../custom_keyboard.dart';
 import 'detail_page.dart';
 
 class DetailEditPage extends StatelessWidget {
@@ -31,13 +32,46 @@ class DetailEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget getCodeListWidgets(List<String> strings, int listIndex) {
+    final _safeAreaHeight = MediaQuery.of(context).padding.bottom;
+
+    void _showCustomKeyboard(context) {
+      Scaffold.of(context).showBottomSheet((BuildContext context) {
+        return CustomKeyboard(
+          onTextInput: (myText) {
+            Provider.of<EditingSongModel>(context, listen: false)
+                .insertText(myText);
+          },
+          onBackspace:
+              Provider.of<EditingSongModel>(context, listen: false).backspace,
+          safeAreaHeight: _safeAreaHeight,
+        );
+      });
+    }
+
+    Widget getCodeListWidgets(context, List<String> strings, int listIndex) {
       List<Widget> list = [];
+
       for (var i = 0; i < strings.length; i++) {
+        final _controller = TextEditingController(text: strings[i]);
+
         list.add(Flexible(
             child: TextField(
+          onTap: () {
+            if (!Provider.of<EditingSongModel>(context, listen: false)
+                .keyboardIsOpening) {
+              _showCustomKeyboard(context);
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .openKeyboard();
+            }
+            Provider.of<EditingSongModel>(context, listen: false)
+                .changeTextController(_controller);
+            Provider.of<EditingSongModel>(context, listen: false)
+                .controlBarIdx = listIndex;
+            Provider.of<EditingSongModel>(context, listen: false)
+                .controlTimeIdx = i;
+          },
           textAlign: TextAlign.center,
-          controller: TextEditingController(text: strings[i]),
+          controller: _controller,
           onChanged: (text) {
             Provider.of<EditingSongModel>(context, listen: false)
                 .editCodeList(text, listIndex, i);
@@ -74,45 +108,51 @@ class DetailEditPage extends StatelessWidget {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios),
                 onPressed: () {
+                  model.closeKeyboard();
                   Navigator.of(context).pop();
                 }),
             title: Text("編集ページ"),
             actions: <Widget>[],
           ),
-          body: Container(
-              child: Scrollbar(
-                  isAlwaysShown: true,
-                  thickness: 8.0,
-                  hoverThickness: 12.0,
-                  child: SingleChildScrollView(
-                    child: Center(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("コードの編集"),
-                        for (int idx = 0; idx < model.codeList.length; idx++)
-                          getCodeListWidgets(model.codeList[idx], idx),
-                        ElevatedButton(
-                          child: const Text('小節を追加',
-                              style: TextStyle(color: Colors.white)),
-                          style:
-                              ElevatedButton.styleFrom(primary: Colors.orange),
-                          onPressed: () {
-                            model.addEmptyList();
-                          },
-                        ),
-                        ElevatedButton(
-                          child: const Text('編集を終了',
-                              style: TextStyle(color: Colors.white)),
-                          style:
-                              ElevatedButton.styleFrom(primary: Colors.orange),
-                          onPressed: () {
-                            submitCodeList(docId);
-                          },
-                        ),
-                      ],
-                    )),
-                  ))));
+          body: Builder(
+            builder: (context) => Container(
+                child: Scrollbar(
+                    isAlwaysShown: true,
+                    thickness: 8.0,
+                    hoverThickness: 12.0,
+                    child: SingleChildScrollView(
+                      child: Center(
+                          child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("コードの編集"),
+                          for (int idx = 0; idx < model.codeList.length; idx++)
+                            getCodeListWidgets(
+                                context, model.codeList[idx], idx),
+                          ElevatedButton(
+                            child: const Text('小節を追加',
+                                style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.orange),
+                            onPressed: () {
+                              model.addEmptyList();
+                            },
+                          ),
+                          ElevatedButton(
+                            child: const Text('編集を終了',
+                                style: TextStyle(color: Colors.white)),
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.orange),
+                            onPressed: () {
+                              model.closeKeyboard();
+                              submitCodeList(docId);
+                            },
+                          ),
+                        ],
+                      )),
+                    ))),
+            //bottomSheet: CustomKeyboard(),
+          ));
     });
   }
 }
