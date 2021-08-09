@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ScrollablePage extends StatefulWidget {
-  ScrollablePage({Key key, this.title}) : super(key: key);
-  final String title;
+  ScrollablePage(this.codeListState);
+  final List<List<String>> codeListState;
 
   @override
   _ScrollPageState createState() => _ScrollPageState();
 }
 
 class _ScrollPageState extends State<ScrollablePage> {
-  int _currentIndex = 0; // currentIndexにデフォルト値を与えないとコンパイルエラー
-
-  bool _showBackToTopButton = false;
-
   // コントローラ
   ScrollController _scrollController;
 
@@ -28,13 +24,46 @@ class _ScrollPageState extends State<ScrollablePage> {
     super.dispose();
   }
 
-  void _scrollToTop() {
-    _scrollController.animateTo(0,
-        duration: Duration(seconds: 3), curve: Curves.linear);
-  }
-
   @override
   Widget build(BuildContext context) {
+    List<Widget> displayedWidget() {
+      List<Widget> displayedList = [];
+      displayedList.add(TextButton(
+          onPressed: () {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              curve: Curves.easeOut,
+              duration: const Duration(milliseconds: 10000),
+            );
+          },
+          child: Text("スクロール")));
+      for (int listIndex = 0;
+          listIndex < widget.codeListState.length;
+          listIndex++) {
+        List<Widget> list = [];
+        for (var i = 0; i < widget.codeListState[listIndex].length; i++) {
+          list.add(Flexible(
+              child: TextField(
+            enabled: false,
+            textAlign: TextAlign.center,
+            controller:
+                TextEditingController(text: widget.codeListState[listIndex][i]),
+          )));
+          list.add(Text("|"));
+        }
+        displayedList.add(Row(children: list));
+      }
+      displayedList.add(TextButton(
+          onPressed: () {
+            _scrollController.jumpTo(
+              0.0,
+            );
+          },
+          child: Text("上まで戻る")));
+
+      return displayedList;
+    }
+
     return Container(
         child: SingleChildScrollView(
             controller: _scrollController,
@@ -44,117 +73,16 @@ class _ScrollPageState extends State<ScrollablePage> {
                     isAlwaysShown: true,
                     thickness: 8.0,
                     hoverThickness: 12.0,
-                    child: ListView(
-                        padding: EdgeInsets.all(36.0),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                _scrollController.animateTo(
-                                  _scrollController.position.maxScrollExtent,
-                                  curve: Curves.linear,
-                                  duration: const Duration(milliseconds: 1000),
-                                );
-                              },
-                              child: Text("スクロール")),
-                          Container(
-                            color: Colors.red,
-                            child: Text(
-                              "ジョナサン・ジョースター",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.green,
-                            child: Text(
-                              "ジョセフ・ジョースター",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          Container(
-                            color: Colors.blue,
-                            child: Text(
-                              "空条承太郎",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 35.0),
-                            ),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                _scrollController.animateTo(
-                                  0.0,
-                                  curve: Curves.easeOut,
-                                  duration: const Duration(milliseconds: 1000),
-                                );
-                              },
-                              child: Text("TOPに戻る")),
-                        ])))));
+                    child: Scrollbar(
+                        controller: _scrollController,
+                        isAlwaysShown: true,
+                        thickness: 8.0,
+                        hoverThickness: 12.0,
+                        child: ListView(
+                          padding: EdgeInsets.all(36.0),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: displayedWidget(),
+                        ))))));
   }
 }

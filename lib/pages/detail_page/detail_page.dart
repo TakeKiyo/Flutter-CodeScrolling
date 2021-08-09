@@ -115,7 +115,7 @@ class DetailPage extends StatelessWidget {
                       }
                       codeListState.add(tmp);
                     }
-                    return ScrollablePage();
+                    return ScrollablePage(codeListState);
                     return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
