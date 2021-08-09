@@ -99,20 +99,48 @@ class _ScrollPageState extends State<ScrollablePage> {
       return displayedList;
     }
 
-    return Container(
-        child: SingleChildScrollView(
-            controller: _scrollController,
-            child: Container(
-                child: Scrollbar(
-                    controller: _scrollController,
-                    isAlwaysShown: true,
-                    thickness: 8.0,
-                    hoverThickness: 12.0,
-                    child: ListView(
-                      padding: EdgeInsets.all(36.0),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: displayedWidget(),
-                    )))));
+    if (widget.codeList.length == 0) {
+      return Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextButton(
+              onPressed: () {
+                Provider.of<MetronomeModel>(context, listen: false).tempoCount =
+                    widget.bpm;
+                Provider.of<EditingSongModel>(context, listen: false).codeList =
+                    [];
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return DetailEditPage(
+                        bpm: widget.bpm,
+                        title: widget.title,
+                        docId: widget.docId,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Text("コードを編集する")),
+          Text("まだコードは追加されていません")
+        ],
+      ));
+    } else {
+      return Container(
+          child: Scrollbar(
+              // controller: _scrollController,
+              isAlwaysShown: true,
+              thickness: 8.0,
+              hoverThickness: 12.0,
+              child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: ListView(
+                    padding: EdgeInsets.all(36.0),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: displayedWidget(),
+                  ))));
+    }
   }
 }

@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/pages/detail_page/scrollable_page.dart';
 import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
 import 'detail_bottom_bar.dart';
-import 'detail_edit_page.dart';
 
 class DetailPage extends StatelessWidget {
   final int bpm;
@@ -52,39 +50,8 @@ class DetailPage extends StatelessWidget {
                     return Center(child: Text("Loading"));
                   }
                   var songDocument = snapshot.data;
-                  if (songDocument["codeList"].length == 0) {
-                    return Center(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        TextButton(
-                            onPressed: () {
-                              Provider.of<MetronomeModel>(context,
-                                      listen: false)
-                                  .tempoCount = bpm;
-                              Provider.of<EditingSongModel>(context,
-                                      listen: false)
-                                  .codeList = [];
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return DetailEditPage(
-                                      bpm: bpm,
-                                      title: title,
-                                      docId: docId,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            child: Text("コードを編集する")),
-                        Text("まだコードは追加されていません")
-                      ],
-                    ));
-                  } else {
-                    var codeList = songDocument["codeList"].cast<String>();
-                    return ScrollablePage(codeList, bpm, title, docId);
-                  }
+                  var codeList = songDocument["codeList"].cast<String>();
+                  return ScrollablePage(codeList, bpm, title, docId);
                 })),
         bottomNavigationBar: detailBottomBar(context, model),
         endDrawer: settingsDrawer(context, model, bpm, title, docId),
