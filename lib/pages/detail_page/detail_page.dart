@@ -42,15 +42,12 @@ class DetailPage extends StatelessWidget {
           ],
         ),
         body: Container(
-            // child: SingleChildScrollView(
             child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('Songs')
                     .doc(docId)
                     .snapshots(),
-                builder:
-                    // ignore: missing_return
-                    (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (!snapshot.hasData) {
                     return Center(child: Text("Loading"));
                   }
