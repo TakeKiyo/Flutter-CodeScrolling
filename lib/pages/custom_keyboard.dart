@@ -90,7 +90,7 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowOne() {
-    final rowTwoElem = ["1", "2", "3", "4", "5", "6", "7", "9", "♭", "♯"];
+    const rowTwoElem = ["1", "2", "3", "4", "5", "6", "7", "9", "♭", "♯"];
 
     return Expanded(
       child: Row(
@@ -105,7 +105,7 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowTwo() {
-    final rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "M", "m"];
+    const rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "M", "m"];
 
     return Expanded(
       child: Row(
@@ -120,7 +120,7 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowThree() {
-    final rowThreeElem = ["dim", "sus", "add", "alt", "/", "N.C."];
+    const rowThreeElem = ["dim", "sus", "add", "alt", "/", "N.C."];
 
     return Expanded(
       child: Row(

@@ -56,6 +56,7 @@ class DetailEditPage extends StatelessWidget {
 
         list.add(Flexible(
             child: TextField(
+          showCursor: true,
           readOnly: true,
           onTap: () {
             if (!Provider.of<EditingSongModel>(context, listen: false)
@@ -104,6 +105,7 @@ class DetailEditPage extends StatelessWidget {
 
     return Consumer<EditingSongModel>(builder: (_, model, __) {
       return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             centerTitle: true,
             leading: IconButton(
@@ -121,64 +123,71 @@ class DetailEditPage extends StatelessWidget {
                     isAlwaysShown: true,
                     thickness: 8.0,
                     hoverThickness: 12.0,
-                    child: SingleChildScrollView(
-                      child: Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text("コードの編集"),
-                          for (int idx = 0; idx < model.codeList.length; idx++)
-                            getCodeListWidgets(
-                                context, model.codeList[idx], idx),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 15, horizontal: 5),
-                                    child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton<int>(
-                                          value: model.selectedBeatCount,
-                                          elevation: 16,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                          ),
-                                          onChanged: (int newValue) {
-                                            model
-                                                .setSelectedBeatCount(newValue);
-                                          },
-                                          items: <int>[1, 2, 3, 4, 5, 6]
-                                              .map<DropdownMenuItem<int>>(
-                                                  (int value) {
-                                            return DropdownMenuItem<int>(
-                                                value: value,
-                                                child: Text(
-                                                    value.toString() + '拍'));
-                                          }).toList(),
-                                        ))),
-                                ElevatedButton(
-                                  child: const Text('小節を追加',
-                                      style: TextStyle(color: Colors.white)),
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.orange),
-                                  onPressed: () {
-                                    model.addEmptyList();
-                                  },
-                                ),
-                              ]),
-                          ElevatedButton(
-                            child: const Text('編集を終了',
-                                style: TextStyle(color: Colors.white)),
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.orange),
-                            onPressed: () {
-                              model.closeKeyboard();
-                              submitCodeList(docId);
-                            },
-                          ),
-                        ],
-                      )),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          bottom: Provider.of<EditingSongModel>(context)
+                              .keyboardBottomSpace),
+                      child: SingleChildScrollView(
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("コードの編集"),
+                            for (int idx = 0;
+                                idx < model.codeList.length;
+                                idx++)
+                              getCodeListWidgets(
+                                  context, model.codeList[idx], idx),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 5),
+                                      child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton<int>(
+                                            value: model.selectedBeatCount,
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            onChanged: (int newValue) {
+                                              model.setSelectedBeatCount(
+                                                  newValue);
+                                            },
+                                            items: <int>[1, 2, 3, 4, 5, 6]
+                                                .map<DropdownMenuItem<int>>(
+                                                    (int value) {
+                                              return DropdownMenuItem<int>(
+                                                  value: value,
+                                                  child: Text(
+                                                      value.toString() + '拍'));
+                                            }).toList(),
+                                          ))),
+                                  ElevatedButton(
+                                    child: const Text('小節を追加',
+                                        style: TextStyle(color: Colors.white)),
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.orange),
+                                    onPressed: () {
+                                      model.addEmptyList();
+                                    },
+                                  ),
+                                ]),
+                            ElevatedButton(
+                              child: const Text('編集を終了',
+                                  style: TextStyle(color: Colors.white)),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.orange),
+                              onPressed: () {
+                                model.closeKeyboard();
+                                submitCodeList(docId);
+                              },
+                            ),
+                          ],
+                        )),
+                      ),
                     ))),
             //bottomSheet: CustomKeyboard(),
           ));
