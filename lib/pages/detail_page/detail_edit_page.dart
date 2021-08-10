@@ -56,6 +56,7 @@ class DetailEditPage extends StatelessWidget {
 
         list.add(Flexible(
             child: TextField(
+          readOnly: true,
           onTap: () {
             if (!Provider.of<EditingSongModel>(context, listen: false)
                 .keyboardIsOpening) {
