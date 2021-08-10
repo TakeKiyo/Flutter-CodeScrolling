@@ -47,15 +47,27 @@ class EditingSongModel extends ChangeNotifier {
   int controlTimeIdx;
   bool _keyboardIsOpening = false;
   get keyboardIsOpening => _keyboardIsOpening;
+  double _keyboardBottomSpace = 0;
+  get keyboardBottomSpace => _keyboardBottomSpace;
 
   void openKeyboard() {
     _keyboardIsOpening = true;
+    changeKeyboardPadding();
     notifyListeners();
   }
 
   void closeKeyboard() {
     _keyboardIsOpening = false;
+    changeKeyboardPadding();
     notifyListeners();
+  }
+
+  void changeKeyboardPadding() {
+    if (_keyboardIsOpening) {
+      _keyboardBottomSpace = 300;
+    } else {
+      _keyboardBottomSpace = 0;
+    }
   }
 
   void changeTextController(TextEditingController controller) {
