@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/models/editing_song.dart';
-import 'package:my_app/models/metronome_model.dart';
+import 'package:my_app/models/editing_song_model.dart';
+import 'package:my_app/models/metronome_bpm_model.dart';
 import 'package:provider/provider.dart';
 
 import 'detail_edit_page.dart';
@@ -48,7 +48,7 @@ class _ScrollPageState extends State<ScrollablePage> {
       List<Widget> displayedList = [];
       displayedList.add(TextButton(
           onPressed: () {
-            Provider.of<MetronomeModel>(context, listen: false).tempoCount =
+            Provider.of<MetronomeBpmModel>(context, listen: false).tempoCount =
                 widget.bpm;
             Provider.of<EditingSongModel>(context, listen: false).codeList =
                 widget.codeList;
@@ -106,8 +106,8 @@ class _ScrollPageState extends State<ScrollablePage> {
         children: <Widget>[
           TextButton(
               onPressed: () {
-                Provider.of<MetronomeModel>(context, listen: false).tempoCount =
-                    widget.bpm;
+                Provider.of<MetronomeBpmModel>(context, listen: false)
+                    .tempoCount = widget.bpm;
                 Provider.of<EditingSongModel>(context, listen: false).codeList =
                     [];
                 Navigator.of(context).push(

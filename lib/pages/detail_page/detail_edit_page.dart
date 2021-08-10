@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/models/editing_song.dart';
+import 'package:my_app/models/editing_song_model.dart';
 import 'package:provider/provider.dart';
 
 import '../custom_keyboard.dart';

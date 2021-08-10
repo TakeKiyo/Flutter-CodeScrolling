@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/metronome_model.dart';
+import '../../models/metronome_timer_model.dart';
 
-Drawer settingsDrawer(BuildContext context, MetronomeModel model, int bpm,
+Drawer settingsDrawer(BuildContext context, MetronomeTimerModel model, int bpm,
     String title, String docId) {
   final double titleTextFont = 16;
   final insertPadding = Padding(padding: EdgeInsets.all(10));

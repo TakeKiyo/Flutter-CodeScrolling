@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/metronome_model.dart';
+import '../../models/metronome_bpm_model.dart';
+import '../../models/metronome_timer_model.dart';
 import 'bpm_setting.dart';
 import 'countin_dialog.dart';
 import 'volume_setting.dart';
 
-Container detailBottomBar(BuildContext context, MetronomeModel model) {
+Container detailBottomBar(BuildContext context, MetronomeBpmModel model) {
   final double bottomIconSIze = 36;
   final Color textColor = Colors.white;
 
@@ -22,7 +24,8 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
             height: 60,
             child: TextButton(
               style: TextButton.styleFrom(
-                backgroundColor: model.metronomeContainerColor,
+                backgroundColor: Provider.of<MetronomeTimerModel>(context)
+                    .metronomeContainerColor,
                 shape: CircleBorder(),
               ),
               child: Column(
@@ -57,17 +60,22 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
                   iconSize: bottomIconSIze,
                   onPressed: () async {
                     model.switchPlayStatus();
-                    model.metronomeLoad();
+                    Provider.of<MetronomeTimerModel>(context, listen: false)
+                        .metronomeLoad();
                     print("Pressed: Play");
-                    if (model.metronomeContainerStatus <
-                        model.countInTimes - 1) {
+                    if (Provider.of<MetronomeTimerModel>(context, listen: false)
+                            .metronomeContainerStatus <
+                        Provider.of<MetronomeTimerModel>(context, listen: false)
+                                .countInTimes -
+                            1) {
                       showDialog(
                           barrierDismissible: false,
                           context: context,
                           builder: (BuildContext context) {
                             return CountInDialog();
                           });
-                      await model
+                      await Provider.of<MetronomeTimerModel>(context,
+                              listen: false)
                           .waitUntilCountInEnds()
                           .then((_) => Navigator.of(context).pop());
                     }
@@ -78,7 +86,8 @@ Container detailBottomBar(BuildContext context, MetronomeModel model) {
                   icon: Icon(Icons.pause_rounded),
                   iconSize: bottomIconSIze,
                   onPressed: () {
-                    model.metronomeClear();
+                    Provider.of<MetronomeTimerModel>(context, listen: false)
+                        .metronomeClear();
                     model.switchPlayStatus();
                     print("Pressed: Pause");
                   },

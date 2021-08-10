@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/metronome_model.dart';
+import '../../models/metronome_timer_model.dart';
 
 class MetronomeContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeModel>(builder: (_, model, __) {
+    return Consumer<MetronomeTimerModel>(builder: (_, model, __) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -30,7 +30,7 @@ class MetronomeContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeModel>(builder: (_, model, __) {
+    return Consumer<MetronomeTimerModel>(builder: (_, model, __) {
       return Container(
         width: 20,
         height: 20,

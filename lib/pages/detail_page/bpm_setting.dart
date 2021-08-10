@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/metronome_model.dart';
+import '../../models/metronome_bpm_model.dart';
 
 class BpmSetting extends StatelessWidget {
   final double tempoIconSize = 32;
@@ -9,7 +9,7 @@ class BpmSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeModel>(builder: (_, model, __) {
+    return Consumer<MetronomeBpmModel>(builder: (_, model, __) {
       return SizedBox(
         height: MediaQuery.of(context).size.height / 2,
         width: MediaQuery.of(context).size.width,

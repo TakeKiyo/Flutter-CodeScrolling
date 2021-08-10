@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
-import 'package:my_app/models/editing_song.dart';
-import 'package:my_app/models/metronome_model.dart';
+import 'package:my_app/models/editing_song_model.dart';
+import 'package:my_app/models/metronome_bpm_model.dart';
 import 'package:my_app/pages/songs_list.dart';
 import 'package:provider/provider.dart';
 
@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider<MetronomeModel>(
-            create: (_) => MetronomeModel(),
+          ChangeNotifierProvider<MetronomeBpmModel>(
+            create: (_) => MetronomeBpmModel(),
           ),
           ChangeNotifierProvider<AuthModel>(
             create: (_) => AuthModel(udid),
