@@ -19,43 +19,41 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeModel>(builder: (_, model, __) {
-      return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Provider.of<MetronomeModel>(context, listen: false).forceStop();
+            }),
+        title: Text(title),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.settings),
               onPressed: () {
-                Navigator.of(context).pop();
-                model.forceStop();
+                _scaffoldKey.currentState.openEndDrawer();
               }),
-          title: Text(title),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.settings),
-                onPressed: () {
-                  _scaffoldKey.currentState.openEndDrawer();
-                }),
-          ],
-        ),
-        body: Container(
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('Songs')
-                    .doc(docId)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: Text("Loading"));
-                  }
-                  var songDocument = snapshot.data;
-                  var codeList = songDocument["codeList"].cast<String>();
-                  return ScrollablePage(codeList, bpm, title, docId);
-                })),
-        bottomNavigationBar: detailBottomBar(context, model),
-        endDrawer: settingsDrawer(context, model, bpm, title, docId),
-      );
-    });
+        ],
+      ),
+      body: Container(
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('Songs')
+                  .doc(docId)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: Text("Loading"));
+                }
+                var songDocument = snapshot.data;
+                var codeList = songDocument["codeList"].cast<String>();
+                return ScrollablePage(codeList, bpm, title, docId);
+              })),
+      bottomNavigationBar: detailBottomBar(context),
+      endDrawer: settingsDrawer(context, bpm, title, docId),
+    );
   }
 }
