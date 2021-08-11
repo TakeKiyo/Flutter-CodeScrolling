@@ -103,33 +103,32 @@ class DetailEditPage extends StatelessWidget {
       );
     }
 
-    return Consumer<EditingSongModel>(builder: (_, model, __) {
-      return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            centerTitle: true,
-            leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  model.closeKeyboard();
-                  Navigator.of(context).pop();
-                }),
-            title: Text("編集ページ"),
-            actions: <Widget>[],
-          ),
-          body: Builder(
-            builder: (context) => Container(
-                child: Scrollbar(
-                    isAlwaysShown: true,
-                    thickness: 8.0,
-                    hoverThickness: 12.0,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          bottom: Provider.of<EditingSongModel>(context)
-                              .keyboardBottomSpace),
-                      child: SingleChildScrollView(
-                        child: Center(
-                            child: Column(
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .closeKeyboard();
+                Navigator.of(context).pop();
+              }),
+          title: Text("編集ページ"),
+          actions: <Widget>[],
+        ),
+        body: Builder(
+          builder: (context) => Container(
+              child: Scrollbar(
+                  isAlwaysShown: true,
+                  thickness: 8.0,
+                  hoverThickness: 12.0,
+                  child: Padding(
+                    padding: bottomPadding(context),
+                    child: SingleChildScrollView(
+                      child: Center(child:
+                          Consumer<EditingSongModel>(builder: (_, model, __) {
+                        return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text("コードの編集"),
@@ -186,11 +185,16 @@ class DetailEditPage extends StatelessWidget {
                               },
                             ),
                           ],
-                        )),
-                      ),
-                    ))),
-            //bottomSheet: CustomKeyboard(),
-          ));
-    });
+                        );
+                      })),
+                    ),
+                  ))),
+          //bottomSheet: CustomKeyboard(),
+        ));
   }
+}
+
+EdgeInsets bottomPadding(context) {
+  return EdgeInsets.only(
+      bottom: Provider.of<EditingSongModel>(context).keyboardBottomSpace);
 }
