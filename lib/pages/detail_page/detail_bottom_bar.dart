@@ -51,49 +51,52 @@ Container detailBottomBar(BuildContext context) {
             }),
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: !Provider.of<MetronomeModel>(context, listen: false).isPlaying
-              ? IconButton(
-                  color: textColor,
-                  icon: Icon(Icons.play_arrow_rounded),
-                  iconSize: bottomIconSIze,
-                  onPressed: () async {
-                    Provider.of<MetronomeModel>(context, listen: false)
-                        .switchPlayStatus();
-                    Provider.of<MetronomeModel>(context, listen: false)
-                        .metronomeLoad();
-                    print("Pressed: Play");
-                    if (Provider.of<MetronomeModel>(context, listen: false)
-                            .metronomeContainerStatus <
-                        Provider.of<MetronomeModel>(context, listen: false)
-                                .countInTimes -
-                            1) {
-                      showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return CountInDialog();
-                          });
-                      await Provider.of<MetronomeModel>(context, listen: false)
-                          .waitUntilCountInEnds()
-                          .then((_) => Navigator.of(context).pop());
-                    }
-                  },
-                )
-              : IconButton(
-                  color: textColor,
-                  icon: Icon(Icons.pause_rounded),
-                  iconSize: bottomIconSIze,
-                  onPressed: () {
-                    Provider.of<MetronomeModel>(context, listen: false)
-                        .metronomeClear();
-                    Provider.of<MetronomeModel>(context, listen: false)
-                        .switchPlayStatus();
-                    print("Pressed: Pause");
-                  },
-                ),
-        ),
+        Consumer<MetronomeModel>(builder: (_, model, __) {
+          return Expanded(
+            flex: 1,
+            child: !model.isPlaying
+                ? IconButton(
+                    color: textColor,
+                    icon: Icon(Icons.play_arrow_rounded),
+                    iconSize: bottomIconSIze,
+                    onPressed: () async {
+                      Provider.of<MetronomeModel>(context, listen: false)
+                          .switchPlayStatus();
+                      Provider.of<MetronomeModel>(context, listen: false)
+                          .metronomeLoad();
+                      print("Pressed: Play");
+                      if (Provider.of<MetronomeModel>(context, listen: false)
+                              .metronomeContainerStatus <
+                          Provider.of<MetronomeModel>(context, listen: false)
+                                  .countInTimes -
+                              1) {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CountInDialog();
+                            });
+                        await Provider.of<MetronomeModel>(context,
+                                listen: false)
+                            .waitUntilCountInEnds()
+                            .then((_) => Navigator.of(context).pop());
+                      }
+                    },
+                  )
+                : IconButton(
+                    color: textColor,
+                    icon: Icon(Icons.pause_rounded),
+                    iconSize: bottomIconSIze,
+                    onPressed: () {
+                      Provider.of<MetronomeModel>(context, listen: false)
+                          .metronomeClear();
+                      Provider.of<MetronomeModel>(context, listen: false)
+                          .switchPlayStatus();
+                      print("Pressed: Pause");
+                    },
+                  ),
+          );
+        }),
         Expanded(
           flex: 1,
           child: IconButton(

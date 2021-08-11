@@ -37,12 +37,12 @@ class MetronomeContainerWidget extends StatelessWidget {
             width: 0.1,
           ),
           shape: BoxShape.circle,
-          color: metronomeContainerColor(context, contentNum, contentState)),
+          color: countInContainerColor(context, contentNum, contentState)),
     );
   }
 }
 
-Color metronomeContainerColor(context, contentNum, contentState) {
+Color countInContainerColor(context, contentNum, contentState) {
   if (!Provider.of<MetronomeModel>(context).isPlaying) {
     return Colors.white;
   } else if (Provider.of<MetronomeModel>(context).metronomeContainerStatus %
