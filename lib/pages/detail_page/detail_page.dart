@@ -5,7 +5,7 @@ import 'package:my_app/pages/detail_page/scrollable_page.dart';
 import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/metronome_bpm_model.dart';
+import '../../models/metronome_model.dart';
 import 'detail_bottom_bar.dart';
 
 class DetailPage extends StatelessWidget {
@@ -19,7 +19,7 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeBpmModel>(builder: (_, model, __) {
+    return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -54,7 +54,7 @@ class DetailPage extends StatelessWidget {
                   return ScrollablePage(codeList, bpm, title, docId);
                 })),
         bottomNavigationBar: detailBottomBar(context, model),
-        endDrawer: settingsDrawer(context, bpm, title, docId),
+        endDrawer: settingsDrawer(context, model, bpm, title, docId),
       );
     });
   }

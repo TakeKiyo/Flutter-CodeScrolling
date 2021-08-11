@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/metronome_timer_model.dart';
+import '../../models/metronome_model.dart';
 
 class VolumeSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeTimerModel>(builder: (_, model, __) {
+    return Consumer<MetronomeModel>(builder: (_, model, __) {
       return SizedBox(
         height: 100,
         width: 400,
@@ -71,7 +71,7 @@ class VolumeSetting extends StatelessWidget {
 class VolumeIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeTimerModel>(builder: (_, model, __) {
+    return Consumer<MetronomeModel>(builder: (_, model, __) {
       if (model.soundVolume == 0) {
         return Icon(Icons.volume_off, color: Colors.white);
       } else if (model.soundVolume < 1) {

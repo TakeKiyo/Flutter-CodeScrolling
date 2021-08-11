@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
-import 'package:my_app/models/metronome_bpm_model.dart';
+import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import 'create_song.dart';
@@ -75,7 +75,7 @@ class SongsList extends StatelessWidget {
                             .map((doc) => TextButton(
                                 onPressed: () {
                                   print(doc["bpm"]);
-                                  Provider.of<MetronomeBpmModel>(context,
+                                  Provider.of<MetronomeModel>(context,
                                           listen: false)
                                       .tempoCount = doc["bpm"];
                                   Navigator.of(context).push(

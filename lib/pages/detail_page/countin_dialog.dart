@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/metronome_timer_model.dart';
+import '../../models/metronome_model.dart';
 import 'metronome_container.dart';
 
 class CountInDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeTimerModel>(builder: (_, model, __) {
+    return Consumer<MetronomeModel>(builder: (_, model, __) {
       return Dialog(
         backgroundColor: Colors.transparent,
         elevation: 0,
