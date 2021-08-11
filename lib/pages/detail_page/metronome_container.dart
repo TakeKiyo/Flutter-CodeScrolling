@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/metronome_bpm_model.dart';
 import '../../models/metronome_timer_model.dart';
 
 class MetronomeContainer extends StatelessWidget {
@@ -30,22 +31,23 @@ class MetronomeContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MetronomeTimerModel>(builder: (_, model, __) {
-      return Container(
-        width: 20,
-        height: 20,
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black,
-              width: 0.1,
-            ),
-            shape: BoxShape.circle,
-            color: !model.isPlaying
-                ? Colors.white
-                : (model.metronomeContainerStatus % contentNum == contentState
-                    ? Colors.orange
-                    : Colors.white)),
-      );
-    });
+    return Container(
+      width: 20,
+      height: 20,
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 0.1,
+          ),
+          shape: BoxShape.circle,
+          color: !Provider.of<MetronomeBpmModel>(context).isPlaying
+              ? Colors.white
+              : (Provider.of<MetronomeTimerModel>(context)
+                              .metronomeContainerStatus %
+                          contentNum ==
+                      contentState
+                  ? Colors.orange
+                  : Colors.white)),
+    );
   }
 }

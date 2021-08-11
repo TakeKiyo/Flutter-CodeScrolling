@@ -54,7 +54,7 @@ class DetailPage extends StatelessWidget {
                   return ScrollablePage(codeList, bpm, title, docId);
                 })),
         bottomNavigationBar: detailBottomBar(context, model),
-        endDrawer: settingsDrawer(context, model, bpm, title, docId),
+        endDrawer: settingsDrawer(context, bpm, title, docId),
       );
     });
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/editing_song_model.dart';
 import 'package:my_app/models/metronome_bpm_model.dart';
+import 'package:my_app/models/metronome_timer_model.dart';
 import 'package:my_app/pages/songs_list.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<MetronomeBpmModel>(
             create: (_) => MetronomeBpmModel(),
+          ),
+          ChangeNotifierProvider<MetronomeTimerModel>(
+            create: (_) => MetronomeTimerModel(),
           ),
           ChangeNotifierProvider<AuthModel>(
             create: (_) => AuthModel(udid),

@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/metronome_timer_model.dart';
 
-Drawer settingsDrawer(BuildContext context, MetronomeTimerModel model, int bpm,
-    String title, String docId) {
+Drawer settingsDrawer(
+    BuildContext context, int bpm, String title, String docId) {
   final double titleTextFont = 16;
   final insertPadding = Padding(padding: EdgeInsets.all(10));
 
@@ -47,7 +48,8 @@ Drawer settingsDrawer(BuildContext context, MetronomeTimerModel model, int bpm,
           ),
           ListTile(
               tileColor: Theme.of(context).primaryColorDark,
-              title: Text(model.metronomeSound,
+              title: Text(
+                  Provider.of<MetronomeTimerModel>(context).metronomeSound,
                   style: TextStyle(color: Colors.white)),
               onTap: () {
                 print("Metronome Sound");
@@ -63,7 +65,11 @@ Drawer settingsDrawer(BuildContext context, MetronomeTimerModel model, int bpm,
           ),
           ListTile(
               tileColor: Theme.of(context).primaryColorDark,
-              title: Text("回数：" + model.countInTimes.toString(),
+              title: Text(
+                  "回数：" +
+                      Provider.of<MetronomeTimerModel>(context)
+                          .countInTimes
+                          .toString(),
                   style: TextStyle(color: Colors.white)),
               onTap: () {
                 print("Count-in Times");

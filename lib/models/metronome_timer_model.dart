@@ -8,7 +8,9 @@ import '../../models/metronome_bpm_model.dart';
 
 void audioPlayerHandler(AudioPlayerState value) => null;
 
-class MetronomeTimerModel extends MetronomeBpmModel {
+class MetronomeTimerModel extends ChangeNotifier {
+  MetronomeBpmModel model = MetronomeBpmModel();
+
   AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
   AudioCache _metronomePlayer = AudioCache();
   Timer _metronomeTimer;
@@ -36,7 +38,7 @@ class MetronomeTimerModel extends MetronomeBpmModel {
   void countInPlay() {
     const microseconds = 60000000;
     var _metronomeDuration =
-        Duration(microseconds: (microseconds ~/ super.tempoCount));
+        Duration(microseconds: (microseconds ~/ model.tempoCount));
 
     ///カウントインを規定回数繰り返したらmetronomePlay()を呼び出す。一定Durationでメトロノームを鳴らしたいのでwhileで実装できない。
     if (_metronomeContainerStatus < _countInTimes - 1) {
@@ -50,7 +52,7 @@ class MetronomeTimerModel extends MetronomeBpmModel {
   }
 
   void countInChangeStatus() {
-    if (super.isPlaying) {
+    if (model.isPlaying) {
       _metronomeContainerStatus++;
       notifyListeners();
     }
@@ -62,13 +64,13 @@ class MetronomeTimerModel extends MetronomeBpmModel {
         microseconds:
 
             ///カウントイン回数xBPM分の時間。ー0.5がないと一瞬だけカウントイン回数+1回目のFlashが起きてしまう
-            (microseconds / super.tempoCount * (_countInTimes - 0.5)).toInt()));
+            (microseconds / model.tempoCount * (_countInTimes - 0.5)).toInt()));
   }
 
   void metronomePlay() {
     const microseconds = 60000000;
     var _metronomeDuration =
-        Duration(microseconds: (microseconds ~/ super.tempoCount));
+        Duration(microseconds: (microseconds ~/ model.tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
     metronomeRingSound();
     countInChangeStatus();
@@ -99,7 +101,7 @@ class MetronomeTimerModel extends MetronomeBpmModel {
   }
 
   void metronomeClear() {
-    if (super.isPlaying) {
+    if (model.isPlaying) {
       _metronomeTimer.cancel();
       _metronomePlayer.clear(_metronomeSound);
     }
