@@ -50,7 +50,16 @@ class DetailPage extends StatelessWidget {
                 }
                 var songDocument = snapshot.data;
                 var codeList = songDocument["codeList"].cast<String>();
-                return ScrollablePage(codeList, bpm, title, docId);
+                // separationがあるか判定
+                Map<String, dynamic> dataMap =
+                    songDocument.data() as Map<String, dynamic>;
+                List<String> separation;
+                if (dataMap.containsKey('separation')) {
+                  separation = songDocument["separation"].cast<String>();
+                } else {
+                  separation = [];
+                }
+                return ScrollablePage(codeList, bpm, title, docId, separation);
               })),
       bottomNavigationBar: detailBottomBar(context),
       endDrawer: settingsDrawer(context, bpm, title, docId),

@@ -6,11 +6,13 @@ import 'package:provider/provider.dart';
 import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
-  ScrollablePage(this.codeList, this.bpm, this.title, this.docId);
+  ScrollablePage(
+      this.codeList, this.bpm, this.title, this.docId, this.separation);
   final List<String> codeList;
   final int bpm;
   final String title;
   final String docId;
+  final List<String> separation;
 
   @override
   _ScrollPageState createState() => _ScrollPageState();
@@ -76,6 +78,13 @@ class _ScrollPageState extends State<ScrollablePage> {
           child: Text("スクロール")));
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
         List<Widget> list = [];
+        if (widget.separation.length != 0) {
+          if (widget.separation[listIndex] != "") {
+            list.add(Text(widget.separation[listIndex]));
+          } else {
+            list.add(Text("　　"));
+          }
+        }
         for (var i = 0; i < codeListState[listIndex].length; i++) {
           list.add(Flexible(
               child: TextField(
