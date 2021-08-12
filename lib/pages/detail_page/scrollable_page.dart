@@ -79,10 +79,15 @@ class _ScrollPageState extends State<ScrollablePage> {
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
         List<Widget> list = [];
         if (widget.separation.length != 0) {
-          if (widget.separation[listIndex] != "") {
+          if (listIndex == 0) {
             list.add(Text(widget.separation[listIndex]));
           } else {
-            list.add(Text("　　"));
+            if (widget.separation[listIndex] !=
+                widget.separation[listIndex - 1]) {
+              list.add(Text(widget.separation[listIndex]));
+            } else {
+              list.add(Text("　　"));
+            }
           }
         }
         for (var i = 0; i < codeListState[listIndex].length; i++) {
