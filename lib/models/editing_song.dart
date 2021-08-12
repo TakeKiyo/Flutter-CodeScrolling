@@ -30,7 +30,10 @@ class EditingSongModel extends ChangeNotifier {
   }
 
   set separationList(List<String> fetchedSeparationList) {
-    _separationList = fetchedSeparationList.sublist(0, _codeList.length);
+    _separationList = [];
+    for (int i = 0; i < fetchedSeparationList.length; i++) {
+      _separationList.add(fetchedSeparationList[i]);
+    }
     _selectedSeparation = "　A";
   }
 
