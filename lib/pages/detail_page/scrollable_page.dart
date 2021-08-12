@@ -7,12 +7,12 @@ import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
   ScrollablePage(
-      this.codeList, this.bpm, this.title, this.docId, this.separation);
+      this.codeList, this.bpm, this.title, this.docId, this.separationList);
   final List<String> codeList;
   final int bpm;
   final String title;
   final String docId;
-  final List<String> separation;
+  final List<String> separationList;
 
   @override
   _ScrollPageState createState() => _ScrollPageState();
@@ -54,6 +54,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                 widget.bpm;
             Provider.of<EditingSongModel>(context, listen: false).codeList =
                 widget.codeList;
+            Provider.of<EditingSongModel>(context, listen: false)
+                .separationList = widget.separationList;
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -78,13 +80,13 @@ class _ScrollPageState extends State<ScrollablePage> {
           child: Text("スクロール")));
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
         List<Widget> list = [];
-        if (widget.separation.length != 0) {
+        if (widget.separationList.length != 0) {
           if (listIndex == 0) {
-            list.add(Text(widget.separation[listIndex]));
+            list.add(Text(widget.separationList[listIndex]));
           } else {
-            if (widget.separation[listIndex] !=
-                widget.separation[listIndex - 1]) {
-              list.add(Text(widget.separation[listIndex]));
+            if (widget.separationList[listIndex] !=
+                widget.separationList[listIndex - 1]) {
+              list.add(Text(widget.separationList[listIndex]));
             } else {
               list.add(Text("　　"));
             }
@@ -124,6 +126,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                     widget.bpm;
                 Provider.of<EditingSongModel>(context, listen: false).codeList =
                     [];
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .separationList = [];
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {

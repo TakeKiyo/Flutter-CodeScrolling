@@ -15,7 +15,23 @@ class EditingSongModel extends ChangeNotifier {
   void addEmptyList() {
     var emptyList = List.filled(_selectedBeatCount, "");
     _codeList.add(emptyList);
+    _separationList.add(_selectedSeparation);
     notifyListeners();
+  }
+
+  String _selectedSeparation = "　A";
+  get selectedSeparation => _selectedSeparation;
+
+  List<String> _separationList = [];
+  get separationList => _separationList;
+  void setSelectedSeparation(String selectedSeparation) {
+    _selectedSeparation = selectedSeparation;
+    notifyListeners();
+  }
+
+  set separationList(List<String> fetchedSeparationList) {
+    _separationList = fetchedSeparationList.sublist(0, _codeList.length);
+    _selectedSeparation = "　A";
   }
 
   // 曲の詳細画面から、編集画面に遷移するときに呼ばれる

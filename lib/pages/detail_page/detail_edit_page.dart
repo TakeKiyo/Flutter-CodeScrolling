@@ -48,8 +48,18 @@ class DetailEditPage extends StatelessWidget {
       });
     }
 
-    Widget getCodeListWidgets(context, List<String> strings, int listIndex) {
+    Widget getCodeListWidgets(context, List<String> strings, int listIndex,
+        List<String> separationList) {
       List<Widget> list = [];
+      if (listIndex == 0) {
+        list.add(Text(separationList[listIndex]));
+      } else {
+        if (separationList[listIndex] != separationList[listIndex - 1]) {
+          list.add(Text(separationList[listIndex]));
+        } else {
+          list.add(Text("　　"));
+        }
+      }
 
       for (var i = 0; i < strings.length; i++) {
         final _controller = TextEditingController(text: strings[i]);
@@ -94,6 +104,8 @@ class DetailEditPage extends StatelessWidget {
       FirebaseFirestore.instance.collection("Songs").doc(docId).update({
         "codeList": formatCodeList(
             Provider.of<EditingSongModel>(context, listen: false).codeList),
+        "separation": Provider.of<EditingSongModel>(context, listen: false)
+            .separationList,
         "updatedAt": DateTime.now(),
       });
       Navigator.of(context).pop(
@@ -135,11 +147,38 @@ class DetailEditPage extends StatelessWidget {
                             for (int idx = 0;
                                 idx < model.codeList.length;
                                 idx++)
-                              getCodeListWidgets(
-                                  context, model.codeList[idx], idx),
+                              getCodeListWidgets(context, model.codeList[idx],
+                                  idx, model.separationList),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 5),
+                                      child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton<String>(
+                                            value: model.selectedSeparation,
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            onChanged: (String newValue) {
+                                              model.setSelectedSeparation(
+                                                  newValue);
+                                            },
+                                            items: <String>[
+                                              "　A",
+                                              "　B",
+                                              "　C",
+                                              "サビ"
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value));
+                                            }).toList(),
+                                          ))),
                                   Padding(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 5),
