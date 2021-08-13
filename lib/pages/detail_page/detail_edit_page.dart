@@ -97,6 +97,13 @@ class DetailEditPage extends StatelessWidget {
             Provider.of<EditingSongModel>(context, listen: false)
                 .deleteOneLine(listIndex);
           }));
+      list.add(IconButton(
+          icon: Icon(Icons.control_point),
+          onPressed: () {
+            Provider.of<EditingSongModel>(context, listen: false)
+                .duplicateList(listIndex);
+            print(listIndex);
+          }));
       return new Row(children: list);
     }
 
