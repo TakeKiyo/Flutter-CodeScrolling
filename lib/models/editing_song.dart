@@ -52,6 +52,7 @@ class EditingSongModel extends ChangeNotifier {
 
   void deleteOneLine(int listIndex) {
     _codeList.removeAt(listIndex);
+    _separationList.removeAt(listIndex);
     notifyListeners();
   }
 
