@@ -106,11 +106,14 @@ class _ScrollPageState extends State<ScrollablePage> {
         ));
         for (var i = 0; i < codeListState[listIndex].length; i++) {
           list.add(Flexible(
-              child: TextField(
-            enabled: false,
-            textAlign: TextAlign.center,
-            controller:
-                TextEditingController(text: codeListState[listIndex][i]),
+              child: Container(
+            color: playedBarColor(context, i, listIndex),
+            child: TextField(
+              enabled: false,
+              textAlign: TextAlign.center,
+              controller:
+                  TextEditingController(text: codeListState[listIndex][i]),
+            ),
           )));
           list.add(Text("|"));
         }
@@ -175,4 +178,24 @@ class _ScrollPageState extends State<ScrollablePage> {
                   ))));
     }
   }
+}
+
+Color playedBarColor(context, int i, int listIndex) {
+  int nowCountAt =
+      Provider.of<MetronomeModel>(context).metronomeContainerStatus;
+
+  /// minRowCount = listIndex -1　番目までの合計カウント数。今はとりあえず4/4 x 4小節想定で16 * 列数
+  /// TODO　拍子指定したらこの数値もEditingModelから持ってくる必要あり
+  int minRowCount = 16 * listIndex;
+
+  /// ColumnCount = 同じくとりあえず4/4 x 4小節想定
+  /// TODO　i-1, i+1番目の拍子を取得して代入する必要あり
+  int minColumnCount = 4 * i;
+  int maxColumnCount = 4 * i + 4;
+
+  if (nowCountAt >= minRowCount + minColumnCount &&
+      nowCountAt < minRowCount + maxColumnCount) {
+    return Colors.amberAccent;
+  } else
+    return Colors.transparent;
 }
