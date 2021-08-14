@@ -105,18 +105,50 @@ class DetailEditPage extends StatelessWidget {
         list.add(Text("|"));
       }
       list.add(IconButton(
-          icon: Icon(Icons.delete),
+          icon: Icon(Icons.more_vert),
           onPressed: () {
-            Provider.of<EditingSongModel>(context, listen: false)
-                .deleteOneLine(listIndex);
-          }));
-
-      list.add(IconButton(
-          icon: Icon(Icons.control_point),
-          onPressed: () {
-            Provider.of<EditingSongModel>(context, listen: false)
-                .duplicateList(listIndex);
-            print(listIndex);
+            showDialog(
+              context: context,
+              builder: (context) {
+                return SimpleDialog(
+                  title: Text("編集"),
+                  children: <Widget>[
+                    SimpleDialogOption(
+                      child: ListTile(
+                        // ignore: missing_required_param
+                        leading: IconButton(
+                          icon: Icon(Icons.delete),
+                        ),
+                        title: Text('この行を削除する'),
+                      ),
+                      onPressed: () {
+                        Provider.of<EditingSongModel>(context, listen: false)
+                            .deleteOneLine(listIndex);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    SimpleDialogOption(
+                      child: ListTile(
+                        // ignore: missing_required_param
+                        leading: IconButton(
+                          icon: Icon(Icons.control_point),
+                        ),
+                        title: Text('この行を複製して追加'),
+                      ),
+                      onPressed: () {
+                        Provider.of<EditingSongModel>(context, listen: false)
+                            .duplicateList(listIndex);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    TextButton(
+                      child: Text("戻る"),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                );
+              },
+            );
           }));
       return Column(children: <Widget>[
         Row(children: separationText),
