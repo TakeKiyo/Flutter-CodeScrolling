@@ -50,17 +50,19 @@ class DetailEditPage extends StatelessWidget {
 
     Widget getCodeListWidgets(context, List<String> strings, int listIndex,
         List<String> separationList) {
-      List<Widget> list = [];
+      List<Widget> separationText = [];
+
       if (listIndex == 0) {
-        list.add(Text(separationList[listIndex]));
+        separationText.add(Text(separationList[listIndex]));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
-          list.add(Text(separationList[listIndex]));
+          separationText.add(Text(separationList[listIndex]));
         } else {
-          list.add(Text("　　"));
+          separationText.add(Text(""));
         }
       }
 
+      List<Widget> list = [];
       for (var i = 0; i < strings.length; i++) {
         final _controller = TextEditingController(text: strings[i]);
 
@@ -97,7 +99,10 @@ class DetailEditPage extends StatelessWidget {
             Provider.of<EditingSongModel>(context, listen: false)
                 .deleteOneLine(listIndex);
           }));
-      return new Row(children: list);
+      return Column(children: <Widget>[
+        Row(children: separationText),
+        Row(children: list)
+      ]);
     }
 
     void submitCodeList(String docId) async {
@@ -235,5 +240,8 @@ class DetailEditPage extends StatelessWidget {
 
 EdgeInsets bottomPadding(context) {
   return EdgeInsets.only(
+      top: 16.0,
+      left: 24.0,
+      right: 16.0,
       bottom: Provider.of<EditingSongModel>(context).keyboardBottomSpace);
 }
