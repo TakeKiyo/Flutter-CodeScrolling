@@ -81,11 +81,19 @@ class _ScrollPageState extends State<ScrollablePage> {
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
         if (widget.separationList.length != 0) {
           if (listIndex == 0) {
-            displayedList.add(Text(widget.separationList[listIndex]));
+            displayedList.add(Text(widget.separationList[listIndex],
+                style: TextStyle(
+                  color: Colors.white,
+                  backgroundColor: Colors.black,
+                )));
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
-              displayedList.add(Text(widget.separationList[listIndex]));
+              displayedList.add(Text(widget.separationList[listIndex],
+                  style: TextStyle(
+                    color: Colors.white,
+                    backgroundColor: Colors.black,
+                  )));
             } else {
               displayedList.add(Text(""));
             }

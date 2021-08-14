@@ -53,10 +53,18 @@ class DetailEditPage extends StatelessWidget {
       List<Widget> separationText = [];
 
       if (listIndex == 0) {
-        separationText.add(Text(separationList[listIndex]));
+        separationText.add(Text(separationList[listIndex],
+            style: TextStyle(
+              color: Colors.white,
+              backgroundColor: Colors.black,
+            )));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
-          separationText.add(Text(separationList[listIndex]));
+          separationText.add(Text(separationList[listIndex],
+              style: TextStyle(
+                color: Colors.white,
+                backgroundColor: Colors.black,
+              )));
         } else {
           separationText.add(Text(""));
         }
