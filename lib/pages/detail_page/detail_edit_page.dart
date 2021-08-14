@@ -63,6 +63,9 @@ class DetailEditPage extends StatelessWidget {
       }
 
       List<Widget> list = [];
+      list.add(Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+      ));
       for (var i = 0; i < strings.length; i++) {
         final _controller = TextEditingController(text: strings[i]);
 
@@ -236,8 +239,8 @@ class DetailEditPage extends StatelessWidget {
 
 EdgeInsets bottomPadding(context) {
   return EdgeInsets.only(
-      top: 16.0,
+      top: 24.0,
       left: 24.0,
-      right: 16.0,
+      right: 8.0,
       bottom: Provider.of<EditingSongModel>(context).keyboardBottomSpace);
 }
