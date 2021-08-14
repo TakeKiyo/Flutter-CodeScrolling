@@ -19,6 +19,17 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void duplicateList(int listIndex) {
+    List<String> duplicatedList = [];
+    for (int i = 0; i < _codeList[listIndex].length; i++) {
+      duplicatedList.add(_codeList[listIndex][i]);
+    }
+    _codeList.add(duplicatedList);
+    String duplicatedSeparation = _separationList[listIndex];
+    _separationList.add(duplicatedSeparation);
+    notifyListeners();
+  }
+
   String _selectedSeparation = "Intro";
   get selectedSeparation => _selectedSeparation;
 
