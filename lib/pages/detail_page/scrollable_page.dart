@@ -79,19 +79,31 @@ class _ScrollPageState extends State<ScrollablePage> {
           },
           child: Text("スクロール")));
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
-        List<Widget> list = [];
         if (widget.separationList.length != 0) {
           if (listIndex == 0) {
-            list.add(Text(widget.separationList[listIndex]));
+            displayedList.add(Text(widget.separationList[listIndex],
+                style: TextStyle(
+                  color: Colors.white,
+                  backgroundColor: Colors.black,
+                )));
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
-              list.add(Text(widget.separationList[listIndex]));
+              displayedList.add(Text(widget.separationList[listIndex],
+                  style: TextStyle(
+                    color: Colors.white,
+                    backgroundColor: Colors.black,
+                  )));
             } else {
-              list.add(Text("　　"));
+              displayedList.add(Text(""));
             }
           }
         }
+
+        List<Widget> list = [];
+        list.add(Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+        ));
         for (var i = 0; i < codeListState[listIndex].length; i++) {
           list.add(Flexible(
               child: TextField(
@@ -102,8 +114,10 @@ class _ScrollPageState extends State<ScrollablePage> {
           )));
           list.add(Text("|"));
         }
+
         displayedList.add(Row(children: list));
       }
+
       displayedList.add(TextButton(
           onPressed: () {
             _scrollController.jumpTo(

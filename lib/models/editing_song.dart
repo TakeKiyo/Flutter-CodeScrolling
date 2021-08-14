@@ -30,7 +30,7 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _selectedSeparation = "　A";
+  String _selectedSeparation = "Intro";
   get selectedSeparation => _selectedSeparation;
 
   List<String> _separationList = [];
@@ -45,7 +45,7 @@ class EditingSongModel extends ChangeNotifier {
     for (int i = 0; i < fetchedSeparationList.length; i++) {
       _separationList.add(fetchedSeparationList[i]);
     }
-    _selectedSeparation = "　A";
+    _selectedSeparation = "Intro";
   }
 
   // 曲の詳細画面から、編集画面に遷移するときに呼ばれる
