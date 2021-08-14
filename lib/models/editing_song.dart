@@ -15,7 +15,26 @@ class EditingSongModel extends ChangeNotifier {
   void addEmptyList() {
     var emptyList = List.filled(_selectedBeatCount, "");
     _codeList.add(emptyList);
+    _separationList.add(_selectedSeparation);
     notifyListeners();
+  }
+
+  String _selectedSeparation = "Intro";
+  get selectedSeparation => _selectedSeparation;
+
+  List<String> _separationList = [];
+  get separationList => _separationList;
+  void setSelectedSeparation(String selectedSeparation) {
+    _selectedSeparation = selectedSeparation;
+    notifyListeners();
+  }
+
+  set separationList(List<String> fetchedSeparationList) {
+    _separationList = [];
+    for (int i = 0; i < fetchedSeparationList.length; i++) {
+      _separationList.add(fetchedSeparationList[i]);
+    }
+    _selectedSeparation = "Intro";
   }
 
   // 曲の詳細画面から、編集画面に遷移するときに呼ばれる
@@ -33,6 +52,7 @@ class EditingSongModel extends ChangeNotifier {
 
   void deleteOneLine(int listIndex) {
     _codeList.removeAt(listIndex);
+    _separationList.removeAt(listIndex);
     notifyListeners();
   }
 

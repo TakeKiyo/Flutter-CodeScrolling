@@ -48,9 +48,32 @@ class DetailEditPage extends StatelessWidget {
       });
     }
 
-    Widget getCodeListWidgets(context, List<String> strings, int listIndex) {
-      List<Widget> list = [];
+    Widget getCodeListWidgets(context, List<String> strings, int listIndex,
+        List<String> separationList) {
+      List<Widget> separationText = [];
 
+      if (listIndex == 0) {
+        separationText.add(Text(separationList[listIndex],
+            style: TextStyle(
+              color: Colors.white,
+              backgroundColor: Colors.black,
+            )));
+      } else {
+        if (separationList[listIndex] != separationList[listIndex - 1]) {
+          separationText.add(Text(separationList[listIndex],
+              style: TextStyle(
+                color: Colors.white,
+                backgroundColor: Colors.black,
+              )));
+        } else {
+          separationText.add(Text(""));
+        }
+      }
+
+      List<Widget> list = [];
+      list.add(Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+      ));
       for (var i = 0; i < strings.length; i++) {
         final _controller = TextEditingController(text: strings[i]);
 
@@ -87,13 +110,18 @@ class DetailEditPage extends StatelessWidget {
             Provider.of<EditingSongModel>(context, listen: false)
                 .deleteOneLine(listIndex);
           }));
-      return new Row(children: list);
+      return Column(children: <Widget>[
+        Row(children: separationText),
+        Row(children: list)
+      ]);
     }
 
     void submitCodeList(String docId) async {
       FirebaseFirestore.instance.collection("Songs").doc(docId).update({
         "codeList": formatCodeList(
             Provider.of<EditingSongModel>(context, listen: false).codeList),
+        "separation": Provider.of<EditingSongModel>(context, listen: false)
+            .separationList,
         "updatedAt": DateTime.now(),
       });
       Navigator.of(context).pop(
@@ -135,11 +163,39 @@ class DetailEditPage extends StatelessWidget {
                             for (int idx = 0;
                                 idx < model.codeList.length;
                                 idx++)
-                              getCodeListWidgets(
-                                  context, model.codeList[idx], idx),
+                              getCodeListWidgets(context, model.codeList[idx],
+                                  idx, model.separationList),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 5),
+                                      child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton<String>(
+                                            value: model.selectedSeparation,
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            onChanged: (String newValue) {
+                                              model.setSelectedSeparation(
+                                                  newValue);
+                                            },
+                                            items: <String>[
+                                              "Intro",
+                                              "A",
+                                              "B",
+                                              "C",
+                                              "サビ"
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value));
+                                            }).toList(),
+                                          ))),
                                   Padding(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 15, horizontal: 5),
@@ -196,5 +252,8 @@ class DetailEditPage extends StatelessWidget {
 
 EdgeInsets bottomPadding(context) {
   return EdgeInsets.only(
+      top: 24.0,
+      left: 24.0,
+      right: 8.0,
       bottom: Provider.of<EditingSongModel>(context).keyboardBottomSpace);
 }
