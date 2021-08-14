@@ -175,9 +175,14 @@ class DetailEditPage extends StatelessWidget {
                                               model.setSelectedSeparation(
                                                   newValue);
                                             },
-                                            items: <String>["A", "B", "C", "サビ"]
-                                                .map<DropdownMenuItem<String>>(
-                                                    (String value) {
+                                            items: <String>[
+                                              "Intro",
+                                              "A",
+                                              "B",
+                                              "C",
+                                              "サビ"
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
                                               return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: Text(value));
