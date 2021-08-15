@@ -113,7 +113,9 @@ class _ScrollPageState extends State<ScrollablePage> {
               ///TODO　色を変える条件式と全く一緒だから、将来的に統一して再利用する
               shouldRebuild: (oldStatus, newStatus) =>
                   newStatus == -1 ||
-                  (newStatus >= 16 * listIndex + 4 * i &&
+                  (!Provider.of<MetronomeModel>(context, listen: false)
+                          .isCountInPlaying &&
+                      newStatus >= 16 * listIndex + 4 * i &&
                       newStatus <= 16 * listIndex + 4 * i + 4),
               builder: (context, containerStatus, child) => Container(
                   color: playedBarColor(context, containerStatus, i, listIndex),
@@ -203,7 +205,8 @@ Color playedBarColor(context, int containerStatus, int i, int listIndex) {
   final int minColumnCount = 4 * i;
   final int maxColumnCount = 4 * i + 4;
 
-  if (nowCountAt >= minRowCount + minColumnCount &&
+  if (!Provider.of<MetronomeModel>(context, listen: false).isCountInPlaying &&
+      nowCountAt >= minRowCount + minColumnCount &&
       nowCountAt < minRowCount + maxColumnCount) {
     return Colors.amberAccent;
   } else

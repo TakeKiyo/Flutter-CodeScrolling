@@ -75,12 +75,10 @@ Container detailBottomBar(BuildContext context) {
                           .metronomeLoad();
                       print("Pressed: Play");
                       if (Provider.of<MetronomeModel>(context, listen: false)
-                              .metronomeContainerStatus <
-                          Provider.of<MetronomeModel>(context, listen: false)
-                                  .countInTimes -
-                              1) {
+                              .metronomeContainerStatus ==
+                          -1) {
                         showDialog(
-                            barrierDismissible: true,
+                            barrierDismissible: false,
                             context: context,
                             builder: (BuildContext context) {
                               return CountInDialog();

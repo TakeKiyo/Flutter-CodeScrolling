@@ -50,6 +50,9 @@ class MetronomeModel extends ChangeNotifier {
   int _countInTimes = 4;
   get countInTimes => _countInTimes;
 
+  bool _isCountInPlaying = false;
+  get isCountInPlaying => _isCountInPlaying;
+
   void increment() {
     if (_tempoCount < 300) {
       _tempoCount++;
@@ -61,18 +64,6 @@ class MetronomeModel extends ChangeNotifier {
     if (_tempoCount > 30) {
       _tempoCount--;
     }
-    notifyListeners();
-  }
-
-  void switchPlayStatus() {
-    _isPlaying = !_isPlaying;
-    notifyListeners();
-  }
-
-  void forceStop() {
-    metronomeClear();
-    _isPlaying = false;
-    _metronomeContainerStatus = -1;
     notifyListeners();
   }
 
@@ -125,8 +116,22 @@ class MetronomeModel extends ChangeNotifier {
     _bpmTapText = "TAPで計測開始";
   }
 
+  void switchPlayStatus() {
+    _isPlaying = !_isPlaying;
+    notifyListeners();
+  }
+
+  void forceStop() {
+    metronomeClear();
+    _isPlaying = false;
+    _metronomeContainerStatus = -1;
+    notifyListeners();
+  }
+
   void metronomeLoad() async {
     await _metronomePlayer.load(_metronomeSound);
+    _isCountInPlaying = true;
+    notifyListeners();
     countInPlay();
   }
 
@@ -139,14 +144,18 @@ class MetronomeModel extends ChangeNotifier {
     if (_metronomeContainerStatus < _countInTimes - 1) {
       _metronomeTimer = Timer(_metronomeDuration, countInPlay);
       metronomeRingSound();
-      countInChangeStatus();
+      changeMetronomeCountStatus();
       print(_metronomeContainerStatus);
     } else {
+      //カウントインが終わる時にContainerStatusを初期値に戻す
+      _metronomeContainerStatus = -1;
+      _isCountInPlaying = false;
+      notifyListeners();
       metronomePlay();
     }
   }
 
-  void countInChangeStatus() {
+  void changeMetronomeCountStatus() {
     if (_isPlaying) {
       _metronomeContainerStatus++;
       notifyListeners();
@@ -168,7 +177,7 @@ class MetronomeModel extends ChangeNotifier {
         Duration(microseconds: (microseconds ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
     metronomeRingSound();
-    countInChangeStatus();
+    changeMetronomeCountStatus();
     changeMetronomeContainerColor();
   }
 

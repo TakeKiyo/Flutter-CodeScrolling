@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
-import 'metronome_container.dart';
 
 class CountInDialog extends StatelessWidget {
   @override
@@ -15,20 +14,35 @@ class CountInDialog extends StatelessWidget {
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 2,
         height: 100,
-        child: Center(child: Consumer<MetronomeModel>(builder: (_, model, __) {
-          return ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(10),
-            scrollDirection: Axis.horizontal,
-            children: List.generate(model.countInTimes, (cNum) => cNum)
-                .map((cNum) => Container(
-                      padding: EdgeInsets.all(5),
-                      child: MetronomeContainerWidget(
-                          contentState: cNum, contentNum: model.countInTimes),
-                    ))
-                .toList(),
-          );
-        })),
+        child: Center(
+          child: Consumer<MetronomeModel>(builder: (_, model, __) {
+            return ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(10),
+              scrollDirection: Axis.horizontal,
+              children: List.generate(model.countInTimes, (cNum) => cNum)
+                  .map((cNum) => Container(
+                        padding: EdgeInsets.all(5),
+                        child: Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 0.1,
+                              ),
+                              shape: BoxShape.circle,
+                              color: (model.metronomeContainerStatus %
+                                          model.countInTimes ==
+                                      cNum)
+                                  ? Colors.orange
+                                  : Colors.white,
+                            )),
+                      ))
+                  .toList(),
+            );
+          }),
+        ),
       ),
     );
   }
