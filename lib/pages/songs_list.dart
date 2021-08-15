@@ -31,11 +31,6 @@ class SongsList extends StatelessWidget {
                     }),
                   );
                 }),
-            IconButton(
-                icon: Icon(Icons.share),
-                onPressed: () {
-                  //shareボタンを押したら反応
-                }),
           ],
         ),
         body: Container(
