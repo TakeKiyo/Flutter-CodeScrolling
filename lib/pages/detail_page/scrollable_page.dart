@@ -108,6 +108,12 @@ class _ScrollPageState extends State<ScrollablePage> {
           list.add(Flexible(
             child: Selector<MetronomeModel, int>(
               selector: (context, model) => model.metronomeContainerStatus,
+
+              ///shouldRebuildでnewStatus=カウントした値が色の変わるべき条件だったらリビルドする
+              ///TODO　色を変える条件式と全く一緒だから、将来的に統一して再利用する
+              shouldRebuild: (oldStatus, newStatus) =>
+                  newStatus >= 16 * listIndex + 4 * i &&
+                  newStatus <= 16 * listIndex + 4 * i + 4,
               builder: (context, containerStatus, child) => Container(
                   color: playedBarColor(context, containerStatus, i, listIndex),
                   child: child),
@@ -185,16 +191,16 @@ class _ScrollPageState extends State<ScrollablePage> {
 }
 
 Color playedBarColor(context, int containerStatus, int i, int listIndex) {
-  int nowCountAt = containerStatus;
+  final int nowCountAt = containerStatus;
 
   /// minRowCount = listIndex -1　番目までの合計カウント数。今はとりあえず4/4 x 4小節想定で16 * 列数
   /// TODO　拍子指定したらこの数値もEditingModelから持ってくる必要あり
-  int minRowCount = 16 * listIndex;
+  final int minRowCount = 16 * listIndex;
 
   /// ColumnCount = 同じくとりあえず4/4 x 4小節想定
   /// TODO　i-1, i+1番目の拍子を取得して代入する必要あり
-  int minColumnCount = 4 * i;
-  int maxColumnCount = 4 * i + 4;
+  final int minColumnCount = 4 * i;
+  final int maxColumnCount = 4 * i + 4;
 
   if (nowCountAt >= minRowCount + minColumnCount &&
       nowCountAt < minRowCount + maxColumnCount) {
