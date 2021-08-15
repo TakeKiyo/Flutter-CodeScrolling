@@ -60,7 +60,8 @@ Container detailBottomBar(BuildContext context) {
         ),
         Selector<MetronomeModel, bool>(
           selector: (context, model) => model.isPlaying,
-          shouldRebuild: (exIsPlaying, notifiedIsPlaying) => exIsPlaying != notifiedIsPlaying,
+          shouldRebuild: (exIsPlaying, notifiedIsPlaying) =>
+              exIsPlaying != notifiedIsPlaying,
           builder: (context, isPlaying, __) => Expanded(
             flex: 1,
             child: !isPlaying
@@ -120,7 +121,8 @@ Container detailBottomBar(BuildContext context) {
           flex: 1,
           child: Selector<MetronomeModel, double>(
               selector: (context, model) => model.soundVolume,
-              shouldRebuild: (exSoundValue, notifiedSoundValue) => exSoundValue != notifiedSoundValue,
+              shouldRebuild: (exSoundValue, notifiedSoundValue) =>
+                  exSoundValue != notifiedSoundValue,
               builder: (context, soundVolume, __) => IconButton(
                     color: textColor,
                     icon: volumeIcon(soundVolume),

@@ -116,7 +116,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                   notifiedMetronomeContainerStatus == -1 ||
                   (!Provider.of<MetronomeModel>(context, listen: false)
                           .isCountInPlaying &&
-                      notifiedMetronomeContainerStatus >= 16 * listIndex + 4 * i &&
+                      notifiedMetronomeContainerStatus >=
+                          16 * listIndex + 4 * i &&
                       notifiedMetronomeContainerStatus <=
                           16 * listIndex + 4 * i + 4),
               builder: (context, containerStatus, child) => Container(
