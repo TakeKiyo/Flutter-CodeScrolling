@@ -77,10 +77,10 @@ class _ImportSongFormState extends State<ImportSongForm> {
       if (documentSnapshot.exists) {
         print('Document exists on the database');
         var document = documentSnapshot.data() as Map;
-        List<String> mermberIDList = document["memberID"].cast<String>();
-        mermberIDList.add(udid);
+        List<String> memberIDList = document["memberID"].cast<String>();
+        memberIDList.add(udid);
         FirebaseFirestore.instance.collection("Songs").doc(copiedID).update({
-          "memberID": mermberIDList,
+          "memberID": memberIDList,
           "updatedAt": DateTime.now(),
         });
         Navigator.of(context).popUntil((route) => route.isFirst);
