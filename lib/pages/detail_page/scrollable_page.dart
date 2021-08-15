@@ -108,7 +108,8 @@ class _ScrollPageState extends State<ScrollablePage> {
           list.add(Flexible(
             child: Consumer<MetronomeModel>(
               builder: (context, model, child) => Container(
-                  color: playedBarColor(context, i, listIndex), child: child),
+                  color: playedBarColor(context, model, i, listIndex),
+                  child: child),
               child: TextField(
                 enabled: false,
                 textAlign: TextAlign.center,
@@ -182,9 +183,8 @@ class _ScrollPageState extends State<ScrollablePage> {
   }
 }
 
-Color playedBarColor(context, int i, int listIndex) {
-  int nowCountAt =
-      Provider.of<MetronomeModel>(context).metronomeContainerStatus;
+Color playedBarColor(context, MetronomeModel model, int i, int listIndex) {
+  int nowCountAt = model.metronomeContainerStatus;
 
   /// minRowCount = listIndex -1　番目までの合計カウント数。今はとりあえず4/4 x 4小節想定で16 * 列数
   /// TODO　拍子指定したらこの数値もEditingModelから持ってくる必要あり
