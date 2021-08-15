@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../models/metronome_model.dart';
 import 'bpm_setting.dart';
 import 'countin_dialog.dart';
-import 'volume_setting.dart';
 
 Container detailBottomBar(BuildContext context) {
   final double bottomIconSIze = 36;
@@ -121,20 +120,26 @@ Container detailBottomBar(BuildContext context) {
         ),
         Expanded(
           flex: 1,
-          child: PopupMenuButton(
-            icon: VolumeIcon(),
-            iconSize: bottomIconSIze,
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                enabled: false,
-                child: VolumeSetting(),
-              ),
-            ],
-            offset: Offset(0, -180),
-          ),
+          child: Selector<MetronomeModel, int>(
+              selector: (context, model) => model.soundVolume,
+              shouldRebuild: (oldBool, newBool) => oldBool != newBool,
+              builder: (context, soundVolume, __) => IconButton(
+                    color: textColor,
+                    icon: volumeIcon(soundVolume),
+                    iconSize: bottomIconSIze,
+                    onPressed: () {
+                      Provider.of<MetronomeModel>(context, listen: false)
+                          .changeMuteStatus();
+                    },
+                  )),
         ),
       ]));
+}
+
+Icon volumeIcon(int soundVolume) {
+  if (soundVolume == 0) {
+    return Icon(Icons.volume_off, color: Colors.white);
+  } else {
+    return Icon(Icons.volume_up, color: Colors.white);
+  }
 }
