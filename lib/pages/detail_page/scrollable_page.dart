@@ -106,15 +106,17 @@ class _ScrollPageState extends State<ScrollablePage> {
         ));
         for (var i = 0; i < codeListState[listIndex].length; i++) {
           list.add(Flexible(
-              child: Container(
-            color: playedBarColor(context, i, listIndex),
-            child: TextField(
-              enabled: false,
-              textAlign: TextAlign.center,
-              controller:
-                  TextEditingController(text: codeListState[listIndex][i]),
+            child: Consumer<MetronomeModel>(
+              builder: (context, model, child) => Container(
+                  color: playedBarColor(context, i, listIndex), child: child),
+              child: TextField(
+                enabled: false,
+                textAlign: TextAlign.center,
+                controller:
+                    TextEditingController(text: codeListState[listIndex][i]),
+              ),
             ),
-          )));
+          ));
           list.add(Text("|"));
         }
 
