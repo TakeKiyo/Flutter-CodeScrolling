@@ -112,8 +112,9 @@ class _ScrollPageState extends State<ScrollablePage> {
               ///shouldRebuildでnewStatus=カウントした値が色の変わるべき条件だったらリビルドする
               ///TODO　色を変える条件式と全く一緒だから、将来的に統一して再利用する
               shouldRebuild: (oldStatus, newStatus) =>
-                  newStatus >= 16 * listIndex + 4 * i &&
-                  newStatus <= 16 * listIndex + 4 * i + 4,
+                  newStatus == -1 ||
+                  (newStatus >= 16 * listIndex + 4 * i &&
+                      newStatus <= 16 * listIndex + 4 * i + 4),
               builder: (context, containerStatus, child) => Container(
                   color: playedBarColor(context, containerStatus, i, listIndex),
                   child: child),
