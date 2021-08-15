@@ -49,8 +49,8 @@ class SongsList extends StatelessWidget {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('Songs')
-                    .where("userID",
-                        isEqualTo: Provider.of<AuthModel>(context).udid)
+                    .where("memberID",
+                        arrayContains: Provider.of<AuthModel>(context).udid)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -70,6 +70,7 @@ class SongsList extends StatelessWidget {
                         ]));
                   } else {
                     final List<DocumentSnapshot> documents = snapshot.data.docs;
+                    documents.map((doc) => {print(doc)});
                     return ListView(
                         children: documents
                             .map((doc) => TextButton(
