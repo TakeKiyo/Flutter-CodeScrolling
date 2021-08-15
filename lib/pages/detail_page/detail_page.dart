@@ -32,6 +32,21 @@ class DetailPage extends StatelessWidget {
         title: Text(title),
         actions: <Widget>[
           IconButton(
+              icon: Icon(Icons.share),
+              onPressed: () {
+                print(docId);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text('曲のIDをコピーしました。\n友達に送って曲を共有しましょう。'),
+                    duration: const Duration(seconds: 5),
+                    action: SnackBarAction(
+                      label: 'OK',
+                      onPressed: () {},
+                    ),
+                  ),
+                );
+              }),
+          IconButton(
               icon: Icon(Icons.settings),
               onPressed: () {
                 _scaffoldKey.currentState.openEndDrawer();
