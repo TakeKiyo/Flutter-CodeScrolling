@@ -110,13 +110,15 @@ class _ScrollPageState extends State<ScrollablePage> {
               selector: (context, model) => model.metronomeContainerStatus,
 
               ///shouldRebuildでnewStatus=カウントした値が色の変わるべき条件だったらリビルドする
+              ///カウントインをプレイ中はリビルドしない
               ///TODO　色を変える条件式と全く一緒だから、将来的に統一して再利用する
-              shouldRebuild: (oldStatus, newStatus) =>
-                  newStatus == -1 ||
+              shouldRebuild: (_, notifiedMetronomeContainerStatus) =>
+                  notifiedMetronomeContainerStatus == -1 ||
                   (!Provider.of<MetronomeModel>(context, listen: false)
                           .isCountInPlaying &&
-                      newStatus >= 16 * listIndex + 4 * i &&
-                      newStatus <= 16 * listIndex + 4 * i + 4),
+                      notifiedMetronomeContainerStatus >= 16 * listIndex + 4 * i &&
+                      notifiedMetronomeContainerStatus <=
+                          16 * listIndex + 4 * i + 4),
               builder: (context, containerStatus, child) => Container(
                   color: playedBarColor(context, containerStatus, i, listIndex),
                   child: child),

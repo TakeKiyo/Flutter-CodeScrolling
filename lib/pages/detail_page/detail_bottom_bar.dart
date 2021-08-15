@@ -47,8 +47,8 @@ Container detailBottomBar(BuildContext context) {
                   Text("BPM", style: TextStyle(color: textColor)),
                   Selector<MetronomeModel, int>(
                       selector: (context, model) => model.tempoCount,
-                      shouldRebuild: (oldTempo, newTempo) =>
-                          oldTempo != newTempo,
+                      shouldRebuild: (exTempoCount, notifiedTempoCount) =>
+                          exTempoCount != notifiedTempoCount,
                       builder: (context, tempoCount, child) => Text(
                             tempoCount.toString(),
                             style: TextStyle(fontSize: 20, color: textColor),
@@ -60,7 +60,7 @@ Container detailBottomBar(BuildContext context) {
         ),
         Selector<MetronomeModel, bool>(
           selector: (context, model) => model.isPlaying,
-          shouldRebuild: (oldBool, newBool) => oldBool != newBool,
+          shouldRebuild: (exIsPlaying, notifiedIsPlaying) => exIsPlaying != notifiedIsPlaying,
           builder: (context, isPlaying, __) => Expanded(
             flex: 1,
             child: !isPlaying
@@ -120,7 +120,7 @@ Container detailBottomBar(BuildContext context) {
           flex: 1,
           child: Selector<MetronomeModel, double>(
               selector: (context, model) => model.soundVolume,
-              shouldRebuild: (oldBool, newBool) => oldBool != newBool,
+              shouldRebuild: (exSoundValue, notifiedSoundValue) => exSoundValue != notifiedSoundValue,
               builder: (context, soundVolume, __) => IconButton(
                     color: textColor,
                     icon: volumeIcon(soundVolume),
