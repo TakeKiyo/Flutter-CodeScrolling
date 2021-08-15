@@ -48,6 +48,8 @@ Container detailBottomBar(BuildContext context) {
                   Text("BPM", style: TextStyle(color: textColor)),
                   Selector<MetronomeModel, int>(
                       selector: (context, model) => model.tempoCount,
+                      shouldRebuild: (oldTempo, newTempo) =>
+                          oldTempo != newTempo,
                       builder: (context, tempoCount, child) => Text(
                             tempoCount.toString(),
                             style: TextStyle(fontSize: 20, color: textColor),
@@ -59,6 +61,7 @@ Container detailBottomBar(BuildContext context) {
         ),
         Selector<MetronomeModel, bool>(
           selector: (context, model) => model.isPlaying,
+          shouldRebuild: (oldBool, newBool) => oldBool != newBool,
           builder: (context, isPlaying, __) => Expanded(
             flex: 1,
             child: !isPlaying
@@ -72,12 +75,13 @@ Container detailBottomBar(BuildContext context) {
                       Provider.of<MetronomeModel>(context, listen: false)
                           .metronomeLoad();
                       print("Pressed: Play");
-                      if (Provider.of<MetronomeModel>(context)
+                      if (Provider.of<MetronomeModel>(context, listen: false)
                               .metronomeContainerStatus <
-                          Provider.of<MetronomeModel>(context).countInTimes -
+                          Provider.of<MetronomeModel>(context, listen: false)
+                                  .countInTimes -
                               1) {
                         showDialog(
-                            barrierDismissible: false,
+                            barrierDismissible: true,
                             context: context,
                             builder: (BuildContext context) {
                               return CountInDialog();
