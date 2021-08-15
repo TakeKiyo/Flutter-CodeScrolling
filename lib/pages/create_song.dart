@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 
+import 'import_song_page.dart';
+
 class CreateSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -11,18 +13,7 @@ class CreateSong extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text('曲追加ページ'),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                //addボタンを押したら反応
-              }),
-          IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () {
-                //shareボタンを押したら反応
-              }),
-        ],
+        actions: [],
       ),
       body: Center(child: CreateSongForm()),
     );
@@ -94,6 +85,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
       "title": _title,
       "bpm": _bpm,
       "userID": udid,
+      "memberID": [udid],
       "codeList": [],
       "createdAt": DateTime.now(),
       "updatedAt": DateTime.now(),
@@ -107,6 +99,15 @@ class _CreateSongFormState extends State<CreateSongForm> {
       padding: const EdgeInsets.all(50),
       child: Column(
         children: <Widget>[
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return ImportSong();
+                  }),
+                );
+              },
+              child: Text('友だちの曲の追加はこちら')),
           Text(
             "タイトル $_title",
             style: TextStyle(
