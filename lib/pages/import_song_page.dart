@@ -75,7 +75,6 @@ class _ImportSongFormState extends State<ImportSongForm> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        print('Document exists on the database');
         var document = documentSnapshot.data() as Map;
         List<String> memberIDList = document["memberID"].cast<String>();
         memberIDList.add(udid);

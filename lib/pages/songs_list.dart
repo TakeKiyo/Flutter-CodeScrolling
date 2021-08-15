@@ -83,7 +83,6 @@ class SongsList extends StatelessWidget {
                         ]));
                   } else {
                     final List<DocumentSnapshot> documents = snapshot.data.docs;
-                    documents.map((doc) => {print(doc)});
                     return ListView(
                         children: documents
                             .map((doc) => TextButton(
