@@ -120,7 +120,7 @@ Container detailBottomBar(BuildContext context) {
         ),
         Expanded(
           flex: 1,
-          child: Selector<MetronomeModel, int>(
+          child: Selector<MetronomeModel, double>(
               selector: (context, model) => model.soundVolume,
               shouldRebuild: (oldBool, newBool) => oldBool != newBool,
               builder: (context, soundVolume, __) => IconButton(
@@ -136,7 +136,7 @@ Container detailBottomBar(BuildContext context) {
       ]));
 }
 
-Icon volumeIcon(int soundVolume) {
+Icon volumeIcon(double soundVolume) {
   if (soundVolume == 0) {
     return Icon(Icons.volume_off, color: Colors.white);
   } else {
