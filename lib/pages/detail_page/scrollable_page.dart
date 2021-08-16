@@ -105,23 +105,55 @@ class _ScrollPageState extends State<ScrollablePage> {
           padding: const EdgeInsets.only(left: 16.0),
         ));
         for (var i = 0; i < codeListState[listIndex].length; i++) {
+          int minRowBeatCount = 0;
+
+          //minRowBeatCount = listIndex-1　番目までの拍数の足し合わせ
+          for (var j = 0; j < listIndex; j++) {
+            minRowBeatCount += 4 * codeListState[j].length;
+          }
+
+          //maxRowBeatCount = listIndex+1番目の行の拍数の合計
+          int maxRowBeatCount =
+              minRowBeatCount + 4 * codeListState[listIndex].length;
+
+          int minColumnBeatCount = 0;
+          //minColumnBeatCount = CodeList[listIndex]のi-1番目までの拍数の足し合わせ
+          for (var j = 0; j < i; j++) {
+            minColumnBeatCount += 4;
+          }
+
+          //maxColumnBeatCount = minColumnBeatCount + i+1　番目の拍数
+          int maxColumnBeatCount = minColumnBeatCount + 4;
+
           list.add(Flexible(
             child: Selector<MetronomeModel, int>(
               selector: (context, model) => model.metronomeContainerStatus,
 
               ///shouldRebuildでnewStatus=カウントした値が色の変わるべき条件だったらリビルドする
               ///カウントインをプレイ中はリビルドしない
-              ///TODO　色を変える条件式と全く一緒だから、将来的に統一して再利用する
               shouldRebuild: (_, notifiedMetronomeContainerStatus) =>
                   notifiedMetronomeContainerStatus == -1 ||
                   (!Provider.of<MetronomeModel>(context, listen: false)
                           .isCountInPlaying &&
                       notifiedMetronomeContainerStatus >=
-                          16 * listIndex + 4 * i &&
+                          minRowBeatCount + minColumnBeatCount &&
                       notifiedMetronomeContainerStatus <=
-                          16 * listIndex + 4 * i + 4),
+                          minRowBeatCount + maxColumnBeatCount &&
+                      notifiedMetronomeContainerStatus <= maxRowBeatCount),
               builder: (context, containerStatus, child) => Container(
-                  color: playedBarColor(context, containerStatus, i, listIndex),
+                  color: (!Provider.of<MetronomeModel>(context, listen: false)
+                              .isCountInPlaying &&
+                          Provider.of<MetronomeModel>(context, listen: false)
+                                  .metronomeContainerStatus >=
+                              minRowBeatCount + minColumnBeatCount &&
+                          Provider.of<MetronomeModel>(context, listen: false)
+                                  .metronomeContainerStatus <
+                              minRowBeatCount + maxColumnBeatCount &&
+                          Provider.of<MetronomeModel>(context, listen: false)
+                                  .metronomeContainerStatus <
+                              maxRowBeatCount)
+                      ? Colors.amberAccent
+                      : Colors.transparent,
                   child: child),
               child: TextField(
                 enabled: false,
@@ -194,24 +226,4 @@ class _ScrollPageState extends State<ScrollablePage> {
                   ))));
     }
   }
-}
-
-Color playedBarColor(context, int containerStatus, int i, int listIndex) {
-  final int nowCountAt = containerStatus;
-
-  /// minRowCount = listIndex -1　番目までの合計カウント数。今はとりあえず4/4 x 4小節想定で16 * 列数
-  /// TODO　拍子指定したらこの数値もEditingModelから持ってくる必要あり
-  final int minRowCount = 16 * listIndex;
-
-  /// ColumnCount = 同じくとりあえず4/4 x 4小節想定
-  /// TODO　i-1, i+1番目の拍子を取得して代入する必要あり
-  final int minColumnCount = 4 * i;
-  final int maxColumnCount = 4 * i + 4;
-
-  if (!Provider.of<MetronomeModel>(context, listen: false).isCountInPlaying &&
-      nowCountAt >= minRowCount + minColumnCount &&
-      nowCountAt < minRowCount + maxColumnCount) {
-    return Colors.amberAccent;
-  } else
-    return Colors.transparent;
 }
