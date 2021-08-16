@@ -105,13 +105,61 @@ class _ScrollPageState extends State<ScrollablePage> {
           padding: const EdgeInsets.only(left: 16.0),
         ));
         for (var i = 0; i < codeListState[listIndex].length; i++) {
+          ///TODO 4 * codeListState[~].length => その行の拍数の合計に置き換え
+          int addedRowBeatCount = 0;
+          for (var j = 0; j < listIndex; j++) {
+            addedRowBeatCount += 4 * codeListState[j].length;
+          }
+
+          final int maxRowBeatCount =
+              addedRowBeatCount + 4 * codeListState[listIndex].length;
+
+          ///TODO 4 => そのTextFormのもつ拍数に置き換え
+          int addedColumnBeatCount = 0;
+          for (var j = 0; j < i; j++) {
+            addedColumnBeatCount += 4;
+          }
+
+          final int maxColumnBeatCount = addedColumnBeatCount + 4;
+
           list.add(Flexible(
+            child: Selector<MetronomeModel, int>(
+              selector: (context, model) => model.metronomeContainerStatus,
+
+              ///shouldRebuildでnewStatus=カウントした値が色の変わるべき条件だったらリビルドする
+              ///カウントインをプレイ中はリビルドしない
+              shouldRebuild: (_, notifiedMetronomeContainerStatus) =>
+                  notifiedMetronomeContainerStatus == -1 ||
+                  (!Provider.of<MetronomeModel>(context, listen: false)
+                          .isCountInPlaying &&
+                      notifiedMetronomeContainerStatus >=
+                          addedRowBeatCount + addedColumnBeatCount &&
+                      notifiedMetronomeContainerStatus <=
+                          addedRowBeatCount + maxColumnBeatCount &&
+                      notifiedMetronomeContainerStatus <= maxRowBeatCount),
+              builder: (context, containerStatus, child) => Container(
+                  color: (!Provider.of<MetronomeModel>(context, listen: false)
+                              .isCountInPlaying &&
+                          Provider.of<MetronomeModel>(context, listen: false)
+                                  .metronomeContainerStatus >=
+                              addedRowBeatCount + addedColumnBeatCount &&
+                          Provider.of<MetronomeModel>(context, listen: false)
+                                  .metronomeContainerStatus <
+                              addedRowBeatCount + maxColumnBeatCount &&
+                          Provider.of<MetronomeModel>(context, listen: false)
+                                  .metronomeContainerStatus <
+                              maxRowBeatCount)
+                      ? Colors.amberAccent
+                      : Colors.transparent,
+                  child: child),
               child: TextField(
-            enabled: false,
-            textAlign: TextAlign.center,
-            controller:
-                TextEditingController(text: codeListState[listIndex][i]),
-          )));
+                enabled: false,
+                textAlign: TextAlign.center,
+                controller:
+                    TextEditingController(text: codeListState[listIndex][i]),
+              ),
+            ),
+          ));
           list.add(Text("|"));
         }
 

@@ -74,8 +74,8 @@ class EditingSongModel extends ChangeNotifier {
 
   ///detail_edit_pageでTextFieldをTapする度に対応したTextEditingControllerを代入する
   TextEditingController controller;
-  int controlBarIdx;
-  int controlTimeIdx;
+  int controlBarIdx = 0;
+  int controlTimeIdx = 0;
   bool _keyboardIsOpening = false;
   get keyboardIsOpening => _keyboardIsOpening;
   double _keyboardBottomSpace = 0;

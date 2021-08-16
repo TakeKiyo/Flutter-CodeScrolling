@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../models/metronome_model.dart';
 import 'bpm_setting.dart';
 import 'countin_dialog.dart';
-import 'volume_setting.dart';
 
 Container detailBottomBar(BuildContext context) {
   final double bottomIconSIze = 36;
@@ -21,22 +20,14 @@ Container detailBottomBar(BuildContext context) {
           flex: 1,
           child: SizedBox(
             height: 60,
-            child: Consumer<MetronomeModel>(builder: (_, model, __) {
-              return TextButton(
+            child: Selector<MetronomeModel, Color>(
+              selector: (context, model) => model.metronomeContainerColor,
+              builder: (context, containerColor, child) => TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: model.metronomeContainerColor,
+                  backgroundColor: containerColor,
                   shape: CircleBorder(),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("BPM", style: TextStyle(color: textColor)),
-                    Text(
-                      model.tempoCount.toString(),
-                      style: TextStyle(fontSize: 20, color: textColor),
-                    ),
-                  ],
-                ),
+                child: child,
                 onPressed: () {
                   print("Pressed: BPM");
                   showModalBottomSheet<void>(
@@ -45,16 +36,35 @@ Container detailBottomBar(BuildContext context) {
                         borderRadius: BorderRadius.all(Radius.circular(32.0))),
                     context: context,
                     builder: (context) => BpmSetting(),
-                  ).then((_) => model.resetBpmTapCount());
+                  ).then((_) =>
+                      Provider.of<MetronomeModel>(context, listen: false)
+                          .resetBpmTapCount());
                 },
-              );
-            }),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("BPM", style: TextStyle(color: textColor)),
+                  Selector<MetronomeModel, int>(
+                      selector: (context, model) => model.tempoCount,
+                      shouldRebuild: (exTempoCount, notifiedTempoCount) =>
+                          exTempoCount != notifiedTempoCount,
+                      builder: (context, tempoCount, child) => Text(
+                            tempoCount.toString(),
+                            style: TextStyle(fontSize: 20, color: textColor),
+                          )),
+                ],
+              ),
+            ),
           ),
         ),
-        Consumer<MetronomeModel>(builder: (_, model, __) {
-          return Expanded(
+        Selector<MetronomeModel, bool>(
+          selector: (context, model) => model.isPlaying,
+          shouldRebuild: (exIsPlaying, notifiedIsPlaying) =>
+              exIsPlaying != notifiedIsPlaying,
+          builder: (context, isPlaying, __) => Expanded(
             flex: 1,
-            child: !model.isPlaying
+            child: !isPlaying
                 ? IconButton(
                     color: textColor,
                     icon: Icon(Icons.play_arrow_rounded),
@@ -66,10 +76,8 @@ Container detailBottomBar(BuildContext context) {
                           .metronomeLoad();
                       print("Pressed: Play");
                       if (Provider.of<MetronomeModel>(context, listen: false)
-                              .metronomeContainerStatus <
-                          Provider.of<MetronomeModel>(context, listen: false)
-                                  .countInTimes -
-                              1) {
+                              .metronomeContainerStatus ==
+                          -1) {
                         showDialog(
                             barrierDismissible: false,
                             context: context,
@@ -95,8 +103,8 @@ Container detailBottomBar(BuildContext context) {
                       print("Pressed: Pause");
                     },
                   ),
-          );
-        }),
+          ),
+        ),
         Expanded(
           flex: 1,
           child: IconButton(
@@ -111,20 +119,27 @@ Container detailBottomBar(BuildContext context) {
         ),
         Expanded(
           flex: 1,
-          child: PopupMenuButton(
-            icon: VolumeIcon(),
-            iconSize: bottomIconSIze,
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                enabled: false,
-                child: VolumeSetting(),
-              ),
-            ],
-            offset: Offset(0, -180),
-          ),
+          child: Selector<MetronomeModel, double>(
+              selector: (context, model) => model.soundVolume,
+              shouldRebuild: (exSoundValue, notifiedSoundValue) =>
+                  exSoundValue != notifiedSoundValue,
+              builder: (context, soundVolume, __) => IconButton(
+                    color: textColor,
+                    icon: volumeIcon(soundVolume),
+                    iconSize: bottomIconSIze,
+                    onPressed: () {
+                      Provider.of<MetronomeModel>(context, listen: false)
+                          .changeMuteStatus();
+                    },
+                  )),
         ),
       ]));
+}
+
+Icon volumeIcon(double soundVolume) {
+  if (soundVolume == 0) {
+    return Icon(Icons.volume_off, color: Colors.white);
+  } else {
+    return Icon(Icons.volume_up, color: Colors.white);
+  }
 }

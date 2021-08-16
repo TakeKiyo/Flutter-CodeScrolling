@@ -8,7 +8,6 @@ void audioPlayerHandler(AudioPlayerState value) => null;
 
 class MetronomeModel extends ChangeNotifier {
   int _tempoCount;
-
   get tempoCount => _tempoCount;
 
   set tempoCount(int bpm) {
@@ -21,7 +20,6 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   bool _isPlaying = false;
-
   get isPlaying => _isPlaying;
 
   DateTime _bpmTapStartTime;
@@ -43,17 +41,17 @@ class MetronomeModel extends ChangeNotifier {
   Color metronomeContainerColor;
 
   double _soundVolume = 1;
-
   get soundVolume => _soundVolume;
 
   ///初期値を-1にするとメトロノームが鳴る１回目に一番左(mod CountIn == 0になる)がフラッシュする
   int _metronomeContainerStatus = -1;
-
   get metronomeContainerStatus => _metronomeContainerStatus;
 
   int _countInTimes = 4;
-
   get countInTimes => _countInTimes;
+
+  bool _isCountInPlaying = false;
+  get isCountInPlaying => _isCountInPlaying;
 
   void increment() {
     if (_tempoCount < 300) {
@@ -66,18 +64,6 @@ class MetronomeModel extends ChangeNotifier {
     if (_tempoCount > 30) {
       _tempoCount--;
     }
-    notifyListeners();
-  }
-
-  void switchPlayStatus() {
-    _isPlaying = !_isPlaying;
-    notifyListeners();
-  }
-
-  void forceStop() {
-    metronomeClear();
-    _isPlaying = false;
-    _metronomeContainerStatus = -1;
     notifyListeners();
   }
 
@@ -130,8 +116,22 @@ class MetronomeModel extends ChangeNotifier {
     _bpmTapText = "TAPで計測開始";
   }
 
+  void switchPlayStatus() {
+    _isPlaying = !_isPlaying;
+    notifyListeners();
+  }
+
+  void forceStop() {
+    metronomeClear();
+    _isPlaying = false;
+    _metronomeContainerStatus = -1;
+    notifyListeners();
+  }
+
   void metronomeLoad() async {
     await _metronomePlayer.load(_metronomeSound);
+    _isCountInPlaying = true;
+    notifyListeners();
     countInPlay();
   }
 
@@ -144,14 +144,18 @@ class MetronomeModel extends ChangeNotifier {
     if (_metronomeContainerStatus < _countInTimes - 1) {
       _metronomeTimer = Timer(_metronomeDuration, countInPlay);
       metronomeRingSound();
-      countInChangeStatus();
+      changeMetronomeCountStatus();
       print(_metronomeContainerStatus);
     } else {
+      //カウントインが終わる時にContainerStatusを初期値に戻す
+      _metronomeContainerStatus = -1;
+      _isCountInPlaying = false;
+      notifyListeners();
       metronomePlay();
     }
   }
 
-  void countInChangeStatus() {
+  void changeMetronomeCountStatus() {
     if (_isPlaying) {
       _metronomeContainerStatus++;
       notifyListeners();
@@ -173,7 +177,7 @@ class MetronomeModel extends ChangeNotifier {
         Duration(microseconds: (microseconds ~/ _tempoCount));
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
     metronomeRingSound();
-    countInChangeStatus();
+    changeMetronomeCountStatus();
     changeMetronomeContainerColor();
   }
 
@@ -202,32 +206,13 @@ class MetronomeModel extends ChangeNotifier {
     }
   }
 
-  void volumeChange(double _volumeValue) {
-    _soundVolume = _volumeValue;
-    _audioPlayer.setVolume(_volumeValue);
-    notifyListeners();
-  }
-
-  void volumeUp() {
-    if (_soundVolume <= 1.9) {
-      _soundVolume = _soundVolume + 0.1;
-    } else {
-      _soundVolume = 2;
-    }
-    notifyListeners();
-  }
-
-  void volumeDown() {
-    if (_soundVolume >= 0.1) {
-      _soundVolume = _soundVolume - 0.1;
-    } else {
+  void changeMuteStatus() {
+    if (_soundVolume == 1) {
       _soundVolume = 0;
+    } else {
+      _soundVolume = 1;
     }
-    notifyListeners();
-  }
-
-  void volumeDefault() {
-    _soundVolume = 1;
+    _audioPlayer.setVolume(_soundVolume);
     notifyListeners();
   }
 }
