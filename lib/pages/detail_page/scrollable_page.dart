@@ -105,25 +105,22 @@ class _ScrollPageState extends State<ScrollablePage> {
           padding: const EdgeInsets.only(left: 16.0),
         ));
         for (var i = 0; i < codeListState[listIndex].length; i++) {
-          int minRowBeatCount = 0;
-
-          //minRowBeatCount = listIndex-1　番目までの拍数の足し合わせ
+          ///TODO 4 * codeListState[~].length => その行の拍数の合計に置き換え
+          int addedRowBeatCount = 0;
           for (var j = 0; j < listIndex; j++) {
-            minRowBeatCount += 4 * codeListState[j].length;
+            addedRowBeatCount += 4 * codeListState[j].length;
           }
 
-          //maxRowBeatCount = listIndex+1番目の行の拍数の合計
-          int maxRowBeatCount =
-              minRowBeatCount + 4 * codeListState[listIndex].length;
+          final int maxRowBeatCount =
+              addedRowBeatCount + 4 * codeListState[listIndex].length;
 
-          int minColumnBeatCount = 0;
-          //minColumnBeatCount = CodeList[listIndex]のi-1番目までの拍数の足し合わせ
+          ///TODO 4 => そのTextFormのもつ拍数に置き換え
+          int addedColumnBeatCount = 0;
           for (var j = 0; j < i; j++) {
-            minColumnBeatCount += 4;
+            addedColumnBeatCount += 4;
           }
 
-          //maxColumnBeatCount = minColumnBeatCount + i+1　番目の拍数
-          int maxColumnBeatCount = minColumnBeatCount + 4;
+          final int maxColumnBeatCount = addedColumnBeatCount + 4;
 
           list.add(Flexible(
             child: Selector<MetronomeModel, int>(
@@ -136,19 +133,19 @@ class _ScrollPageState extends State<ScrollablePage> {
                   (!Provider.of<MetronomeModel>(context, listen: false)
                           .isCountInPlaying &&
                       notifiedMetronomeContainerStatus >=
-                          minRowBeatCount + minColumnBeatCount &&
+                          addedRowBeatCount + addedColumnBeatCount &&
                       notifiedMetronomeContainerStatus <=
-                          minRowBeatCount + maxColumnBeatCount &&
+                          addedRowBeatCount + maxColumnBeatCount &&
                       notifiedMetronomeContainerStatus <= maxRowBeatCount),
               builder: (context, containerStatus, child) => Container(
                   color: (!Provider.of<MetronomeModel>(context, listen: false)
                               .isCountInPlaying &&
                           Provider.of<MetronomeModel>(context, listen: false)
                                   .metronomeContainerStatus >=
-                              minRowBeatCount + minColumnBeatCount &&
+                              addedRowBeatCount + addedColumnBeatCount &&
                           Provider.of<MetronomeModel>(context, listen: false)
                                   .metronomeContainerStatus <
-                              minRowBeatCount + maxColumnBeatCount &&
+                              addedRowBeatCount + maxColumnBeatCount &&
                           Provider.of<MetronomeModel>(context, listen: false)
                                   .metronomeContainerStatus <
                               maxRowBeatCount)
