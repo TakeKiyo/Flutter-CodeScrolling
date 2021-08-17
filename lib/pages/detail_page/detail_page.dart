@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:my_app/pages/detail_page/scrollable_page.dart';
 import 'package:my_app/pages/detail_page/settings_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
+import '../export_song.dart';
 import 'detail_bottom_bar.dart';
 
 class DetailPage extends StatelessWidget {
@@ -35,17 +35,10 @@ class DetailPage extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.share),
               onPressed: () async {
-                final data = ClipboardData(text: docId);
-                await Clipboard.setData(data);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text('曲のIDをコピーしました。\n友達に送って曲を共有しましょう。'),
-                    duration: const Duration(seconds: 5),
-                    action: SnackBarAction(
-                      label: 'OK',
-                      onPressed: () {},
-                    ),
-                  ),
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return ExportSong(docId: docId);
+                  }),
                 );
               }),
           IconButton(
