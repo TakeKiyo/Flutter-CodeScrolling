@@ -72,12 +72,12 @@ Container detailBottomBar(BuildContext context) {
                     onPressed: () async {
                       Provider.of<MetronomeModel>(context, listen: false)
                           .switchPlayStatus();
-                      Provider.of<MetronomeModel>(context, listen: false)
-                          .metronomeLoad();
                       print("Pressed: Play");
                       if (Provider.of<MetronomeModel>(context, listen: false)
                               .metronomeContainerStatus ==
                           -1) {
+                        Provider.of<MetronomeModel>(context, listen: false)
+                            .metronomeLoad();
                         showDialog(
                             barrierDismissible: false,
                             context: context,
@@ -88,7 +88,9 @@ Container detailBottomBar(BuildContext context) {
                                 listen: false)
                             .waitUntilCountInEnds()
                             .then((_) => Navigator.of(context).pop());
-                      }
+                      } else
+                        Provider.of<MetronomeModel>(context, listen: false)
+                            .metronomePlay();
                     },
                   )
                 : IconButton(
