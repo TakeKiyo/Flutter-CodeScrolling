@@ -71,12 +71,19 @@ class DetailPage extends StatelessWidget {
                 Map<String, dynamic> dataMap =
                     songDocument.data() as Map<String, dynamic>;
                 List<String> separation;
+                List<String> rhythmList;
                 if (dataMap.containsKey('separation')) {
                   separation = songDocument["separation"].cast<String>();
                 } else {
                   separation = [];
                 }
-                return ScrollablePage(codeList, bpm, title, docId, separation);
+                if (dataMap.containsKey('rhythmList')) {
+                  rhythmList = songDocument["rhythmList"].cast<String>();
+                } else {
+                  rhythmList = [];
+                }
+                return ScrollablePage(
+                    codeList, bpm, title, docId, separation, rhythmList);
               })),
       bottomNavigationBar: detailBottomBar(context),
       endDrawer: settingsDrawer(context, bpm, title, docId),
