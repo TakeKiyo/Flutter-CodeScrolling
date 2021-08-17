@@ -133,7 +133,6 @@ class _CreateSongFormState extends State<CreateSongForm> {
   }
 
   void _onSelectedItemChanged(int index) {
-    print(index);
     setState(() {
       _key = _items[index];
     });
