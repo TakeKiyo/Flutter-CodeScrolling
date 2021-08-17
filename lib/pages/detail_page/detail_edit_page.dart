@@ -290,7 +290,7 @@ class DetailEditPage extends StatelessWidget {
                                               return DropdownMenuItem<int>(
                                                   value: value,
                                                   child: Text(
-                                                      value.toString() + '拍'));
+                                                      value.toString() + '小節'));
                                             }).toList(),
                                           ))),
                                   ElevatedButton(
