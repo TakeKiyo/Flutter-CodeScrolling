@@ -13,10 +13,14 @@ class DetailPage extends StatelessWidget {
   final int bpm;
   final String title;
   final String docId;
+  final String artist;
+  final String songKey;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  DetailPage({Key key, this.bpm, this.title, this.docId}) : super(key: key);
+  DetailPage(
+      {Key key, this.bpm, this.title, this.artist, this.songKey, this.docId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +90,7 @@ class DetailPage extends StatelessWidget {
                     codeList, bpm, title, docId, separation, rhythmList);
               })),
       bottomNavigationBar: detailBottomBar(context),
-      endDrawer: settingsDrawer(context, bpm, title, docId),
+      endDrawer: settingsDrawer(context, bpm, title, artist, songKey, docId),
     );
   }
 }

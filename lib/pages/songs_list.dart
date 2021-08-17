@@ -98,9 +98,20 @@ class SongsList extends StatelessWidget {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) {
+                                            var tempMap = doc.data() as Map;
+                                            String artist = "";
+                                            String songKey = "";
+                                            if (tempMap.containsKey("artist")) {
+                                              artist = tempMap["artist"];
+                                            }
+                                            if (tempMap.containsKey("key")) {
+                                              songKey = tempMap["key"];
+                                            }
                                             return DetailPage(
                                               bpm: doc["bpm"],
                                               title: doc["title"],
+                                              artist: artist,
+                                              songKey: songKey,
                                               docId: doc.id,
                                             );
                                           },

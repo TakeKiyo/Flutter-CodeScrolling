@@ -28,26 +28,34 @@ class CreateSongForm extends StatefulWidget {
 class _CreateSongFormState extends State<CreateSongForm> {
   String _title = "";
   int _bpm = 120;
+  String _artist = "";
+  String _key = "未選択";
   void _handleTitle(String inputText) {
     setState(() {
       _title = inputText;
     });
   }
 
-  void _handleBpm(String inputText) {
+  void _handleBpm(double inputText) {
     setState(() {
-      _bpm = int.parse(inputText);
+      _bpm = inputText.toInt();
+    });
+  }
+
+  void _handleArtist(String inputText) {
+    setState(() {
+      _artist = inputText;
     });
   }
 
   void createButtonClicked() {
     // TODO バリデーションが満たされてなかったwarning いけてたら確認ダイアログ
-    if (_title == "") {
+    if (_title == "" || _artist == "" || _key == "未選択") {
       showDialog(
           context: context,
           builder: (_) => CupertinoAlertDialog(
                 title: Text("エラー"),
-                content: Text("タイトルを入力してください"),
+                content: Text("未入力の項目があります。"),
                 actions: <Widget>[
                   TextButton(
                     child: Text('OK'),
@@ -63,7 +71,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
           builder: (_) => CupertinoAlertDialog(
                 title: Text("確認"),
                 content: Text(
-                    "以下の曲を作成します\nタイトル: ${_title.toString()}\nBPM: ${_bpm.toString()}"),
+                    "以下の曲を作成します\n 曲名: ${_title.toString()}\n アーティスト: ${_artist.toString()}\n BPM: ${_bpm.toString()}\n キー: ${_key.toString()}"),
                 actions: <Widget>[
                   TextButton(
                     child: Text("Cancel"),
@@ -84,6 +92,8 @@ class _CreateSongFormState extends State<CreateSongForm> {
     FirebaseFirestore.instance.collection("Songs").add({
       "title": _title,
       "bpm": _bpm,
+      "key": _key,
+      "artist": _artist,
       "userID": udid,
       "memberID": [udid],
       "codeList": [],
@@ -93,6 +103,57 @@ class _CreateSongFormState extends State<CreateSongForm> {
     // 　ここはいずれ詳細ページにそのまま飛ばしたい
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
+
+  void _showModalPicker(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height / 3,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: CupertinoPicker(
+              itemExtent: 40,
+              children: _items.map(_pickerItem).toList(),
+              onSelectedItemChanged: _onSelectedItemChanged,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _pickerItem(String str) {
+    return Text(
+      str,
+      style: const TextStyle(fontSize: 32),
+    );
+  }
+
+  void _onSelectedItemChanged(int index) {
+    setState(() {
+      _key = _items[index];
+    });
+  }
+
+  final List<String> _items = [
+    'C',
+    'Cm',
+    'D',
+    'Dm',
+    'E',
+    'Em',
+    'F',
+    'Fm',
+    'G',
+    'Gm',
+    'A',
+    'Am',
+    'B',
+    'Bm',
+  ];
 
   Widget build(BuildContext context) {
     return Container(
@@ -109,7 +170,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
               },
               child: Text('友だちの曲の追加はこちら')),
           Text(
-            "タイトル $_title",
+            "曲名",
             style: TextStyle(
               color: Colors.blueAccent,
               fontSize: 30.0,
@@ -123,7 +184,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
             onChanged: _handleTitle,
           ),
           Text(
-            "bpm $_bpm",
+            "アーティスト",
             style: TextStyle(
               color: Colors.blueAccent,
               fontSize: 30.0,
@@ -131,19 +192,66 @@ class _CreateSongFormState extends State<CreateSongForm> {
             ),
           ),
           TextField(
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             style: TextStyle(color: Colors.black),
             maxLines: 1,
+            onChanged: _handleArtist,
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: 25.0),
+              child: Text(
+                "BPM: $_bpm",
+                style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
+          Text(
+            "いつでも変更可能です",
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 15.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Slider(
+            activeColor: Colors.black,
+            inactiveColor: Theme.of(context).primaryColorDark,
+            label: null,
+            value: _bpm.toDouble(),
+            divisions: 270,
+            min: 30,
+            max: 300,
             onChanged: _handleBpm,
           ),
+          Padding(
+              padding: EdgeInsets.only(top: 10.0),
+              child: Text(
+                "キー $_key",
+                style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
           ElevatedButton(
-            child: const Text('曲を追加', style: TextStyle(color: Colors.white)),
+            child: const Text('キーを選択', style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(primary: Colors.orange),
             onPressed: () {
-              createButtonClicked();
+              _showModalPicker(context);
             },
           ),
+          Padding(
+              padding: EdgeInsets.only(top: 25.0),
+              child: ElevatedButton(
+                child:
+                    const Text('曲を追加', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(primary: Colors.orange),
+                onPressed: () {
+                  createButtonClicked();
+                },
+              )),
         ],
       ),
     );
