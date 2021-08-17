@@ -28,6 +28,7 @@ class ImportSongForm extends StatefulWidget {
 
 class _ImportSongFormState extends State<ImportSongForm> {
   String copiedID = "";
+  bool qrScanned = false;
   void _handleCopiedID(String inputText) {
     setState(() {
       copiedID = inputText;
@@ -76,7 +77,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
                   ),
                   TextButton(
                     child: Text("OK"),
-                    onPressed: () async => importSong(),
+                    onPressed: () async => importSong(copiedID),
                   ),
                 ],
               ));
@@ -105,14 +106,30 @@ class _ImportSongFormState extends State<ImportSongForm> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
+    controller.scannedDataStream.listen((scanData) async {
+      if (qrScanned == false) {
+        showQRScannedDialog(scanData.code.toString());
+      }
+      qrScanned = true;
     });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
+  }
+
+  void showQRScannedDialog(String docId) {
+    showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              title: Text("確認"),
+              content: Text("QRコードを認識しました。\n曲のインポートを開始します"),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () => {qrScanned = false, Navigator.pop(context)},
+                ),
+                TextButton(
+                    child: Text("OK"),
+                    onPressed: () async => {importSong(docId)}),
+              ],
+            ));
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
@@ -124,38 +141,54 @@ class _ImportSongFormState extends State<ImportSongForm> {
     }
   }
 
-  void importSong() async {
+  void importSong(String docId) async {
     String udid = await FlutterUdid.udid;
-    await FirebaseFirestore.instance
-        .collection("Songs")
-        .doc(copiedID)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        var document = documentSnapshot.data() as Map;
-        List<String> memberIDList = document["memberID"].cast<String>();
-        memberIDList.add(udid);
-        memberIDList = memberIDList.toSet().toList();
-        FirebaseFirestore.instance.collection("Songs").doc(copiedID).update({
-          "memberID": memberIDList,
-          "updatedAt": DateTime.now(),
-        });
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      } else {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content: const Text('曲が存在していません'),
-            duration: const Duration(seconds: 5),
-            action: SnackBarAction(
-              label: 'OK',
-              onPressed: () {},
+    try {
+      await FirebaseFirestore.instance
+          .collection("Songs")
+          .doc(docId)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          var document = documentSnapshot.data() as Map;
+          List<String> memberIDList = document["memberID"].cast<String>();
+          memberIDList.add(udid);
+          memberIDList = memberIDList.toSet().toList();
+          FirebaseFirestore.instance.collection("Songs").doc(docId).update({
+            "memberID": memberIDList,
+            "updatedAt": DateTime.now(),
+          });
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        } else {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: const Text('曲が存在していません'),
+              duration: const Duration(seconds: 5),
+              action: SnackBarAction(
+                label: 'OK',
+                onPressed: () {},
+              ),
             ),
+          );
+        }
+      });
+    } catch (e) {
+      print(e);
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: const Text('エラーが発生しました'),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
           ),
-        );
-      }
-    });
+        ),
+      );
+    }
   }
 
   @override
@@ -183,7 +216,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
                 TextField(
                   maxLengthEnforcement: MaxLengthEnforcement.enforced,
                   enabled: true,
-                  style: TextStyle(color: Colors.red),
+                  style: TextStyle(color: Colors.black),
                   obscureText: false,
                   maxLines: 1,
                   //パスワード
