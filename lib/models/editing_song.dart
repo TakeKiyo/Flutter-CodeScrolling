@@ -16,6 +16,7 @@ class EditingSongModel extends ChangeNotifier {
     var emptyList = List.filled(_selectedBeatCount, "");
     _codeList.add(emptyList);
     _separationList.add(_selectedSeparation);
+    _rhythmList.add(_selectedRhythm);
     notifyListeners();
   }
 
@@ -27,6 +28,8 @@ class EditingSongModel extends ChangeNotifier {
     _codeList.add(duplicatedList);
     String duplicatedSeparation = _separationList[listIndex];
     _separationList.add(duplicatedSeparation);
+    String duplicatedRhythm = _rhythmList[listIndex];
+    _rhythmList.add(duplicatedRhythm);
     notifyListeners();
   }
 
@@ -48,6 +51,24 @@ class EditingSongModel extends ChangeNotifier {
     _selectedSeparation = "Intro";
   }
 
+  String _selectedRhythm = "4/4";
+  get selectedRhythm => _selectedRhythm;
+
+  List<String> _rhythmList = [];
+  get rhythmList => _rhythmList;
+  void setSelectedRhythm(String selectedRhythm) {
+    _selectedRhythm = selectedRhythm;
+    notifyListeners();
+  }
+
+  set rhythmList(List<String> fetchedRhythmList) {
+    _rhythmList = [];
+    for (int i = 0; i < fetchedRhythmList.length; i++) {
+      _rhythmList.add(fetchedRhythmList[i]);
+    }
+    _selectedRhythm = "4/4";
+  }
+
   // 曲の詳細画面から、編集画面に遷移するときに呼ばれる
   set codeList(List<String> fetchedCodeList) {
     _codeList = [];
@@ -64,6 +85,7 @@ class EditingSongModel extends ChangeNotifier {
   void deleteOneLine(int listIndex) {
     _codeList.removeAt(listIndex);
     _separationList.removeAt(listIndex);
+    _rhythmList.removeAt((listIndex));
     notifyListeners();
   }
 
