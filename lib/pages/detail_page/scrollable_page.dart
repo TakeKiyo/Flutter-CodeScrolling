@@ -6,13 +6,14 @@ import 'package:provider/provider.dart';
 import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
-  ScrollablePage(
-      this.codeList, this.bpm, this.title, this.docId, this.separationList);
+  ScrollablePage(this.codeList, this.bpm, this.title, this.docId,
+      this.separationList, this.rhythmList);
   final List<String> codeList;
   final int bpm;
   final String title;
   final String docId;
   final List<String> separationList;
+  final List<String> rhythmList;
 
   @override
   _ScrollPageState createState() => _ScrollPageState();
@@ -56,6 +57,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                 widget.codeList;
             Provider.of<EditingSongModel>(context, listen: false)
                 .separationList = widget.separationList;
+            Provider.of<EditingSongModel>(context, listen: false).rhythmList =
+                widget.rhythmList;
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -79,6 +82,7 @@ class _ScrollPageState extends State<ScrollablePage> {
           },
           child: Text("スクロール")));
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
+        List<Widget> list = [];
         if (widget.separationList.length != 0) {
           if (listIndex == 0) {
             displayedList.add(Text(widget.separationList[listIndex],
@@ -86,6 +90,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                   color: Colors.white,
                   backgroundColor: Colors.black,
                 )));
+            list.add(Text(widget.rhythmList[listIndex]));
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
@@ -97,13 +102,18 @@ class _ScrollPageState extends State<ScrollablePage> {
             } else {
               displayedList.add(Text(""));
             }
+
+            if (widget.rhythmList[listIndex] !=
+                widget.rhythmList[listIndex - 1]) {
+              list.add(Text(widget.rhythmList[listIndex]));
+            } else {
+              list.add(Padding(
+                padding: const EdgeInsets.only(left: 24.0),
+              ));
+            }
           }
         }
 
-        List<Widget> list = [];
-        list.add(Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-        ));
         for (var i = 0; i < codeListState[listIndex].length; i++) {
           ///TODO 4 * codeListState[~].length => その行の拍数の合計に置き換え
           int addedRowBeatCount = 0;
@@ -188,6 +198,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                     widget.bpm;
                 Provider.of<EditingSongModel>(context, listen: false).codeList =
                     [];
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .rhythmList = [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .separationList = [];
                 Navigator.of(context).push(
