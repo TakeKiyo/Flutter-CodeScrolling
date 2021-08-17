@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
 
-Drawer settingsDrawer(
-    BuildContext context, int bpm, String title, String docId) {
+Drawer settingsDrawer(BuildContext context, int bpm, String title,
+    String artist, String songKey, String docId) {
   final double titleTextFont = 16;
   final insertPadding = Padding(padding: EdgeInsets.all(10));
 
@@ -29,6 +29,8 @@ Drawer settingsDrawer(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("曲名：" + title, style: TextStyle(color: Colors.white)),
+                Text("アーティスト：" + artist, style: TextStyle(color: Colors.white)),
+                Text("キー：" + songKey, style: TextStyle(color: Colors.white)),
                 Text("BPM：" + bpm.toString(),
                     style: TextStyle(color: Colors.white)),
               ],
