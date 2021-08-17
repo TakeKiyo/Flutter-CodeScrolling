@@ -198,14 +198,16 @@ class _CreateSongFormState extends State<CreateSongForm> {
             maxLines: 1,
             onChanged: _handleArtist,
           ),
-          Text(
-            "BPM: $_bpm",
-            style: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Padding(
+              padding: EdgeInsets.only(top: 25.0),
+              child: Text(
+                "BPM: $_bpm",
+                style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
           Text(
             "いつでも変更可能です",
             style: TextStyle(
@@ -224,14 +226,16 @@ class _CreateSongFormState extends State<CreateSongForm> {
             max: 300,
             onChanged: _handleBpm,
           ),
-          Text(
-            "キー $_key",
-            style: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Padding(
+              padding: EdgeInsets.only(top: 10.0),
+              child: Text(
+                "キー $_key",
+                style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
           ElevatedButton(
             child: const Text('キーを選択', style: TextStyle(color: Colors.white)),
             style: ElevatedButton.styleFrom(primary: Colors.orange),
@@ -239,13 +243,16 @@ class _CreateSongFormState extends State<CreateSongForm> {
               _showModalPicker(context);
             },
           ),
-          ElevatedButton(
-            child: const Text('曲を追加', style: TextStyle(color: Colors.white)),
-            style: ElevatedButton.styleFrom(primary: Colors.orange),
-            onPressed: () {
-              createButtonClicked();
-            },
-          ),
+          Padding(
+              padding: EdgeInsets.only(top: 25.0),
+              child: ElevatedButton(
+                child:
+                    const Text('曲を追加', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(primary: Colors.orange),
+                onPressed: () {
+                  createButtonClicked();
+                },
+              )),
         ],
       ),
     );
