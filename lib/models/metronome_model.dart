@@ -125,13 +125,14 @@ class MetronomeModel extends ChangeNotifier {
     metronomeClear();
     _isPlaying = false;
     _metronomeContainerStatus = -1;
+    _metronomePlayer.clear(_metronomeSound);
     notifyListeners();
   }
 
   void metronomeLoad() async {
     await _metronomePlayer.load(_metronomeSound);
-    _isCountInPlaying = true;
     notifyListeners();
+    _isCountInPlaying = true;
     countInPlay();
   }
 
@@ -145,11 +146,10 @@ class MetronomeModel extends ChangeNotifier {
       _metronomeTimer = Timer(_metronomeDuration, countInPlay);
       metronomeRingSound();
       changeMetronomeCountStatus();
-      print(_metronomeContainerStatus);
     } else {
       //カウントインが終わる時にContainerStatusを初期値に戻す
-      _metronomeContainerStatus = -1;
       _isCountInPlaying = false;
+      _metronomeContainerStatus = -1;
       notifyListeners();
       metronomePlay();
     }
@@ -178,7 +178,6 @@ class MetronomeModel extends ChangeNotifier {
     _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
     metronomeRingSound();
     changeMetronomeCountStatus();
-    changeMetronomeContainerColor();
   }
 
   void metronomeRingSound() {
@@ -189,20 +188,9 @@ class MetronomeModel extends ChangeNotifier {
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
   }
 
-  void changeMetronomeContainerColor() async {
-    /// flashDuration=100000　はbpm=300（最大時）に合わせた数値
-    const flashDuration = 100000;
-    metronomeContainerColor = Colors.orange;
-    notifyListeners();
-    await Future.delayed(Duration(microseconds: flashDuration));
-    metronomeContainerColor = null;
-    notifyListeners();
-  }
-
   void metronomeClear() {
     if (_isPlaying) {
       _metronomeTimer.cancel();
-      _metronomePlayer.clear(_metronomeSound);
     }
   }
 

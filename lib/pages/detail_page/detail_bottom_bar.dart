@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/pages/detail_page/metronome_flash_container.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
@@ -20,41 +21,41 @@ Container detailBottomBar(BuildContext context) {
           flex: 1,
           child: SizedBox(
             height: 60,
-            child: Selector<MetronomeModel, Color>(
-              selector: (context, model) => model.metronomeContainerColor,
-              builder: (context, containerColor, child) => TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: containerColor,
-                  shape: CircleBorder(),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                FlashContainer(),
+                TextButton(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("BPM", style: TextStyle(color: textColor)),
+                      Selector<MetronomeModel, int>(
+                          selector: (context, model) => model.tempoCount,
+                          shouldRebuild: (exTempoCount, notifiedTempoCount) =>
+                              exTempoCount != notifiedTempoCount,
+                          builder: (context, tempoCount, child) => Text(
+                                tempoCount.toString(),
+                                style:
+                                    TextStyle(fontSize: 20, color: textColor),
+                              )),
+                    ],
+                  ),
+                  onPressed: () {
+                    print("Pressed: BPM");
+                    showModalBottomSheet<void>(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(32.0))),
+                      context: context,
+                      builder: (context) => BpmSetting(),
+                    ).then((_) =>
+                        Provider.of<MetronomeModel>(context, listen: false)
+                            .resetBpmTapCount());
+                  },
                 ),
-                child: child,
-                onPressed: () {
-                  print("Pressed: BPM");
-                  showModalBottomSheet<void>(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(32.0))),
-                    context: context,
-                    builder: (context) => BpmSetting(),
-                  ).then((_) =>
-                      Provider.of<MetronomeModel>(context, listen: false)
-                          .resetBpmTapCount());
-                },
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("BPM", style: TextStyle(color: textColor)),
-                  Selector<MetronomeModel, int>(
-                      selector: (context, model) => model.tempoCount,
-                      shouldRebuild: (exTempoCount, notifiedTempoCount) =>
-                          exTempoCount != notifiedTempoCount,
-                      builder: (context, tempoCount, child) => Text(
-                            tempoCount.toString(),
-                            style: TextStyle(fontSize: 20, color: textColor),
-                          )),
-                ],
-              ),
+              ],
             ),
           ),
         ),
@@ -72,12 +73,12 @@ Container detailBottomBar(BuildContext context) {
                     onPressed: () async {
                       Provider.of<MetronomeModel>(context, listen: false)
                           .switchPlayStatus();
-                      Provider.of<MetronomeModel>(context, listen: false)
-                          .metronomeLoad();
                       print("Pressed: Play");
                       if (Provider.of<MetronomeModel>(context, listen: false)
                               .metronomeContainerStatus ==
                           -1) {
+                        Provider.of<MetronomeModel>(context, listen: false)
+                            .metronomeLoad();
                         showDialog(
                             barrierDismissible: false,
                             context: context,
@@ -88,6 +89,9 @@ Container detailBottomBar(BuildContext context) {
                                 listen: false)
                             .waitUntilCountInEnds()
                             .then((_) => Navigator.of(context).pop());
+                      } else {
+                        Provider.of<MetronomeModel>(context, listen: false)
+                            .metronomePlay();
                       }
                     },
                   )
