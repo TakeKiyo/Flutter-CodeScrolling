@@ -15,19 +15,21 @@ Material detailBottomBar(BuildContext context) {
     child: Container(
         width: MediaQuery.of(context).size.width,
         height: 100,
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Expanded(
             flex: 1,
             child: SizedBox(
-              height: 60,
+              height: 70,
               child: Selector<MetronomeModel, Color>(
                 selector: (context, model) => model.metronomeContainerColor,
                 builder: (context, containerColor, child) => TextButton(
-                  style: TextButton.styleFrom(
-                    backgroundColor: containerColor,
-                    shape: CircleBorder(),
-                  ),
+                  style: ButtonStyle(
+                      overlayColor: MaterialStateColor.resolveWith(
+                          (states) => Theme.of(context).primaryColorLight),
+                      backgroundColor:
+                          MaterialStateProperty.all(containerColor),
+                      shape: MaterialStateProperty.all(CircleBorder())),
                   child: child,
                   onPressed: () {
                     print("Pressed: BPM");
