@@ -108,9 +108,9 @@ class _ImportSongFormState extends State<ImportSongForm> {
   void _onQRViewCreated(QRViewController controller) {
     controller.scannedDataStream.listen((scanData) async {
       if (qrScanned == false) {
+        qrScanned = true;
         showQRScannedDialog(scanData.code.toString());
       }
-      qrScanned = true;
     });
   }
 
@@ -160,6 +160,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
           });
           Navigator.of(context).popUntil((route) => route.isFirst);
         } else {
+          qrScanned = false;
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -176,6 +177,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
       });
     } catch (e) {
       print(e);
+      qrScanned = false;
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
