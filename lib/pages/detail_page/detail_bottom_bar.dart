@@ -26,7 +26,7 @@ Material detailBottomBar(BuildContext context) {
                 builder: (context, containerColor, child) => TextButton(
                   style: ButtonStyle(
                       overlayColor: MaterialStateColor.resolveWith(
-                          (states) => Theme.of(context).primaryColorLight),
+                          (states) => Theme.of(context).splashColor),
                       backgroundColor:
                           MaterialStateProperty.all(containerColor),
                       shape: MaterialStateProperty.all(CircleBorder())),
