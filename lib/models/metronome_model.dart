@@ -146,7 +146,6 @@ class MetronomeModel extends ChangeNotifier {
       _metronomeTimer = Timer(_metronomeDuration, countInPlay);
       metronomeRingSound();
       changeMetronomeCountStatus();
-      print(_metronomeContainerStatus);
     } else {
       //カウントインが終わる時にContainerStatusを初期値に戻す
       _metronomeContainerStatus = -1;
