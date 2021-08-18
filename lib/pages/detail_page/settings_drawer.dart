@@ -51,29 +51,6 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               ),
             ),
             ListTile(
-              tileColor: Theme.of(context).primaryColorDark,
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("曲名：" + title, style: TextStyle(color: Colors.white)),
-                  Text("BPM：" + bpm.toString(),
-                      style: TextStyle(color: Colors.white)),
-                ],
-              ),
-              onTap: () {
-                print("Information");
-                //TODO ボタンを押したら情報変更画面
-              },
-            ),
-            insertPadding,
-            Text(
-              "メトロノームのサウンド",
-              style: TextStyle(
-                fontSize: titleTextFont,
-                color: Colors.white,
-              ),
-            ),
-            ListTile(
                 tileColor: Theme.of(context).primaryColorDark,
                 title: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Text(model.metronomeSound,
