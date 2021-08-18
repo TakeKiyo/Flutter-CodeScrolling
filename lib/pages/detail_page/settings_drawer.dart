@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
 
-Drawer settingsDrawer(
-    BuildContext context, int bpm, String title, String docId) {
+Drawer settingsDrawer(BuildContext context, int bpm, String title,
+    String artist, String songKey, String docId) {
   final double titleTextFont = 16;
   final insertPadding = Padding(padding: EdgeInsets.all(10));
 
@@ -19,6 +19,32 @@ Drawer settingsDrawer(
           children: [
             Text(
               "曲情報",
+              style: TextStyle(
+                fontSize: titleTextFont,
+                color: Colors.white,
+              ),
+            ),
+            ListTile(
+              tileColor: Theme.of(context).primaryColorDark,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("曲名：" + title, style: TextStyle(color: Colors.white)),
+                  Text("アーティスト：" + artist,
+                      style: TextStyle(color: Colors.white)),
+                  Text("キー：" + songKey, style: TextStyle(color: Colors.white)),
+                  Text("BPM：" + bpm.toString(),
+                      style: TextStyle(color: Colors.white)),
+                ],
+              ),
+              onTap: () {
+                print("Information");
+                //TODO ボタンを押したら情報変更画面
+              },
+            ),
+            insertPadding,
+            Text(
+              "メトロノームのサウンド",
               style: TextStyle(
                 fontSize: titleTextFont,
                 color: Colors.white,

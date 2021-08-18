@@ -49,15 +49,16 @@ class DetailEditPage extends StatelessWidget {
     }
 
     Widget getCodeListWidgets(context, List<String> strings, int listIndex,
-        List<String> separationList) {
+        List<String> separationList, List<String> rhythmList) {
       List<Widget> separationText = [];
-
+      List<Widget> list = [];
       if (listIndex == 0) {
         separationText.add(Text(separationList[listIndex],
             style: TextStyle(
               color: Colors.white,
               backgroundColor: Colors.black,
             )));
+        list.add(Text(rhythmList[listIndex]));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
           separationText.add(Text(separationList[listIndex],
@@ -68,12 +69,16 @@ class DetailEditPage extends StatelessWidget {
         } else {
           separationText.add(Text(""));
         }
+
+        if (rhythmList[listIndex] != rhythmList[listIndex - 1]) {
+          list.add(Text(rhythmList[listIndex]));
+        } else {
+          list.add(Padding(
+            padding: const EdgeInsets.only(left: 24.0),
+          ));
+        }
       }
 
-      List<Widget> list = [];
-      list.add(Padding(
-        padding: const EdgeInsets.only(left: 16.0),
-      ));
       for (var i = 0; i < strings.length; i++) {
         final _controller = TextEditingController(text: strings[i]);
 
@@ -162,6 +167,8 @@ class DetailEditPage extends StatelessWidget {
             Provider.of<EditingSongModel>(context, listen: false).codeList),
         "separation": Provider.of<EditingSongModel>(context, listen: false)
             .separationList,
+        "rhythmList":
+            Provider.of<EditingSongModel>(context, listen: false).rhythmList,
         "updatedAt": DateTime.now(),
       });
       Navigator.of(context).pop(
@@ -204,7 +211,7 @@ class DetailEditPage extends StatelessWidget {
                                 idx < model.codeList.length;
                                 idx++)
                               getCodeListWidgets(context, model.codeList[idx],
-                                  idx, model.separationList),
+                                  idx, model.separationList, model.rhythmList),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -241,6 +248,32 @@ class DetailEditPage extends StatelessWidget {
                                           vertical: 15, horizontal: 5),
                                       child: ButtonTheme(
                                           alignedDropdown: true,
+                                          child: DropdownButton<String>(
+                                            value: model.selectedRhythm,
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                            onChanged: (String newValue) {
+                                              model.setSelectedRhythm(newValue);
+                                            },
+                                            items: <String>[
+                                              "4/4",
+                                              "4/3",
+                                              "4/2",
+                                              "6/8",
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value));
+                                            }).toList(),
+                                          ))),
+                                  Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 15, horizontal: 5),
+                                      child: ButtonTheme(
+                                          alignedDropdown: true,
                                           child: DropdownButton<int>(
                                             value: model.selectedBeatCount,
                                             elevation: 16,
@@ -257,7 +290,7 @@ class DetailEditPage extends StatelessWidget {
                                               return DropdownMenuItem<int>(
                                                   value: value,
                                                   child: Text(
-                                                      value.toString() + '拍'));
+                                                      value.toString() + '小節'));
                                             }).toList(),
                                           ))),
                                   ElevatedButton(
