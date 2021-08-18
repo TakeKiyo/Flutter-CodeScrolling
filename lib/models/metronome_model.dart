@@ -125,6 +125,7 @@ class MetronomeModel extends ChangeNotifier {
     metronomeClear();
     _isPlaying = false;
     _metronomeContainerStatus = -1;
+    _metronomePlayer.clear(_metronomeSound);
     notifyListeners();
   }
 
@@ -145,7 +146,6 @@ class MetronomeModel extends ChangeNotifier {
       _metronomeTimer = Timer(_metronomeDuration, countInPlay);
       metronomeRingSound();
       changeMetronomeCountStatus();
-      print(_metronomeContainerStatus);
     } else {
       //カウントインが終わる時にContainerStatusを初期値に戻す
       _metronomeContainerStatus = -1;
@@ -202,7 +202,6 @@ class MetronomeModel extends ChangeNotifier {
   void metronomeClear() {
     if (_isPlaying) {
       _metronomeTimer.cancel();
-      _metronomePlayer.clear(_metronomeSound);
     }
   }
 

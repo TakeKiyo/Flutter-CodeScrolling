@@ -32,10 +32,12 @@ class CountInDialog extends StatelessWidget {
                                 width: 0.1,
                               ),
                               shape: BoxShape.circle,
-                              color: (model.metronomeContainerStatus %
-                                          model.countInTimes ==
-                                      cNum)
-                                  ? Colors.orange
+                              color: model.metronomeContainerStatus >= 0
+                                  ? (model.metronomeContainerStatus %
+                                              model.countInTimes ==
+                                          cNum)
+                                      ? Colors.orange
+                                      : Colors.white
                                   : Colors.white,
                             )),
                       ))
