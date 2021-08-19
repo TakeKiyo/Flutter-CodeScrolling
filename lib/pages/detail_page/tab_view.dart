@@ -62,7 +62,6 @@ class TabView extends StatelessWidget {
           title: Text('Tab Controller'),
           bottom: PreferredSize(
             child: TabBar(
-              isScrollable: true,
               tabs: _tabs.map((TabInfo tab) {
                 return Tab(text: tab.label);
               }).toList(),
