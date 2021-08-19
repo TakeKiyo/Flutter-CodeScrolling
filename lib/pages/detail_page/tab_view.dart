@@ -59,7 +59,7 @@ class TabView extends StatelessWidget {
                 Navigator.of(context).pop();
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
               }),
-          title: Text('Tab Controller'),
+          title: Text(title),
           bottom: TabBar(
             tabs: _tabs.map((TabInfo tab) {
               return Tab(text: tab.label);
