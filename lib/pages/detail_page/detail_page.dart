@@ -16,37 +16,35 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-          child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('Songs')
-                  .doc(docId)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: Text("Loading"));
-                }
-                var songDocument = snapshot.data;
-                var codeList = songDocument["codeList"].cast<String>();
-                // separationがあるか判定
-                Map<String, dynamic> dataMap =
-                    songDocument.data() as Map<String, dynamic>;
-                List<String> separation;
-                List<String> rhythmList;
-                if (dataMap.containsKey('separation')) {
-                  separation = songDocument["separation"].cast<String>();
-                } else {
-                  separation = [];
-                }
-                if (dataMap.containsKey('rhythmList')) {
-                  rhythmList = songDocument["rhythmList"].cast<String>();
-                } else {
-                  rhythmList = [];
-                }
-                return ScrollablePage(
-                    codeList, bpm, title, docId, separation, rhythmList);
-              })),
-    );
+    return Container(
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('Songs')
+                .doc(docId)
+                .snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: Text("Loading"));
+              }
+              var songDocument = snapshot.data;
+              var codeList = songDocument["codeList"].cast<String>();
+              // separationがあるか判定
+              Map<String, dynamic> dataMap =
+                  songDocument.data() as Map<String, dynamic>;
+              List<String> separation;
+              List<String> rhythmList;
+              if (dataMap.containsKey('separation')) {
+                separation = songDocument["separation"].cast<String>();
+              } else {
+                separation = [];
+              }
+              if (dataMap.containsKey('rhythmList')) {
+                rhythmList = songDocument["rhythmList"].cast<String>();
+              } else {
+                rhythmList = [];
+              }
+              return ScrollablePage(
+                  codeList, bpm, title, docId, separation, rhythmList);
+            }));
   }
 }
