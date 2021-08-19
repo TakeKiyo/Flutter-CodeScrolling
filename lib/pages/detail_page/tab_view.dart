@@ -60,13 +60,10 @@ class TabView extends StatelessWidget {
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
               }),
           title: Text('Tab Controller'),
-          bottom: PreferredSize(
-            child: TabBar(
-              tabs: _tabs.map((TabInfo tab) {
-                return Tab(text: tab.label);
-              }).toList(),
-            ),
-            preferredSize: Size.fromHeight(30.0),
+          bottom: TabBar(
+            tabs: _tabs.map((TabInfo tab) {
+              return Tab(text: tab.label);
+            }).toList(),
           ),
           actions: <Widget>[
             IconButton(
