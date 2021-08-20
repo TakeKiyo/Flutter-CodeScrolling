@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
+import '../export_song.dart';
 import 'detail_bottom_bar.dart';
 import 'detail_page.dart';
 import 'settings_drawer.dart';
@@ -69,17 +69,10 @@ class TabView extends StatelessWidget {
             IconButton(
                 icon: Icon(Icons.share),
                 onPressed: () async {
-                  final data = ClipboardData(text: docId);
-                  await Clipboard.setData(data);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('曲のIDをコピーしました。\n友達に送って曲を共有しましょう。'),
-                      duration: const Duration(seconds: 5),
-                      action: SnackBarAction(
-                        label: 'OK',
-                        onPressed: () {},
-                      ),
-                    ),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                      return ExportSong(docId: docId);
+                    }),
                   );
                 }),
             IconButton(
