@@ -139,20 +139,18 @@ class _CreateSongFormState extends State<CreateSongForm> {
   }
 
   final List<String> _items = [
-    'C',
-    'Cm',
-    'D',
-    'Dm',
-    'E',
-    'Em',
-    'F',
-    'Fm',
-    'G',
-    'Gm',
-    'A',
-    'Am',
-    'B',
-    'Bm',
+    'C / Am',
+    'C# / A#m',
+    'D / Bm',
+    'E♭ / Cm',
+    'E / C#m',
+    'F / Dm',
+    'F# / D#m',
+    'G / Em',
+    'A♭ / Fm',
+    'A / F#m',
+    'B♭ / Gm',
+    'B / G#m',
   ];
 
   Widget build(BuildContext context) {
