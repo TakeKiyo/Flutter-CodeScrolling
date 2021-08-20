@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 
 import 'import_song_page.dart';
@@ -26,6 +25,8 @@ class CreateSongForm extends StatefulWidget {
 }
 
 class _CreateSongFormState extends State<CreateSongForm> {
+  final _formKey = GlobalKey<FormState>();
+
   String _title = "";
   int _bpm = 120;
   String _artist = "";
@@ -49,13 +50,12 @@ class _CreateSongFormState extends State<CreateSongForm> {
   }
 
   void createButtonClicked() {
-    // TODO バリデーションが満たされてなかったwarning いけてたら確認ダイアログ
-    if (_title == "" || _artist == "" || _key == "未選択") {
+    if (_key == "未選択") {
       showDialog(
           context: context,
           builder: (_) => CupertinoAlertDialog(
                 title: Text("エラー"),
-                content: Text("未入力の項目があります。"),
+                content: Text("キーを選択してください。"),
                 actions: <Widget>[
                   TextButton(
                     child: Text('OK'),
@@ -154,105 +154,118 @@ class _CreateSongFormState extends State<CreateSongForm> {
   ];
 
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Container(
-      padding: const EdgeInsets.only(left: 30, right: 30),
-      child: Column(
-        children: <Widget>[
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) {
-                    return ImportSong();
-                  }),
-                );
-              },
-              child: Text('友だちの曲の追加はこちら')),
-          Text(
-            "曲名",
-            style: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextField(
-            maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            style: TextStyle(color: Colors.black),
-            maxLines: 1,
-            onChanged: _handleTitle,
-          ),
-          Text(
-            "アーティスト",
-            style: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: 30.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextField(
-            maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            style: TextStyle(color: Colors.black),
-            maxLines: 1,
-            onChanged: _handleArtist,
-          ),
-          Padding(
-              padding: EdgeInsets.only(top: 25.0),
-              child: Text(
-                "BPM: $_bpm",
+    return Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+            child: Container(
+          padding: const EdgeInsets.only(left: 30, right: 30),
+          child: Column(
+            children: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) {
+                        return ImportSong();
+                      }),
+                    );
+                  },
+                  child: Text('友だちの曲の追加はこちら')),
+              Text(
+                "曲名",
                 style: TextStyle(
                   color: Colors.blueAccent,
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
                 ),
-              )),
-          Text(
-            "いつでも変更可能です",
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 15.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Slider(
-            activeColor: Colors.black,
-            inactiveColor: Theme.of(context).primaryColorDark,
-            label: null,
-            value: _bpm.toDouble(),
-            divisions: 270,
-            min: 30,
-            max: 300,
-            onChanged: _handleBpm,
-          ),
-          Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Text(
-                "キー $_key",
+              ),
+              TextFormField(
+                cursorColor: Colors.black,
+                onChanged: _handleTitle,
+                // ignore: missing_return
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return '曲名を入力してください。';
+                  }
+                },
+              ),
+              Text(
+                "アーティスト",
                 style: TextStyle(
                   color: Colors.blueAccent,
                   fontSize: 30.0,
                   fontWeight: FontWeight.bold,
                 ),
-              )),
-          ElevatedButton(
-            child: const Text('キーを選択', style: TextStyle(color: Colors.white)),
-            style: ElevatedButton.styleFrom(primary: Colors.orange),
-            onPressed: () {
-              _showModalPicker(context);
-            },
-          ),
-          Padding(
-              padding: EdgeInsets.only(top: 25.0),
-              child: ElevatedButton(
+              ),
+              TextFormField(
+                cursorColor: Colors.black,
+                onChanged: _handleArtist,
+                // ignore: missing_return
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'アーティストを入力してください。';
+                  }
+                },
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 25.0),
+                  child: Text(
+                    "BPM: $_bpm",
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+              Text(
+                "いつでも変更可能です",
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Slider(
+                activeColor: Colors.black,
+                inactiveColor: Theme.of(context).primaryColorDark,
+                label: null,
+                value: _bpm.toDouble(),
+                divisions: 270,
+                min: 30,
+                max: 300,
+                onChanged: _handleBpm,
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Text(
+                    "キー $_key",
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+              ElevatedButton(
                 child:
-                    const Text('曲を追加', style: TextStyle(color: Colors.white)),
+                    const Text('キーを選択', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(primary: Colors.orange),
                 onPressed: () {
-                  createButtonClicked();
+                  _showModalPicker(context);
                 },
-              )),
-        ],
-      ),
-    ));
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 25.0),
+                  child: ElevatedButton(
+                    child: const Text('曲を追加',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(primary: Colors.orange),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        createButtonClicked();
+                      }
+                    },
+                  )),
+            ],
+          ),
+        )));
   }
 }
