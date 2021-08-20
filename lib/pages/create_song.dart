@@ -161,15 +161,17 @@ class _CreateSongFormState extends State<CreateSongForm> {
           padding: const EdgeInsets.only(left: 30, right: 30),
           child: Column(
             children: <Widget>[
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return ImportSong();
-                      }),
-                    );
-                  },
-                  child: Text('友だちの曲の追加はこちら')),
+              Padding(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) {
+                            return ImportSong();
+                          }),
+                        );
+                      },
+                      child: Text('友だちの曲の追加はこちら'))),
               Text(
                 "曲名",
                 style: TextStyle(
