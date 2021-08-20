@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -27,6 +26,7 @@ class ImportSongForm extends StatefulWidget {
 }
 
 class _ImportSongFormState extends State<ImportSongForm> {
+  final _formKey = GlobalKey<FormState>();
   String copiedID = "";
   bool qrScanned = false;
   void _handleCopiedID(String inputText) {
@@ -49,39 +49,22 @@ class _ImportSongFormState extends State<ImportSongForm> {
   }
 
   void importButtonClicked() {
-    if (copiedID == "") {
-      showDialog(
-          context: context,
-          builder: (_) => CupertinoAlertDialog(
-                title: Text("エラー"),
-                content: Text("コピーした曲のIDを入力してください"),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text('OK'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              ));
-    } else {
-      showDialog(
-          context: context,
-          builder: (_) => CupertinoAlertDialog(
-                title: Text("確認"),
-                content: Text("曲のインポートを開始します"),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text("Cancel"),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  TextButton(
-                    child: Text("OK"),
-                    onPressed: () async => importSong(copiedID),
-                  ),
-                ],
-              ));
-    }
+    showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              title: Text("確認"),
+              content: Text("曲のインポートを開始します"),
+              actions: <Widget>[
+                TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () async => importSong(copiedID),
+                ),
+              ],
+            ));
   }
 
   Widget _buildQrView(BuildContext context) {
@@ -204,35 +187,40 @@ class _ImportSongFormState extends State<ImportSongForm> {
         padding: const EdgeInsets.all(50),
         child: Column(children: <Widget>[
           Expanded(child: _buildQrView(context)),
-          Container(
-              padding: const EdgeInsets.all(30),
-              child: Column(children: <Widget>[
-                Text(
-                  "コピーしたIDをペーストしても\n追加することができます",
-                  style: TextStyle(
-                    color: Colors.blueAccent,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextField(
-                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                  enabled: true,
-                  style: TextStyle(color: Colors.black),
-                  obscureText: false,
-                  maxLines: 1,
-                  //パスワード
-                  onChanged: _handleCopiedID,
-                ),
-                ElevatedButton(
-                  child: const Text('曲をインポート',
-                      style: TextStyle(color: Colors.white)),
-                  style: ElevatedButton.styleFrom(primary: Colors.orange),
-                  onPressed: () {
-                    importButtonClicked();
-                  },
-                ),
-              ])),
+          Form(
+              key: _formKey,
+              child: Container(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(children: <Widget>[
+                    Text(
+                      "コピーしたIDをペーストしても\n追加することができます",
+                      style: TextStyle(
+                        color: Colors.blueAccent,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextFormField(
+                      cursorColor: Colors.black,
+                      onChanged: _handleCopiedID,
+                      // ignore: missing_return
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'IDを入力してください。';
+                        }
+                      },
+                    ),
+                    ElevatedButton(
+                      child: const Text('曲をインポート',
+                          style: TextStyle(color: Colors.white)),
+                      style: ElevatedButton.styleFrom(primary: Colors.orange),
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          importButtonClicked();
+                        }
+                      },
+                    ),
+                  ]))),
         ]));
   }
 }
