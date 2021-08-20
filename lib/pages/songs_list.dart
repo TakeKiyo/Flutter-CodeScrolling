@@ -7,7 +7,7 @@ import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import 'create_song.dart';
-import 'detail_page/detail_page.dart';
+import 'detail_page/tab_view.dart';
 
 class SongsList extends StatelessWidget {
   @override
@@ -107,7 +107,7 @@ class SongsList extends StatelessWidget {
                                             if (tempMap.containsKey("key")) {
                                               songKey = tempMap["key"];
                                             }
-                                            return DetailPage(
+                                            return TabView(
                                               bpm: doc["bpm"],
                                               title: doc["title"],
                                               artist: artist,

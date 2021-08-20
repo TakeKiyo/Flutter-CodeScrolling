@@ -222,7 +222,7 @@ class _ScrollPageState extends State<ScrollablePage> {
       return Container(
           child: Scrollbar(
               // controller: _scrollController,
-              isAlwaysShown: true,
+              isAlwaysShown: false,
               thickness: 8.0,
               hoverThickness: 12.0,
               child: SingleChildScrollView(
