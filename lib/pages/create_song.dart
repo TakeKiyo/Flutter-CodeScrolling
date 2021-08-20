@@ -154,8 +154,9 @@ class _CreateSongFormState extends State<CreateSongForm> {
   ];
 
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(50),
+    return SingleChildScrollView(
+        child: Container(
+      padding: const EdgeInsets.only(left: 30, right: 30),
       child: Column(
         children: <Widget>[
           TextButton(
@@ -252,6 +253,6 @@ class _CreateSongFormState extends State<CreateSongForm> {
               )),
         ],
       ),
-    );
+    ));
   }
 }
