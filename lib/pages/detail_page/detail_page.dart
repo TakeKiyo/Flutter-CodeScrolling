@@ -33,6 +33,7 @@ class DetailPage extends StatelessWidget {
                   songDocument.data() as Map<String, dynamic>;
               List<String> separation;
               List<String> rhythmList;
+              List<String> lyricsList;
               if (dataMap.containsKey('separation')) {
                 separation = songDocument["separation"].cast<String>();
               } else {
@@ -43,8 +44,13 @@ class DetailPage extends StatelessWidget {
               } else {
                 rhythmList = [];
               }
-              return ScrollablePage(
-                  codeList, bpm, title, docId, separation, rhythmList);
+              if (dataMap.containsKey("lyricsList")) {
+                lyricsList = songDocument["lyricsList"].cast<String>();
+              } else {
+                lyricsList = [];
+              }
+              return ScrollablePage(codeList, bpm, title, docId, separation,
+                  rhythmList, lyricsList);
             }));
   }
 }
