@@ -92,6 +92,11 @@ class DetailEditPage extends StatelessWidget {
                 showCursor: true,
                 maxLines: null,
                 onTap: () {
+                  if (Provider.of<EditingSongModel>(context, listen: false)
+                      .keyboardIsOpening) {
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .closeKeyboard();
+                  }
                   Provider.of<EditingSongModel>(context, listen: false)
                       .openNormalKeyboard();
                 },
@@ -110,7 +115,7 @@ class DetailEditPage extends StatelessWidget {
           showCursor: true,
           readOnly: true,
           onTap: () {
-            if (!Provider.of<EditingSongModel>(context, listen: false)
+            if (Provider.of<EditingSongModel>(context, listen: false)
                 .normalKeyboardIsOpen) {
               Provider.of<EditingSongModel>(context, listen: false)
                   .closeNormalKeyboard();
