@@ -31,6 +31,8 @@ class _CreateSongFormState extends State<CreateSongForm> {
   int _bpm = 120;
   String _artist = "";
   String _key = "未選択";
+  int _selectedIndex = 0;
+
   void _handleTitle(String inputText) {
     setState(() {
       _title = inputText;
@@ -118,6 +120,8 @@ class _CreateSongFormState extends State<CreateSongForm> {
               itemExtent: 40,
               children: _items.map(_pickerItem).toList(),
               onSelectedItemChanged: _onSelectedItemChanged,
+              scrollController:
+                  FixedExtentScrollController(initialItem: _selectedIndex),
             ),
           ),
         );
@@ -135,6 +139,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
   void _onSelectedItemChanged(int index) {
     setState(() {
       _key = _items[index];
+      _selectedIndex = index;
     });
   }
 
