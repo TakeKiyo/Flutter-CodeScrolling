@@ -45,6 +45,7 @@ dependencies:
   permission_handler: ^8.1.4+2
 
   quiver: ^3.0.1
+  path_provider: ^2.0.2
 
 dev_dependencies:
   flutter_test:
@@ -68,7 +69,12 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   assets:
-    - assets/metronome_digital1.wav
+    - assets/sounds/ClickLayer808.wav
+    - assets/sounds/ClickLayer808Up.wav
+    - assets/sounds/Metronome.wav
+    - assets/sounds/MetronomeUp.wav
+    - assets/sounds/Woodblock5.wav
+    - assets/sounds/Woodblock5Up.wav
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

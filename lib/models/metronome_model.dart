@@ -31,13 +31,26 @@ class MetronomeModel extends ChangeNotifier {
   get bpmTapCount => _bpmTapCount;
   get bpmTapText => _bpmTapText;
 
-  AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
-  AudioCache _metronomePlayer = AudioCache(fixedPlayer: AudioPlayer());
-  String _metronomeSound = "metronome_digital1.wav";
+  AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY)
+    ..setReleaseMode(ReleaseMode.STOP);
+  AudioCache _metronomePlayer = AudioCache(
+      fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY)
+        ..setReleaseMode(ReleaseMode.STOP));
+  String _metronomeSound = "sounds/Metronome.wav";
+  List<String> _metronomeSoundList = [
+    "sounds/Metronome.wav",
+    "sounds/ClickLayer808.wav",
+    "sounds/Woodblock5.wav",
+  ];
   Metronome _metronomeTimer;
   StreamSubscription<DateTime> _metronomeSubscription;
 
   get metronomeSound => _metronomeSound;
+  get metronomeSoundList => _metronomeSoundList;
+
+  set metronomeSound(int index) {
+    _metronomeSound = _metronomeSoundList[index];
+  }
 
   Color _metronomeContainerColor;
   get metronomeContainerColor => _metronomeContainerColor;
@@ -192,7 +205,10 @@ class MetronomeModel extends ChangeNotifier {
 
   void metronomeRingSound() {
     _metronomePlayer.play(_metronomeSound,
-        volume: _soundVolume, isNotification: true);
+        volume: _soundVolume,
+        mode: PlayerMode.LOW_LATENCY,
+        stayAwake: true,
+        isNotification: true);
 
     ///下記のコードが無いとiOSでのみエラーを吐く。
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
