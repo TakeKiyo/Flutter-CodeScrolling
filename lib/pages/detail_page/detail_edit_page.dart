@@ -82,6 +82,8 @@ class DetailEditPage extends StatelessWidget {
       final _lyricsController = TextEditingController(
           text: Provider.of<EditingSongModel>(context, listen: false)
               .lyricsList[listIndex]);
+      _lyricsController.selection = TextSelection.fromPosition(
+          TextPosition(offset: _lyricsController.text.length));
       lyrics.add(Flexible(
           child: Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 48.0),
@@ -89,6 +91,10 @@ class DetailEditPage extends StatelessWidget {
                 controller: _lyricsController,
                 showCursor: true,
                 maxLines: null,
+                onTap: () {
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .openNormalKeyboard();
+                },
                 onChanged: (text) {
                   Provider.of<EditingSongModel>(context, listen: false)
                       .editLyricsList(text, listIndex);
@@ -103,6 +109,11 @@ class DetailEditPage extends StatelessWidget {
           showCursor: true,
           readOnly: true,
           onTap: () {
+            if (!Provider.of<EditingSongModel>(context, listen: false)
+                .normalKeyboardIsOpen) {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .closeNormalKeyboard();
+            }
             if (!Provider.of<EditingSongModel>(context, listen: false)
                 .keyboardIsOpening) {
               _showCustomKeyboard(context);
@@ -329,6 +340,7 @@ class DetailEditPage extends StatelessWidget {
                                   primary: Colors.orange),
                               onPressed: () {
                                 model.closeKeyboard();
+                                model.closeNormalKeyboard();
                                 submitCodeList(docId);
                               },
                             ),

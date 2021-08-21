@@ -78,12 +78,10 @@ class EditingSongModel extends ChangeNotifier {
     for (int i = 0; i < fetchedLyricsList.length; i++) {
       _lyricsList.add(fetchedLyricsList[i]);
     }
-    print(_lyricsList);
   }
 
   void editLyricsList(String lyrics, int listIndex) {
     _lyricsList[listIndex] = lyrics;
-    print(_lyricsList);
   }
 
   // 曲の詳細画面から、編集画面に遷移するときに呼ばれる
@@ -120,10 +118,24 @@ class EditingSongModel extends ChangeNotifier {
   get keyboardIsOpening => _keyboardIsOpening;
   double _keyboardBottomSpace = 0;
   get keyboardBottomSpace => _keyboardBottomSpace;
+  bool _normalKeyboardIsOpen = false;
+  get normalKeyboardIsOpen => _normalKeyboardIsOpen;
 
   void openKeyboard() {
     _keyboardIsOpening = true;
     changeKeyboardPadding();
+    notifyListeners();
+  }
+
+  void openNormalKeyboard() {
+    _normalKeyboardIsOpen = true;
+    _keyboardBottomSpace = 350;
+    notifyListeners();
+  }
+
+  void closeNormalKeyboard() {
+    _normalKeyboardIsOpen = false;
+    _keyboardBottomSpace = 0;
     notifyListeners();
   }
 
