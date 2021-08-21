@@ -7,13 +7,14 @@ import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
   ScrollablePage(this.codeList, this.bpm, this.title, this.docId,
-      this.separationList, this.rhythmList);
+      this.separationList, this.rhythmList, this.lyricsList);
   final List<String> codeList;
   final int bpm;
   final String title;
   final String docId;
   final List<String> separationList;
   final List<String> rhythmList;
+  final List<String> lyricsList;
 
   @override
   _ScrollPageState createState() => _ScrollPageState();
@@ -59,6 +60,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                 .separationList = widget.separationList;
             Provider.of<EditingSongModel>(context, listen: false).rhythmList =
                 widget.rhythmList;
+            Provider.of<EditingSongModel>(context, listen: false).lyricsList =
+                widget.lyricsList;
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -202,6 +205,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                     .rhythmList = [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .separationList = [];
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .lyricsList = widget.lyricsList;
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {

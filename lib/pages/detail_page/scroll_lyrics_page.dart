@@ -60,6 +60,8 @@ class _ScrollLyricsPageState extends State<ScrollLyricsPage> {
                 .separationList = widget.separationList;
             Provider.of<EditingSongModel>(context, listen: false).rhythmList =
                 widget.rhythmList;
+            Provider.of<EditingSongModel>(context, listen: false).lyricsList =
+                widget.lyricsList;
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -136,6 +138,8 @@ class _ScrollLyricsPageState extends State<ScrollLyricsPage> {
                     .rhythmList = [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .separationList = [];
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .lyricsList = widget.lyricsList;
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
