@@ -48,9 +48,15 @@ class DetailEditPage extends StatelessWidget {
       });
     }
 
-    Widget getCodeListWidgets(context, List<String> strings, int listIndex,
-        List<String> separationList, List<String> rhythmList) {
+    Widget getCodeListWidgets(
+        context,
+        List<String> strings,
+        int listIndex,
+        List<String> separationList,
+        List<String> rhythmList,
+        List<String> lyricsList) {
       List<Widget> separationText = [];
+      List<Widget> lyrics = [];
       List<Widget> list = [];
       if (listIndex == 0) {
         separationText.add(Text(separationList[listIndex],
@@ -78,6 +84,23 @@ class DetailEditPage extends StatelessWidget {
           ));
         }
       }
+
+      final _lyricsController =
+          TextEditingController(text: lyricsList[listIndex]);
+      lyrics.add(Flexible(
+          child: Padding(
+              padding: const EdgeInsets.only(left: 24.0, right: 48.0),
+              child: TextField(
+                showCursor: true,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                textAlign: TextAlign.center,
+                controller: _lyricsController,
+                onChanged: (text) {
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .editLyricsList(text, listIndex);
+                },
+              ))));
 
       for (var i = 0; i < strings.length; i++) {
         final _controller = TextEditingController(text: strings[i]);
@@ -157,6 +180,7 @@ class DetailEditPage extends StatelessWidget {
           }));
       return Column(children: <Widget>[
         Row(children: separationText),
+        Row(children: lyrics),
         Row(children: list)
       ]);
     }
@@ -169,6 +193,8 @@ class DetailEditPage extends StatelessWidget {
             .separationList,
         "rhythmList":
             Provider.of<EditingSongModel>(context, listen: false).rhythmList,
+        "lyricsList":
+            Provider.of<EditingSongModel>(context, listen: false).lyricsList,
         "updatedAt": DateTime.now(),
       });
       Navigator.of(context).pop(
@@ -210,8 +236,13 @@ class DetailEditPage extends StatelessWidget {
                             for (int idx = 0;
                                 idx < model.codeList.length;
                                 idx++)
-                              getCodeListWidgets(context, model.codeList[idx],
-                                  idx, model.separationList, model.rhythmList),
+                              getCodeListWidgets(
+                                  context,
+                                  model.codeList[idx],
+                                  idx,
+                                  model.separationList,
+                                  model.rhythmList,
+                                  model.lyricsList),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
