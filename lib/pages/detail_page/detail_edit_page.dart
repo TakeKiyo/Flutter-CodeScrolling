@@ -226,134 +226,170 @@ class DetailEditPage extends StatelessWidget {
           actions: <Widget>[],
         ),
         body: Builder(
-          builder: (context) => Container(
-              child: Scrollbar(
-                  isAlwaysShown: true,
-                  thickness: 8.0,
-                  hoverThickness: 12.0,
-                  child: Padding(
-                    padding: bottomPadding(context),
-                    child: SingleChildScrollView(
-                      child: Center(child:
-                          Consumer<EditingSongModel>(builder: (_, model, __) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("コードの編集"),
-                            for (int idx = 0;
-                                idx < model.codeList.length;
-                                idx++)
-                              getCodeListWidgets(context, model.codeList[idx],
-                                  idx, model.separationList, model.rhythmList),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 5),
-                                      child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton<String>(
-                                            value: model.selectedSeparation,
-                                            elevation: 16,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            onChanged: (String newValue) {
-                                              model.setSelectedSeparation(
-                                                  newValue);
+            builder: (context) => GestureDetector(
+                  onTap: () => {
+                    FocusScope.of(context).unfocus(),
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .closeNormalKeyboard(),
+                  },
+                  child: Container(
+                      child: Scrollbar(
+                          isAlwaysShown: true,
+                          thickness: 8.0,
+                          hoverThickness: 12.0,
+                          child: Padding(
+                            padding: bottomPadding(context),
+                            child: SingleChildScrollView(
+                              child: Center(child: Consumer<EditingSongModel>(
+                                  builder: (_, model, __) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text("コードの編集"),
+                                    for (int idx = 0;
+                                        idx < model.codeList.length;
+                                        idx++)
+                                      getCodeListWidgets(
+                                          context,
+                                          model.codeList[idx],
+                                          idx,
+                                          model.separationList,
+                                          model.rhythmList),
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 5),
+                                              child: ButtonTheme(
+                                                  alignedDropdown: true,
+                                                  child: DropdownButton<String>(
+                                                    value: model
+                                                        .selectedSeparation,
+                                                    elevation: 16,
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                    ),
+                                                    onChanged:
+                                                        (String newValue) {
+                                                      model
+                                                          .setSelectedSeparation(
+                                                              newValue);
+                                                    },
+                                                    items: <String>[
+                                                      "Intro",
+                                                      "A",
+                                                      "B",
+                                                      "C",
+                                                      "サビ"
+                                                    ].map<
+                                                            DropdownMenuItem<
+                                                                String>>(
+                                                        (String value) {
+                                                      return DropdownMenuItem<
+                                                              String>(
+                                                          value: value,
+                                                          child: Text(value));
+                                                    }).toList(),
+                                                  ))),
+                                          Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 5),
+                                              child: ButtonTheme(
+                                                  alignedDropdown: true,
+                                                  child: DropdownButton<String>(
+                                                    value: model.selectedRhythm,
+                                                    elevation: 16,
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                    ),
+                                                    onChanged:
+                                                        (String newValue) {
+                                                      model.setSelectedRhythm(
+                                                          newValue);
+                                                    },
+                                                    items: <String>[
+                                                      "4/4",
+                                                      "4/3",
+                                                      "4/2",
+                                                      "6/8",
+                                                    ].map<
+                                                            DropdownMenuItem<
+                                                                String>>(
+                                                        (String value) {
+                                                      return DropdownMenuItem<
+                                                              String>(
+                                                          value: value,
+                                                          child: Text(value));
+                                                    }).toList(),
+                                                  ))),
+                                          Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5, horizontal: 5),
+                                              child: ButtonTheme(
+                                                  alignedDropdown: true,
+                                                  child: DropdownButton<int>(
+                                                    value:
+                                                        model.selectedBeatCount,
+                                                    elevation: 16,
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                    ),
+                                                    onChanged: (int newValue) {
+                                                      model
+                                                          .setSelectedBeatCount(
+                                                              newValue);
+                                                    },
+                                                    items: <int>[
+                                                      1,
+                                                      2,
+                                                      3,
+                                                      4,
+                                                      5,
+                                                      6
+                                                    ].map<
+                                                        DropdownMenuItem<
+                                                            int>>((int value) {
+                                                      return DropdownMenuItem<
+                                                              int>(
+                                                          value: value,
+                                                          child: Text(
+                                                              value.toString() +
+                                                                  '小節'));
+                                                    }).toList(),
+                                                  ))),
+                                          ElevatedButton(
+                                            child: const Text('追加',
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.orange),
+                                            onPressed: () {
+                                              model.addEmptyList();
                                             },
-                                            items: <String>[
-                                              "Intro",
-                                              "A",
-                                              "B",
-                                              "C",
-                                              "サビ"
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value));
-                                            }).toList(),
-                                          ))),
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 5),
-                                      child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton<String>(
-                                            value: model.selectedRhythm,
-                                            elevation: 16,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            onChanged: (String newValue) {
-                                              model.setSelectedRhythm(newValue);
-                                            },
-                                            items: <String>[
-                                              "4/4",
-                                              "4/3",
-                                              "4/2",
-                                              "6/8",
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value));
-                                            }).toList(),
-                                          ))),
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 5),
-                                      child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton<int>(
-                                            value: model.selectedBeatCount,
-                                            elevation: 16,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            onChanged: (int newValue) {
-                                              model.setSelectedBeatCount(
-                                                  newValue);
-                                            },
-                                            items: <int>[1, 2, 3, 4, 5, 6]
-                                                .map<DropdownMenuItem<int>>(
-                                                    (int value) {
-                                              return DropdownMenuItem<int>(
-                                                  value: value,
-                                                  child: Text(
-                                                      value.toString() + '小節'));
-                                            }).toList(),
-                                          ))),
-                                  ElevatedButton(
-                                    child: const Text('追加',
-                                        style: TextStyle(color: Colors.white)),
-                                    style: ElevatedButton.styleFrom(
-                                        primary: Colors.orange),
-                                    onPressed: () {
-                                      model.addEmptyList();
-                                    },
-                                  ),
-                                ]),
-                            ElevatedButton(
-                              child: const Text('編集を終了',
-                                  style: TextStyle(color: Colors.white)),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.orange),
-                              onPressed: () {
-                                model.closeKeyboard();
-                                model.closeNormalKeyboard();
-                                submitCodeList(docId);
-                              },
+                                          ),
+                                        ]),
+                                    ElevatedButton(
+                                      child: const Text('編集を終了',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.orange),
+                                      onPressed: () {
+                                        FocusScope.of(context).unfocus();
+                                        model.closeKeyboard();
+                                        model.closeNormalKeyboard();
+                                        submitCodeList(docId);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              })),
                             ),
-                          ],
-                        );
-                      })),
-                    ),
-                  ))),
-          //bottomSheet: CustomKeyboard(),
-        ));
+                          ))),
+                  //bottomSheet: CustomKeyboard(),
+                )));
   }
 }
 
