@@ -33,9 +33,7 @@ class MetronomeModel extends ChangeNotifier {
 
   AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY)
     ..setReleaseMode(ReleaseMode.STOP);
-  AudioCache _metronomePlayer = AudioCache(
-      fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY)
-        ..setReleaseMode(ReleaseMode.STOP));
+  AudioCache _metronomePlayer;
   String _metronomeSound = "sounds/Metronome.wav";
   List<String> _metronomeSoundList = [
     "sounds/Metronome.wav",
@@ -175,6 +173,7 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void metronomeLoad() async {
+    _metronomePlayer = AudioCache(fixedPlayer: _audioPlayer);
     await _metronomePlayer.load(_metronomeSound);
     _isCountInPlaying = true;
     notifyListeners();
