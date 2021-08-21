@@ -217,6 +217,8 @@ class DetailEditPage extends StatelessWidget {
               onPressed: () {
                 Provider.of<EditingSongModel>(context, listen: false)
                     .closeKeyboard();
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .closeNormalKeyboard();
                 Navigator.of(context).pop();
               }),
           title: Text("編集ページ"),
