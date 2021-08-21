@@ -45,7 +45,6 @@ dependencies:
   permission_handler: ^8.1.4+2
 
   quiver: ^3.0.1
-  path_provider: ^2.0.2
 
 dev_dependencies:
   flutter_test:
