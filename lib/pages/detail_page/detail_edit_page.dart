@@ -103,7 +103,8 @@ class DetailEditPage extends StatelessWidget {
 
       for (var i = 0; i < strings.length; i++) {
         final _controller = TextEditingController(text: strings[i]);
-
+        _controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: _controller.text.length));
         list.add(Flexible(
             child: TextField(
           showCursor: true,

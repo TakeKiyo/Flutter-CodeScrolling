@@ -107,7 +107,6 @@ class EditingSongModel extends ChangeNotifier {
 
   void editCodeList(String code, int barIdx, int timeIdx) {
     _codeList[barIdx][timeIdx] = code;
-    notifyListeners();
   }
 
   ///detail_edit_pageでTextFieldをTapする度に対応したTextEditingControllerを代入する
