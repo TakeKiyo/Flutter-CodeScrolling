@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:quiver/async.dart';
 
 void audioPlayerHandler(AudioPlayerState value) => null;
 
@@ -28,17 +29,18 @@ class MetronomeModel extends ChangeNotifier {
   String _bpmTapText = "TAPで計測開始";
 
   get bpmTapCount => _bpmTapCount;
-
   get bpmTapText => _bpmTapText;
 
   AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
-  AudioCache _metronomePlayer = AudioCache();
+  AudioCache _metronomePlayer = AudioCache(fixedPlayer: AudioPlayer());
   String _metronomeSound = "metronome_digital1.wav";
-  Timer _metronomeTimer;
+  Metronome _metronomeTimer;
+  StreamSubscription<DateTime> _metronomeSubscription;
 
   get metronomeSound => _metronomeSound;
 
-  Color metronomeContainerColor;
+  Color _metronomeContainerColor;
+  get metronomeContainerColor => _metronomeContainerColor;
 
   double _soundVolume = 1;
   get soundVolume => _soundVolume;
@@ -53,23 +55,53 @@ class MetronomeModel extends ChangeNotifier {
   bool _isCountInPlaying = false;
   get isCountInPlaying => _isCountInPlaying;
 
-  void increment() {
+  Timer _tempoTapTimer;
+
+  void tempoUp() {
     if (_tempoCount < 300) {
+      _metronomeSubscription?.cancel();
+      _tempoTapTimer?.cancel();
       _tempoCount++;
+      notifyListeners();
+      if (_isPlaying) {
+        ///最後にボタンを押されてから0.5秒後にmetronomeを再開
+        _tempoTapTimer =
+            Timer(const Duration(milliseconds: 500), metronomeStart);
+      }
     }
-    notifyListeners();
   }
 
-  void decrement() {
+  void tempoDown() {
     if (_tempoCount > 30) {
+      _metronomeSubscription?.cancel();
+      _tempoTapTimer?.cancel();
       _tempoCount--;
+      notifyListeners();
+      if (_isPlaying) {
+        ///最後にボタンを押されてから0.5秒後にmetronomeを再開
+        _tempoTapTimer =
+            Timer(const Duration(milliseconds: 500), metronomeStart);
+      }
     }
+  }
+
+  void startSlider(double _slideValue) {
+    _metronomeSubscription?.cancel();
+    _tempoCount = _slideValue.toInt();
     notifyListeners();
   }
 
   void changeSlider(double _slideValue) {
     _tempoCount = _slideValue.toInt();
     notifyListeners();
+  }
+
+  void endSlider(double _slideValue) {
+    _tempoCount = _slideValue.toInt();
+    notifyListeners();
+    if (_isPlaying) {
+      metronomeStart();
+    }
   }
 
   void bpmTapDetector() {
@@ -133,26 +165,7 @@ class MetronomeModel extends ChangeNotifier {
     await _metronomePlayer.load(_metronomeSound);
     _isCountInPlaying = true;
     notifyListeners();
-    countInPlay();
-  }
-
-  void countInPlay() {
-    const microseconds = 60000000;
-    var _metronomeDuration =
-        Duration(microseconds: (microseconds ~/ _tempoCount));
-
-    ///カウントインを規定回数繰り返したらmetronomePlay()を呼び出す。一定Durationでメトロノームを鳴らしたいのでwhileで実装できない。
-    if (_metronomeContainerStatus < _countInTimes - 1) {
-      _metronomeTimer = Timer(_metronomeDuration, countInPlay);
-      metronomeRingSound();
-      changeMetronomeCountStatus();
-    } else {
-      //カウントインが終わる時にContainerStatusを初期値に戻す
-      _metronomeContainerStatus = -1;
-      _isCountInPlaying = false;
-      notifyListeners();
-      metronomePlay();
-    }
+    metronomeStart();
   }
 
   void changeMetronomeCountStatus() {
@@ -165,20 +178,16 @@ class MetronomeModel extends ChangeNotifier {
   Future waitUntilCountInEnds() {
     const microseconds = 60000000;
     return Future.delayed(Duration(
-        microseconds:
-
-            ///カウントイン回数xBPM分の時間。ー0.5がないと一瞬だけカウントイン回数+1回目のFlashが起きてしまう
-            (microseconds / _tempoCount * (_countInTimes - 0.5)).toInt()));
+        microseconds: (microseconds / _tempoCount * (_countInTimes)).toInt()));
   }
 
-  void metronomePlay() {
+  void metronomeStart() {
     const microseconds = 60000000;
     var _metronomeDuration =
         Duration(microseconds: (microseconds ~/ _tempoCount));
-    _metronomeTimer = Timer(_metronomeDuration, metronomePlay);
-    metronomeRingSound();
-    changeMetronomeCountStatus();
-    changeMetronomeContainerColor();
+    _metronomeTimer = Metronome.epoch(_metronomeDuration);
+    _metronomeSubscription =
+        _metronomeTimer.listen((d) => metronomeRingSound());
   }
 
   void metronomeRingSound() {
@@ -187,22 +196,29 @@ class MetronomeModel extends ChangeNotifier {
 
     ///下記のコードが無いとiOSでのみエラーを吐く。
     _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
+
+    changeMetronomeCountStatus();
+    changeMetronomeContainerColor();
+
+    ///カウントインの処理
+    if (_isCountInPlaying && metronomeContainerStatus == _countInTimes) {
+      _isCountInPlaying = !_isCountInPlaying;
+      _metronomeContainerStatus = 0;
+    }
   }
 
   void changeMetronomeContainerColor() async {
     /// flashDuration=100000　はbpm=300（最大時）に合わせた数値
     const flashDuration = 100000;
-    metronomeContainerColor = Colors.orange;
+    _metronomeContainerColor = Colors.orange;
     notifyListeners();
     await Future.delayed(Duration(microseconds: flashDuration));
-    metronomeContainerColor = null;
+    _metronomeContainerColor = Colors.transparent;
     notifyListeners();
   }
 
   void metronomeClear() {
-    if (_isPlaying) {
-      _metronomeTimer.cancel();
-    }
+    _metronomeSubscription?.cancel();
   }
 
   void changeMuteStatus() {

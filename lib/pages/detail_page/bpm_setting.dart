@@ -36,7 +36,7 @@ class BpmSetting extends StatelessWidget {
                       iconSize: tempoIconSize,
                       tooltip: 'Decrement',
                       onPressed: () {
-                        model.decrement();
+                        model.tempoDown();
                       }),
                   Text(
                     model.tempoCount.toString(),
@@ -51,7 +51,7 @@ class BpmSetting extends StatelessWidget {
                       iconSize: tempoIconSize,
                       tooltip: 'Increment',
                       onPressed: () {
-                        model.increment();
+                        model.tempoUp();
                       }),
                 ],
               ),
@@ -66,7 +66,9 @@ class BpmSetting extends StatelessWidget {
                 divisions: 270,
                 min: 30,
                 max: 300,
+                onChangeStart: model.startSlider,
                 onChanged: model.changeSlider,
+                onChangeEnd: model.endSlider,
               ),
             ),
             Flexible(
