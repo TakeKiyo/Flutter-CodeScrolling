@@ -84,7 +84,6 @@ class EditingSongModel extends ChangeNotifier {
   void editLyricsList(String lyrics, int listIndex) {
     _lyricsList[listIndex] = lyrics;
     print(_lyricsList);
-    notifyListeners();
   }
 
   // 曲の詳細画面から、編集画面に遷移するときに呼ばれる

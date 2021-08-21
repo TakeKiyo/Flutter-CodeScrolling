@@ -48,13 +48,8 @@ class DetailEditPage extends StatelessWidget {
       });
     }
 
-    Widget getCodeListWidgets(
-        context,
-        List<String> strings,
-        int listIndex,
-        List<String> separationList,
-        List<String> rhythmList,
-        List<String> lyricsList) {
+    Widget getCodeListWidgets(context, List<String> strings, int listIndex,
+        List<String> separationList, List<String> rhythmList) {
       List<Widget> separationText = [];
       List<Widget> lyrics = [];
       List<Widget> list = [];
@@ -84,18 +79,16 @@ class DetailEditPage extends StatelessWidget {
           ));
         }
       }
-
-      final _lyricsController =
-          TextEditingController(text: lyricsList[listIndex]);
+      final _lyricsController = TextEditingController(
+          text: Provider.of<EditingSongModel>(context, listen: false)
+              .lyricsList[listIndex]);
       lyrics.add(Flexible(
           child: Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 48.0),
-              child: TextField(
-                showCursor: true,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                textAlign: TextAlign.center,
+              child: TextFormField(
                 controller: _lyricsController,
+                showCursor: true,
+                maxLines: null,
                 onChanged: (text) {
                   Provider.of<EditingSongModel>(context, listen: false)
                       .editLyricsList(text, listIndex);
@@ -236,13 +229,8 @@ class DetailEditPage extends StatelessWidget {
                             for (int idx = 0;
                                 idx < model.codeList.length;
                                 idx++)
-                              getCodeListWidgets(
-                                  context,
-                                  model.codeList[idx],
-                                  idx,
-                                  model.separationList,
-                                  model.rhythmList,
-                                  model.lyricsList),
+                              getCodeListWidgets(context, model.codeList[idx],
+                                  idx, model.separationList, model.rhythmList),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
