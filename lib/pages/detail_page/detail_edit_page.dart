@@ -248,7 +248,7 @@ class DetailEditPage extends StatelessWidget {
                                 children: <Widget>[
                                   Padding(
                                       padding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 5),
+                                          vertical: 5, horizontal: 5),
                                       child: ButtonTheme(
                                           alignedDropdown: true,
                                           child: DropdownButton<String>(
@@ -276,7 +276,7 @@ class DetailEditPage extends StatelessWidget {
                                           ))),
                                   Padding(
                                       padding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 5),
+                                          vertical: 5, horizontal: 5),
                                       child: ButtonTheme(
                                           alignedDropdown: true,
                                           child: DropdownButton<String>(
@@ -302,7 +302,7 @@ class DetailEditPage extends StatelessWidget {
                                           ))),
                                   Padding(
                                       padding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 5),
+                                          vertical: 5, horizontal: 5),
                                       child: ButtonTheme(
                                           alignedDropdown: true,
                                           child: DropdownButton<int>(
@@ -325,7 +325,7 @@ class DetailEditPage extends StatelessWidget {
                                             }).toList(),
                                           ))),
                                   ElevatedButton(
-                                    child: const Text('小節を追加',
+                                    child: const Text('追加',
                                         style: TextStyle(color: Colors.white)),
                                     style: ElevatedButton.styleFrom(
                                         primary: Colors.orange),
