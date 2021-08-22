@@ -50,6 +50,24 @@ class _ScrollLyricsPageState extends State<ScrollLyricsPage> {
 
     List<Widget> displayedWidget() {
       List<Widget> displayedList = [];
+
+      bool noLyrics = true;
+      for (int listIndex = 0;
+          listIndex < widget.lyricsList.length;
+          listIndex++) {
+        if (widget.lyricsList[listIndex] != "") {
+          noLyrics = false;
+        }
+      }
+      if (noLyrics) {
+        displayedList.add(Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+              Text('歌詞は追加されていません。'),
+            ])));
+        return displayedList;
+      }
       displayedList.add(TextButton(
           onPressed: () {
             Provider.of<MetronomeModel>(context, listen: false).tempoCount =
