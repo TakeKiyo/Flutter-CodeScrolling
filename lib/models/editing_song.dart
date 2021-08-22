@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class EditingSongModel extends ChangeNotifier {
+  String _displayType = "both";
+  get displayType => _displayType;
+  void setDisplayType(String selectedType) {
+    _displayType = selectedType;
+    notifyListeners();
+  }
+
   List<List<String>> _codeList = [];
   get codeList => _codeList;
 
