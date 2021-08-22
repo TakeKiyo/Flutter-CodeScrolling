@@ -21,6 +21,13 @@ class ScrollablePage extends StatefulWidget {
 }
 
 class _ScrollPageState extends State<ScrollablePage> {
+  bool _lyricsDisplayed = false;
+  void _handleCheckbox(bool e) {
+    setState(() {
+      _lyricsDisplayed = e;
+    });
+  }
+
   // コントローラ
   ScrollController _scrollController;
 
@@ -93,6 +100,18 @@ class _ScrollPageState extends State<ScrollablePage> {
             ])));
         return displayedList;
       }
+      displayedList.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Checkbox(
+            activeColor: Colors.blue,
+            value: _lyricsDisplayed,
+            onChanged: _handleCheckbox,
+          ),
+          Text("歌詞も表示する")
+        ],
+      ));
+
       displayedList.add(TextButton(
           onPressed: () {
             _scrollController.animateTo(
@@ -111,6 +130,9 @@ class _ScrollPageState extends State<ScrollablePage> {
                   color: Colors.white,
                   backgroundColor: Colors.black,
                 )));
+            if (_lyricsDisplayed) {
+              displayedList.add(Text(widget.lyricsList[listIndex]));
+            }
             list.add(Text(widget.rhythmList[listIndex]));
           } else {
             if (widget.separationList[listIndex] !=
@@ -124,6 +146,10 @@ class _ScrollPageState extends State<ScrollablePage> {
               displayedList.add(Text(""));
             }
 
+            if (_lyricsDisplayed) {
+              displayedList.add(Text(widget.lyricsList[listIndex]));
+            }
+
             if (widget.rhythmList[listIndex] !=
                 widget.rhythmList[listIndex - 1]) {
               list.add(Text(widget.rhythmList[listIndex]));
@@ -134,7 +160,6 @@ class _ScrollPageState extends State<ScrollablePage> {
             }
           }
         }
-
         for (var i = 0; i < codeListState[listIndex].length; i++) {
           ///TODO 4 * codeListState[~].length => その行の拍数の合計に置き換え
           int addedRowBeatCount = 0;
