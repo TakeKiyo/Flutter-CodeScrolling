@@ -319,7 +319,7 @@ class DetailEditPage extends StatelessWidget {
                                       onPressed: () {
                                         return showDisplayTypeDialog();
                                       },
-                                      child: Text('コードの編集')),
+                                      child: Text('編集方法の変更')),
                                   for (int idx = 0;
                                       idx < model.codeList.length;
                                       idx++)
