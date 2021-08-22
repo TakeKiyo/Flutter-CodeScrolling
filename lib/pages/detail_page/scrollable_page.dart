@@ -114,23 +114,32 @@ class _ScrollPageState extends State<ScrollablePage> {
           }
         }
 
+        Provider.of<MetronomeModel>(context, listen: false).rhythmNumList =
+            widget.rhythmList;
+        Provider.of<MetronomeModel>(context, listen: false).codeNumList =
+            codeListState;
+
+        int eachBeatCount(int index) {
+          return Provider.of<MetronomeModel>(context, listen: false)
+              .rhythmNumList[index];
+        }
+
         for (var i = 0; i < codeListState[listIndex].length; i++) {
-          ///TODO 4 * codeListState[~].length => その行の拍数の合計に置き換え
           int addedRowBeatCount = 0;
           for (var j = 0; j < listIndex; j++) {
-            addedRowBeatCount += 4 * codeListState[j].length;
+            addedRowBeatCount += eachBeatCount(j) * codeListState[j].length;
           }
 
-          final int maxRowBeatCount =
-              addedRowBeatCount + 4 * codeListState[listIndex].length;
+          final int maxRowBeatCount = addedRowBeatCount +
+              eachBeatCount(listIndex) * codeListState[listIndex].length;
 
-          ///TODO 4 => そのTextFormのもつ拍数に置き換え
           int addedColumnBeatCount = 0;
           for (var j = 0; j < i; j++) {
-            addedColumnBeatCount += 4;
+            addedColumnBeatCount += eachBeatCount(listIndex);
           }
 
-          final int maxColumnBeatCount = addedColumnBeatCount + 4;
+          final int maxColumnBeatCount =
+              addedColumnBeatCount + eachBeatCount(listIndex);
 
           list.add(Flexible(
             child: Selector<MetronomeModel, int>(

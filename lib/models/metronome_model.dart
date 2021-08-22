@@ -43,6 +43,40 @@ class MetronomeModel extends ChangeNotifier {
   Metronome _metronomeTimer;
   StreamSubscription<DateTime> _metronomeSubscription;
 
+  List<int> _rhythmNumList = [];
+  List<int> _codeNumList = [];
+  get rhythmNumList => _rhythmNumList;
+  get codeNumList => _codeNumList;
+
+  set rhythmNumList(List<String> fetchedRhythmList) {
+    _rhythmNumList = [];
+    if (fetchedRhythmList == []) {
+      _rhythmNumList = [];
+    } else {
+      for (int i = 0; i < fetchedRhythmList.length; i++) {
+        List<String> beatCountList = fetchedRhythmList[i].split('/');
+        if (beatCountList[1] == "4") {
+          _rhythmNumList.add(int.parse(beatCountList[0]));
+        } else if (beatCountList[1] == "8") {
+          _rhythmNumList.add(int.parse(beatCountList[0]) ~/ 2);
+        } else if (beatCountList[1] == "16") {
+          _rhythmNumList.add(int.parse(beatCountList[0]) ~/ 4);
+        }
+      }
+    }
+  }
+
+  set codeNumList(List<List<String>> fetchedCodeList) {
+    _codeNumList = [];
+    if (fetchedCodeList == []) {
+      _codeNumList = [];
+    } else {
+      for (int listIndex = 0; listIndex < fetchedCodeList.length; listIndex++) {
+        _codeNumList.add(fetchedCodeList[listIndex].length);
+      }
+    }
+  }
+
   get metronomeSound => _metronomeSound;
   get metronomeSoundList => _metronomeSoundList;
 
@@ -168,7 +202,7 @@ class MetronomeModel extends ChangeNotifier {
     metronomeClear();
     _isPlaying = false;
     _metronomeContainerStatus = -1;
-    _metronomePlayer.clear(_metronomeSound);
+    _metronomePlayer?.clear(_metronomeSound);
     notifyListeners();
   }
 
