@@ -75,6 +75,24 @@ class _ScrollPageState extends State<ScrollablePage> {
             );
           },
           child: Text("コードを編集する")));
+      bool noCode = true;
+      for (int i = 0; i < codeListState.length; i++) {
+        for (int j = 0; j < codeListState[i].length; j++) {
+          if (codeListState[i][j] != "") {
+            noCode = false;
+          }
+        }
+      }
+
+      if (noCode) {
+        displayedList.add(Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+              Text('コードは追加されていません。'),
+            ])));
+        return displayedList;
+      }
       displayedList.add(TextButton(
           onPressed: () {
             _scrollController.animateTo(
