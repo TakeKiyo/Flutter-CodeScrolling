@@ -235,40 +235,71 @@ class DetailEditPage extends StatelessWidget {
           context: context,
           builder: (context) {
             return SimpleDialog(
-              title: Text("編集方法の選択"),
+              title: Center(child: Text("編集方法の選択")),
               children: <Widget>[
                 // コンテンツ領域
                 SimpleDialogOption(
-                    onPressed: () => {
-                          Navigator.pop(context),
-                          Provider.of<EditingSongModel>(context, listen: false)
-                              .setDisplayType("both")
-                        },
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text("コードと歌詞を編集"),
-                    )),
+                  onPressed: () => {
+                    Navigator.pop(context),
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .setDisplayType("both")
+                  },
+                  child: CheckboxListTile(
+                    title: Text("コードと歌詞"),
+                    value: Provider.of<EditingSongModel>(context, listen: false)
+                            .displayType ==
+                        "both",
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
+                    onChanged: (e) => {
+                      Navigator.pop(context),
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .setDisplayType("both")
+                    },
+                  ),
+                  // child: Text("コードと歌詞を編集"),
+                ),
                 SimpleDialogOption(
-                    onPressed: () => {
-                          Navigator.pop(context),
-                          Provider.of<EditingSongModel>(context, listen: false)
-                              .setDisplayType("code")
-                        },
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text("コードのみ編集"),
-                    )),
+                  onPressed: () => {
+                    Navigator.pop(context),
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .setDisplayType("code")
+                  },
+                  child: CheckboxListTile(
+                    title: Text("コードのみ"),
+                    value: Provider.of<EditingSongModel>(context, listen: false)
+                            .displayType ==
+                        "code",
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
+                    onChanged: (e) => {
+                      Navigator.pop(context),
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .setDisplayType("code")
+                    },
+                  ),
+                ),
 
                 SimpleDialogOption(
-                    onPressed: () => {
-                          Navigator.pop(context),
-                          Provider.of<EditingSongModel>(context, listen: false)
-                              .setDisplayType("lyrics")
-                        },
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text("歌詞のみ編集"),
-                    )),
+                  onPressed: () => {
+                    Navigator.pop(context),
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .setDisplayType("lyrics")
+                  },
+                  child: CheckboxListTile(
+                    title: Text("歌詞のみ"),
+                    value: Provider.of<EditingSongModel>(context, listen: false)
+                            .displayType ==
+                        "lyrics",
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
+                    onChanged: (e) => {
+                      Navigator.pop(context),
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .setDisplayType("lyrics")
+                    },
+                  ),
+                ),
               ],
             );
           });
