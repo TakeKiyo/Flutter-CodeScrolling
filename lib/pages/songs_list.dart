@@ -53,7 +53,7 @@ class _SongsListState extends State<SongsListForm> {
   @override
   void initState() {
     super.initState();
-    _textEditingController = new TextEditingController(text: ''); // <- こんな感じ
+    _textEditingController = TextEditingController(text: '');
   }
 
   @override
@@ -177,7 +177,6 @@ class _SongsListState extends State<SongsListForm> {
           });
 
           return Scrollbar(
-              isAlwaysShown: true,
               thickness: 8.0,
               hoverThickness: 12.0,
               child: SingleChildScrollView(
