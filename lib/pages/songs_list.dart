@@ -117,7 +117,7 @@ class _SongsListState extends State<SongsListForm> {
                     IconSlideAction(
                       caption: '削除',
                       color: Colors.red,
-                      icon: Icons.remove,
+                      icon: Icons.delete,
                       onTap: () {
                         showDialog(
                             context: context,
@@ -176,48 +176,46 @@ class _SongsListState extends State<SongsListForm> {
             }
           });
 
-          return Column(children: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                child: TextField(
-                  controller: _textEditingController,
-                  onChanged: (text) {
-                    setState(() {
-                      searchText = text;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    hintText: "曲名を検索する",
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        _textEditingController.clear();
-                        setState(() {
-                          searchText = "";
-                        });
-                      },
-                      icon: Icon(Icons.clear),
-                    ),
-                  ),
-                )),
-            Container(
-                child: Scrollbar(
-                    isAlwaysShown: true,
-                    thickness: 8.0,
-                    hoverThickness: 12.0,
-                    child: SingleChildScrollView(
-                        controller: _scrollController,
-                        child: ListView(
-                            padding: EdgeInsets.all(12.0),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children: songsList))))
-          ]);
+          return Scrollbar(
+              isAlwaysShown: true,
+              thickness: 8.0,
+              hoverThickness: 12.0,
+              child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                        child: TextField(
+                          controller: _textEditingController,
+                          onChanged: (text) {
+                            setState(() {
+                              searchText = text;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search),
+                            hintText: "曲名を検索する",
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                _textEditingController.clear();
+                                setState(() {
+                                  searchText = "";
+                                });
+                                FocusScope.of(context).unfocus();
+                              },
+                              icon: Icon(Icons.clear),
+                            ),
+                          ),
+                        )),
+                    ListView(
+                      padding: EdgeInsets.all(12.0),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: songsList,
+                    )
+                  ])));
         }
       },
     );
-    // );
-    //   ),
-    // ));
   }
 }
