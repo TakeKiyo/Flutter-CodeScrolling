@@ -7,19 +7,27 @@ import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
   ScrollablePage(this.codeList, this.bpm, this.title, this.docId,
-      this.separationList, this.rhythmList);
+      this.separationList, this.rhythmList, this.lyricsList);
   final List<String> codeList;
   final int bpm;
   final String title;
   final String docId;
   final List<String> separationList;
   final List<String> rhythmList;
+  final List<String> lyricsList;
 
   @override
   _ScrollPageState createState() => _ScrollPageState();
 }
 
 class _ScrollPageState extends State<ScrollablePage> {
+  bool _lyricsDisplayed = false;
+  void _handleCheckbox(bool e) {
+    setState(() {
+      _lyricsDisplayed = e;
+    });
+  }
+
   // コントローラ
   ScrollController _scrollController;
 
@@ -59,6 +67,15 @@ class _ScrollPageState extends State<ScrollablePage> {
                 .separationList = widget.separationList;
             Provider.of<EditingSongModel>(context, listen: false).rhythmList =
                 widget.rhythmList;
+            Provider.of<EditingSongModel>(context, listen: false).lyricsList =
+                widget.lyricsList;
+            if (_lyricsDisplayed) {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .setDisplayType("both");
+            } else {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .setDisplayType("code");
+            }
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -72,6 +89,36 @@ class _ScrollPageState extends State<ScrollablePage> {
             );
           },
           child: Text("コードを編集する")));
+      bool noCode = true;
+      for (int i = 0; i < codeListState.length; i++) {
+        for (int j = 0; j < codeListState[i].length; j++) {
+          if (codeListState[i][j] != "") {
+            noCode = false;
+          }
+        }
+      }
+
+      if (noCode) {
+        displayedList.add(Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+              Text('コードは追加されていません。'),
+            ])));
+        return displayedList;
+      }
+      displayedList.add(Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Checkbox(
+            activeColor: Colors.blue,
+            value: _lyricsDisplayed,
+            onChanged: _handleCheckbox,
+          ),
+          Text("歌詞も表示する")
+        ],
+      ));
+
       displayedList.add(TextButton(
           onPressed: () {
             _scrollController.animateTo(
@@ -90,6 +137,9 @@ class _ScrollPageState extends State<ScrollablePage> {
                   color: Colors.white,
                   backgroundColor: Colors.black,
                 )));
+            if (_lyricsDisplayed) {
+              displayedList.add(Text(widget.lyricsList[listIndex]));
+            }
             list.add(Text(widget.rhythmList[listIndex]));
           } else {
             if (widget.separationList[listIndex] !=
@@ -101,6 +151,10 @@ class _ScrollPageState extends State<ScrollablePage> {
                   )));
             } else {
               displayedList.add(Text(""));
+            }
+
+            if (_lyricsDisplayed) {
+              displayedList.add(Text(widget.lyricsList[listIndex]));
             }
 
             if (widget.rhythmList[listIndex] !=
@@ -211,6 +265,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                     .rhythmList = [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .separationList = [];
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .lyricsList = widget.lyricsList;
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
