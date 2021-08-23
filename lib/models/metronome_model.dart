@@ -54,9 +54,7 @@ class MetronomeModel extends ChangeNotifier {
   StreamSubscription<DateTime> _metronomeSubscription;
 
   List<int> _rhythmNumList = [];
-  List<int> _codeNumList = [];
   get rhythmNumList => _rhythmNumList;
-  get codeNumList => _codeNumList;
 
   set rhythmNumList(List<String> fetchedRhythmList) {
     _rhythmNumList = [];
@@ -74,17 +72,7 @@ class MetronomeModel extends ChangeNotifier {
         }
       }
     }
-  }
-
-  set codeNumList(List<List<String>> fetchedCodeList) {
-    _codeNumList = [];
-    if (fetchedCodeList == []) {
-      _codeNumList = [];
-    } else {
-      for (int listIndex = 0; listIndex < fetchedCodeList.length; listIndex++) {
-        _codeNumList.add(fetchedCodeList[listIndex].length);
-      }
-    }
+    print(_rhythmNumList);
   }
 
   Color _metronomeContainerColor;

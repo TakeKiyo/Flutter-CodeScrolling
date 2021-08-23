@@ -170,8 +170,6 @@ class _ScrollPageState extends State<ScrollablePage> {
 
         Provider.of<MetronomeModel>(context, listen: false).rhythmNumList =
             widget.rhythmList;
-        Provider.of<MetronomeModel>(context, listen: false).codeNumList =
-            codeListState;
 
         int eachBeatCount(int index) {
           return Provider.of<MetronomeModel>(context, listen: false)
