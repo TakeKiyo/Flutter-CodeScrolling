@@ -51,12 +51,12 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               ),
             ),
             ButtonTheme(
-                buttonColor: Colors.white,
                 alignedDropdown: true,
                 child: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Container(
                       color: Theme.of(context).primaryColorDark,
                       child: DropdownButton<int>(
+                        isExpanded: true,
                         dropdownColor: Theme.of(context).primaryColorDark,
                         value: model.metronomeSoundsList
                             .indexOf(model.metronomeSound),

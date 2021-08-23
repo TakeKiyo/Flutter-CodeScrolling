@@ -32,8 +32,6 @@ class DetailEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _safeAreaHeight = MediaQuery.of(context).padding.bottom;
-
     void _showCustomKeyboard(context) {
       Scaffold.of(context).showBottomSheet((BuildContext context) {
         return CustomKeyboard(
@@ -43,7 +41,6 @@ class DetailEditPage extends StatelessWidget {
           },
           onBackspace:
               Provider.of<EditingSongModel>(context, listen: false).backspace,
-          safeAreaHeight: _safeAreaHeight,
         );
       });
     }

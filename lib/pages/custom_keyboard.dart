@@ -6,14 +6,12 @@ import 'package:provider/provider.dart';
 class CustomKeyboard extends StatelessWidget {
   final ValueSetter<String> onTextInput;
   final VoidCallback onBackspace;
-  final double safeAreaHeight;
-  final Padding insertPadding = Padding(padding: const EdgeInsets.all(2.0));
+  final Padding insertPadding = Padding(padding: const EdgeInsets.all(3.0));
 
   CustomKeyboard({
     Key key,
     this.onTextInput,
     this.onBackspace,
-    this.safeAreaHeight,
   }) : super(key: key);
 
   void _textInputHandler(String text) => onTextInput?.call(text);
@@ -23,7 +21,7 @@ class CustomKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 350,
       color: Colors.grey[800],
       child: Column(
         children: [
@@ -36,7 +34,7 @@ class CustomKeyboard extends StatelessWidget {
           buildRowThree(),
           insertPadding,
           buildRowFour(),
-          Padding(padding: EdgeInsets.only(bottom: safeAreaHeight))
+          Padding(padding: EdgeInsets.only(bottom: 70))
         ],
       ),
     );
@@ -44,7 +42,7 @@ class CustomKeyboard extends StatelessWidget {
 
   Container buildRowSetting(BuildContext context) {
     return Container(
-      height: 40,
+      height: 50,
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         IconButton(
             icon: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.grey),
@@ -184,9 +182,9 @@ class TextKey extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width / keyWidth,
       child: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 3.0),
         child: Material(
-          color: Colors.grey[500],
+          color: Colors.grey[600],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -228,7 +226,7 @@ class BackspaceKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.grey[600],
+          color: Colors.grey[700],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -279,7 +277,7 @@ class FunctionKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.grey[500],
+          color: Colors.grey[700],
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
