@@ -99,6 +99,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
       "userID": udid,
       "memberID": [udid],
       "codeList": [],
+      "lyricsList": [],
       "createdAt": DateTime.now(),
       "updatedAt": DateTime.now(),
     });

@@ -51,6 +51,7 @@ class DetailEditPage extends StatelessWidget {
     Widget getCodeListWidgets(context, List<String> strings, int listIndex,
         List<String> separationList, List<String> rhythmList) {
       List<Widget> separationText = [];
+      List<Widget> lyrics = [];
       List<Widget> list = [];
       if (listIndex == 0) {
         separationText.add(Text(separationList[listIndex],
@@ -78,15 +79,48 @@ class DetailEditPage extends StatelessWidget {
           ));
         }
       }
+      final _lyricsController = TextEditingController(
+          text: Provider.of<EditingSongModel>(context, listen: false)
+              .lyricsList[listIndex]);
+      _lyricsController.selection = TextSelection.fromPosition(
+          TextPosition(offset: _lyricsController.text.length));
+      lyrics.add(Flexible(
+          child: Padding(
+              padding: const EdgeInsets.only(left: 24.0, right: 48.0),
+              child: TextFormField(
+                controller: _lyricsController,
+                showCursor: true,
+                maxLines: null,
+                onTap: () {
+                  if (Provider.of<EditingSongModel>(context, listen: false)
+                      .keyboardIsOpening) {
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .closeKeyboard();
+                    Navigator.of(context).pop();
+                  }
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .openNormalKeyboard();
+                },
+                onChanged: (text) {
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .editLyricsList(text, listIndex);
+                },
+              ))));
 
       for (var i = 0; i < strings.length; i++) {
         final _controller = TextEditingController(text: strings[i]);
-
+        _controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: _controller.text.length));
         list.add(Flexible(
             child: TextField(
           showCursor: true,
           readOnly: true,
           onTap: () {
+            if (Provider.of<EditingSongModel>(context, listen: false)
+                .normalKeyboardIsOpen) {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .closeNormalKeyboard();
+            }
             if (!Provider.of<EditingSongModel>(context, listen: false)
                 .keyboardIsOpening) {
               _showCustomKeyboard(context);
@@ -155,10 +189,26 @@ class DetailEditPage extends StatelessWidget {
               },
             );
           }));
-      return Column(children: <Widget>[
-        Row(children: separationText),
-        Row(children: list)
-      ]);
+      if (Provider.of<EditingSongModel>(context, listen: false).displayType ==
+          "both") {
+        return Column(children: <Widget>[
+          Row(children: separationText),
+          Row(children: lyrics),
+          Row(children: list)
+        ]);
+      } else if (Provider.of<EditingSongModel>(context, listen: false)
+              .displayType ==
+          "code") {
+        return Column(children: <Widget>[
+          Row(children: separationText),
+          Row(children: list)
+        ]);
+      } else {
+        return Column(children: <Widget>[
+          Row(children: separationText),
+          Row(children: lyrics),
+        ]);
+      }
     }
 
     void submitCodeList(String docId) async {
@@ -169,6 +219,8 @@ class DetailEditPage extends StatelessWidget {
             .separationList,
         "rhythmList":
             Provider.of<EditingSongModel>(context, listen: false).rhythmList,
+        "lyricsList":
+            Provider.of<EditingSongModel>(context, listen: false).lyricsList,
         "updatedAt": DateTime.now(),
       });
       Navigator.of(context).pop(
@@ -178,148 +230,278 @@ class DetailEditPage extends StatelessWidget {
       );
     }
 
+    void showDisplayTypeDialog() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: Center(child: Text("編集方法の選択")),
+              children: <Widget>[
+                // コンテンツ領域
+                SimpleDialogOption(
+                  onPressed: () => {
+                    Navigator.pop(context),
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .setDisplayType("both")
+                  },
+                  child: CheckboxListTile(
+                    title: Text("コードと歌詞"),
+                    value: Provider.of<EditingSongModel>(context, listen: false)
+                            .displayType ==
+                        "both",
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
+                    onChanged: (e) => {
+                      Navigator.pop(context),
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .setDisplayType("both")
+                    },
+                  ),
+                  // child: Text("コードと歌詞を編集"),
+                ),
+                SimpleDialogOption(
+                  onPressed: () => {
+                    Navigator.pop(context),
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .setDisplayType("code")
+                  },
+                  child: CheckboxListTile(
+                    title: Text("コードのみ"),
+                    value: Provider.of<EditingSongModel>(context, listen: false)
+                            .displayType ==
+                        "code",
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
+                    onChanged: (e) => {
+                      Navigator.pop(context),
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .setDisplayType("code")
+                    },
+                  ),
+                ),
+
+                SimpleDialogOption(
+                  onPressed: () => {
+                    Navigator.pop(context),
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .setDisplayType("lyrics")
+                  },
+                  child: CheckboxListTile(
+                    title: Text("歌詞のみ"),
+                    value: Provider.of<EditingSongModel>(context, listen: false)
+                            .displayType ==
+                        "lyrics",
+                    controlAffinity: ListTileControlAffinity
+                        .leading, //  <-- leading Checkbox
+                    onChanged: (e) => {
+                      Navigator.pop(context),
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .setDisplayType("lyrics")
+                    },
+                  ),
+                ),
+              ],
+            );
+          });
+    }
+
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .closeKeyboard();
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .closeNormalKeyboard();
+              Navigator.of(context).pop();
+            }),
+        title: Text("編集ページ"),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.settings),
               onPressed: () {
-                Provider.of<EditingSongModel>(context, listen: false)
-                    .closeKeyboard();
-                Navigator.of(context).pop();
+                showDisplayTypeDialog();
               }),
-          title: Text("編集ページ"),
-          actions: <Widget>[],
-        ),
-        body: Builder(
-          builder: (context) => Container(
-              child: Scrollbar(
-                  isAlwaysShown: true,
-                  thickness: 8.0,
-                  hoverThickness: 12.0,
-                  child: Padding(
-                    padding: bottomPadding(context),
-                    child: SingleChildScrollView(
-                      child: Center(child:
-                          Consumer<EditingSongModel>(builder: (_, model, __) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("コードの編集"),
-                            for (int idx = 0;
-                                idx < model.codeList.length;
-                                idx++)
-                              getCodeListWidgets(context, model.codeList[idx],
-                                  idx, model.separationList, model.rhythmList),
-                            Row(
+        ],
+      ),
+      body: Builder(
+          builder: (context) => GestureDetector(
+                onTap: () => {
+                  FocusScope.of(context).unfocus(),
+                  if (Provider.of<EditingSongModel>(context, listen: false)
+                      .normalKeyboardIsOpen)
+                    {
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .closeNormalKeyboard()
+                    },
+                  if (Provider.of<EditingSongModel>(context, listen: false)
+                      .keyboardIsOpening)
+                    {
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .closeKeyboard(),
+                      Navigator.of(context).pop(),
+                    }
+                },
+                child: Container(
+                    child: Scrollbar(
+                        isAlwaysShown: true,
+                        thickness: 8.0,
+                        hoverThickness: 12.0,
+                        child: Padding(
+                          padding: bottomPadding(context),
+                          child: SingleChildScrollView(
+                            child: Center(child: Consumer<EditingSongModel>(
+                                builder: (_, model, __) {
+                              return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 5),
-                                      child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton<String>(
-                                            value: model.selectedSeparation,
-                                            elevation: 16,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            onChanged: (String newValue) {
-                                              model.setSelectedSeparation(
-                                                  newValue);
-                                            },
-                                            items: <String>[
-                                              "Intro",
-                                              "A",
-                                              "B",
-                                              "C",
-                                              "サビ"
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value));
-                                            }).toList(),
-                                          ))),
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 5),
-                                      child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton<String>(
-                                            value: model.selectedRhythm,
-                                            elevation: 16,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            onChanged: (String newValue) {
-                                              model.setSelectedRhythm(newValue);
-                                            },
-                                            items: <String>[
-                                              "4/4",
-                                              "4/3",
-                                              "4/2",
-                                              "6/8",
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
-                                              return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value));
-                                            }).toList(),
-                                          ))),
-                                  Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 5),
-                                      child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton<int>(
-                                            value: model.selectedBeatCount,
-                                            elevation: 16,
-                                            style: const TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                            onChanged: (int newValue) {
-                                              model.setSelectedBeatCount(
-                                                  newValue);
-                                            },
-                                            items: <int>[1, 2, 3, 4, 5, 6]
-                                                .map<DropdownMenuItem<int>>(
-                                                    (int value) {
-                                              return DropdownMenuItem<int>(
-                                                  value: value,
-                                                  child: Text(
-                                                      value.toString() + '小節'));
-                                            }).toList(),
-                                          ))),
                                   ElevatedButton(
-                                    child: const Text('小節を追加',
+                                      onPressed: () {
+                                        return showDisplayTypeDialog();
+                                      },
+                                      child: Text('編集方法の変更')),
+                                  for (int idx = 0;
+                                      idx < model.codeList.length;
+                                      idx++)
+                                    getCodeListWidgets(
+                                        context,
+                                        model.codeList[idx],
+                                        idx,
+                                        model.separationList,
+                                        model.rhythmList),
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 5),
+                                            child: ButtonTheme(
+                                                alignedDropdown: true,
+                                                child: DropdownButton<String>(
+                                                  value:
+                                                      model.selectedSeparation,
+                                                  elevation: 16,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                  onChanged: (String newValue) {
+                                                    model.setSelectedSeparation(
+                                                        newValue);
+                                                  },
+                                                  items: <String>[
+                                                    "Intro",
+                                                    "A",
+                                                    "B",
+                                                    "C",
+                                                    "サビ"
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                            String>(
+                                                        value: value,
+                                                        child: Text(value));
+                                                  }).toList(),
+                                                ))),
+                                        Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 5),
+                                            child: ButtonTheme(
+                                                alignedDropdown: true,
+                                                child: DropdownButton<String>(
+                                                  value: model.selectedRhythm,
+                                                  elevation: 16,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                  onChanged: (String newValue) {
+                                                    model.setSelectedRhythm(
+                                                        newValue);
+                                                  },
+                                                  items: <String>[
+                                                    "4/4",
+                                                    "3/4",
+                                                    "2/4",
+                                                    "6/8",
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                            String>(
+                                                        value: value,
+                                                        child: Text(value));
+                                                  }).toList(),
+                                                ))),
+                                        Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 5),
+                                            child: ButtonTheme(
+                                                alignedDropdown: true,
+                                                child: DropdownButton<int>(
+                                                  value:
+                                                      model.selectedBeatCount,
+                                                  elevation: 16,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                  onChanged: (int newValue) {
+                                                    model.setSelectedBeatCount(
+                                                        newValue);
+                                                  },
+                                                  items: <int>[
+                                                    1,
+                                                    2,
+                                                    3,
+                                                    4,
+                                                    5,
+                                                    6
+                                                  ].map<DropdownMenuItem<int>>(
+                                                      (int value) {
+                                                    return DropdownMenuItem<
+                                                            int>(
+                                                        value: value,
+                                                        child: Text(
+                                                            value.toString() +
+                                                                '小節'));
+                                                  }).toList(),
+                                                ))),
+                                        ElevatedButton(
+                                          child: const Text('追加',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          style: ElevatedButton.styleFrom(
+                                              primary: Colors.orange),
+                                          onPressed: () {
+                                            model.addEmptyList();
+                                          },
+                                        ),
+                                      ]),
+                                  ElevatedButton(
+                                    child: const Text('編集を終了',
                                         style: TextStyle(color: Colors.white)),
                                     style: ElevatedButton.styleFrom(
                                         primary: Colors.orange),
                                     onPressed: () {
-                                      model.addEmptyList();
+                                      FocusScope.of(context).unfocus();
+                                      model.closeKeyboard();
+                                      model.closeNormalKeyboard();
+                                      submitCodeList(docId);
                                     },
                                   ),
-                                ]),
-                            ElevatedButton(
-                              child: const Text('編集を終了',
-                                  style: TextStyle(color: Colors.white)),
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.orange),
-                              onPressed: () {
-                                model.closeKeyboard();
-                                submitCodeList(docId);
-                              },
-                            ),
-                          ],
-                        );
-                      })),
-                    ),
-                  ))),
-          //bottomSheet: CustomKeyboard(),
-        ));
+                                ],
+                              );
+                            })),
+                          ),
+                        ))),
+                //bottomSheet: CustomKeyboard(),
+              )),
+    );
   }
 }
 

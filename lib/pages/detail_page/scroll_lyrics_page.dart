@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import 'detail_edit_page.dart';
 
-class ScrollablePage extends StatefulWidget {
-  ScrollablePage(this.codeList, this.bpm, this.title, this.docId,
+class ScrollLyricsPage extends StatefulWidget {
+  ScrollLyricsPage(this.codeList, this.bpm, this.title, this.docId,
       this.separationList, this.rhythmList, this.lyricsList);
   final List<String> codeList;
   final int bpm;
@@ -17,17 +17,10 @@ class ScrollablePage extends StatefulWidget {
   final List<String> lyricsList;
 
   @override
-  _ScrollPageState createState() => _ScrollPageState();
+  _ScrollLyricsPageState createState() => _ScrollLyricsPageState();
 }
 
-class _ScrollPageState extends State<ScrollablePage> {
-  bool _lyricsDisplayed = false;
-  void _handleCheckbox(bool e) {
-    setState(() {
-      _lyricsDisplayed = e;
-    });
-  }
-
+class _ScrollLyricsPageState extends State<ScrollLyricsPage> {
   // コントローラ
   ScrollController _scrollController;
 
@@ -69,13 +62,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                 widget.rhythmList;
             Provider.of<EditingSongModel>(context, listen: false).lyricsList =
                 widget.lyricsList;
-            if (_lyricsDisplayed) {
-              Provider.of<EditingSongModel>(context, listen: false)
-                  .setDisplayType("both");
-            } else {
-              Provider.of<EditingSongModel>(context, listen: false)
-                  .setDisplayType("code");
-            }
+            Provider.of<EditingSongModel>(context, listen: false)
+                .setDisplayType("lyrics");
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -88,37 +76,25 @@ class _ScrollPageState extends State<ScrollablePage> {
               ),
             );
           },
-          child: Text("コードを編集する")));
-      bool noCode = true;
-      for (int i = 0; i < codeListState.length; i++) {
-        for (int j = 0; j < codeListState[i].length; j++) {
-          if (codeListState[i][j] != "") {
-            noCode = false;
-          }
+          child: Text("曲を編集する")));
+
+      bool noLyrics = true;
+      for (int listIndex = 0;
+          listIndex < widget.lyricsList.length;
+          listIndex++) {
+        if (widget.lyricsList[listIndex] != "") {
+          noLyrics = false;
         }
       }
-
-      if (noCode) {
+      if (noLyrics) {
         displayedList.add(Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-              Text('コードは追加されていません。'),
+              Text('歌詞は追加されていません。'),
             ])));
         return displayedList;
       }
-      displayedList.add(Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Checkbox(
-            activeColor: Colors.blue,
-            value: _lyricsDisplayed,
-            onChanged: _handleCheckbox,
-          ),
-          Text("歌詞も表示する")
-        ],
-      ));
-
       displayedList.add(TextButton(
           onPressed: () {
             _scrollController.animateTo(
@@ -127,9 +103,11 @@ class _ScrollPageState extends State<ScrollablePage> {
               duration: const Duration(milliseconds: 10000),
             );
           },
-          child: Text("スクロール")));
-      for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
-        List<Widget> list = [];
+          child: Text("歌詞をスクロール")));
+
+      for (int listIndex = 0;
+          listIndex < widget.lyricsList.length;
+          listIndex++) {
         if (widget.separationList.length != 0) {
           if (listIndex == 0) {
             displayedList.add(Text(widget.separationList[listIndex],
@@ -137,10 +115,6 @@ class _ScrollPageState extends State<ScrollablePage> {
                   color: Colors.white,
                   backgroundColor: Colors.black,
                 )));
-            if (_lyricsDisplayed) {
-              displayedList.add(Text(widget.lyricsList[listIndex]));
-            }
-            list.add(Text(widget.rhythmList[listIndex]));
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
@@ -149,84 +123,13 @@ class _ScrollPageState extends State<ScrollablePage> {
                     color: Colors.white,
                     backgroundColor: Colors.black,
                   )));
-            } else {
-              displayedList.add(Text(""));
-            }
-
-            if (_lyricsDisplayed) {
-              displayedList.add(Text(widget.lyricsList[listIndex]));
-            }
-
-            if (widget.rhythmList[listIndex] !=
-                widget.rhythmList[listIndex - 1]) {
-              list.add(Text(widget.rhythmList[listIndex]));
-            } else {
-              list.add(Padding(
-                padding: const EdgeInsets.only(left: 24.0),
-              ));
             }
           }
+          displayedList.add(Text(widget.lyricsList[listIndex],
+              style: TextStyle(
+                fontSize: 20,
+              )));
         }
-        for (var i = 0; i < codeListState[listIndex].length; i++) {
-          ///TODO 4 * codeListState[~].length => その行の拍数の合計に置き換え
-          int addedRowBeatCount = 0;
-          for (var j = 0; j < listIndex; j++) {
-            addedRowBeatCount += 4 * codeListState[j].length;
-          }
-
-          final int maxRowBeatCount =
-              addedRowBeatCount + 4 * codeListState[listIndex].length;
-
-          ///TODO 4 => そのTextFormのもつ拍数に置き換え
-          int addedColumnBeatCount = 0;
-          for (var j = 0; j < i; j++) {
-            addedColumnBeatCount += 4;
-          }
-
-          final int maxColumnBeatCount = addedColumnBeatCount + 4;
-
-          list.add(Flexible(
-            child: Selector<MetronomeModel, int>(
-              selector: (context, model) => model.metronomeContainerStatus,
-
-              ///shouldRebuildでnewStatus=カウントした値が色の変わるべき条件だったらリビルドする
-              ///カウントインをプレイ中はリビルドしない
-              shouldRebuild: (_, notifiedMetronomeContainerStatus) =>
-                  notifiedMetronomeContainerStatus == -1 ||
-                  (!Provider.of<MetronomeModel>(context, listen: false)
-                          .isCountInPlaying &&
-                      notifiedMetronomeContainerStatus >=
-                          addedRowBeatCount + addedColumnBeatCount &&
-                      notifiedMetronomeContainerStatus <=
-                          addedRowBeatCount + maxColumnBeatCount &&
-                      notifiedMetronomeContainerStatus <= maxRowBeatCount),
-              builder: (context, containerStatus, child) => Container(
-                  color: (!Provider.of<MetronomeModel>(context, listen: false)
-                              .isCountInPlaying &&
-                          Provider.of<MetronomeModel>(context, listen: false)
-                                  .metronomeContainerStatus >=
-                              addedRowBeatCount + addedColumnBeatCount &&
-                          Provider.of<MetronomeModel>(context, listen: false)
-                                  .metronomeContainerStatus <
-                              addedRowBeatCount + maxColumnBeatCount &&
-                          Provider.of<MetronomeModel>(context, listen: false)
-                                  .metronomeContainerStatus <
-                              maxRowBeatCount)
-                      ? Colors.amberAccent
-                      : Colors.transparent,
-                  child: child),
-              child: TextField(
-                enabled: false,
-                textAlign: TextAlign.center,
-                controller:
-                    TextEditingController(text: codeListState[listIndex][i]),
-              ),
-            ),
-          ));
-          list.add(Text("|"));
-        }
-
-        displayedList.add(Row(children: list));
       }
 
       displayedList.add(TextButton(
@@ -240,7 +143,7 @@ class _ScrollPageState extends State<ScrollablePage> {
       return displayedList;
     }
 
-    if (widget.codeList.length == 0) {
+    if (widget.lyricsList.length == 0) {
       return Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -269,8 +172,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                   ),
                 );
               },
-              child: Text("コードを編集する")),
-          Text("まだコードは追加されていません")
+              child: Text("曲を編集する")),
+          Text("まだ歌詞は追加されていません")
         ],
       ));
     } else {

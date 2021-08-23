@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../export_song.dart';
 import 'detail_bottom_bar.dart';
 import 'detail_page.dart';
+import 'lyrics_page.dart';
 import 'settings_drawer.dart';
 
 class TabInfo {
@@ -39,7 +40,7 @@ class TabView extends StatelessWidget {
               docId: docId)),
       TabInfo(
           "Lyrics",
-          DetailPage(
+          LyricsPage(
               bpm: bpm,
               title: title,
               artist: artist,

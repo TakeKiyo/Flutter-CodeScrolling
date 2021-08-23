@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/pages/detail_page/scrollable_page.dart';
+import 'package:my_app/pages/detail_page/scroll_lyrics_page.dart';
 
-class DetailPage extends StatelessWidget {
+class LyricsPage extends StatelessWidget {
   final int bpm;
   final String title;
   final String docId;
   final String artist;
   final String songKey;
 
-  DetailPage(
+  LyricsPage(
       {Key key, this.bpm, this.title, this.artist, this.songKey, this.docId})
       : super(key: key);
 
@@ -49,7 +49,7 @@ class DetailPage extends StatelessWidget {
               } else {
                 lyricsList = [];
               }
-              return ScrollablePage(codeList, bpm, title, docId, separation,
+              return ScrollLyricsPage(codeList, bpm, title, docId, separation,
                   rhythmList, lyricsList);
             }));
   }
