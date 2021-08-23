@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/metronome_model.dart';
@@ -89,75 +90,76 @@ class SongsList extends StatelessWidget {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             children: documents
-                                .map((doc) => TextButton(
-                                    onPressed: () {
-                                      print(doc["bpm"]);
-                                      Provider.of<MetronomeModel>(context,
-                                              listen: false)
-                                          .tempoCount = doc["bpm"];
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            var tempMap = doc.data() as Map;
-                                            String artist = "";
-                                            String songKey = "";
-                                            if (tempMap.containsKey("artist")) {
-                                              artist = tempMap["artist"];
-                                            }
-                                            if (tempMap.containsKey("key")) {
-                                              songKey = tempMap["key"];
-                                            }
-                                            return TabView(
-                                              bpm: doc["bpm"],
-                                              title: doc["title"],
-                                              artist: artist,
-                                              songKey: songKey,
-                                              docId: doc.id,
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 32.0),
-                                            child: Text(
-                                              doc["title"],
-                                              textAlign: TextAlign.center,
-                                            ),
+                                .map((doc) => Slidable(
+                                    actionExtentRatio: 0.2,
+                                    actionPane: SlidableScrollActionPane(),
+                                    secondaryActions: [
+                                      IconSlideAction(
+                                        caption: '削除',
+                                        color: Colors.red,
+                                        icon: Icons.remove,
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (_) =>
+                                                  CupertinoAlertDialog(
+                                                    title: Text("確認"),
+                                                    content: Text(
+                                                        "${doc["title"]}を削除してもよいですか？"),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        child: Text("キャンセル"),
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                      ),
+                                                      TextButton(
+                                                        child: Text("OK"),
+                                                        onPressed: () =>
+                                                            deleteButtonClicked(
+                                                                doc.id),
+                                                      ),
+                                                    ],
+                                                  ));
+                                        },
+                                      ),
+                                    ],
+                                    child: TextButton(
+                                      onPressed: () {
+                                        print(doc["bpm"]);
+                                        Provider.of<MetronomeModel>(context,
+                                                listen: false)
+                                            .tempoCount = doc["bpm"];
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              var tempMap = doc.data() as Map;
+                                              String artist = "";
+                                              String songKey = "";
+                                              if (tempMap
+                                                  .containsKey("artist")) {
+                                                artist = tempMap["artist"];
+                                              }
+                                              if (tempMap.containsKey("key")) {
+                                                songKey = tempMap["key"];
+                                              }
+                                              return TabView(
+                                                bpm: doc["bpm"],
+                                                title: doc["title"],
+                                                artist: artist,
+                                                songKey: songKey,
+                                                docId: doc.id,
+                                              );
+                                            },
                                           ),
+                                        );
+                                      },
+                                      child: Container(
+                                        child: ListTile(
+                                          title:
+                                              Center(child: Text(doc["title"])),
                                         ),
-                                        IconButton(
-                                            icon: Icon(Icons.delete),
-                                            onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (_) =>
-                                                      CupertinoAlertDialog(
-                                                        title: Text("確認"),
-                                                        content: Text(
-                                                            "${doc["title"]}を削除してもよいですか？"),
-                                                        actions: <Widget>[
-                                                          TextButton(
-                                                            child:
-                                                                Text("キャンセル"),
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    context),
-                                                          ),
-                                                          TextButton(
-                                                            child: Text("OK"),
-                                                            onPressed: () =>
-                                                                deleteButtonClicked(
-                                                                    doc.id),
-                                                          ),
-                                                        ],
-                                                      ));
-                                            }),
-                                      ],
+                                      ),
                                     )))
                                 .toList()))));
           }
