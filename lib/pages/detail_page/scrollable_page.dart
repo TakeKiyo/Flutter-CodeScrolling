@@ -69,6 +69,13 @@ class _ScrollPageState extends State<ScrollablePage> {
                 widget.rhythmList;
             Provider.of<EditingSongModel>(context, listen: false).lyricsList =
                 widget.lyricsList;
+            if (_lyricsDisplayed) {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .setDisplayType("both");
+            } else {
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .setDisplayType("code");
+            }
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {

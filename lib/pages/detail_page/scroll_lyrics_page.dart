@@ -62,6 +62,8 @@ class _ScrollLyricsPageState extends State<ScrollLyricsPage> {
                 widget.rhythmList;
             Provider.of<EditingSongModel>(context, listen: false).lyricsList =
                 widget.lyricsList;
+            Provider.of<EditingSongModel>(context, listen: false)
+                .setDisplayType("lyrics");
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
