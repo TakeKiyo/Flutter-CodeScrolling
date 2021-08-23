@@ -33,13 +33,23 @@ class MetronomeModel extends ChangeNotifier {
 
   AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY)
     ..setReleaseMode(ReleaseMode.STOP);
-  AudioCache _metronomePlayer;
-  String _metronomeSound = "sounds/Metronome.wav";
-  List<String> _metronomeSoundList = [
-    "sounds/Metronome.wav",
-    "sounds/ClickLayer808.wav",
-    "sounds/Woodblock5.wav",
+  AudioCache _metronomePlayer = AudioCache(
+      fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY)
+        ..setReleaseMode(ReleaseMode.STOP));
+  String _metronomeSound = "sounds/Metronome.mp3";
+  final List<String> _metronomeSoundsList = [
+    "sounds/Metronome.mp3",
+    "sounds/Click.mp3",
+    "sounds/WoodBlock.mp3",
   ];
+  get metronomeSound => _metronomeSound;
+  get metronomeSoundsList => _metronomeSoundsList;
+
+  set metronomeSound(int selectedIndex) {
+    _metronomeSound = _metronomeSoundsList[selectedIndex];
+    notifyListeners();
+  }
+
   Metronome _metronomeTimer;
   StreamSubscription<DateTime> _metronomeSubscription;
 
@@ -75,13 +85,6 @@ class MetronomeModel extends ChangeNotifier {
         _codeNumList.add(fetchedCodeList[listIndex].length);
       }
     }
-  }
-
-  get metronomeSound => _metronomeSound;
-  get metronomeSoundList => _metronomeSoundList;
-
-  set metronomeSound(int index) {
-    _metronomeSound = _metronomeSoundList[index];
   }
 
   Color _metronomeContainerColor;
@@ -202,13 +205,12 @@ class MetronomeModel extends ChangeNotifier {
     metronomeClear();
     _isPlaying = false;
     _metronomeContainerStatus = -1;
-    _metronomePlayer?.clear(_metronomeSound);
+    _metronomePlayer?.clearCache();
     notifyListeners();
   }
 
   void metronomeLoad() async {
-    _metronomePlayer = AudioCache(fixedPlayer: _audioPlayer);
-    await _metronomePlayer.load(_metronomeSound);
+    await _metronomePlayer.loadAll(_metronomeSoundsList);
     _isCountInPlaying = true;
     notifyListeners();
     metronomeStart();

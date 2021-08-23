@@ -68,12 +68,10 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   assets:
-    - assets/sounds/ClickLayer808.wav
-    - assets/sounds/ClickLayer808Up.wav
-    - assets/sounds/Metronome.wav
-    - assets/sounds/MetronomeUp.wav
-    - assets/sounds/Woodblock5.wav
-    - assets/sounds/Woodblock5Up.wav
+    - assets/sounds/Click.mp3
+    - assets/sounds/Metronome.mp3
+    - assets/sounds/MetronomeUp.mp3
+    - assets/sounds/WoodBlock.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
