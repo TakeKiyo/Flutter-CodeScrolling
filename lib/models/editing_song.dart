@@ -129,7 +129,7 @@ class EditingSongModel extends ChangeNotifier {
 
   void openKeyboard() {
     _keyboardIsOpening = true;
-    changeKeyboardPadding();
+    _keyboardBottomSpace = 350;
     notifyListeners();
   }
 
@@ -147,16 +147,8 @@ class EditingSongModel extends ChangeNotifier {
 
   void closeKeyboard() {
     _keyboardIsOpening = false;
-    changeKeyboardPadding();
+    _keyboardBottomSpace = 0;
     notifyListeners();
-  }
-
-  void changeKeyboardPadding() {
-    if (_keyboardIsOpening) {
-      _keyboardBottomSpace = 300;
-    } else {
-      _keyboardBottomSpace = 0;
-    }
   }
 
   void changeTextController(TextEditingController controller) {

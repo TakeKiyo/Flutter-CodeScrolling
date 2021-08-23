@@ -94,7 +94,7 @@ Material detailBottomBar(BuildContext context) {
                               .then((_) => Navigator.of(context).pop());
                         } else
                           Provider.of<MetronomeModel>(context, listen: false)
-                              .metronomePlay();
+                              .metronomeStart();
                       },
                     )
                   : IconButton(

@@ -50,16 +50,33 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 color: Colors.white,
               ),
             ),
-            ListTile(
-                tileColor: Theme.of(context).primaryColorDark,
-                title: Consumer<MetronomeModel>(builder: (_, model, __) {
-                  return Text(model.metronomeSound,
-                      style: TextStyle(color: Colors.white));
-                }),
-                onTap: () {
-                  print("Metronome Sound");
-                  //TODO
-                }),
+            ButtonTheme(
+                alignedDropdown: true,
+                child: Consumer<MetronomeModel>(builder: (_, model, __) {
+                  return Container(
+                      color: Theme.of(context).primaryColorDark,
+                      child: DropdownButton<int>(
+                        isExpanded: true,
+                        dropdownColor: Theme.of(context).primaryColorDark,
+                        value: model.metronomeSoundsList
+                            .indexOf(model.metronomeSound),
+                        elevation: 16,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        onChanged: (int newValue) {
+                          model.metronomeSound = newValue;
+                        },
+                        items: <int>[0, 1, 2]
+                            .map<DropdownMenuItem<int>>((int value) {
+                          return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(model.metronomeSoundsList[value]
+                                  .replaceAll("sounds/", "")
+                                  .replaceAll(".mp3", "")));
+                        }).toList(),
+                      ));
+                })),
             insertPadding,
             Text(
               "カウントイン",

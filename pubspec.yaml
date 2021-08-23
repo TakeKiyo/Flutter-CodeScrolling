@@ -44,6 +44,8 @@ dependencies:
   qr_code_scanner: ^0.5.2
   permission_handler: ^8.1.4+2
 
+  quiver: ^3.0.1
+
   flutter_slidable: ^0.6.0
 
 dev_dependencies:
@@ -68,7 +70,10 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   assets:
-    - assets/metronome_digital1.wav
+    - assets/sounds/Click.mp3
+    - assets/sounds/Metronome.mp3
+    - assets/sounds/MetronomeUp.mp3
+    - assets/sounds/WoodBlock.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
