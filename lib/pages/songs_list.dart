@@ -183,7 +183,8 @@ class _SongsListState extends State<SongsListForm> {
                   controller: _scrollController,
                   child: Column(children: <Widget>[
                     Padding(
-                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                        padding:
+                            EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
                         child: TextField(
                           controller: _textEditingController,
                           onChanged: (text) {
