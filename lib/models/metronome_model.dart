@@ -72,7 +72,6 @@ class MetronomeModel extends ChangeNotifier {
         }
       }
     }
-    print(_rhythmNumList);
   }
 
   Color _metronomeContainerColor;

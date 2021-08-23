@@ -173,7 +173,7 @@ class _ScrollPageState extends State<ScrollablePage> {
 
         int eachBeatCount(int index) {
           return Provider.of<MetronomeModel>(context, listen: false)
-              ?.rhythmNumList[index];
+              .rhythmNumList[index];
         }
 
         for (var i = 0; i < codeListState[listIndex].length; i++) {
