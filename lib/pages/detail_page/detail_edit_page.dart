@@ -96,6 +96,7 @@ class DetailEditPage extends StatelessWidget {
                       .keyboardIsOpening) {
                     Provider.of<EditingSongModel>(context, listen: false)
                         .closeKeyboard();
+                    Navigator.of(context).pop();
                   }
                   Provider.of<EditingSongModel>(context, listen: false)
                       .openNormalKeyboard();
@@ -299,8 +300,19 @@ class DetailEditPage extends StatelessWidget {
           builder: (context) => GestureDetector(
                 onTap: () => {
                   FocusScope.of(context).unfocus(),
-                  Provider.of<EditingSongModel>(context, listen: false)
-                      .closeNormalKeyboard(),
+                  if (Provider.of<EditingSongModel>(context, listen: false)
+                      .normalKeyboardIsOpen)
+                    {
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .closeNormalKeyboard()
+                    },
+                  if (Provider.of<EditingSongModel>(context, listen: false)
+                      .keyboardIsOpening)
+                    {
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .closeKeyboard(),
+                      Navigator.of(context).pop(),
+                    }
                 },
                 child: Container(
                     child: Scrollbar(
