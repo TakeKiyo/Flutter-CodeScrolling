@@ -40,8 +40,22 @@ class SongsListForm extends StatefulWidget {
 }
 
 class _SongsListState extends State<SongsListForm> {
-  String searchText = "";
   List<Widget> songsList = [];
+  String searchText = "";
+  TextEditingController _textEditingController;
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = new TextEditingController(text: ''); // <- こんな感じ
+  }
+
   @override
   Widget build(BuildContext context) {
     void deleteButtonClicked(String docId) async {
@@ -163,17 +177,29 @@ class _SongsListState extends State<SongsListForm> {
           });
 
           return Column(children: <Widget>[
-            TextField(
-              onChanged: (text) {
-                searchText = text;
-                setState(() {
-                  searchText = text;
-                });
-              },
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
+            Padding(
+                padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                child: TextField(
+                  controller: _textEditingController,
+                  onChanged: (text) {
+                    setState(() {
+                      searchText = text;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    hintText: "曲名を検索する",
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        _textEditingController.clear();
+                        setState(() {
+                          searchText = "";
+                        });
+                      },
+                      icon: Icon(Icons.clear),
+                    ),
+                  ),
+                )),
             Container(
                 child: Scrollbar(
                     isAlwaysShown: true,
