@@ -309,10 +309,18 @@ class DetailEditPage extends StatelessWidget {
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
-              Provider.of<EditingSongModel>(context, listen: false)
-                  .closeKeyboard();
-              Provider.of<EditingSongModel>(context, listen: false)
-                  .closeNormalKeyboard();
+              if (Provider.of<EditingSongModel>(context, listen: false)
+                  .keyboardIsOpening) {
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .closeKeyboard();
+                Navigator.of(context).pop();
+              }
+              if (Provider.of<EditingSongModel>(context, listen: false)
+                  .normalKeyboardIsOpen) {
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .closeNormalKeyboard();
+                FocusScope.of(context).unfocus();
+              }
               Navigator.of(context).pop();
             }),
         title: Text("編集ページ"),
@@ -485,9 +493,18 @@ class DetailEditPage extends StatelessWidget {
                                     style: ElevatedButton.styleFrom(
                                         primary: Colors.orange),
                                     onPressed: () {
-                                      FocusScope.of(context).unfocus();
-                                      model.closeKeyboard();
-                                      model.closeNormalKeyboard();
+                                      if (Provider.of<EditingSongModel>(context,
+                                              listen: false)
+                                          .normalKeyboardIsOpen) {
+                                        FocusScope.of(context).unfocus();
+                                        model.closeNormalKeyboard();
+                                      }
+                                      if (Provider.of<EditingSongModel>(context,
+                                              listen: false)
+                                          .keyboardIsOpening) {
+                                        model.closeKeyboard();
+                                        Navigator.of(context).pop();
+                                      }
                                       submitCodeList(docId);
                                     },
                                   ),
