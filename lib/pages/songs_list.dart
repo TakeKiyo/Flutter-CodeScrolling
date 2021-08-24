@@ -43,6 +43,7 @@ class _SongsListState extends State<SongsListForm> {
   List<Widget> songsList = [];
   String searchText = "";
   TextEditingController _textEditingController;
+  final SlidableController slidableController = SlidableController();
 
   @override
   void dispose() {
@@ -111,6 +112,7 @@ class _SongsListState extends State<SongsListForm> {
             if (searchText == "" ||
                 doc["title"].toString().contains(searchText)) {
               songsList.add(Slidable(
+                  controller: slidableController,
                   actionExtentRatio: 0.2,
                   actionPane: SlidableScrollActionPane(),
                   secondaryActions: [
