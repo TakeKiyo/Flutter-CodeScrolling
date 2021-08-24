@@ -20,12 +20,13 @@ class LyricsPage extends StatefulWidget {
 }
 
 class _ScrollLyricsPageState extends State<LyricsPage> {
-  final _isScrolling = false;
+  bool _isScrolling;
   ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _isScrolling = false;
     _scrollController = ScrollController();
   }
 
@@ -33,6 +34,46 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
   void dispose() {
     _scrollController.dispose(); // dispose the controller
     super.dispose();
+  }
+
+  Positioned scrollButton() {
+    if (_isScrolling) {
+      return Positioned(
+          bottom: 20.0,
+          right: 20.0,
+          width: 70.0,
+          height: 70.0,
+          child: FloatingActionButton(
+              backgroundColor: Colors.deepOrange[800],
+              child: Icon(Icons.stop),
+              onPressed: () {
+                setState(() {
+                  _isScrolling = false;
+                });
+                _scrollController.jumpTo(_scrollController.offset);
+              }));
+    }
+    return Positioned(
+        bottom: 20.0,
+        right: 20.0,
+        width: 70.0,
+        height: 70.0,
+        child: FloatingActionButton(
+            backgroundColor: Colors.deepOrange[800],
+            child: Icon(Icons.arrow_downward),
+            onPressed: () {
+              setState(() {
+                _isScrolling = true;
+              });
+              _scrollController.animateTo(
+                _scrollController.position.maxScrollExtent,
+                curve: Curves.easeOut,
+                duration: Duration(
+                    milliseconds:
+                        Provider.of<EditingSongModel>(context, listen: false)
+                            .scrollSpeed),
+              );
+            }));
   }
 
   @override
@@ -166,16 +207,6 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                           ])));
                       return displayedList;
                     }
-                    displayedList.add(TextButton(
-                        onPressed: () {
-                          _scrollController.animateTo(
-                            _scrollController.position.maxScrollExtent,
-                            curve: Curves.easeOut,
-                            duration: const Duration(milliseconds: 10000),
-                          );
-                        },
-                        child: Text("歌詞をスクロール")));
-
                     for (int listIndex = 0;
                         listIndex < lyricsList.length;
                         listIndex++) {
@@ -228,24 +259,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                               ))));
                 }
               })),
-      Positioned(
-          bottom: 20.0,
-          right: 20.0,
-          width: 70.0,
-          height: 70.0,
-          child: FloatingActionButton(
-              backgroundColor: Colors.deepOrange[800],
-              child: Icon(Icons.arrow_downward),
-              onPressed: () {
-                _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent,
-                  curve: Curves.easeOut,
-                  duration: Duration(
-                      milliseconds:
-                          Provider.of<EditingSongModel>(context, listen: false)
-                              .scrollSpeed),
-                );
-              }))
+      scrollButton()
     ]);
   }
 }
