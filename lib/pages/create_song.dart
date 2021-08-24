@@ -160,120 +160,122 @@ class _CreateSongFormState extends State<CreateSongForm> {
   ];
 
   Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-            child: Container(
-          padding: const EdgeInsets.only(left: 30, right: 30),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) {
-                            return ImportSong();
-                          }),
-                        );
-                      },
-                      child: Text('友だちの曲の追加はこちら'))),
-              Text(
-                "曲名",
-                style: TextStyle(
-                  color: Colors.blueAccent,
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextFormField(
-                cursorColor: Colors.black,
-                onChanged: _handleTitle,
-                // ignore: missing_return
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return '曲名を入力してください。';
-                  }
-                },
-              ),
-              Text(
-                "アーティスト",
-                style: TextStyle(
-                  color: Colors.blueAccent,
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextFormField(
-                cursorColor: Colors.black,
-                onChanged: _handleArtist,
-                // ignore: missing_return
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'アーティストを入力してください。';
-                  }
-                },
-              ),
-              Padding(
-                  padding: EdgeInsets.only(top: 25.0),
-                  child: Text(
-                    "BPM: $_bpm",
+    return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+                child: Container(
+              padding: const EdgeInsets.only(left: 30, right: 30),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return ImportSong();
+                              }),
+                            );
+                          },
+                          child: Text('友だちの曲の追加はこちら'))),
+                  Text(
+                    "曲名",
                     style: TextStyle(
                       color: Colors.blueAccent,
                       fontSize: 30.0,
                       fontWeight: FontWeight.bold,
                     ),
-                  )),
-              Text(
-                "いつでも変更可能です",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Slider(
-                activeColor: Colors.black,
-                inactiveColor: Theme.of(context).primaryColorDark,
-                label: null,
-                value: _bpm.toDouble(),
-                divisions: 270,
-                min: 30,
-                max: 300,
-                onChanged: _handleBpm,
-              ),
-              Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: Text(
-                    "キー $_key",
+                  ),
+                  TextFormField(
+                    cursorColor: Colors.black,
+                    onChanged: _handleTitle,
+                    // ignore: missing_return
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '曲名を入力してください。';
+                      }
+                    },
+                  ),
+                  Text(
+                    "アーティスト",
                     style: TextStyle(
                       color: Colors.blueAccent,
                       fontSize: 30.0,
                       fontWeight: FontWeight.bold,
                     ),
-                  )),
-              ElevatedButton(
-                child:
-                    const Text('キーを選択', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(primary: Colors.orange),
-                onPressed: () {
-                  _showModalPicker(context);
-                },
-              ),
-              Padding(
-                  padding: EdgeInsets.only(top: 25.0),
-                  child: ElevatedButton(
-                    child: const Text('曲を追加',
+                  ),
+                  TextFormField(
+                    cursorColor: Colors.black,
+                    onChanged: _handleArtist,
+                    // ignore: missing_return
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'アーティストを入力してください。';
+                      }
+                    },
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 25.0),
+                      child: Text(
+                        "BPM: $_bpm",
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  Text(
+                    "いつでも変更可能です",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Slider(
+                    activeColor: Colors.black,
+                    inactiveColor: Theme.of(context).primaryColorDark,
+                    label: null,
+                    value: _bpm.toDouble(),
+                    divisions: 270,
+                    min: 30,
+                    max: 300,
+                    onChanged: _handleBpm,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "キー $_key",
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  ElevatedButton(
+                    child: const Text('キーを選択',
                         style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(primary: Colors.orange),
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        createButtonClicked();
-                      }
+                      _showModalPicker(context);
                     },
-                  )),
-            ],
-          ),
-        )));
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 25.0),
+                      child: ElevatedButton(
+                        child: const Text('曲を追加',
+                            style: TextStyle(color: Colors.white)),
+                        style: ElevatedButton.styleFrom(primary: Colors.orange),
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            createButtonClicked();
+                          }
+                        },
+                      )),
+                ],
+              ),
+            ))));
   }
 }
