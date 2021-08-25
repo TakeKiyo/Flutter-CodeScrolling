@@ -116,8 +116,22 @@ class EditingSongModel extends ChangeNotifier {
     _codeList[barIdx][timeIdx] = code;
   }
 
-  int _scrollSpeed = 1000;
+  int _scrollSpeed = 30000;
   get scrollSpeed => _scrollSpeed;
+  void setScrollSpeedUp() {
+    if (_scrollSpeed >= 4000) {
+      _scrollSpeed -= 2000;
+    }
+    print(_scrollSpeed);
+    notifyListeners();
+  }
+
+  void setScrollSpeedDown() {
+    print(_scrollSpeed);
+    _scrollSpeed += 2000;
+    print(_scrollSpeed);
+    notifyListeners();
+  }
 
   ///detail_edit_pageでTextFieldをTapする度に対応したTextEditingControllerを代入する
   TextEditingController controller;
