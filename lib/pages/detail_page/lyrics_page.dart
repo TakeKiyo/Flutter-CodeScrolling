@@ -274,6 +274,18 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                                   listen: false)
                               .scrollSpeed),
                     );
+                  } else {
+                    setState(() {
+                      _isScrolling = true;
+                    });
+                    _scrollController.animateTo(
+                      _scrollController.position.maxScrollExtent,
+                      curve: Curves.easeOut,
+                      duration: Duration(
+                          milliseconds: Provider.of<EditingSongModel>(context,
+                                  listen: false)
+                              .scrollSpeed),
+                    );
                   }
                 })),
         Positioned(
@@ -298,6 +310,17 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                                   listen: false)
                               .scrollSpeed),
                     );
+                  } else {
+                    setState(() {
+                      _isScrolling = true;
+                    });
+                    _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        curve: Curves.easeOut,
+                        duration: Duration(
+                            milliseconds: Provider.of<EditingSongModel>(context,
+                                    listen: false)
+                                .scrollSpeed));
                   }
                 })),
       ],
