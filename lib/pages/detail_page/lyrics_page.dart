@@ -255,7 +255,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
         Positioned(
             //スピードダウンボタン
             bottom: 30.0,
-            right: 90.0,
+            right: 110.0,
             width: 60.0,
             height: 60.0,
             child: FloatingActionButton(
@@ -291,7 +291,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
         Positioned(
             //スピードアップボタン
             bottom: 30.0,
-            right: 20.0,
+            right: 30.0,
             width: 60.0,
             height: 60.0,
             child: FloatingActionButton(
