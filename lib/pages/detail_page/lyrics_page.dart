@@ -127,6 +127,8 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
 
                         List<Widget> displayedWidget() {
                           List<Widget> displayedList = [];
+                          displayedList.add(
+                              Center(child: Text('画面をタップするとスクロールが開始します。')));
                           displayedList.add(TextButton(
                               onPressed: () {
                                 Provider.of<MetronomeModel>(context,
