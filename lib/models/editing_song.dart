@@ -118,15 +118,8 @@ class EditingSongModel extends ChangeNotifier {
 
   int _scrollSpeed = 30000;
   get scrollSpeed => _scrollSpeed;
-  void setScrollSpeedUp() {
-    if (_scrollSpeed >= 4000) {
-      _scrollSpeed -= 2000;
-    }
-    notifyListeners();
-  }
-
-  void setScrollSpeedDown() {
-    _scrollSpeed += 2000;
+  void setScrollSpeed(double newSpeed) {
+    _scrollSpeed = ((61 - newSpeed) * 1000).toInt();
     notifyListeners();
   }
 
