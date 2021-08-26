@@ -264,7 +264,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
         Positioned(
             bottom: 20.0,
             left: 25.0,
-            right: 30.0,
+            right: 35.0,
             child: Slider(
               value: _scrollSpeed,
               min: 0.0,
