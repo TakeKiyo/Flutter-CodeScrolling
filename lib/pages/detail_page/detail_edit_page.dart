@@ -326,7 +326,7 @@ class DetailEditPage extends StatelessWidget {
         title: Text("編集ページ"),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.mode_edit),
+              icon: Icon(Icons.view_headline),
               onPressed: () {
                 showDisplayTypeDialog();
               }),
