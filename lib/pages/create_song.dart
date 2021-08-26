@@ -16,8 +16,8 @@ class CreateSong extends StatelessWidget {
         ),
         body: Center(child: CreateSongForm()),
         floatingActionButton: Container(
-            width: 80.0,
-            height: 80.0,
+            width: 70.0,
+            height: 70.0,
             child: FloatingActionButton(
               onPressed: () {
                 Navigator.of(context).push(
@@ -28,7 +28,7 @@ class CreateSong extends StatelessWidget {
               },
               child: const Icon(
                 Icons.qr_code_scanner_rounded,
-                size: 40.0,
+                size: 30.0,
               ),
               backgroundColor: Colors.green,
             )));

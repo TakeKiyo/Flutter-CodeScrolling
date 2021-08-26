@@ -21,8 +21,8 @@ class SongsList extends StatelessWidget {
         ),
         body: SongsListForm(),
         floatingActionButton: Container(
-            width: 80.0,
-            height: 80.0,
+            width: 70.0,
+            height: 70.0,
             child: FloatingActionButton(
               onPressed: () {
                 Navigator.of(context).push(
