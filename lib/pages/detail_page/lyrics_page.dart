@@ -123,6 +123,33 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
           List<Widget> displayedWidget() {
             List<Widget> displayedList = [];
             displayedList.add(Center(child: Text('画面をタップするとスクロールが開始します。')));
+            displayedList.add(TextButton(
+                onPressed: () {
+                  Provider.of<MetronomeModel>(context, listen: false)
+                      .tempoCount = widget.bpm;
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .codeList = codeList;
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .separationList = separation;
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .rhythmList = rhythmList;
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .lyricsList = lyricsList;
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .setDisplayType("lyrics");
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return DetailEditPage(
+                          bpm: widget.bpm,
+                          title: widget.title,
+                          docId: widget.docId,
+                        );
+                      },
+                    ),
+                  );
+                },
+                child: Text("曲を編集する")));
             bool noLyrics = true;
             for (int listIndex = 0;
                 listIndex < lyricsList.length;
@@ -252,44 +279,6 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                   semanticsLabel: 'rabbit',
                   width: 30.0,
                 )),
-            Positioned(
-                bottom: 90.0,
-                right: 15.0,
-                child: Container(
-                    width: 60.0,
-                    height: 60.0,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        Provider.of<MetronomeModel>(context, listen: false)
-                            .tempoCount = widget.bpm;
-                        Provider.of<EditingSongModel>(context, listen: false)
-                            .codeList = codeList;
-                        Provider.of<EditingSongModel>(context, listen: false)
-                            .separationList = separation;
-                        Provider.of<EditingSongModel>(context, listen: false)
-                            .rhythmList = rhythmList;
-                        Provider.of<EditingSongModel>(context, listen: false)
-                            .lyricsList = lyricsList;
-                        Provider.of<EditingSongModel>(context, listen: false)
-                            .setDisplayType("lyrics");
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return DetailEditPage(
-                                bpm: widget.bpm,
-                                title: widget.title,
-                                docId: widget.docId,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.edit,
-                        size: 30.0,
-                      ),
-                      backgroundColor: Colors.green,
-                    ))),
           ]);
         }
       },
