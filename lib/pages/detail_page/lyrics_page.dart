@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,11 @@ class LyricsPage extends StatefulWidget {
 class _ScrollLyricsPageState extends State<LyricsPage> {
   bool _isScrolling;
   ScrollController _scrollController;
+
+  double _scrollSpeed = 30.0;
+
+  final String turtleIcon = 'assets/icons/turtle.svg';
+  final String rabbitIcon = 'assets/icons/easter-bunny.svg';
 
   @override
   void initState() {
@@ -206,13 +212,6 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                                   )));
                             }
                           }
-                          displayedList.add(TextButton(
-                              onPressed: () {
-                                _scrollController.jumpTo(
-                                  0.0,
-                                );
-                              },
-                              child: Text("上まで戻る")));
 
                           return displayedList;
                         }
@@ -255,76 +254,51 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
             }),
         // scrollButton()
         Positioned(
-            //スピードダウンボタン
-            bottom: 30.0,
-            right: 110.0,
-            width: 60.0,
-            height: 60.0,
-            child: FloatingActionButton(
-                backgroundColor: Colors.deepOrange[800],
-                child: Icon(Icons.fast_rewind),
-                onPressed: () {
-                  if (_isScrolling == true) {
-                    _scrollController.jumpTo(_scrollController.offset);
-                    Provider.of<EditingSongModel>(context, listen: false)
-                        .setScrollSpeedDown();
-                    _scrollController.animateTo(
-                      _scrollController.position.maxScrollExtent,
-                      curve: Curves.easeOut,
-                      duration: Duration(
-                          milliseconds: Provider.of<EditingSongModel>(context,
-                                  listen: false)
-                              .scrollSpeed),
-                    );
-                  } else {
-                    setState(() {
-                      _isScrolling = true;
-                    });
-                    _scrollController.animateTo(
-                      _scrollController.position.maxScrollExtent,
-                      curve: Curves.easeOut,
-                      duration: Duration(
-                          milliseconds: Provider.of<EditingSongModel>(context,
-                                  listen: false)
-                              .scrollSpeed),
-                    );
-                  }
-                })),
+            bottom: 40.0,
+            left: 10.0,
+            child: SvgPicture.asset(
+              turtleIcon,
+              semanticsLabel: 'turtle',
+              width: 30.0,
+            )),
         Positioned(
-            //スピードアップボタン
             bottom: 30.0,
+            left: 25.0,
             right: 30.0,
-            width: 60.0,
-            height: 60.0,
-            child: FloatingActionButton(
-                backgroundColor: Colors.deepOrange[800],
-                child: Icon(Icons.fast_forward),
-                onPressed: () {
-                  if (_isScrolling == true) {
-                    _scrollController.jumpTo(_scrollController.offset);
-                    Provider.of<EditingSongModel>(context, listen: false)
-                        .setScrollSpeedUp();
-                    _scrollController.animateTo(
-                      _scrollController.position.maxScrollExtent,
-                      curve: Curves.easeOut,
-                      duration: Duration(
-                          milliseconds: Provider.of<EditingSongModel>(context,
-                                  listen: false)
-                              .scrollSpeed),
-                    );
-                  } else {
-                    setState(() {
-                      _isScrolling = true;
-                    });
-                    _scrollController.animateTo(
-                        _scrollController.position.maxScrollExtent,
-                        curve: Curves.easeOut,
-                        duration: Duration(
-                            milliseconds: Provider.of<EditingSongModel>(context,
-                                    listen: false)
-                                .scrollSpeed));
-                  }
-                })),
+            child: Slider(
+              value: _scrollSpeed,
+              min: 0.0,
+              max: 60.0,
+              divisions: 60,
+              onChanged: (double value) {
+                setState(() {
+                  _scrollSpeed = value;
+                });
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .setScrollSpeed(_scrollSpeed);
+              },
+              onChangeEnd: (double value) {
+                if (_isScrolling == true) {
+                  _scrollController.jumpTo(_scrollController.offset);
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    curve: Curves.easeOut,
+                    duration: Duration(
+                        milliseconds: Provider.of<EditingSongModel>(context,
+                                listen: false)
+                            .scrollSpeed),
+                  );
+                }
+              },
+            )),
+        Positioned(
+            bottom: 42.0,
+            right: 15.0,
+            child: SvgPicture.asset(
+              rabbitIcon,
+              semanticsLabel: 'rabbit',
+              width: 30.0,
+            )),
       ],
     );
   }
