@@ -9,29 +9,13 @@ class CreateSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('曲追加ページ'),
-          actions: [],
-        ),
-        body: Center(child: CreateSongForm()),
-        floatingActionButton: Container(
-            width: 70.0,
-            height: 70.0,
-            child: FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) {
-                    return ImportSong();
-                  }),
-                );
-              },
-              child: const Icon(
-                Icons.qr_code_scanner_rounded,
-                size: 30.0,
-              ),
-              backgroundColor: Colors.green,
-            )));
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('曲追加ページ'),
+        actions: [],
+      ),
+      body: Center(child: CreateSongForm()),
+    );
   }
 }
 
@@ -185,6 +169,17 @@ class _CreateSongFormState extends State<CreateSongForm> {
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: Column(
                 children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return ImportSong();
+                              }),
+                            );
+                          },
+                          child: Text('友だちの曲の追加はこちら'))),
                   Text(
                     "曲名",
                     style: TextStyle(
