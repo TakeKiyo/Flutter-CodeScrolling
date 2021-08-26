@@ -254,7 +254,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
             }),
         // scrollButton()
         Positioned(
-            bottom: 40.0,
+            bottom: 30.0,
             left: 10.0,
             child: SvgPicture.asset(
               turtleIcon,
@@ -262,7 +262,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
               width: 30.0,
             )),
         Positioned(
-            bottom: 30.0,
+            bottom: 20.0,
             left: 25.0,
             right: 30.0,
             child: Slider(
@@ -292,7 +292,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
               },
             )),
         Positioned(
-            bottom: 42.0,
+            bottom: 32.0,
             right: 15.0,
             child: SvgPicture.asset(
               rabbitIcon,
