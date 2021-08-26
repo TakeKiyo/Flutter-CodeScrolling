@@ -331,8 +331,8 @@ class DetailEditPage extends StatelessWidget {
                 showDisplayTypeDialog();
               }),
           TextButton(
-            child: Text("編集を終了",
-                style: TextStyle(color: Colors.white, fontSize: 14)),
+            child:
+                Text("完了", style: TextStyle(color: Colors.white, fontSize: 18)),
             onPressed: () {
               if (Provider.of<EditingSongModel>(context, listen: false)
                   .normalKeyboardIsOpen) {
