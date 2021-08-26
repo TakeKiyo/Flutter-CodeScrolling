@@ -17,20 +17,26 @@ class SongsList extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text('曲一覧'),
-          actions: [
-            IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  //addボタンを押したら反応
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return CreateSong();
-                    }),
-                  );
-                }),
-          ],
+          actions: [],
         ),
-        body: SongsListForm());
+        body: SongsListForm(),
+        floatingActionButton: Container(
+            width: 80.0,
+            height: 80.0,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return CreateSong();
+                  }),
+                );
+              },
+              child: const Icon(
+                Icons.add,
+                size: 40.0,
+              ),
+              backgroundColor: Colors.green,
+            )));
   }
 }
 
