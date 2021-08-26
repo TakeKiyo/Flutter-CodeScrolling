@@ -165,6 +165,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                     )));
               }
             }
+            displayedList.add(Padding(padding: EdgeInsets.only(bottom: 20)));
 
             return displayedList;
           }
