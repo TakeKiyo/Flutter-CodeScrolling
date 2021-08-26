@@ -35,6 +35,9 @@ class _ScrollPageState extends State<ScrollablePage> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    Provider.of<MetronomeModel>(context, listen: false).setMaxTickList(-1);
+    Provider.of<MetronomeModel>(context, listen: false).scrollController =
+        _scrollController;
   }
 
   @override
@@ -118,16 +121,6 @@ class _ScrollPageState extends State<ScrollablePage> {
           Text("歌詞も表示する")
         ],
       ));
-
-      displayedList.add(TextButton(
-          onPressed: () {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              curve: Curves.easeOut,
-              duration: const Duration(milliseconds: 10000),
-            );
-          },
-          child: Text("スクロール")));
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
         List<Widget> list = [];
         if (widget.separationList.length != 0) {
@@ -168,12 +161,15 @@ class _ScrollPageState extends State<ScrollablePage> {
           }
         }
 
-        Provider.of<MetronomeModel>(context, listen: false).rhythmNumList =
+        Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
             widget.rhythmList;
+
+        Provider.of<MetronomeModel>(context, listen: false)
+            .setMaxTickList(codeListState[listIndex].length, listIndex);
 
         int eachBeatCount(int index) {
           return Provider.of<MetronomeModel>(context, listen: false)
-              .rhythmNumList[index];
+              .ticksPerRowList[index];
         }
 
         for (var i = 0; i < codeListState[listIndex].length; i++) {
@@ -233,17 +229,8 @@ class _ScrollPageState extends State<ScrollablePage> {
           ));
           list.add(Text("|"));
         }
-
         displayedList.add(Row(children: list));
       }
-
-      displayedList.add(TextButton(
-          onPressed: () {
-            _scrollController.jumpTo(
-              0.0,
-            );
-          },
-          child: Text("上まで戻る")));
 
       return displayedList;
     }

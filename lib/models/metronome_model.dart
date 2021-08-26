@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -53,23 +54,45 @@ class MetronomeModel extends ChangeNotifier {
   Metronome _metronomeTimer;
   StreamSubscription<DateTime> _metronomeSubscription;
 
-  List<int> _rhythmNumList = [];
-  get rhythmNumList => _rhythmNumList;
+  List<int> _ticksPerRowList = [];
+  get ticksPerRowList => _ticksPerRowList;
 
-  set rhythmNumList(List<String> fetchedRhythmList) {
-    _rhythmNumList = [];
+  set ticksPerRowList(List<String> fetchedRhythmList) {
+    _ticksPerRowList = [];
     if (fetchedRhythmList == []) {
-      _rhythmNumList = [];
+      _ticksPerRowList = [];
     } else {
       for (int i = 0; i < fetchedRhythmList.length; i++) {
         List<String> beatCountList = fetchedRhythmList[i].split('/');
         if (beatCountList[1] == "4") {
-          _rhythmNumList.add(int.parse(beatCountList[0]));
+          _ticksPerRowList.add(int.parse(beatCountList[0]));
         } else if (beatCountList[1] == "8") {
-          _rhythmNumList.add(int.parse(beatCountList[0]) ~/ 2);
+          _ticksPerRowList.add(int.parse(beatCountList[0]) ~/ 2);
         } else if (beatCountList[1] == "16") {
-          _rhythmNumList.add(int.parse(beatCountList[0]) ~/ 4);
+          _ticksPerRowList.add(int.parse(beatCountList[0]) ~/ 4);
         }
+      }
+    }
+  }
+
+  List<int> _maxTickList = [];
+
+  double _scrollRate = 0.0;
+  get scrollRate => _scrollRate;
+
+  ScrollController scrollController;
+
+  /// codeNumList : 一列あたりの小節数を受けてmetronomeContainerStatusの列ごとの最大数をリスト化
+  void setMaxTickList(int fetchedBarNum, [int listIndex]) {
+    if (fetchedBarNum == -1) {
+      //scrollablePage呼び出し時に初期化
+      _maxTickList = [];
+    } else {
+      if (listIndex == 0) {
+        _maxTickList.add(fetchedBarNum * _ticksPerRowList[listIndex]);
+      } else {
+        _maxTickList.add(_maxTickList[listIndex - 1] +
+            fetchedBarNum * _ticksPerRowList[listIndex]);
       }
     }
   }
@@ -193,6 +216,9 @@ class MetronomeModel extends ChangeNotifier {
     _isPlaying = false;
     _metronomeContainerStatus = -1;
     _metronomePlayer?.clearCache();
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(0.0);
+    }
     notifyListeners();
   }
 
@@ -207,6 +233,11 @@ class MetronomeModel extends ChangeNotifier {
     if (_isPlaying) {
       _metronomeContainerStatus++;
       notifyListeners();
+    }
+
+    ///カウントアウト処理
+    if (metronomeContainerStatus >= _maxTickList.reduce(max) + 7) {
+      forceStop();
     }
   }
 
@@ -237,6 +268,7 @@ class MetronomeModel extends ChangeNotifier {
 
     changeMetronomeCountStatus();
     changeMetronomeContainerColor();
+    decideRateToScroll();
 
     ///カウントインの処理
     if (_isCountInPlaying && metronomeContainerStatus == _countInTimes) {
@@ -253,6 +285,36 @@ class MetronomeModel extends ChangeNotifier {
     await Future.delayed(Duration(microseconds: flashDuration));
     _metronomeContainerColor = Colors.transparent;
     notifyListeners();
+  }
+
+  void decideRateToScroll() {
+    try {
+      if (_metronomeContainerStatus >= 0 &&
+          _metronomeContainerStatus < _maxTickList[0]) {
+        _scrollRate = 0.0;
+        scrollToNowPlaying();
+      } else {
+        for (int i = 1; i < _maxTickList.length; i++) {
+          if (_metronomeContainerStatus >= _maxTickList[i - 1] &&
+              _metronomeContainerStatus < _maxTickList[i]) {
+            _scrollRate = i / (_maxTickList.length - 2);
+          } else if (_metronomeContainerStatus == _maxTickList[i]) {
+            scrollToNowPlaying();
+          }
+        }
+      }
+      if (_metronomeContainerStatus >= _maxTickList.reduce(max)) {
+        _scrollRate = 1.0;
+      }
+    } catch (e) {}
+  }
+
+  void scrollToNowPlaying() {
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(
+        scrollController.position.maxScrollExtent * _scrollRate,
+      );
+    }
   }
 
   void metronomeClear() {
