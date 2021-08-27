@@ -97,6 +97,19 @@ class MetronomeModel extends ChangeNotifier {
     }
   }
 
+  List<double> _textFormOffsetList = [];
+  get textFormOffsetList => _textFormOffsetList;
+
+  set textFormOffsetList(double dy) {
+    if (dy == -1) {
+      //scrollablePage呼び出し時に初期化
+      _textFormOffsetList = [];
+    } else {
+      _textFormOffsetList.add(dy);
+    }
+    print(_textFormOffsetList);
+  }
+
   Color _metronomeContainerColor;
   get metronomeContainerColor => _metronomeContainerColor;
 

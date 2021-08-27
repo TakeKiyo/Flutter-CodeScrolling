@@ -31,6 +31,8 @@ class _ScrollPageState extends State<ScrollablePage> {
   // コントローラ
   ScrollController _scrollController;
 
+  final List<GlobalKey> _globalTextFormList = [];
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +40,7 @@ class _ScrollPageState extends State<ScrollablePage> {
     Provider.of<MetronomeModel>(context, listen: false).setMaxTickList(-1);
     Provider.of<MetronomeModel>(context, listen: false).scrollController =
         _scrollController;
+    Provider.of<MetronomeModel>(context, listen: false).textFormOffsetList = -1;
   }
 
   @override
@@ -161,6 +164,20 @@ class _ScrollPageState extends State<ScrollablePage> {
           }
         }
 
+        _globalTextFormList.add(GlobalKey<FormState>());
+
+        double _getLocaleAndSize(int listIndex) {
+          RenderBox box =
+              _globalTextFormList[listIndex].currentContext.findRenderObject();
+          return box.localToGlobal(Offset.zero).dy;
+        }
+
+        ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
+        WidgetsBinding.instance.addPostFrameCallback((cb) {
+          Provider.of<MetronomeModel>(context, listen: false)
+              .textFormOffsetList = _getLocaleAndSize(listIndex);
+        });
+
         Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
             widget.rhythmList;
 
@@ -220,6 +237,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                       : Colors.transparent,
                   child: child),
               child: TextField(
+                key: i == 0 ? _globalTextFormList[listIndex] : null,
                 enabled: false,
                 textAlign: TextAlign.center,
                 controller:
