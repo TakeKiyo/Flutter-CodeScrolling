@@ -97,6 +97,7 @@ class MetronomeModel extends ChangeNotifier {
     }
   }
 
+  double deviceHeight = 0;
   List<double> _textFormOffsetList = [];
   get textFormOffsetList => _textFormOffsetList;
 
@@ -107,7 +108,6 @@ class MetronomeModel extends ChangeNotifier {
     } else {
       _textFormOffsetList.add(dy);
     }
-    print(_textFormOffsetList);
   }
 
   Color _metronomeContainerColor;
@@ -261,6 +261,12 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void metronomeStart() {
+    print("_textFormOffsetList : $_textFormOffsetList");
+    print("deviceHeight : $deviceHeight");
+    print("maxTickList : $_maxTickList");
+    print("ticksPerList : $_ticksPerRowList");
+    print("maxScroll : ${scrollController.position.maxScrollExtent}");
+
     const microseconds = 60000000;
     var _metronomeDuration =
         Duration(microseconds: (microseconds ~/ _tempoCount));
@@ -302,31 +308,34 @@ class MetronomeModel extends ChangeNotifier {
 
   void decideRateToScroll() {
     try {
-      if (_metronomeContainerStatus >= 0 &&
-          _metronomeContainerStatus < _maxTickList[0]) {
-        _scrollRate = 0.0;
-        scrollToNowPlaying();
-      } else {
-        for (int i = 1; i < _maxTickList.length; i++) {
-          if (_metronomeContainerStatus >= _maxTickList[i - 1] &&
-              _metronomeContainerStatus < _maxTickList[i]) {
-            _scrollRate = i / (_maxTickList.length - 2);
-          } else if (_metronomeContainerStatus == _maxTickList[i]) {
-            scrollToNowPlaying();
-          }
+      for (int i = 0; i < _maxTickList.length; i++) {
+        if (deviceHeight / 2 <= _textFormOffsetList[i] &&
+            _metronomeContainerStatus == _maxTickList[i]) {
+          _scrollRate = _textFormOffsetList[i + 1] - deviceHeight / 2;
+          scrollToNowPlaying();
         }
       }
       if (_metronomeContainerStatus >= _maxTickList.reduce(max)) {
-        _scrollRate = 1.0;
+        _scrollRate = scrollController.position.maxScrollExtent;
       }
     } catch (e) {}
   }
 
   void scrollToNowPlaying() {
     if (scrollController.hasClients) {
-      scrollController.jumpTo(
-        scrollController.position.maxScrollExtent * _scrollRate,
-      );
+      if (_scrollRate <= scrollController.position.maxScrollExtent) {
+        scrollController.animateTo(
+          _scrollRate,
+          curve: Curves.easeOut,
+          duration: Duration(milliseconds: 500),
+        );
+      } else {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: Duration(milliseconds: 500),
+        );
+      }
     }
   }
 

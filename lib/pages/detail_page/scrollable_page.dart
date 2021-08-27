@@ -25,12 +25,13 @@ class _ScrollPageState extends State<ScrollablePage> {
   void _handleCheckbox(bool e) {
     setState(() {
       _lyricsDisplayed = e;
+      Provider.of<MetronomeModel>(context, listen: false).textFormOffsetList =
+          -1;
     });
   }
 
   // コントローラ
   ScrollController _scrollController;
-
   final List<GlobalKey> _globalTextFormList = [];
 
   @override
@@ -51,6 +52,9 @@ class _ScrollPageState extends State<ScrollablePage> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<MetronomeModel>(context, listen: false).deviceHeight =
+        MediaQuery.of(context).size.height;
+
     List<List<String>> codeListState = [];
     for (int i = 0; i < widget.codeList.length; i++) {
       List<String> oneLineCode = widget.codeList[i].split(",");
