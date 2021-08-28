@@ -292,7 +292,10 @@ class _ScrollPageState extends State<ScrollablePage> {
       ));
     } else {
       return Container(
-          child: Scrollbar(
+          child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Scrollbar(
               // controller: _scrollController,
               isAlwaysShown: false,
               thickness: 8.0,
@@ -304,7 +307,26 @@ class _ScrollPageState extends State<ScrollablePage> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: displayedWidget(),
-                  ))));
+                  ))),
+          Positioned(
+            bottom: 5,
+            child: Container(
+                width: 200,
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.9),
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: TextButton(
+                  child: Text("スクロールを\n再開する",
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all((RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  )))),
+                  onPressed: () {},
+                )),
+          )
+        ],
+      ));
     }
   }
 }
