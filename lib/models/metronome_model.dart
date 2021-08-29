@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -8,8 +9,13 @@ import 'package:quiver/async.dart';
 void audioPlayerHandler(AudioPlayerState value) => null;
 
 class MetronomeModel extends ChangeNotifier {
+  bool _isPlaying = false;
+  get isPlaying => _isPlaying;
+
   int _tempoCount;
   get tempoCount => _tempoCount;
+
+  Timer _tempoTapTimer;
 
   set tempoCount(int bpm) {
     if (bpm < 30)
@@ -19,78 +25,6 @@ class MetronomeModel extends ChangeNotifier {
     else
       _tempoCount = bpm;
   }
-
-  bool _isPlaying = false;
-  get isPlaying => _isPlaying;
-
-  DateTime _bpmTapStartTime;
-  int _bpmTapCount = 0;
-  var _bpmCalculateList = <int>[];
-  String _bpmTapText = "TAPで計測開始";
-
-  get bpmTapCount => _bpmTapCount;
-  get bpmTapText => _bpmTapText;
-
-  AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY)
-    ..setReleaseMode(ReleaseMode.STOP);
-  AudioCache _metronomePlayer = AudioCache(
-      fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY)
-        ..setReleaseMode(ReleaseMode.STOP));
-  String _metronomeSound = "sounds/Metronome.mp3";
-  final List<String> _metronomeSoundsList = [
-    "sounds/Metronome.mp3",
-    "sounds/Click.mp3",
-    "sounds/WoodBlock.mp3",
-  ];
-  get metronomeSound => _metronomeSound;
-  get metronomeSoundsList => _metronomeSoundsList;
-
-  set metronomeSound(int selectedIndex) {
-    _metronomeSound = _metronomeSoundsList[selectedIndex];
-    notifyListeners();
-  }
-
-  Metronome _metronomeTimer;
-  StreamSubscription<DateTime> _metronomeSubscription;
-
-  List<int> _rhythmNumList = [];
-  get rhythmNumList => _rhythmNumList;
-
-  set rhythmNumList(List<String> fetchedRhythmList) {
-    _rhythmNumList = [];
-    if (fetchedRhythmList == []) {
-      _rhythmNumList = [];
-    } else {
-      for (int i = 0; i < fetchedRhythmList.length; i++) {
-        List<String> beatCountList = fetchedRhythmList[i].split('/');
-        if (beatCountList[1] == "4") {
-          _rhythmNumList.add(int.parse(beatCountList[0]));
-        } else if (beatCountList[1] == "8") {
-          _rhythmNumList.add(int.parse(beatCountList[0]) ~/ 2);
-        } else if (beatCountList[1] == "16") {
-          _rhythmNumList.add(int.parse(beatCountList[0]) ~/ 4);
-        }
-      }
-    }
-  }
-
-  Color _metronomeContainerColor;
-  get metronomeContainerColor => _metronomeContainerColor;
-
-  double _soundVolume = 1;
-  get soundVolume => _soundVolume;
-
-  ///初期値を-1にするとメトロノームが鳴る１回目に一番左(mod CountIn == 0になる)がフラッシュする
-  int _metronomeContainerStatus = -1;
-  get metronomeContainerStatus => _metronomeContainerStatus;
-
-  int _countInTimes = 4;
-  get countInTimes => _countInTimes;
-
-  bool _isCountInPlaying = false;
-  get isCountInPlaying => _isCountInPlaying;
-
-  Timer _tempoTapTimer;
 
   void tempoUp() {
     if (_tempoCount < 300) {
@@ -139,6 +73,13 @@ class MetronomeModel extends ChangeNotifier {
     }
   }
 
+  DateTime _bpmTapStartTime;
+  int _bpmTapCount = 0;
+  var _bpmCalculateList = <int>[];
+  String _bpmTapText = "TAPで計測開始";
+  get bpmTapCount => _bpmTapCount;
+  get bpmTapText => _bpmTapText;
+
   void bpmTapDetector() {
     const bpmMin = 30;
     const bpmMax = 300;
@@ -183,6 +124,45 @@ class MetronomeModel extends ChangeNotifier {
     _bpmTapText = "TAPで計測開始";
   }
 
+  AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY)
+    ..setReleaseMode(ReleaseMode.STOP);
+  AudioCache _metronomePlayer = AudioCache(
+      fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY)
+        ..setReleaseMode(ReleaseMode.STOP));
+
+  String _metronomeSound = "sounds/Metronome.mp3";
+  get metronomeSound => _metronomeSound;
+  set metronomeSound(int selectedIndex) {
+    _metronomeSound = _metronomeSoundsList[selectedIndex];
+    notifyListeners();
+  }
+
+  final List<String> _metronomeSoundsList = [
+    "sounds/Metronome.mp3",
+    "sounds/Click.mp3",
+    "sounds/WoodBlock.mp3",
+  ];
+  get metronomeSoundsList => _metronomeSoundsList;
+
+  Metronome _metronomeTimer;
+  StreamSubscription<DateTime> _metronomeSubscription;
+
+  Color _metronomeContainerColor;
+  get metronomeContainerColor => _metronomeContainerColor;
+
+  double _soundVolume = 1;
+  get soundVolume => _soundVolume;
+
+  ///初期値を-1にするとメトロノームが鳴る１回目に一番左(mod CountIn == 0になる)がフラッシュする
+  int _metronomeContainerStatus = -1;
+  get metronomeContainerStatus => _metronomeContainerStatus;
+
+  int _countInTimes = 4;
+  get countInTimes => _countInTimes;
+
+  bool _isCountInPlaying = false;
+  get isCountInPlaying => _isCountInPlaying;
+
   void switchPlayStatus() {
     _isPlaying = !_isPlaying;
     notifyListeners();
@@ -193,6 +173,9 @@ class MetronomeModel extends ChangeNotifier {
     _isPlaying = false;
     _metronomeContainerStatus = -1;
     _metronomePlayer?.clearCache();
+    _hasScrolledDuringPlaying = false;
+    _scrollOffset = 0.0;
+    scrollToNowPlaying();
     notifyListeners();
   }
 
@@ -207,6 +190,11 @@ class MetronomeModel extends ChangeNotifier {
     if (_isPlaying) {
       _metronomeContainerStatus++;
       notifyListeners();
+    }
+
+    ///カウントアウト処理
+    if (metronomeContainerStatus >= _maxTickList.reduce(max) + 7) {
+      forceStop();
     }
   }
 
@@ -237,6 +225,7 @@ class MetronomeModel extends ChangeNotifier {
 
     changeMetronomeCountStatus();
     changeMetronomeContainerColor();
+    decideRateToScroll();
 
     ///カウントインの処理
     if (_isCountInPlaying && metronomeContainerStatus == _countInTimes) {
@@ -267,5 +256,106 @@ class MetronomeModel extends ChangeNotifier {
     }
     _audioPlayer.setVolume(_soundVolume);
     notifyListeners();
+  }
+
+  bool _hasScrolledDuringPlaying = false;
+  get hasScrolledDuringPlaying => _hasScrolledDuringPlaying;
+
+  double _scrollOffset = 0.0;
+  get scrollOffset => _scrollOffset;
+
+  //scrollable_pageビルド時に代入
+  double deviceHeight = 0;
+  ScrollController scrollController;
+  List<int> _maxTickList = [];
+
+  List<int> _ticksPerRowList = [];
+  get ticksPerRowList => _ticksPerRowList;
+  set ticksPerRowList(List<String> fetchedRhythmList) {
+    _ticksPerRowList = [];
+    if (fetchedRhythmList == []) {
+      _ticksPerRowList = [];
+    } else {
+      for (int i = 0; i < fetchedRhythmList.length; i++) {
+        List<String> beatCountList = fetchedRhythmList[i].split('/');
+        if (beatCountList[1] == "4") {
+          _ticksPerRowList.add(int.parse(beatCountList[0]));
+        } else if (beatCountList[1] == "8") {
+          _ticksPerRowList.add(int.parse(beatCountList[0]) ~/ 2);
+        } else if (beatCountList[1] == "16") {
+          _ticksPerRowList.add(int.parse(beatCountList[0]) ~/ 4);
+        }
+      }
+    }
+  }
+
+  List<double> _textFormOffsetList = [];
+  get textFormOffsetList => _textFormOffsetList;
+
+  set textFormOffsetList(double dy) {
+    if (dy == -1) {
+      //scrollablePage呼び出し時に初期化
+      _textFormOffsetList = [];
+    } else {
+      _textFormOffsetList.add(dy);
+    }
+  }
+
+  /// codeNumList : 一列あたりの小節数を受けてmetronomeContainerStatusの列ごとの最大数をリスト化
+  void setMaxTickList(int fetchedBarNum, [int listIndex]) {
+    if (fetchedBarNum == -1) {
+      //scrollablePage呼び出し時に初期化
+      _maxTickList = [];
+    } else {
+      if (listIndex == 0) {
+        _maxTickList.add(fetchedBarNum * _ticksPerRowList[listIndex]);
+      } else {
+        _maxTickList.add(_maxTickList[listIndex - 1] +
+            fetchedBarNum * _ticksPerRowList[listIndex]);
+      }
+    }
+  }
+
+  void enableScroll() {
+    _hasScrolledDuringPlaying = false;
+    notifyListeners();
+  }
+
+  void unableScroll() {
+    _hasScrolledDuringPlaying = true;
+    notifyListeners();
+  }
+
+  void decideRateToScroll() {
+    try {
+      for (int i = 0; i < _maxTickList.length; i++) {
+        if (deviceHeight / 2 <= _textFormOffsetList[i] &&
+            _metronomeContainerStatus == _maxTickList[i]) {
+          _scrollOffset = _textFormOffsetList[i + 1] - deviceHeight / 2;
+          scrollToNowPlaying();
+        }
+      }
+      if (_metronomeContainerStatus >= _maxTickList.reduce(max)) {
+        _scrollOffset = scrollController.position.maxScrollExtent;
+      }
+    } catch (e) {}
+  }
+
+  void scrollToNowPlaying() {
+    if (scrollController.hasClients && !_hasScrolledDuringPlaying) {
+      if (_scrollOffset <= scrollController.position.maxScrollExtent) {
+        scrollController.animateTo(
+          _scrollOffset,
+          curve: Curves.easeOut,
+          duration: Duration(milliseconds: 500),
+        );
+      } else {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: Duration(milliseconds: 500),
+        );
+      }
+    }
   }
 }

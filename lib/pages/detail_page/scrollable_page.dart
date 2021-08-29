@@ -25,16 +25,23 @@ class _ScrollPageState extends State<ScrollablePage> {
   void _handleCheckbox(bool e) {
     setState(() {
       _lyricsDisplayed = e;
+      Provider.of<MetronomeModel>(context, listen: false).textFormOffsetList =
+          -1;
     });
   }
 
   // コントローラ
   ScrollController _scrollController;
+  final List<GlobalKey> _globalTextFormList = [];
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    Provider.of<MetronomeModel>(context, listen: false).setMaxTickList(-1);
+    Provider.of<MetronomeModel>(context, listen: false).scrollController =
+        _scrollController;
+    Provider.of<MetronomeModel>(context, listen: false).textFormOffsetList = -1;
   }
 
   @override
@@ -45,6 +52,9 @@ class _ScrollPageState extends State<ScrollablePage> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<MetronomeModel>(context, listen: false).deviceHeight =
+        MediaQuery.of(context).size.height;
+
     List<List<String>> codeListState = [];
     for (int i = 0; i < widget.codeList.length; i++) {
       List<String> oneLineCode = widget.codeList[i].split(",");
@@ -118,16 +128,6 @@ class _ScrollPageState extends State<ScrollablePage> {
           Text("歌詞も表示する")
         ],
       ));
-
-      displayedList.add(TextButton(
-          onPressed: () {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              curve: Curves.easeOut,
-              duration: const Duration(milliseconds: 10000),
-            );
-          },
-          child: Text("スクロール")));
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
         List<Widget> list = [];
         if (widget.separationList.length != 0) {
@@ -168,12 +168,29 @@ class _ScrollPageState extends State<ScrollablePage> {
           }
         }
 
-        Provider.of<MetronomeModel>(context, listen: false).rhythmNumList =
+        _globalTextFormList.add(GlobalKey<FormState>());
+
+        double _getLocaleAndSize(int listIndex) {
+          RenderBox box =
+              _globalTextFormList[listIndex].currentContext.findRenderObject();
+          return box.localToGlobal(Offset.zero).dy;
+        }
+
+        ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
+        WidgetsBinding.instance.addPostFrameCallback((cb) {
+          Provider.of<MetronomeModel>(context, listen: false)
+              .textFormOffsetList = _getLocaleAndSize(listIndex);
+        });
+
+        Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
             widget.rhythmList;
+
+        Provider.of<MetronomeModel>(context, listen: false)
+            .setMaxTickList(codeListState[listIndex].length, listIndex);
 
         int eachBeatCount(int index) {
           return Provider.of<MetronomeModel>(context, listen: false)
-              .rhythmNumList[index];
+              .ticksPerRowList[index];
         }
 
         for (var i = 0; i < codeListState[listIndex].length; i++) {
@@ -224,6 +241,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                       : Colors.transparent,
                   child: child),
               child: TextField(
+                key: i == 0 ? _globalTextFormList[listIndex] : null,
                 enabled: false,
                 textAlign: TextAlign.center,
                 controller:
@@ -233,17 +251,8 @@ class _ScrollPageState extends State<ScrollablePage> {
           ));
           list.add(Text("|"));
         }
-
         displayedList.add(Row(children: list));
       }
-
-      displayedList.add(TextButton(
-          onPressed: () {
-            _scrollController.jumpTo(
-              0.0,
-            );
-          },
-          child: Text("上まで戻る")));
 
       return displayedList;
     }
@@ -282,20 +291,67 @@ class _ScrollPageState extends State<ScrollablePage> {
         ],
       ));
     } else {
-      return Container(
-          child: Scrollbar(
-              // controller: _scrollController,
-              isAlwaysShown: false,
-              thickness: 8.0,
-              hoverThickness: 12.0,
-              child: SingleChildScrollView(
+      return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          child: Container(
+              child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Scrollbar(
                   controller: _scrollController,
-                  child: ListView(
-                    padding: EdgeInsets.all(36.0),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: displayedWidget(),
-                  ))));
+                  isAlwaysShown: false,
+                  thickness: 8.0,
+                  hoverThickness: 12.0,
+                  child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: ListView(
+                        padding: EdgeInsets.all(36.0),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: displayedWidget(),
+                      ))),
+              Selector<MetronomeModel, bool>(
+                  selector: (context, model) => model.hasScrolledDuringPlaying,
+                  shouldRebuild: (exScrollStatus, notifiedScrollStatus) =>
+                      exScrollStatus != notifiedScrollStatus,
+                  builder: (context, hasScrolledDuringPlaying, child) =>
+                      hasScrolledDuringPlaying &&
+                              Provider.of<MetronomeModel>(context,
+                                      listen: false)
+                                  .isPlaying
+                          ? Positioned(
+                              bottom: 5,
+                              child: Container(
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(0.9),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: TextButton(
+                                    child: Text("スクロールを\n再開する",
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.white)),
+                                    style: ButtonStyle(
+                                        shape: MaterialStateProperty.all(
+                                            (RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    )))),
+                                    onPressed: () {
+                                      Provider.of<MetronomeModel>(context,
+                                              listen: false)
+                                          .enableScroll();
+                                      Provider.of<MetronomeModel>(context,
+                                              listen: false)
+                                          .scrollToNowPlaying();
+                                    },
+                                  )),
+                            )
+                          : Container())
+            ],
+          )),
+          onTapDown: (_) {
+            Provider.of<MetronomeModel>(context, listen: false).unableScroll();
+          });
     }
   }
 }
