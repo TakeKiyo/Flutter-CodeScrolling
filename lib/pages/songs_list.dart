@@ -79,6 +79,7 @@ class _SongsListState extends State<SongsListForm> {
         } else {
           memberIDList.remove(udid);
           FirebaseFirestore.instance.collection("Songs").doc(docId).update({
+            "type": "removeMember",
             "memberID": memberIDList,
             "updatedAt": DateTime.now(),
           });

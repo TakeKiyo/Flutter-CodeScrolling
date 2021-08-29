@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
@@ -117,11 +118,36 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                                   Navigator.of(context)
                                       .popUntil((route) => route.isFirst);
                                   await Future.delayed(Duration(seconds: 1));
-                                  FirebaseFirestore.instance
-                                      .collection('Songs')
+                                  String udid = await FlutterUdid.udid;
+                                  await FirebaseFirestore.instance
+                                      .collection("Songs")
                                       .doc(docId)
-                                      .delete();
-                                }),
+                                      .get()
+                                      .then(
+                                          (DocumentSnapshot documentSnapshot) {
+                                    var document =
+                                        documentSnapshot.data() as Map;
+                                    List<String> memberIDList =
+                                        document["memberID"].cast<String>();
+                                    if (memberIDList.length == 1) {
+                                      FirebaseFirestore.instance
+                                          .collection('Songs')
+                                          .doc(docId)
+                                          .delete();
+                                    } else {
+                                      memberIDList.remove(udid);
+                                      FirebaseFirestore.instance
+                                          .collection("Songs")
+                                          .doc(docId)
+                                          .update({
+                                        "type": "removeMember",
+                                        "memberID": memberIDList,
+                                        "updatedAt": DateTime.now(),
+                                      });
+                                    }
+                                    ;
+                                  });
+                                })
                           ],
                         ));
               },
