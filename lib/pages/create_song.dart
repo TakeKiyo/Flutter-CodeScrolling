@@ -175,7 +175,6 @@ class _CreateSongFormState extends State<CreateSongForm> {
                     children: <Widget>[
                       OutlinedButton(
                         onPressed: () => {
-                          print('id'),
                           Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) {
                               return ImportSongById();
@@ -206,7 +205,6 @@ class _CreateSongFormState extends State<CreateSongForm> {
                       ),
                       OutlinedButton(
                         onPressed: () => {
-                          print('qr'),
                           Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) {
                               return ImportSong();
