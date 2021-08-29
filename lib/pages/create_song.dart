@@ -167,10 +167,11 @@ class _CreateSongFormState extends State<CreateSongForm> {
             key: _formKey,
             child: SingleChildScrollView(
                 child: Container(
-              padding: const EdgeInsets.only(left: 30, right: 30),
+              padding: const EdgeInsets.only(left: 30, right: 30, top: 5.0),
               child: Column(
                 children: <Widget>[
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       OutlinedButton(
                         onPressed: () => {
@@ -196,7 +197,8 @@ class _CreateSongFormState extends State<CreateSongForm> {
                                   icon: const Icon(Icons.edit),
                                   onPressed: null,
                                 ),
-                                Text('IDから追加する')
+                                Text('IDから'),
+                                Text('追加する')
                               ],
                             ),
                           ],
@@ -226,7 +228,8 @@ class _CreateSongFormState extends State<CreateSongForm> {
                                   icon: const Icon(Icons.qr_code),
                                   onPressed: null,
                                 ),
-                                Text('QRコードから追加する')
+                                Text('QRコードから'),
+                                Text('追加する')
                               ],
                             ),
                           ],
