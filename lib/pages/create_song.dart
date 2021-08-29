@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 
+import 'import_song_by_id.dart';
 import 'import_song_page.dart';
 
 class CreateSong extends StatelessWidget {
@@ -14,7 +15,7 @@ class CreateSong extends StatelessWidget {
         title: Text('曲追加ページ'),
         actions: [],
       ),
-      body: Center(child: CreateSongForm()),
+      body: CreateSongForm(),
     );
   }
 }
@@ -169,17 +170,70 @@ class _CreateSongFormState extends State<CreateSongForm> {
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: Column(
                 children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return ImportSong();
-                              }),
-                            );
-                          },
-                          child: Text('友だちの曲の追加はこちら'))),
+                  Row(
+                    children: <Widget>[
+                      OutlinedButton(
+                        onPressed: () => {
+                          print('id'),
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return ImportSongById();
+                            }),
+                          ),
+                        },
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                          padding: EdgeInsets.only(
+                              left: 32.0, right: 32.0, top: 12.0, bottom: 12.0),
+                          textStyle: const TextStyle(fontSize: 16),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: null,
+                                ),
+                                Text('IDから追加する')
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () => {
+                          print('qr'),
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return ImportSong();
+                            }),
+                          ),
+                        },
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                          padding: EdgeInsets.only(
+                              left: 12.0, right: 12.0, top: 12.0, bottom: 12.0),
+                          textStyle: const TextStyle(fontSize: 16),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: const Icon(Icons.qr_code),
+                                  onPressed: null,
+                                ),
+                                Text('QRコードから追加する')
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                   Text(
                     "曲名",
                     style: TextStyle(
