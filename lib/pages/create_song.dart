@@ -259,6 +259,7 @@ class _CreateSongFormState extends State<CreateSongForm> {
                         style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(primary: Colors.orange),
                     onPressed: () {
+                      FocusScope.of(context).unfocus();
                       if (_key == "未選択") {
                         _onSelectedItemChanged(0);
                       }
