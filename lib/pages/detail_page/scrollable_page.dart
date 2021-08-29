@@ -295,58 +295,61 @@ class _ScrollPageState extends State<ScrollablePage> {
           behavior: HitTestBehavior.opaque,
           child: Container(
               child: Stack(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.center,
             children: [
-              Scrollbar(
-                  controller: _scrollController,
-                  isAlwaysShown: false,
-                  thickness: 8.0,
-                  hoverThickness: 12.0,
-                  child: SingleChildScrollView(
-                      controller: _scrollController,
-                      child: ListView(
-                        padding: EdgeInsets.all(36.0),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: displayedWidget(),
-                      ))),
-              Selector<MetronomeModel, bool>(
-                  selector: (context, model) => model.hasScrolledDuringPlaying,
-                  shouldRebuild: (exScrollStatus, notifiedScrollStatus) =>
-                      exScrollStatus != notifiedScrollStatus,
-                  builder: (context, hasScrolledDuringPlaying, child) =>
-                      hasScrolledDuringPlaying &&
-                              Provider.of<MetronomeModel>(context,
-                                      listen: false)
-                                  .isPlaying
-                          ? Positioned(
-                              bottom: 5,
-                              child: Container(
-                                  width: 200,
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.withOpacity(0.9),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: TextButton(
-                                    child: Text("スクロールを\n再開する",
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.white)),
-                                    style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                            (RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    )))),
-                                    onPressed: () {
-                                      Provider.of<MetronomeModel>(context,
-                                              listen: false)
-                                          .enableScroll();
-                                      Provider.of<MetronomeModel>(context,
-                                              listen: false)
-                                          .scrollToNowPlaying();
-                                    },
-                                  )),
-                            )
-                          : Container())
+              Positioned(
+                child: Scrollbar(
+                    controller: _scrollController,
+                    isAlwaysShown: false,
+                    thickness: 8.0,
+                    hoverThickness: 12.0,
+                    child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: ListView(
+                          padding: EdgeInsets.all(36.0),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: displayedWidget(),
+                        ))),
+              ),
+              Positioned(
+                bottom: 5,
+                child: Selector<MetronomeModel, bool>(
+                    selector: (context, model) =>
+                        model.hasScrolledDuringPlaying,
+                    shouldRebuild: (exScrollStatus, notifiedScrollStatus) =>
+                        exScrollStatus != notifiedScrollStatus,
+                    builder: (context, hasScrolledDuringPlaying, child) =>
+                        hasScrolledDuringPlaying &&
+                                Provider.of<MetronomeModel>(context,
+                                        listen: false)
+                                    .isPlaying
+                            ? Container(
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.9),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                child: TextButton(
+                                  child: Text("スクロールを\n再開する",
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.white)),
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                          (RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  )))),
+                                  onPressed: () {
+                                    Provider.of<MetronomeModel>(context,
+                                            listen: false)
+                                        .enableScroll();
+                                    Provider.of<MetronomeModel>(context,
+                                            listen: false)
+                                        .scrollToNowPlaying();
+                                  },
+                                ))
+                            : Container()),
+              )
             ],
           )),
           onTapDown: (_) {

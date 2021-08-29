@@ -12,6 +12,8 @@ class DetailEditPage extends StatelessWidget {
   final String title;
   final String docId;
 
+  final ScrollController _scrollController = ScrollController();
+
   DetailEditPage({this.bpm, this.title, this.docId});
 
   List<String> formatCodeList(List<List<String>> codeList) {
@@ -32,6 +34,9 @@ class DetailEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<EditingSongModel>(context, listen: false).editScrollController =
+        _scrollController;
+
     void _showCustomKeyboard(context) {
       Scaffold.of(context).showBottomSheet((BuildContext context) {
         return CustomKeyboard(
@@ -371,12 +376,14 @@ class DetailEditPage extends StatelessWidget {
                 },
                 child: Container(
                     child: Scrollbar(
+                        controller: _scrollController,
                         isAlwaysShown: true,
                         thickness: 8.0,
                         hoverThickness: 12.0,
                         child: Padding(
                           padding: bottomPadding(context),
                           child: SingleChildScrollView(
+                            controller: _scrollController,
                             child: Center(child: Consumer<EditingSongModel>(
                                 builder: (_, model, __) {
                               return Column(
@@ -508,8 +515,11 @@ class DetailEditPage extends StatelessWidget {
                                                       color: Colors.white)),
                                               style: ElevatedButton.styleFrom(
                                                   primary: Colors.orange),
-                                              onPressed: () {
+                                              onPressed: () async {
                                                 model.addEmptyList();
+                                                await Future.delayed(Duration(
+                                                    milliseconds: 200));
+                                                model.scrollToEnd();
                                               },
                                             )
                                           ])),

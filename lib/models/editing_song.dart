@@ -123,6 +123,19 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///detailEditPageビルド時に代入
+  ScrollController editScrollController;
+
+  void scrollToEnd() {
+    if (editScrollController.hasClients) {
+      editScrollController.animateTo(
+        editScrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
   ///detail_edit_pageでTextFieldをTapする度に対応したTextEditingControllerを代入する
   TextEditingController controller;
   int controlBarIdx = 0;
@@ -254,11 +267,5 @@ class EditingSongModel extends ChangeNotifier {
 
   bool _isUtf16Surrogate(int value) {
     return value & 0xF800 == 0xD800;
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }
