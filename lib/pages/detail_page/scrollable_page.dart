@@ -350,7 +350,6 @@ class _ScrollPageState extends State<ScrollablePage> {
             ],
           )),
           onTapDown: (_) {
-            print("Tapped");
             Provider.of<MetronomeModel>(context, listen: false).unableScroll();
           });
     }

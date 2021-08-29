@@ -205,12 +205,6 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void metronomeStart() {
-    print("_textFormOffsetList : $_textFormOffsetList");
-    print("deviceHeight : $deviceHeight");
-    print("maxTickList : $_maxTickList");
-    print("ticksPerList : $_ticksPerRowList");
-    print("maxScroll : ${scrollController.position.maxScrollExtent}");
-
     const microseconds = 60000000;
     var _metronomeDuration =
         Duration(microseconds: (microseconds ~/ _tempoCount));
