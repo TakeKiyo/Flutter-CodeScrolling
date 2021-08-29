@@ -138,6 +138,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
           memberIDList.add(udid);
           memberIDList = memberIDList.toSet().toList();
           FirebaseFirestore.instance.collection("Songs").doc(docId).update({
+            "type": "addMember",
             "memberID": memberIDList,
             "updatedAt": DateTime.now(),
           });
