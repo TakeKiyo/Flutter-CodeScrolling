@@ -171,25 +171,26 @@ class _CreateSongFormState extends State<CreateSongForm> {
               child: Column(
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      OutlinedButton(
-                        onPressed: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) {
-                              return ImportSongById();
-                            }),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        OutlinedButton(
+                          onPressed: () => {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return ImportSongById();
+                              }),
+                            ),
+                          },
+                          style: TextButton.styleFrom(
+                            primary: Colors.black,
+                            padding: EdgeInsets.only(
+                                left: 32.0,
+                                right: 32.0,
+                                top: 12.0,
+                                bottom: 12.0),
+                            textStyle: const TextStyle(fontSize: 16),
                           ),
-                        },
-                        style: TextButton.styleFrom(
-                          primary: Colors.black,
-                          padding: EdgeInsets.only(
-                              left: 32.0, right: 32.0, top: 12.0, bottom: 12.0),
-                          textStyle: const TextStyle(fontSize: 16),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Column(
+                          child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 IconButton(
@@ -197,44 +198,39 @@ class _CreateSongFormState extends State<CreateSongForm> {
                                   onPressed: null,
                                 ),
                                 Text('IDから'),
-                                Text('追加する')
-                              ],
-                            ),
-                          ],
+                                Text('追加する'),
+                              ]),
                         ),
-                      ),
-                      OutlinedButton(
-                        onPressed: () => {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) {
-                              return ImportSong();
-                            }),
+                        OutlinedButton(
+                          onPressed: () => {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return ImportSong();
+                              }),
+                            ),
+                          },
+                          style: TextButton.styleFrom(
+                            primary: Colors.black,
+                            padding: EdgeInsets.only(
+                                left: 12.0,
+                                right: 12.0,
+                                top: 12.0,
+                                bottom: 12.0),
+                            textStyle: const TextStyle(fontSize: 16),
                           ),
-                        },
-                        style: TextButton.styleFrom(
-                          primary: Colors.black,
-                          padding: EdgeInsets.only(
-                              left: 12.0, right: 12.0, top: 12.0, bottom: 12.0),
-                          textStyle: const TextStyle(fontSize: 16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                icon: const Icon(Icons.qr_code),
+                                onPressed: null,
+                              ),
+                              Text('QRコードから'),
+                              Text('追加する')
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          children: <Widget>[
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: const Icon(Icons.qr_code),
-                                  onPressed: null,
-                                ),
-                                Text('QRコードから'),
-                                Text('追加する')
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                      ]),
                   Text(
                     "曲名",
                     style: TextStyle(
