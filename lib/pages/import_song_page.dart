@@ -26,14 +26,8 @@ class ImportSongForm extends StatefulWidget {
 }
 
 class _ImportSongFormState extends State<ImportSongForm> {
-  final _formKey = GlobalKey<FormState>();
   String copiedID = "";
   bool qrScanned = false;
-  void _handleCopiedID(String inputText) {
-    setState(() {
-      copiedID = inputText;
-    });
-  }
 
   Barcode result;
   QRViewController controller;
@@ -188,40 +182,19 @@ class _ImportSongFormState extends State<ImportSongForm> {
         padding: const EdgeInsets.all(50),
         child: Column(children: <Widget>[
           Expanded(child: _buildQrView(context)),
-          Form(
-              key: _formKey,
-              child: Container(
-                  padding: const EdgeInsets.all(30),
-                  child: Column(children: <Widget>[
-                    Text(
-                      "コピーしたIDをペーストしても\n追加することができます",
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextFormField(
-                      cursorColor: Colors.black,
-                      onChanged: _handleCopiedID,
-                      // ignore: missing_return
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'IDを入力してください。';
-                        }
-                      },
-                    ),
-                    ElevatedButton(
-                      child: const Text('曲をインポート',
-                          style: TextStyle(color: Colors.white)),
-                      style: ElevatedButton.styleFrom(primary: Colors.orange),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          importButtonClicked();
-                        }
-                      },
-                    ),
-                  ]))),
+          Container(
+              padding: const EdgeInsets.all(30),
+              child: Column(children: <Widget>[
+                Text(
+                  "QRコードをスキャンすると\nインポートが始まります。",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ]))
         ]));
   }
 }

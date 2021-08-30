@@ -145,7 +145,6 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                                         "updatedAt": DateTime.now(),
                                       });
                                     }
-                                    ;
                                   });
                                 })
                           ],
