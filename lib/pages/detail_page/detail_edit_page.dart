@@ -42,6 +42,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
   }
 
   void _setEachOffsetList() {
+    print("set");
     _resetOffsetList();
     switch (Provider.of<EditingSongModel>(context, listen: false).displayType) {
       case "code":
@@ -86,6 +87,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
     _scrollController = ScrollController();
     Provider.of<EditingSongModel>(context, listen: false).editScrollController =
         _scrollController;
+    WidgetsBinding.instance.addPostFrameCallback((cb) => _setEachOffsetList());
   }
 
   @override
@@ -114,9 +116,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
   Widget build(BuildContext context) {
     Provider.of<EditingSongModel>(context, listen: false).deviceHeight =
         MediaQuery.of(context).size.height;
-
-    ///このWidgetがBuildされた時に呼ばれる
-    WidgetsBinding.instance.addPostFrameCallback((cb) => _setEachOffsetList());
 
     void _showCustomKeyboard(context) {
       Scaffold.of(context).showBottomSheet((BuildContext context) {
@@ -348,7 +347,11 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
                           .setDisplayType("both"),
-                      _setEachOffsetList()
+                      //スクロール位置を戻してからWidget位置をSet
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .scrollToStart(),
+                      WidgetsBinding.instance
+                          .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
                   ),
                   // child: Text("コードと歌詞を編集"),
@@ -370,7 +373,11 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
                           .setDisplayType("code"),
-                      _setEachOffsetList()
+                      //スクロール位置を戻してからWidget位置をSet
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .scrollToStart(),
+                      WidgetsBinding.instance
+                          .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
                   ),
                 ),
@@ -392,7 +399,11 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
                           .setDisplayType("lyrics"),
-                      _setEachOffsetList()
+                      //スクロール位置を戻してからWidget位置をSet
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .scrollToStart(),
+                      WidgetsBinding.instance
+                          .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
                   ),
                 ),
@@ -622,7 +633,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                             })),
                           ),
                         ))),
-                //bottomSheet: CustomKeyboard(),
               )),
     );
   }
@@ -630,9 +640,8 @@ class _DetailEditPageState extends State<DetailEditPage> {
 
 EdgeInsets bottomPadding(context) {
   return EdgeInsets.only(
-    top: 24.0,
-    left: 24.0,
-    right: 8.0,
-    bottom: 0,
-  ); //Provider.of<EditingSongModel>(context).keyboardBottomSpace);
+      top: 24.0,
+      left: 24.0,
+      right: 8.0,
+      bottom: Provider.of<EditingSongModel>(context).keyboardBottomSpace);
 }

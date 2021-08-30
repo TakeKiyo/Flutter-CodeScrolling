@@ -134,20 +134,22 @@ class EditingSongModel extends ChangeNotifier {
   double deviceHeight = 0;
 
   set codeFormOffsetList(double dy) {
+    double yOffset = dy;
     if (dy == -1) {
       //scrollablePage呼び出し時に初期化
       _codeFormOffsetList = [];
     } else {
-      _codeFormOffsetList.add(dy);
+      _codeFormOffsetList.add(yOffset);
     }
   }
 
   set lyricFormOffsetList(double dy) {
+    double yOffset = dy;
     if (dy == -1) {
       //scrollablePage呼び出し時に初期化
       _lyricFormOffsetList = [];
     } else {
-      _lyricFormOffsetList.add(dy);
+      _lyricFormOffsetList.add(yOffset);
     }
   }
 
@@ -175,6 +177,14 @@ class EditingSongModel extends ChangeNotifier {
           );
           break;
       }
+    }
+  }
+
+  void scrollToStart() {
+    if (editScrollController.hasClients) {
+      editScrollController.jumpTo(
+        editScrollController.position.minScrollExtent,
+      );
     }
   }
 
