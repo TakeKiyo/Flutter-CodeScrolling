@@ -186,15 +186,8 @@ class _ImportSongFormState extends State<ImportSongForm> {
               padding: const EdgeInsets.all(30),
               child: Column(children: <Widget>[
                 Text(
-                  "QRコードをスキャンすると",
-                  style: TextStyle(
-                    color: Colors.blueAccent,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  "インポートが始まります。",
+                  "QRコードをスキャンすると\nインポートが始まります。",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.blueAccent,
                     fontSize: 14.0,

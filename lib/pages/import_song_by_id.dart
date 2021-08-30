@@ -111,15 +111,8 @@ class _ImportSongFormState extends State<ImportSongForm> {
                   padding: const EdgeInsets.all(30),
                   child: Column(children: <Widget>[
                     Text(
-                      "コピーしたIDをペーストしても",
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "追加することができます",
+                      "コピーしたIDをペーストしても \n 追加することができます",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.blueAccent,
                         fontSize: 14.0,
