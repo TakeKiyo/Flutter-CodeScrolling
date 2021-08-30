@@ -349,7 +349,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                           .setDisplayType("both"),
                       //スクロール位置を戻してからWidget位置をSet
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .scrollToStart(),
+                          .scrollToTop(),
                       WidgetsBinding.instance
                           .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
@@ -375,7 +375,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                           .setDisplayType("code"),
                       //スクロール位置を戻してからWidget位置をSet
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .scrollToStart(),
+                          .scrollToTop(),
                       WidgetsBinding.instance
                           .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
@@ -401,7 +401,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                           .setDisplayType("lyrics"),
                       //スクロール位置を戻してからWidget位置をSet
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .scrollToStart(),
+                          .scrollToTop(),
                       WidgetsBinding.instance
                           .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
