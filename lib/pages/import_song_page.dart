@@ -26,14 +26,8 @@ class ImportSongForm extends StatefulWidget {
 }
 
 class _ImportSongFormState extends State<ImportSongForm> {
-  final _formKey = GlobalKey<FormState>();
   String copiedID = "";
   bool qrScanned = false;
-  void _handleCopiedID(String inputText) {
-    setState(() {
-      copiedID = inputText;
-    });
-  }
 
   Barcode result;
   QRViewController controller;
