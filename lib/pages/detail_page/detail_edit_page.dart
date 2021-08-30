@@ -78,10 +78,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
               .lyricFormOffsetList = _getLyricLocale(listIndex);
         break;
     }
-    print(Provider.of<EditingSongModel>(context, listen: false)
-        .lyricFormOffsetList);
-    print(Provider.of<EditingSongModel>(context, listen: false)
-        .codeFormOffsetList);
   }
 
   @override
