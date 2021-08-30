@@ -189,7 +189,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                   Provider.of<EditingSongModel>(context, listen: false)
                       .openNormalKeyboard();
                   Provider.of<EditingSongModel>(context, listen: false)
-                      .scrollToTappedForm(listIndex: listIndex, mode: "lyric");
+                      .scrollToTappedForm(listIndex: listIndex, mode: "lyrics");
                 },
                 onChanged: (text) {
                   Provider.of<EditingSongModel>(context, listen: false)
@@ -474,10 +474,10 @@ class _DetailEditPageState extends State<DetailEditPage> {
                         isAlwaysShown: true,
                         thickness: 8.0,
                         hoverThickness: 12.0,
-                        child: Padding(
-                          padding: bottomPadding(context),
-                          child: SingleChildScrollView(
-                            controller: _scrollController,
+                        child: SingleChildScrollView(
+                          controller: _scrollController,
+                          child: Padding(
+                            padding: bottomPadding(context),
                             child: Center(child: Consumer<EditingSongModel>(
                                 builder: (_, model, __) {
                               return Column(
@@ -630,8 +630,9 @@ class _DetailEditPageState extends State<DetailEditPage> {
 
 EdgeInsets bottomPadding(context) {
   return EdgeInsets.only(
-      top: 24.0,
-      left: 24.0,
-      right: 8.0,
-      bottom: Provider.of<EditingSongModel>(context).keyboardBottomSpace);
+    top: 24.0,
+    left: 24.0,
+    right: 8.0,
+    bottom: 0,
+  ); //Provider.of<EditingSongModel>(context).keyboardBottomSpace);
 }
