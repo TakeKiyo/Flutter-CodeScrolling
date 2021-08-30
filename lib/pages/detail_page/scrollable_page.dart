@@ -30,9 +30,14 @@ class _ScrollPageState extends State<ScrollablePage> {
     });
   }
 
-  // コントローラ
   ScrollController _scrollController;
   final List<GlobalKey> _globalTextFormList = [];
+
+  double _getLocaleAndSize(int listIndex) {
+    RenderBox box =
+        _globalTextFormList[listIndex].currentContext.findRenderObject();
+    return box.localToGlobal(Offset.zero).dy;
+  }
 
   @override
   void initState() {
@@ -169,12 +174,6 @@ class _ScrollPageState extends State<ScrollablePage> {
         }
 
         _globalTextFormList.add(GlobalKey<FormState>());
-
-        double _getLocaleAndSize(int listIndex) {
-          RenderBox box =
-              _globalTextFormList[listIndex].currentContext.findRenderObject();
-          return box.localToGlobal(Offset.zero).dy;
-        }
 
         ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
         WidgetsBinding.instance.addPostFrameCallback((cb) {

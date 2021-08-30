@@ -126,6 +126,54 @@ class EditingSongModel extends ChangeNotifier {
   ///detailEditPageビルド時に代入
   ScrollController editScrollController;
 
+  List<double> _codeFormOffsetList = [];
+  List<double> _lyricFormOffsetList = [];
+  get codeFormOffsetList => _codeFormOffsetList;
+  get lyricFormOffsetList => _lyricFormOffsetList;
+
+  double deviceHeight = 0;
+
+  set codeFormOffsetList(double dy) {
+    if (dy == -1) {
+      //scrollablePage呼び出し時に初期化
+      _codeFormOffsetList = [];
+    } else {
+      _codeFormOffsetList.add(dy);
+    }
+  }
+
+  set lyricFormOffsetList(double dy) {
+    if (dy == -1) {
+      //scrollablePage呼び出し時に初期化
+      _lyricFormOffsetList = [];
+    } else {
+      _lyricFormOffsetList.add(dy);
+    }
+  }
+
+  void scrollToTappedForm({int listIndex, String mode}) {
+    if (editScrollController.hasClients) {
+      switch (mode) {
+        case "code":
+          if (_codeFormOffsetList[listIndex] > deviceHeight / 2)
+            editScrollController.animateTo(
+              _codeFormOffsetList[listIndex] - deviceHeight / 2,
+              duration: Duration(milliseconds: 500),
+              curve: Curves.easeOut,
+            );
+          break;
+        case "lyric":
+          if (_lyricFormOffsetList[listIndex] > deviceHeight / 2)
+            editScrollController.animateTo(
+              _lyricFormOffsetList[listIndex] - deviceHeight / 2,
+              duration: Duration(milliseconds: 500),
+              curve: Curves.easeOut,
+            );
+          break;
+      }
+    }
+  }
+
   void scrollToEnd() {
     if (editScrollController.hasClients) {
       editScrollController.animateTo(

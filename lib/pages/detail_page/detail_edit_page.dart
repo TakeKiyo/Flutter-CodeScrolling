@@ -7,14 +7,96 @@ import 'package:provider/provider.dart';
 import '../custom_keyboard.dart';
 import 'detail_page.dart';
 
-class DetailEditPage extends StatelessWidget {
+class DetailEditPage extends StatefulWidget {
   final int bpm;
   final String title;
   final String docId;
 
-  final ScrollController _scrollController = ScrollController();
-
   DetailEditPage({this.bpm, this.title, this.docId});
+
+  _DetailEditPageState createState() => _DetailEditPageState();
+}
+
+class _DetailEditPageState extends State<DetailEditPage> {
+  ScrollController _scrollController;
+  final List<GlobalKey> _globalLyricFormList = [];
+  final List<GlobalKey> _globalCodeFormList = [];
+
+  double _getLyricLocale(int listIndex) {
+    RenderBox box =
+        _globalLyricFormList[listIndex].currentContext.findRenderObject();
+    return box.localToGlobal(Offset.zero).dy;
+  }
+
+  double _getCodeLocale(int listIndex) {
+    RenderBox box =
+        _globalCodeFormList[listIndex].currentContext.findRenderObject();
+    return box.localToGlobal(Offset.zero).dy;
+  }
+
+  void _resetOffsetList() {
+    Provider.of<EditingSongModel>(context, listen: false).codeFormOffsetList =
+        -1;
+    Provider.of<EditingSongModel>(context, listen: false).lyricFormOffsetList =
+        -1;
+  }
+
+  void _setEachOffsetList() {
+    _resetOffsetList();
+    switch (Provider.of<EditingSongModel>(context, listen: false).displayType) {
+      case "code":
+        for (int listIndex = 0;
+            listIndex <
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .codeList
+                    .length;
+            listIndex++)
+          Provider.of<EditingSongModel>(context, listen: false)
+              .codeFormOffsetList = _getCodeLocale(listIndex);
+        break;
+      case "both":
+        for (int listIndex = 0;
+            listIndex <
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .codeList
+                    .length;
+            listIndex++) {
+          Provider.of<EditingSongModel>(context, listen: false)
+              .codeFormOffsetList = _getCodeLocale(listIndex);
+          Provider.of<EditingSongModel>(context, listen: false)
+              .lyricFormOffsetList = _getLyricLocale(listIndex);
+        }
+        break;
+      case "lyrics":
+        for (int listIndex = 0;
+            listIndex <
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .codeList
+                    .length;
+            listIndex++)
+          Provider.of<EditingSongModel>(context, listen: false)
+              .lyricFormOffsetList = _getLyricLocale(listIndex);
+        break;
+    }
+    print(Provider.of<EditingSongModel>(context, listen: false)
+        .lyricFormOffsetList);
+    print(Provider.of<EditingSongModel>(context, listen: false)
+        .codeFormOffsetList);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    Provider.of<EditingSongModel>(context, listen: false).editScrollController =
+        _scrollController;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   List<String> formatCodeList(List<List<String>> codeList) {
     List<String> formattedCodeList = [];
@@ -34,8 +116,11 @@ class DetailEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<EditingSongModel>(context, listen: false).editScrollController =
-        _scrollController;
+    Provider.of<EditingSongModel>(context, listen: false).deviceHeight =
+        MediaQuery.of(context).size.height;
+
+    ///このWidgetがBuildされた時に呼ばれる
+    WidgetsBinding.instance.addPostFrameCallback((cb) => _setEachOffsetList());
 
     void _showCustomKeyboard(context) {
       Scaffold.of(context).showBottomSheet((BuildContext context) {
@@ -81,6 +166,10 @@ class DetailEditPage extends StatelessWidget {
           ));
         }
       }
+
+      _globalLyricFormList.add(GlobalKey<FormState>());
+      _globalCodeFormList.add(GlobalKey<FormState>());
+
       final _lyricsController = TextEditingController(
           text: Provider.of<EditingSongModel>(context, listen: false)
               .lyricsList[listIndex]);
@@ -90,6 +179,7 @@ class DetailEditPage extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 48.0),
               child: TextFormField(
+                key: _globalLyricFormList[listIndex],
                 controller: _lyricsController,
                 showCursor: true,
                 maxLines: null,
@@ -102,6 +192,8 @@ class DetailEditPage extends StatelessWidget {
                   }
                   Provider.of<EditingSongModel>(context, listen: false)
                       .openNormalKeyboard();
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .scrollToTappedForm(listIndex: listIndex, mode: "lyric");
                 },
                 onChanged: (text) {
                   Provider.of<EditingSongModel>(context, listen: false)
@@ -115,6 +207,7 @@ class DetailEditPage extends StatelessWidget {
             TextPosition(offset: _controller.text.length));
         list.add(Flexible(
             child: TextField(
+          key: i == 0 ? _globalCodeFormList[listIndex] : null,
           showCursor: true,
           readOnly: true,
           onTap: () {
@@ -135,6 +228,8 @@ class DetailEditPage extends StatelessWidget {
                 .controlBarIdx = listIndex;
             Provider.of<EditingSongModel>(context, listen: false)
                 .controlTimeIdx = i;
+            Provider.of<EditingSongModel>(context, listen: false)
+                .scrollToTappedForm(listIndex: listIndex, mode: "code");
           },
           textAlign: TextAlign.center,
           controller: _controller,
@@ -256,7 +351,8 @@ class DetailEditPage extends StatelessWidget {
                     onChanged: (e) => {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .setDisplayType("both")
+                          .setDisplayType("both"),
+                      _setEachOffsetList()
                     },
                   ),
                   // child: Text("コードと歌詞を編集"),
@@ -277,7 +373,8 @@ class DetailEditPage extends StatelessWidget {
                     onChanged: (e) => {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .setDisplayType("code")
+                          .setDisplayType("code"),
+                      _setEachOffsetList()
                     },
                   ),
                 ),
@@ -298,7 +395,8 @@ class DetailEditPage extends StatelessWidget {
                     onChanged: (e) => {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .setDisplayType("lyrics")
+                          .setDisplayType("lyrics"),
+                      _setEachOffsetList()
                     },
                   ),
                 ),
@@ -351,7 +449,7 @@ class DetailEditPage extends StatelessWidget {
                     .closeKeyboard();
                 Navigator.of(context).pop();
               }
-              submitCodeList(docId);
+              submitCodeList(widget.docId);
             },
           ),
         ],
