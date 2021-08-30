@@ -155,20 +155,22 @@ class EditingSongModel extends ChangeNotifier {
     if (editScrollController.hasClients) {
       switch (mode) {
         case "code":
-          if (_codeFormOffsetList[listIndex] > deviceHeight / 2)
-            editScrollController.animateTo(
-              _codeFormOffsetList[listIndex] - deviceHeight / 2,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeOut,
-            );
+          editScrollController.animateTo(
+            (_codeFormOffsetList[listIndex] > deviceHeight / 2)
+                ? _codeFormOffsetList[listIndex] - deviceHeight / 2
+                : 0,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeOut,
+          );
           break;
         case "lyric":
-          if (_lyricFormOffsetList[listIndex] > deviceHeight / 2)
-            editScrollController.animateTo(
-              _lyricFormOffsetList[listIndex] - deviceHeight / 2,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeOut,
-            );
+          editScrollController.animateTo(
+            (_lyricFormOffsetList[listIndex] > deviceHeight / 2)
+                ? _lyricFormOffsetList[listIndex] - deviceHeight / 2
+                : 0,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeOut,
+          );
           break;
       }
     }
