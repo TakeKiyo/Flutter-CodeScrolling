@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
@@ -304,6 +305,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
     }
 
     void submitCodeList(String docId) async {
+      String udid = await FlutterUdid.udid;
       FirebaseFirestore.instance.collection("Songs").doc(docId).update({
         "codeList": formatCodeList(
             Provider.of<EditingSongModel>(context, listen: false).codeList),
@@ -314,6 +316,8 @@ class _DetailEditPageState extends State<DetailEditPage> {
         "lyricsList":
             Provider.of<EditingSongModel>(context, listen: false).lyricsList,
         "updatedAt": DateTime.now(),
+        "udid": udid,
+        "type": "edit",
       });
       Navigator.of(context).pop(
         MaterialPageRoute(builder: (context) {
