@@ -294,23 +294,21 @@ class _ScrollPageState extends State<ScrollablePage> {
           behavior: HitTestBehavior.opaque,
           child: Container(
               child: Stack(
-            alignment: Alignment.center,
+            alignment: Alignment.topCenter,
             children: [
-              Positioned(
-                child: Scrollbar(
-                    controller: _scrollController,
-                    isAlwaysShown: false,
-                    thickness: 8.0,
-                    hoverThickness: 12.0,
-                    child: SingleChildScrollView(
-                        controller: _scrollController,
-                        child: ListView(
-                          padding: EdgeInsets.all(36.0),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: displayedWidget(),
-                        ))),
-              ),
+              Scrollbar(
+                  controller: _scrollController,
+                  isAlwaysShown: false,
+                  thickness: 8.0,
+                  hoverThickness: 12.0,
+                  child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: ListView(
+                        padding: EdgeInsets.all(36.0),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: displayedWidget(),
+                      ))),
               Positioned(
                 bottom: 5,
                 child: Selector<MetronomeModel, bool>(
