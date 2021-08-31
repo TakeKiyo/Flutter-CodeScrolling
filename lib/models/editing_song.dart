@@ -139,7 +139,7 @@ class EditingSongModel extends ChangeNotifier {
       //scrollablePage呼び出し時に初期化
       _codeFormOffsetList = [];
     } else {
-      _codeFormOffsetList.add(tmp);
+      _codeFormOffsetList.add(tmp + editScrollController.offset);
     }
   }
 
@@ -149,7 +149,7 @@ class EditingSongModel extends ChangeNotifier {
       //scrollablePage呼び出し時に初期化
       _lyricFormOffsetList = [];
     } else {
-      _lyricFormOffsetList.add(tmp);
+      _lyricFormOffsetList.add(tmp + editScrollController.offset);
     }
   }
 

@@ -351,9 +351,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
                           .setDisplayType("both"),
-                      //スクロール位置を戻してからWidget位置をSet
-                      Provider.of<EditingSongModel>(context, listen: false)
-                          .scrollToTop(),
                       WidgetsBinding.instance
                           .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
@@ -377,9 +374,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
                           .setDisplayType("code"),
-                      //スクロール位置を戻してからWidget位置をSet
-                      Provider.of<EditingSongModel>(context, listen: false)
-                          .scrollToTop(),
                       WidgetsBinding.instance
                           .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
@@ -403,9 +397,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
                           .setDisplayType("lyrics"),
-                      //スクロール位置を戻してからWidget位置をSet
-                      Provider.of<EditingSongModel>(context, listen: false)
-                          .scrollToTop(),
                       WidgetsBinding.instance
                           .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
@@ -629,6 +620,9 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                 await Future.delayed(Duration(
                                                     milliseconds: 200));
                                                 model.scrollToEnd();
+                                                WidgetsBinding.instance
+                                                    .addPostFrameCallback((cb) =>
+                                                        _setEachOffsetList());
                                               },
                                             )
                                           ])),
