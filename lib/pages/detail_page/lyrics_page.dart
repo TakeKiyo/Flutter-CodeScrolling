@@ -34,12 +34,21 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
     super.initState();
     _isScrolling = false;
     _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => showToast());
   }
 
   @override
   void dispose() {
     _scrollController.dispose(); // dispose the controller
     super.dispose();
+  }
+
+  void showToast() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.grey,
+      content: const Text('画面をタップするとスクロールが始まります'),
+      duration: const Duration(seconds: 1),
+    ));
   }
 
   @override
@@ -122,7 +131,6 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
 
           List<Widget> displayedWidget() {
             List<Widget> displayedList = [];
-            displayedList.add(Center(child: Text('画面をタップするとスクロールが開始します。')));
             displayedList.add(TextButton(
                 onPressed: () {
                   Provider.of<MetronomeModel>(context, listen: false)
