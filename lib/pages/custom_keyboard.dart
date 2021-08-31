@@ -21,7 +21,7 @@ class CustomKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
+      height: 300,
       color: Colors.grey[800],
       child: Column(
         children: [
@@ -34,7 +34,7 @@ class CustomKeyboard extends StatelessWidget {
           buildRowThree(),
           insertPadding,
           buildRowFour(),
-          Padding(padding: EdgeInsets.only(bottom: 70))
+          Padding(padding: EdgeInsets.only(bottom: 30))
         ],
       ),
     );
@@ -42,7 +42,7 @@ class CustomKeyboard extends StatelessWidget {
 
   Container buildRowSetting(BuildContext context) {
     return Container(
-      height: 50,
+      height: 40,
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         IconButton(
             icon: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.grey),
@@ -55,6 +55,8 @@ class CustomKeyboard extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.fromLTRB(2.0, 8.0, 2.0, 2.0),
                 child: TextField(
+                    readOnly: true,
+                    showCursor: true,
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(

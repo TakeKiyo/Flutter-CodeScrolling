@@ -123,6 +123,81 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///detailEditPageビルド時に代入
+  ScrollController editScrollController;
+
+  List<double> _codeFormOffsetList = [];
+  List<double> _lyricFormOffsetList = [];
+  get codeFormOffsetList => _codeFormOffsetList;
+  get lyricFormOffsetList => _lyricFormOffsetList;
+
+  double deviceHeight = 0;
+
+  set codeFormOffsetList(double yOffset) {
+    double tmp = yOffset;
+    if (yOffset == -1) {
+      //scrollablePage呼び出し時に初期化
+      _codeFormOffsetList = [];
+    } else {
+      _codeFormOffsetList.add(tmp + editScrollController.offset);
+    }
+  }
+
+  set lyricFormOffsetList(double yOffset) {
+    double tmp = yOffset;
+    if (yOffset == -1) {
+      //scrollablePage呼び出し時に初期化
+      _lyricFormOffsetList = [];
+    } else {
+      _lyricFormOffsetList.add(tmp + editScrollController.offset);
+    }
+  }
+
+  void scrollToTappedForm({int listIndex, String mode}) {
+    if (editScrollController.hasClients) {
+      switch (mode) {
+        case "code":
+          print(_codeFormOffsetList[listIndex]);
+          editScrollController.animateTo(
+            (_codeFormOffsetList[listIndex] > deviceHeight / 2)
+                ? _codeFormOffsetList[listIndex] - (deviceHeight / 2)
+                : 0,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeOut,
+          );
+          break;
+        case "lyrics":
+          print(_lyricFormOffsetList[listIndex]);
+          editScrollController.animateTo(
+            (_lyricFormOffsetList[listIndex] > deviceHeight / 2)
+                ? _lyricFormOffsetList[listIndex] - (deviceHeight / 2)
+                : 0,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeOut,
+          );
+          break;
+      }
+    }
+  }
+
+  void scrollToTop() {
+    if (editScrollController.hasClients) {
+      editScrollController.jumpTo(
+        editScrollController.position.minScrollExtent,
+      );
+    }
+  }
+
+  void scrollToEnd() {
+    if (editScrollController.hasClients) {
+      editScrollController.animateTo(
+        editScrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
   ///detail_edit_pageでTextFieldをTapする度に対応したTextEditingControllerを代入する
   TextEditingController controller;
   int controlBarIdx = 0;
@@ -136,7 +211,7 @@ class EditingSongModel extends ChangeNotifier {
 
   void openKeyboard() {
     _keyboardIsOpening = true;
-    _keyboardBottomSpace = 350;
+    _keyboardBottomSpace = 300;
     notifyListeners();
   }
 
@@ -254,11 +329,5 @@ class EditingSongModel extends ChangeNotifier {
 
   bool _isUtf16Surrogate(int value) {
     return value & 0xF800 == 0xD800;
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }
