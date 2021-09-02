@@ -180,6 +180,7 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void metronomeLoad() async {
+    if (scrollController.hasClients) scrollController.position.jumpTo(0.0);
     await _metronomePlayer.loadAll(_metronomeSoundsList);
     _isCountInPlaying = true;
     notifyListeners();
@@ -278,13 +279,10 @@ class MetronomeModel extends ChangeNotifier {
     } else {
       for (int i = 0; i < fetchedRhythmList.length; i++) {
         List<String> beatCountList = fetchedRhythmList[i].split('/');
-        if (beatCountList[1] == "4") {
-          _ticksPerRowList.add(int.parse(beatCountList[0]));
-        } else if (beatCountList[1] == "8") {
-          _ticksPerRowList.add(int.parse(beatCountList[0]) ~/ 2);
-        } else if (beatCountList[1] == "16") {
-          _ticksPerRowList.add(int.parse(beatCountList[0]) ~/ 4);
+        if (i == 0) {
+          _countInTimes = int.parse(beatCountList[0]);
         }
+        _ticksPerRowList.add(int.parse(beatCountList[0]));
       }
     }
   }
