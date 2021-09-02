@@ -93,6 +93,7 @@ class _ScrollPageState extends State<ScrollablePage> {
             }
             Navigator.of(context).push(
               MaterialPageRoute(
+                fullscreenDialog: true,
                 builder: (context) {
                   return DetailEditPage(
                     bpm: widget.bpm,
@@ -275,6 +276,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                     .lyricsList = widget.lyricsList;
                 Navigator.of(context).push(
                   MaterialPageRoute(
+                    fullscreenDialog: true,
                     builder: (context) {
                       return DetailEditPage(
                         bpm: widget.bpm,

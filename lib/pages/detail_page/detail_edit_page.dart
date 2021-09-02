@@ -412,7 +412,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: Icon(Icons.close),
             onPressed: () {
               if (Provider.of<EditingSongModel>(context, listen: false)
                   .keyboardIsOpening) {

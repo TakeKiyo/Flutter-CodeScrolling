@@ -26,9 +26,11 @@ class SongsList extends StatelessWidget {
             child: FloatingActionButton(
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) {
-                    return CreateSong();
-                  }),
+                  MaterialPageRoute(
+                      fullscreenDialog: true,
+                      builder: (context) {
+                        return CreateSong();
+                      }),
                 );
               },
               child: const Icon(
