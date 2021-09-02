@@ -41,15 +41,17 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               ),
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) {
-                    return EditSongInfo(
-                      title: title,
-                      artist: artist,
-                      bpm: bpm,
-                      songKey: songKey,
-                      docId: docId,
-                    );
-                  }),
+                  MaterialPageRoute(
+                      fullscreenDialog: true,
+                      builder: (context) {
+                        return EditSongInfo(
+                          title: title,
+                          artist: artist,
+                          bpm: bpm,
+                          songKey: songKey,
+                          docId: docId,
+                        );
+                      }),
                 );
               },
             ),
