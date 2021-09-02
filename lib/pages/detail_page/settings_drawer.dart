@@ -40,27 +40,19 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 ],
               ),
               onTap: () {
-                print("Information");
-                //TODO ボタンを押したら情報変更画面
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return EditSongInfo(
+                      title: title,
+                      artist: artist,
+                      bpm: bpm,
+                      songKey: songKey,
+                      docId: docId,
+                    );
+                  }),
+                );
               },
             ),
-            ElevatedButton(
-                child: Text("曲情報を編集する", style: TextStyle(color: Colors.black)),
-                style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColorLight),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return EditSongInfo(
-                        title: title,
-                        artist: artist,
-                        bpm: bpm,
-                        songKey: songKey,
-                        docId: docId,
-                      );
-                    }),
-                  );
-                }),
             insertPadding,
             Text(
               "メトロノームのサウンド",
