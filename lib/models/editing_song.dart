@@ -57,7 +57,11 @@ class EditingSongModel extends ChangeNotifier {
     for (int i = 0; i < fetchedSeparationList.length; i++) {
       _separationList.add(fetchedSeparationList[i]);
     }
-    _selectedSeparation = "Intro";
+    if (fetchedSeparationList.length > 0) {
+      _selectedSeparation = fetchedSeparationList.last;
+    } else {
+      _selectedSeparation = "Intro";
+    }
   }
 
   String _selectedRhythm = "4/4";
@@ -75,7 +79,12 @@ class EditingSongModel extends ChangeNotifier {
     for (int i = 0; i < fetchedRhythmList.length; i++) {
       _rhythmList.add(fetchedRhythmList[i]);
     }
-    _selectedRhythm = "4/4";
+    if (fetchedRhythmList.length > 0){
+      _selectedRhythm = fetchedRhythmList.last;
+    }else{
+      _selectedRhythm = "4/4";
+    }
+
   }
 
   List<String> _lyricsList = [];
