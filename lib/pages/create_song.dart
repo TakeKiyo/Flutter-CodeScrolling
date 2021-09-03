@@ -178,7 +178,8 @@ class _CreateSongFormState extends State<CreateSong> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                OutlinedButton(
+                                Expanded(
+                                    child: OutlinedButton(
                                   onPressed: () => {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
@@ -189,10 +190,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                   style: TextButton.styleFrom(
                                     primary: Colors.black,
                                     padding: EdgeInsets.only(
-                                        left: 32.0,
-                                        right: 32.0,
-                                        top: 12.0,
-                                        bottom: 12.0),
+                                        top: 12.0, bottom: 12.0),
                                     textStyle: const TextStyle(fontSize: 16),
                                   ),
                                   child: Column(
@@ -202,11 +200,14 @@ class _CreateSongFormState extends State<CreateSong> {
                                           icon: const Icon(Icons.edit),
                                           onPressed: null,
                                         ),
-                                        Text('IDから'),
-                                        Text('追加する'),
+                                        Text(
+                                          'IDから\n追加する',
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ]),
-                                ),
-                                OutlinedButton(
+                                )),
+                                Expanded(
+                                    child: OutlinedButton(
                                   onPressed: () => {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
@@ -217,10 +218,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                   style: TextButton.styleFrom(
                                     primary: Colors.black,
                                     padding: EdgeInsets.only(
-                                        left: 12.0,
-                                        right: 12.0,
-                                        top: 12.0,
-                                        bottom: 12.0),
+                                        top: 12.0, bottom: 12.0),
                                     textStyle: const TextStyle(fontSize: 16),
                                   ),
                                   child: Column(
@@ -230,11 +228,13 @@ class _CreateSongFormState extends State<CreateSong> {
                                         icon: const Icon(Icons.qr_code),
                                         onPressed: null,
                                       ),
-                                      Text('QRコードから'),
-                                      Text('追加する')
+                                      Text(
+                                        'QRコードから\n追加する',
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ],
                                   ),
-                                ),
+                                )),
                               ])),
                       TextFormField(
                         style: TextStyle(
