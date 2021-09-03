@@ -90,6 +90,64 @@ class _SongsListState extends State<SongsListForm> {
       Navigator.pop(context);
     }
 
+    void createSong() async {
+      String udid = await FlutterUdid.udid;
+
+      List<String> codeList = [
+        "A,A,A,A",
+        "A,A,A,A",
+        "A,E,Fm,B",
+        "A,E,Fm,B",
+        "D,C,F,G",
+        "A,E,C,E",
+        "A,A,A,A",
+      ];
+
+      List<String> lyricsList = [
+        "",
+        "",
+        "Aメロの歌詞1",
+        "Aメロの歌詞2",
+        "Bメロの歌詞",
+        "サビの歌詞",
+        "英語や長い文章でも適切に表示することができます。",
+      ];
+
+      List<String> rhythmList = [
+        "4/4",
+        "4/4",
+        "4/4",
+        "4/4",
+        "4/4",
+        "4/4",
+        "4/4",
+      ];
+
+      List<String> separation = [
+        "Intro",
+        "Intro",
+        "A",
+        "A",
+        "B",
+        "サビ",
+        "サビ",
+      ];
+      FirebaseFirestore.instance.collection("Songs").add({
+        "title": "サンプル曲",
+        "bpm": 120,
+        "key": "C / Am",
+        "artist": "サンプルアーティスト",
+        "userID": udid,
+        "memberID": [udid],
+        "codeList": codeList,
+        "lyricsList": lyricsList,
+        "rhythmList": rhythmList,
+        "separation": separation,
+        "createdAt": DateTime.now(),
+        "updatedAt": DateTime.now(),
+      });
+    }
+
     final _scrollController = ScrollController();
 
     return StreamBuilder<QuerySnapshot>(
@@ -113,6 +171,11 @@ class _SongsListState extends State<SongsListForm> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                 Text('保存された曲はありません'),
+                TextButton(
+                    onPressed: () {
+                      createSong();
+                    },
+                    child: Text("サンプル曲を作成してみる"))
               ]));
         } else {
           final List<DocumentSnapshot> documents = snapshot.data.docs;
