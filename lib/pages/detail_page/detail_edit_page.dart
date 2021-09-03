@@ -574,9 +574,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                       value: model
                                                           .selectedBeatCount,
                                                       elevation: 16,
-                                                      style: const TextStyle(
-                                                        color: Colors.black,
-                                                      ),
                                                       onChanged:
                                                           (int newValue) {
                                                         model

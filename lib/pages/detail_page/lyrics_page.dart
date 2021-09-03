@@ -248,6 +248,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                 left: 10.0,
                 child: SvgPicture.asset(
                   turtleIcon,
+                  color: Theme.of(context).iconTheme.color,
                   semanticsLabel: 'turtle',
                   width: 30.0,
                 )),
@@ -286,6 +287,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                 right: 15.0,
                 child: SvgPicture.asset(
                   rabbitIcon,
+                  color: Theme.of(context).iconTheme.color,
                   semanticsLabel: 'rabbit',
                   width: 30.0,
                 )),

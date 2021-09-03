@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class ThemeModel extends ChangeNotifier {
   ThemeData _currentTheme = ThemeData(
-    primarySwatch: Colors.grey,
     primaryColor: Colors.white,
   );
   get currentTheme => _currentTheme;
@@ -15,7 +14,6 @@ class ThemeModel extends ChangeNotifier {
       case 0:
         _themeIndex = fetchedIndex;
         _currentTheme = ThemeData(
-          primarySwatch: Colors.grey,
           primaryColor: Colors.white,
         );
         break;
@@ -23,7 +21,6 @@ class ThemeModel extends ChangeNotifier {
       case 1:
         _themeIndex = fetchedIndex;
         _currentTheme = ThemeData(
-          primarySwatch: Colors.grey,
           primaryColor: Colors.white,
         );
         break;

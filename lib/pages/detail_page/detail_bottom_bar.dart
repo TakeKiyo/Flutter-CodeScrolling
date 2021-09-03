@@ -8,7 +8,6 @@ import 'countin_dialog.dart';
 
 Material detailBottomBar(BuildContext context) {
   final double bottomIconSIze = 36;
-  final Color textColor = Colors.black;
 
   return Material(
     color: Theme.of(context).primaryColor.withOpacity(0.5),
@@ -48,14 +47,18 @@ Material detailBottomBar(BuildContext context) {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("BPM", style: TextStyle(color: textColor)),
+                    Text("BPM",
+                        style: TextStyle(
+                            color: Theme.of(context).iconTheme.color)),
                     Selector<MetronomeModel, int>(
                         selector: (context, model) => model.tempoCount,
                         shouldRebuild: (exTempoCount, notifiedTempoCount) =>
                             exTempoCount != notifiedTempoCount,
                         builder: (context, tempoCount, child) => Text(
                               tempoCount.toString(),
-                              style: TextStyle(fontSize: 20, color: textColor),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Theme.of(context).iconTheme.color),
                             )),
                   ],
                 ),
@@ -70,7 +73,6 @@ Material detailBottomBar(BuildContext context) {
               flex: 1,
               child: !isPlaying
                   ? IconButton(
-                      color: textColor,
                       icon: Icon(Icons.play_arrow_rounded),
                       iconSize: bottomIconSIze,
                       onPressed: () async {
@@ -98,7 +100,6 @@ Material detailBottomBar(BuildContext context) {
                       },
                     )
                   : IconButton(
-                      color: textColor,
                       icon: Icon(Icons.pause_rounded),
                       iconSize: bottomIconSIze,
                       onPressed: () {
@@ -114,7 +115,6 @@ Material detailBottomBar(BuildContext context) {
           Expanded(
             flex: 1,
             child: IconButton(
-              color: textColor,
               icon: Icon(Icons.stop_rounded),
               iconSize: bottomIconSIze,
               onPressed: () {
@@ -130,7 +130,6 @@ Material detailBottomBar(BuildContext context) {
                 shouldRebuild: (exSoundValue, notifiedSoundValue) =>
                     exSoundValue != notifiedSoundValue,
                 builder: (context, soundVolume, __) => IconButton(
-                      color: textColor,
                       icon: volumeIcon(soundVolume),
                       iconSize: bottomIconSIze,
                       onPressed: () {
@@ -145,8 +144,8 @@ Material detailBottomBar(BuildContext context) {
 
 Icon volumeIcon(double soundVolume) {
   if (soundVolume == 0) {
-    return Icon(Icons.volume_off, color: Colors.black);
+    return Icon(Icons.volume_off);
   } else {
-    return Icon(Icons.volume_up, color: Colors.black);
+    return Icon(Icons.volume_up);
   }
 }

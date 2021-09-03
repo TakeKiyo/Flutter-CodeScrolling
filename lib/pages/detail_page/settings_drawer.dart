@@ -26,7 +26,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               ),
             ),
             ListTile(
-              tileColor: Colors.grey,
+              tileColor: Theme.of(context).primaryColorLight,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -63,10 +63,10 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 alignedDropdown: true,
                 child: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Container(
-                      color: Colors.grey,
+                      color: Theme.of(context).primaryColorLight,
                       child: DropdownButton<int>(
                         isExpanded: true,
-                        dropdownColor: Theme.of(context).primaryColorDark,
+                        dropdownColor: Theme.of(context).primaryColorLight,
                         value: model.metronomeSoundsList
                             .indexOf(model.metronomeSound),
                         elevation: 16,
@@ -91,7 +91,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               ),
             ),
             ListTile(
-                tileColor: Colors.grey,
+                tileColor: Theme.of(context).primaryColorLight,
                 title: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Text(
                     "回数：" + model.countInTimes.toString(),
@@ -104,8 +104,6 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
             insertPadding,
             ElevatedButton(
               child: Text("曲を削除する", style: TextStyle(color: Colors.red)),
-              style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColorLight),
               onPressed: () {
                 showDialog(
                     context: context,
