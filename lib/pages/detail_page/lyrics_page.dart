@@ -104,6 +104,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                         .lyricsList = lyricsList;
                     Navigator.of(context).push(
                       MaterialPageRoute(
+                        fullscreenDialog: true,
                         builder: (context) {
                           return DetailEditPage(
                             bpm: widget.bpm,
@@ -147,6 +148,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                       .setDisplayType("lyrics");
                   Navigator.of(context).push(
                     MaterialPageRoute(
+                      fullscreenDialog: true,
                       builder: (context) {
                         return DetailEditPage(
                           bpm: widget.bpm,
