@@ -36,7 +36,6 @@ class ExportSong extends StatelessWidget {
               OutlinedButton(
                 child: const Text('IDをコピーする'),
                 style: OutlinedButton.styleFrom(
-                  primary: Colors.black,
                   side: const BorderSide(),
                 ),
                 onPressed: () async {

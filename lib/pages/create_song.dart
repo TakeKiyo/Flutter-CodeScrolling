@@ -105,6 +105,7 @@ class _CreateSongFormState extends State<CreateSong> {
               Navigator.pop(context);
             },
             child: CupertinoPicker(
+              backgroundColor: Theme.of(context).primaryColorLight,
               itemExtent: 40,
               children: _items.map(_pickerItem).toList(),
               onSelectedItemChanged: _onSelectedItemChanged,
@@ -153,8 +154,7 @@ class _CreateSongFormState extends State<CreateSong> {
           title: Text('曲追加ページ'),
           actions: [
             TextButton(
-              child: Text("作成",
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
+              child: Text("作成", style: TextStyle(fontSize: 18)),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   createButtonClicked();
@@ -176,68 +176,80 @@ class _CreateSongFormState extends State<CreateSong> {
                       Padding(
                           padding: EdgeInsets.only(bottom: 10.0),
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                Expanded(
-                                    child: OutlinedButton(
-                                  onPressed: () => {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                        return ImportSongById();
-                                      }),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.width / 3,
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  child: OutlinedButton(
+                                    onPressed: () => {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                          return ImportSongById();
+                                        }),
+                                      ),
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.only(
+                                          top: 12.0, bottom: 12.0),
+                                      textStyle: const TextStyle(fontSize: 16),
                                     ),
-                                  },
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.black,
-                                    padding: EdgeInsets.only(
-                                        top: 12.0, bottom: 12.0),
-                                    textStyle: const TextStyle(fontSize: 16),
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          IconButton(
+                                            icon: const Icon(Icons.edit),
+                                            onPressed: null,
+                                          ),
+                                          Text('IDから\n追加する',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryTextTheme
+                                                      .caption
+                                                      .color)),
+                                        ]),
                                   ),
-                                  child: Column(
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.width / 3,
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  child: OutlinedButton(
+                                    onPressed: () => {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                          return ImportSong();
+                                        }),
+                                      ),
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.only(
+                                          top: 12.0, bottom: 12.0),
+                                      textStyle: const TextStyle(fontSize: 16),
+                                    ),
+                                    child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
                                         IconButton(
-                                          icon: const Icon(Icons.edit),
+                                          icon: const Icon(Icons.qr_code),
                                           onPressed: null,
                                         ),
                                         Text(
-                                          'IDから\n追加する',
+                                          'QRコードから\n追加する',
                                           textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryTextTheme
+                                                  .caption
+                                                  .color),
                                         ),
-                                      ]),
-                                )),
-                                Expanded(
-                                    child: OutlinedButton(
-                                  onPressed: () => {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(builder: (context) {
-                                        return ImportSong();
-                                      }),
+                                      ],
                                     ),
-                                  },
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.black,
-                                    padding: EdgeInsets.only(
-                                        top: 12.0, bottom: 12.0),
-                                    textStyle: const TextStyle(fontSize: 16),
                                   ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: const Icon(Icons.qr_code),
-                                        onPressed: null,
-                                      ),
-                                      Text(
-                                        'QRコードから\n追加する',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                )),
+                                ),
                               ])),
                       TextFormField(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 25.0,
                         ),
                         decoration: const InputDecoration(
@@ -246,7 +258,6 @@ class _CreateSongFormState extends State<CreateSong> {
                               child: Icon(Icons.music_note, size: 30.0)),
                           labelText: '曲名',
                         ),
-                        cursorColor: Colors.black,
                         onChanged: _handleTitle,
                         // ignore: missing_return
                         validator: (value) {
@@ -256,16 +267,15 @@ class _CreateSongFormState extends State<CreateSong> {
                         },
                       ),
                       TextFormField(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 25.0,
                         ),
                         decoration: const InputDecoration(
                           icon: Padding(
                               padding: EdgeInsets.only(top: 10.0),
-                              child: Icon(Icons.person, size: 30.0)),
+                              child: const Icon(Icons.person, size: 30.0)),
                           labelText: 'アーティスト',
                         ),
-                        cursorColor: Colors.black,
                         onChanged: _handleArtist,
                         // ignore: missing_return
                         validator: (value) {
@@ -275,23 +285,30 @@ class _CreateSongFormState extends State<CreateSong> {
                         },
                       ),
                       Padding(
-                          padding: EdgeInsets.only(top: 20.0),
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
                                   "キー  ",
                                   style: TextStyle(
+                                    color: Theme.of(context)
+                                        .primaryTextTheme
+                                        .bodyText1
+                                        .color,
                                     fontSize: 25.0,
                                   ),
                                 ),
                                 OutlinedButton(
                                   child: Text((_key == "未選択") ? "キーを選択" : _key,
                                       style: TextStyle(
+                                        color: Theme.of(context)
+                                            .primaryTextTheme
+                                            .bodyText1
+                                            .color,
                                         fontSize: 25.0,
                                       )),
                                   style: OutlinedButton.styleFrom(
-                                    primary: Colors.black,
                                     side: const BorderSide(),
                                   ),
                                   onPressed: () {
@@ -314,14 +331,13 @@ class _CreateSongFormState extends State<CreateSong> {
                       Text(
                         "いつでも変更可能です",
                         style: TextStyle(
-                          color: Colors.grey,
+                          color:
+                              Theme.of(context).primaryTextTheme.caption.color,
                           fontSize: 15.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Slider(
-                        activeColor: Colors.black,
-                        inactiveColor: Theme.of(context).primaryColorDark,
                         label: null,
                         value: _bpm.toDouble(),
                         divisions: 270,
