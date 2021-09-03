@@ -153,19 +153,21 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                 key: _formKey,
                 child: SingleChildScrollView(
                     child: Container(
-                  padding: const EdgeInsets.only(left: 30, right: 30, top: 5.0),
+                  padding:
+                      const EdgeInsets.only(left: 30, right: 30, top: 15.0),
                   child: Column(
                     children: <Widget>[
-                      Text(
-                        "曲名",
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       TextFormField(
                         controller: _titleEditingController,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                        ),
+                        decoration: const InputDecoration(
+                          icon: Padding(
+                              padding: EdgeInsets.only(top: 10.0),
+                              child: Icon(Icons.music_note, size: 30.0)),
+                          labelText: '曲名',
+                        ),
                         cursorColor: Colors.black,
                         onChanged: _handleTitle,
                         // ignore: missing_return
@@ -175,16 +177,17 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                           }
                         },
                       ),
-                      Text(
-                        "アーティスト",
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       TextFormField(
                         controller: _artistEditingController,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                        ),
+                        decoration: const InputDecoration(
+                          icon: Padding(
+                              padding: EdgeInsets.only(top: 10.0),
+                              child: Icon(Icons.person, size: 30.0)),
+                          labelText: 'アーティスト',
+                        ),
                         cursorColor: Colors.black,
                         onChanged: _handleArtist,
                         // ignore: missing_return
@@ -195,13 +198,37 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                         },
                       ),
                       Padding(
+                          padding: EdgeInsets.only(top: 20.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  "キー  ",
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                  ),
+                                ),
+                                OutlinedButton(
+                                  child: Text(_key,
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                      )),
+                                  style: OutlinedButton.styleFrom(
+                                    primary: Colors.black,
+                                    side: const BorderSide(),
+                                  ),
+                                  onPressed: () {
+                                    FocusScope.of(context).unfocus();
+                                    _showModalPicker(context);
+                                  },
+                                ),
+                              ])),
+                      Padding(
                           padding: EdgeInsets.only(top: 25.0),
                           child: Text(
                             "BPM: $_bpm",
                             style: TextStyle(
-                              color: Colors.blueAccent,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 25.0,
                             ),
                           )),
                       Slider(
@@ -213,28 +240,6 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                         min: 30,
                         max: 300,
                         onChanged: _handleBpm,
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(top: 10.0),
-                          child: Text(
-                            "キー $_key",
-                            style: TextStyle(
-                              color: Colors.blueAccent,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )),
-                      ElevatedButton(
-                        child: const Text('キーを選択',
-                            style: TextStyle(color: Colors.white)),
-                        style: ElevatedButton.styleFrom(primary: Colors.orange),
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                          if (_key == "未選択") {
-                            _onSelectedItemChanged(0);
-                          }
-                          _showModalPicker(context);
-                        },
                       ),
                     ],
                   ),
