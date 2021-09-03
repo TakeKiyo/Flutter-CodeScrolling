@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'create_song.dart';
 import 'detail_page/tab_view.dart';
+import 'setting_page.dart';
 
 class SongsList extends StatelessWidget {
   @override
@@ -17,6 +18,17 @@ class SongsList extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text('曲一覧'),
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: IconButton(
+              icon: Icon(Icons.toc),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    fullscreenDialog: true,
+                    builder: (context) => SettingPage()));
+              },
+            ),
+          ),
           actions: [],
         ),
         body: SongsListForm(),
@@ -37,7 +49,6 @@ class SongsList extends StatelessWidget {
                 Icons.add,
                 size: 40.0,
               ),
-              backgroundColor: Colors.green,
             )));
   }
 }

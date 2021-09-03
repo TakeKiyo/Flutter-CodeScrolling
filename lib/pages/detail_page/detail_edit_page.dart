@@ -436,8 +436,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                 showDisplayTypeDialog();
               }),
           TextButton(
-            child:
-                Text("完了", style: TextStyle(color: Colors.white, fontSize: 18)),
+            child: Text("完了", style: TextStyle(fontSize: 18)),
             onPressed: () {
               if (Provider.of<EditingSongModel>(context, listen: false)
                   .normalKeyboardIsOpen) {
@@ -514,9 +513,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                       value: model
                                                           .selectedSeparation,
                                                       elevation: 16,
-                                                      style: const TextStyle(
-                                                        color: Colors.black,
-                                                      ),
                                                       onChanged:
                                                           (String newValue) {
                                                         model
@@ -549,9 +545,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                       value:
                                                           model.selectedRhythm,
                                                       elevation: 16,
-                                                      style: const TextStyle(
-                                                        color: Colors.black,
-                                                      ),
                                                       onChanged:
                                                           (String newValue) {
                                                         model.setSelectedRhythm(
@@ -581,9 +574,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                       value: model
                                                           .selectedBeatCount,
                                                       elevation: 16,
-                                                      style: const TextStyle(
-                                                        color: Colors.black,
-                                                      ),
                                                       onChanged:
                                                           (int newValue) {
                                                         model

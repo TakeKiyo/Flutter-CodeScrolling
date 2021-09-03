@@ -118,7 +118,6 @@ class _ImportSongFormState extends State<ImportSongForm> {
                       ),
                     ),
                     TextFormField(
-                      cursorColor: Colors.black,
                       onChanged: _handleCopiedID,
                       // ignore: missing_return
                       validator: (value) {
@@ -132,7 +131,6 @@ class _ImportSongFormState extends State<ImportSongForm> {
                       child: OutlinedButton(
                         child: const Text('曲をインポート'),
                         style: OutlinedButton.styleFrom(
-                          primary: Colors.black,
                           side: const BorderSide(),
                         ),
                         onPressed: () {
