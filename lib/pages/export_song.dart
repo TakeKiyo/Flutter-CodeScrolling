@@ -33,10 +33,12 @@ class ExportSong extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              ElevatedButton(
-                child: const Text('IDをコピーする',
-                    style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(primary: Colors.orange),
+              OutlinedButton(
+                child: const Text('IDをコピーする'),
+                style: OutlinedButton.styleFrom(
+                  primary: Colors.black,
+                  side: const BorderSide(),
+                ),
                 onPressed: () async {
                   final data = ClipboardData(text: docId);
                   await Clipboard.setData(data);

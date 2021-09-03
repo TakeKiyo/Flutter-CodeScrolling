@@ -106,12 +106,8 @@ class _ScrollPageState extends State<ScrollablePage> {
           },
           child: Text("コードを編集する")));
       bool noCode = true;
-      for (int i = 0; i < codeListState.length; i++) {
-        for (int j = 0; j < codeListState[i].length; j++) {
-          if (codeListState[i][j] != "") {
-            noCode = false;
-          }
-        }
+      if (codeListState.length > 0) {
+        noCode = false;
       }
 
       if (noCode) {

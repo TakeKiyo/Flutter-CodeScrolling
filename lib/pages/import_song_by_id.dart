@@ -114,9 +114,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
                       "コピーしたIDをペーストしても \n 追加することができます",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.blueAccent,
                         fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     TextFormField(
@@ -129,15 +127,20 @@ class _ImportSongFormState extends State<ImportSongForm> {
                         }
                       },
                     ),
-                    ElevatedButton(
-                      child: const Text('曲をインポート',
-                          style: TextStyle(color: Colors.white)),
-                      style: ElevatedButton.styleFrom(primary: Colors.orange),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          importButtonClicked();
-                        }
-                      },
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.0),
+                      child: OutlinedButton(
+                        child: const Text('曲をインポート'),
+                        style: OutlinedButton.styleFrom(
+                          primary: Colors.black,
+                          side: const BorderSide(),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            importButtonClicked();
+                          }
+                        },
+                      ),
                     ),
                   ]))),
         ]));

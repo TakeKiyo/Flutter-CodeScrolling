@@ -189,9 +189,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
                   "QRコードをスキャンすると\nインポートが始まります。",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.blueAccent,
                     fontSize: 14.0,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ]))
