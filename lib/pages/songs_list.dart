@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'create_song.dart';
 import 'detail_page/tab_view.dart';
+import 'setting_page.dart';
 
 class SongsList extends StatelessWidget {
   @override
@@ -20,8 +21,12 @@ class SongsList extends StatelessWidget {
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: IconButton(
-              icon: Icon(Icons.dark_mode),
-              onPressed: () {},
+              icon: Icon(Icons.toc),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    fullscreenDialog: true,
+                    builder: (context) => SettingPage()));
+              },
             ),
           ),
           actions: [],
