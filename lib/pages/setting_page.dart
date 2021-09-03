@@ -33,13 +33,12 @@ class SettingPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Flexible(flex: 3, child: Text("アプリテーマ：　")),
+                Flexible(flex: 1, child: Text("アプリテーマ：　")),
                 Flexible(
                   flex: 1,
                   child: ButtonTheme(
-                    minWidth: 20,
                     alignedDropdown: true,
                     child: Consumer<ThemeModel>(builder: (_, theme, __) {
                       return DropdownButton<int>(
