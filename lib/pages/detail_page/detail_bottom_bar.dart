@@ -8,10 +8,10 @@ import 'countin_dialog.dart';
 
 Material detailBottomBar(BuildContext context) {
   final double bottomIconSIze = 36;
-  final Color textColor = Colors.white;
+  final Color textColor = Colors.black;
 
   return Material(
-    color: Theme.of(context).primaryColor,
+    color: Theme.of(context).primaryColor.withOpacity(0.5),
     child: Container(
         width: MediaQuery.of(context).size.width,
         height: 100,
@@ -145,8 +145,8 @@ Material detailBottomBar(BuildContext context) {
 
 Icon volumeIcon(double soundVolume) {
   if (soundVolume == 0) {
-    return Icon(Icons.volume_off, color: Colors.white);
+    return Icon(Icons.volume_off, color: Colors.black);
   } else {
-    return Icon(Icons.volume_up, color: Colors.white);
+    return Icon(Icons.volume_up, color: Colors.black);
   }
 }

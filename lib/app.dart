@@ -27,7 +27,11 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'Code Scrolling',
-          theme: ThemeData(primarySwatch: Colors.blueGrey),
+          theme: ThemeData(
+            primarySwatch: Colors.grey,
+            primaryColor: Colors.white,
+          ),
+          darkTheme: ThemeData.dark(),
           home: SongsList(),
         ));
   }

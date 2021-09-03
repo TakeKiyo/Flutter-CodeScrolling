@@ -23,20 +23,17 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               "曲情報",
               style: TextStyle(
                 fontSize: titleTextFont,
-                color: Colors.white,
               ),
             ),
             ListTile(
-              tileColor: Theme.of(context).primaryColorDark,
+              tileColor: Colors.grey,
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("曲名：" + title, style: TextStyle(color: Colors.white)),
-                  Text("アーティスト：" + artist,
-                      style: TextStyle(color: Colors.white)),
-                  Text("キー：" + songKey, style: TextStyle(color: Colors.white)),
-                  Text("BPM：" + bpm.toString(),
-                      style: TextStyle(color: Colors.white)),
+                  Text("曲名：" + title),
+                  Text("アーティスト：" + artist),
+                  Text("キー：" + songKey),
+                  Text("BPM：" + bpm.toString()),
                 ],
               ),
               onTap: () {
@@ -60,23 +57,19 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               "メトロノームのサウンド",
               style: TextStyle(
                 fontSize: titleTextFont,
-                color: Colors.white,
               ),
             ),
             ButtonTheme(
                 alignedDropdown: true,
                 child: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Container(
-                      color: Theme.of(context).primaryColorDark,
+                      color: Colors.grey,
                       child: DropdownButton<int>(
                         isExpanded: true,
                         dropdownColor: Theme.of(context).primaryColorDark,
                         value: model.metronomeSoundsList
                             .indexOf(model.metronomeSound),
                         elevation: 16,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
                         onChanged: (int newValue) {
                           model.metronomeSound = newValue;
                         },
@@ -95,14 +88,14 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               "カウントイン",
               style: TextStyle(
                 fontSize: titleTextFont,
-                color: Colors.white,
               ),
             ),
             ListTile(
-                tileColor: Theme.of(context).primaryColorDark,
+                tileColor: Colors.grey,
                 title: Consumer<MetronomeModel>(builder: (_, model, __) {
-                  return Text("回数：" + model.countInTimes.toString(),
-                      style: TextStyle(color: Colors.white));
+                  return Text(
+                    "回数：" + model.countInTimes.toString(),
+                  );
                 }),
                 onTap: () {
                   print("Count-in Times");

@@ -17,6 +17,13 @@ class SongsList extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text('曲一覧'),
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: IconButton(
+              icon: Icon(Icons.dark_mode),
+              onPressed: () {},
+            ),
+          ),
           actions: [],
         ),
         body: SongsListForm(),
@@ -37,7 +44,6 @@ class SongsList extends StatelessWidget {
                 Icons.add,
                 size: 40.0,
               ),
-              backgroundColor: Colors.green,
             )));
   }
 }
