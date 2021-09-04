@@ -19,7 +19,10 @@ class SongsList extends StatelessWidget {
           centerTitle: true,
           title: Text(
             'Bandout',
-            style: TextStyle(fontFamily: 'BetterGrade', fontSize: 50),
+            style: TextStyle(
+              fontFamily: 'Rochester',
+              fontSize: 35,
+            ),
           ),
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
