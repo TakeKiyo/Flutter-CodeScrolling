@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 class ThemeModel extends ChangeNotifier {
   ThemeData _currentTheme = ThemeData(
-    appBarTheme: AppBarTheme(
-        color: Colors.white,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.transparent),
+    appBarTheme: AppBarTheme(color: Colors.white),
     primaryColor: Colors.white,
   );
   get currentTheme => _currentTheme;
@@ -18,11 +15,7 @@ class ThemeModel extends ChangeNotifier {
       case 0:
         _themeIndex = fetchedIndex;
         _currentTheme = ThemeData(
-          appBarTheme: AppBarTheme(
-              centerTitle: false,
-              color: Colors.white,
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.transparent),
+          appBarTheme: AppBarTheme(color: Colors.white),
           primaryColor: Colors.white,
         );
         break;
@@ -30,11 +23,7 @@ class ThemeModel extends ChangeNotifier {
       case 1:
         _themeIndex = fetchedIndex;
         _currentTheme = ThemeData(
-          appBarTheme: AppBarTheme(
-              centerTitle: false,
-              color: Colors.white,
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.transparent),
+          appBarTheme: AppBarTheme(color: Colors.white),
           primaryColor: Colors.white,
         );
         break;
