@@ -134,12 +134,12 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('基本情報を編集'),
+          title: const Text('基本情報を編集'),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: TextButton(
-                child: Text("完了", style: TextStyle(fontSize: 18)),
+                child: const Text("完了", style: TextStyle(fontSize: 18)),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     editSong();
@@ -161,11 +161,9 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                     children: <Widget>[
                       TextFormField(
                         controller: _titleEditingController,
-                        style: TextStyle(
-                          fontSize: 25.0,
-                        ),
+                        style: const TextStyle(fontSize: 25.0),
                         decoration: const InputDecoration(
-                          icon: Padding(
+                          icon: const Padding(
                               padding: EdgeInsets.only(top: 10.0),
                               child: Icon(Icons.music_note, size: 30.0)),
                           labelText: '曲名',
@@ -180,11 +178,9 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                       ),
                       TextFormField(
                         controller: _artistEditingController,
-                        style: TextStyle(
-                          fontSize: 25.0,
-                        ),
+                        style: const TextStyle(fontSize: 25.0),
                         decoration: const InputDecoration(
-                          icon: Padding(
+                          icon: const Padding(
                               padding: EdgeInsets.only(top: 10.0),
                               child: Icon(Icons.person, size: 30.0)),
                           labelText: 'アーティスト',
@@ -198,21 +194,17 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                         },
                       ),
                       Padding(
-                          padding: EdgeInsets.only(top: 20.0),
+                          padding: const EdgeInsets.only(top: 20.0),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(
+                                const Text(
                                   "キー  ",
-                                  style: TextStyle(
-                                    fontSize: 25.0,
-                                  ),
+                                  style: TextStyle(fontSize: 25.0),
                                 ),
                                 OutlinedButton(
                                   child: Text(_key,
-                                      style: TextStyle(
-                                        fontSize: 25.0,
-                                      )),
+                                      style: const TextStyle(fontSize: 25.0)),
                                   style: OutlinedButton.styleFrom(
                                     primary: Theme.of(context)
                                         .textTheme
@@ -227,12 +219,10 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                                 ),
                               ])),
                       Padding(
-                          padding: EdgeInsets.only(top: 25.0),
+                          padding: const EdgeInsets.only(top: 25.0),
                           child: Text(
                             "BPM: $_bpm",
-                            style: TextStyle(
-                              fontSize: 25.0,
-                            ),
+                            style: const TextStyle(fontSize: 25.0),
                           )),
                       Slider(
                         label: null,

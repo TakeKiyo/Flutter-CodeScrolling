@@ -35,7 +35,7 @@ Material detailBottomBar(BuildContext context) {
                     showModalBottomSheet<void>(
                       shape: const RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.all(Radius.circular(32.0))),
+                              const BorderRadius.all(Radius.circular(32.0))),
                       context: context,
                       builder: (context) => BpmSetting(),
                     ).then((_) =>
@@ -72,7 +72,7 @@ Material detailBottomBar(BuildContext context) {
               flex: 1,
               child: !isPlaying
                   ? IconButton(
-                      icon: Icon(Icons.play_arrow_rounded),
+                      icon: const Icon(Icons.play_arrow_rounded),
                       iconSize: bottomIconSIze,
                       onPressed: () async {
                         Provider.of<MetronomeModel>(context, listen: false)
@@ -99,7 +99,7 @@ Material detailBottomBar(BuildContext context) {
                       },
                     )
                   : IconButton(
-                      icon: Icon(Icons.pause_rounded),
+                      icon: const Icon(Icons.pause_rounded),
                       iconSize: bottomIconSIze,
                       onPressed: () {
                         Provider.of<MetronomeModel>(context, listen: false)
@@ -114,7 +114,7 @@ Material detailBottomBar(BuildContext context) {
           Expanded(
             flex: 1,
             child: IconButton(
-              icon: Icon(Icons.stop_rounded),
+              icon: const Icon(Icons.stop_rounded),
               iconSize: bottomIconSIze,
               onPressed: () {
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
@@ -143,8 +143,8 @@ Material detailBottomBar(BuildContext context) {
 
 Icon volumeIcon(double soundVolume) {
   if (soundVolume == 0) {
-    return Icon(Icons.volume_off);
+    return const Icon(Icons.volume_off);
   } else {
-    return Icon(Icons.volume_up);
+    return const Icon(Icons.volume_up);
   }
 }

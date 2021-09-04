@@ -9,7 +9,7 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('main menu'),
+        title: const Text('main menu'),
         actions: [
           IconButton(
               icon: Icon(Icons.add),

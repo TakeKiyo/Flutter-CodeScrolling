@@ -138,7 +138,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
       List<Widget> list = [];
       if (listIndex == 0) {
         separationText.add(Text(separationList[listIndex],
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               backgroundColor: Colors.black,
             )));
@@ -146,18 +146,18 @@ class _DetailEditPageState extends State<DetailEditPage> {
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
           separationText.add(Text(separationList[listIndex],
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 backgroundColor: Colors.black,
               )));
         } else {
-          separationText.add(Text(""));
+          separationText.add(const Text(""));
         }
 
         if (rhythmList[listIndex] != rhythmList[listIndex - 1]) {
           list.add(Text(rhythmList[listIndex]));
         } else {
-          list.add(Padding(
+          list.add(const Padding(
             padding: const EdgeInsets.only(left: 24.0),
           ));
         }
@@ -234,24 +234,24 @@ class _DetailEditPageState extends State<DetailEditPage> {
                 .editCodeList(text, listIndex, i);
           },
         )));
-        list.add(Text("|"));
+        list.add(const Text("|"));
       }
       list.add(IconButton(
-          icon: Icon(Icons.more_vert),
+          icon: const Icon(Icons.more_vert),
           onPressed: () {
             showDialog(
               context: context,
               builder: (context) {
                 return SimpleDialog(
-                  title: Text("編集"),
+                  title: const Text("編集"),
                   children: <Widget>[
                     SimpleDialogOption(
-                      child: ListTile(
+                      child: const ListTile(
                         // ignore: missing_required_param
-                        leading: IconButton(
-                          icon: Icon(Icons.delete),
+                        leading: const IconButton(
+                          icon: const Icon(Icons.delete),
                         ),
-                        title: Text('この行を削除する'),
+                        title: const Text('この行を削除する'),
                       ),
                       onPressed: () {
                         Provider.of<EditingSongModel>(context, listen: false)
@@ -260,12 +260,12 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       },
                     ),
                     SimpleDialogOption(
-                      child: ListTile(
+                      child: const ListTile(
                         // ignore: missing_required_param
                         leading: IconButton(
-                          icon: Icon(Icons.control_point),
+                          icon: const Icon(Icons.control_point),
                         ),
-                        title: Text('この行を複製して追加'),
+                        title: const Text('この行を複製して追加'),
                       ),
                       onPressed: () {
                         Provider.of<EditingSongModel>(context, listen: false)
@@ -274,7 +274,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       },
                     ),
                     TextButton(
-                      child: Text("戻る"),
+                      child: const Text("戻る"),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -331,7 +331,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
           context: context,
           builder: (context) {
             return SimpleDialog(
-              title: Center(child: Text("編集方法の選択")),
+              title: Center(child: const Text("編集方法の選択")),
               children: <Widget>[
                 // コンテンツ領域
                 SimpleDialogOption(
@@ -341,7 +341,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                         .setDisplayType("both")
                   },
                   child: CheckboxListTile(
-                    title: Text("コードと歌詞"),
+                    title: const Text("コードと歌詞"),
                     value: Provider.of<EditingSongModel>(context, listen: false)
                             .displayType ==
                         "both",
@@ -363,7 +363,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                         .setDisplayType("code")
                   },
                   child: CheckboxListTile(
-                    title: Text("コードのみ"),
+                    title: const Text("コードのみ"),
                     value: Provider.of<EditingSongModel>(context, listen: false)
                             .displayType ==
                         "code",
@@ -386,7 +386,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                         .setDisplayType("lyrics")
                   },
                   child: CheckboxListTile(
-                    title: Text("歌詞のみ"),
+                    title: const Text("歌詞のみ"),
                     value: Provider.of<EditingSongModel>(context, listen: false)
                             .displayType ==
                         "lyrics",
@@ -411,7 +411,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             onPressed: () {
               if (Provider.of<EditingSongModel>(context, listen: false)
                   .keyboardIsOpening) {
@@ -427,15 +427,15 @@ class _DetailEditPageState extends State<DetailEditPage> {
               }
               Navigator.of(context).pop();
             }),
-        title: Text("編集ページ"),
+        title: const Text("編集ページ"),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.view_headline),
+              icon: const Icon(Icons.view_headline),
               onPressed: () {
                 showDisplayTypeDialog();
               }),
           TextButton(
-            child: Text("完了", style: TextStyle(fontSize: 18)),
+            child: const Text("完了", style: TextStyle(fontSize: 18)),
             onPressed: () {
               if (Provider.of<EditingSongModel>(context, listen: false)
                   .normalKeyboardIsOpen) {
@@ -497,14 +497,17 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                         model.separationList,
                                         model.rhythmList),
                                   Padding(
-                                      padding: EdgeInsets.only(bottom: 24.0),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 24.0),
                                       child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: <Widget>[
                                             Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 5, horizontal: 5),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 5),
                                                 child: ButtonTheme(
                                                     alignedDropdown: true,
                                                     child:
@@ -535,8 +538,10 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                       }).toList(),
                                                     ))),
                                             Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 5, horizontal: 5),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 5),
                                                 child: ButtonTheme(
                                                     alignedDropdown: true,
                                                     child:
@@ -549,7 +554,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                         model.setSelectedRhythm(
                                                             newValue);
                                                       },
-                                                      items: <String>[
+                                                      items: const <String>[
                                                         "4/4",
                                                         "3/4",
                                                         "2/4",
@@ -565,8 +570,10 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                       }).toList(),
                                                     ))),
                                             Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 5, horizontal: 5),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5,
+                                                        horizontal: 5),
                                                 child: ButtonTheme(
                                                     alignedDropdown: true,
                                                     child: DropdownButton<int>(
@@ -579,7 +586,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                             .setSelectedBeatCount(
                                                                 newValue);
                                                       },
-                                                      items: <int>[
+                                                      items: const <int>[
                                                         1,
                                                         2,
                                                         3,

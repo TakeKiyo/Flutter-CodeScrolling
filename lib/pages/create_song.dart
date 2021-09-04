@@ -43,11 +43,11 @@ class _CreateSongFormState extends State<CreateSong> {
       showDialog(
           context: context,
           builder: (_) => CupertinoAlertDialog(
-                title: Text("エラー"),
-                content: Text("キーを選択してください。"),
+                title: const Text("エラー"),
+                content: const Text("キーを選択してください。"),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('OK'),
+                    child: const Text('OK'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -58,16 +58,16 @@ class _CreateSongFormState extends State<CreateSong> {
       showDialog(
           context: context,
           builder: (_) => CupertinoAlertDialog(
-                title: Text("確認"),
+                title: const Text("確認"),
                 content: Text(
                     "以下の曲を作成します\n 曲名: ${_title.toString()}\n アーティスト: ${_artist.toString()}\n BPM: ${_bpm.toString()}\n キー: ${_key.toString()}"),
                 actions: <Widget>[
                   TextButton(
-                    child: Text("Cancel"),
+                    child: const Text("Cancel"),
                     onPressed: () => Navigator.pop(context),
                   ),
                   TextButton(
-                    child: Text("OK"),
+                    child: const Text("OK"),
                     onPressed: () async => createSong(),
                   ),
                 ],
@@ -131,7 +131,7 @@ class _CreateSongFormState extends State<CreateSong> {
     });
   }
 
-  final List<String> _items = [
+  final List<String> _items = const [
     'C / Am',
     'C# / A#m',
     'D / Bm',
@@ -150,10 +150,10 @@ class _CreateSongFormState extends State<CreateSong> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('曲追加ページ'),
+          title: const Text('曲追加ページ'),
           actions: [
             TextButton(
-              child: Text("作成", style: TextStyle(fontSize: 18)),
+              child: const Text("作成", style: TextStyle(fontSize: 18)),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   createButtonClicked();
@@ -173,7 +173,7 @@ class _CreateSongFormState extends State<CreateSong> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                          padding: EdgeInsets.only(bottom: 10.0),
+                          padding: const EdgeInsets.only(bottom: 10.0),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
@@ -189,7 +189,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                       ),
                                     },
                                     style: TextButton.styleFrom(
-                                      padding: EdgeInsets.only(
+                                      padding: const EdgeInsets.only(
                                           top: 12.0, bottom: 12.0),
                                       textStyle: const TextStyle(fontSize: 16),
                                     ),
@@ -222,7 +222,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                       ),
                                     },
                                     style: TextButton.styleFrom(
-                                      padding: EdgeInsets.only(
+                                      padding: const EdgeInsets.only(
                                           top: 12.0, bottom: 12.0),
                                       textStyle: const TextStyle(fontSize: 16),
                                     ),
@@ -252,7 +252,7 @@ class _CreateSongFormState extends State<CreateSong> {
                           fontSize: 25.0,
                         ),
                         decoration: const InputDecoration(
-                          icon: Padding(
+                          icon: const Padding(
                               padding: EdgeInsets.only(top: 10.0),
                               child: Icon(Icons.music_note, size: 30.0)),
                           labelText: '曲名',
@@ -266,12 +266,10 @@ class _CreateSongFormState extends State<CreateSong> {
                         },
                       ),
                       TextFormField(
-                        style: const TextStyle(
-                          fontSize: 25.0,
-                        ),
+                        style: const TextStyle(fontSize: 25.0),
                         decoration: const InputDecoration(
                           icon: Padding(
-                              padding: EdgeInsets.only(top: 10.0),
+                              padding: const EdgeInsets.only(top: 10.0),
                               child: const Icon(Icons.person, size: 30.0)),
                           labelText: 'アーティスト',
                         ),
@@ -320,10 +318,10 @@ class _CreateSongFormState extends State<CreateSong> {
                                 ),
                               ])),
                       Padding(
-                          padding: EdgeInsets.only(top: 25.0),
+                          padding: const EdgeInsets.only(top: 25.0),
                           child: Text(
                             "BPM: $_bpm",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 25.0,
                             ),
                           )),
@@ -343,7 +341,7 @@ class _CreateSongFormState extends State<CreateSong> {
                             Icon(Icons.info_outline,
                                 color:
                                     Theme.of(context).textTheme.caption.color),
-                            Padding(padding: const EdgeInsets.all(5.0)),
+                            const Padding(padding: const EdgeInsets.all(5.0)),
                             Text(
                               "これらの情報はいつでも変更可能です",
                               style: TextStyle(

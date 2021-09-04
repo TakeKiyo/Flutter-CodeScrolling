@@ -17,11 +17,11 @@ class SongsList extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('曲一覧'),
+          title: const Text('曲一覧'),
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: IconButton(
-              icon: Icon(Icons.toc),
+              icon: const Icon(Icons.toc),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     fullscreenDialog: true,
@@ -104,7 +104,7 @@ class _SongsListState extends State<SongsListForm> {
     void createSong() async {
       String udid = await FlutterUdid.udid;
 
-      List<String> codeList = [
+      List<String> codeList = const [
         "A,A,A,A",
         "A,A,A,A",
         "A,E,Fm,B",
@@ -114,7 +114,7 @@ class _SongsListState extends State<SongsListForm> {
         "A,A,A,A",
       ];
 
-      List<String> lyricsList = [
+      List<String> lyricsList = const [
         "",
         "",
         "Aメロの歌詞1",
@@ -124,7 +124,7 @@ class _SongsListState extends State<SongsListForm> {
         "英語や長い文章でも適切に表示することができます。",
       ];
 
-      List<String> rhythmList = [
+      List<String> rhythmList = const [
         "4/4",
         "4/4",
         "4/4",
@@ -134,7 +134,7 @@ class _SongsListState extends State<SongsListForm> {
         "4/4",
       ];
 
-      List<String> separation = [
+      List<String> separation = const [
         "Intro",
         "Intro",
         "A",
@@ -173,7 +173,7 @@ class _SongsListState extends State<SongsListForm> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                Text('Loading...'),
+                const Text('Loading...'),
               ]));
         }
         if (snapshot.data.docs.length == 0) {
@@ -181,12 +181,12 @@ class _SongsListState extends State<SongsListForm> {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                Text('保存された曲はありません'),
+                const Text('保存された曲はありません'),
                 TextButton(
                     onPressed: () {
                       createSong();
                     },
-                    child: Text("サンプル曲を作成してみる"))
+                    child: const Text("サンプル曲を作成してみる"))
               ]));
         } else {
           final List<DocumentSnapshot> documents = snapshot.data.docs;
@@ -207,15 +207,15 @@ class _SongsListState extends State<SongsListForm> {
                         showDialog(
                             context: context,
                             builder: (_) => CupertinoAlertDialog(
-                                  title: Text("確認"),
+                                  title: const Text("確認"),
                                   content: Text("${doc["title"]}を削除してもよいですか？"),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: Text("キャンセル"),
+                                      child: const Text("キャンセル"),
                                       onPressed: () => Navigator.pop(context),
                                     ),
                                     TextButton(
-                                      child: Text("OK"),
+                                      child: const Text("OK"),
                                       onPressed: () =>
                                           deleteButtonClicked(doc.id),
                                     ),
@@ -268,8 +268,8 @@ class _SongsListState extends State<SongsListForm> {
                   controller: _scrollController,
                   child: Column(children: <Widget>[
                     Padding(
-                        padding:
-                            EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+                        padding: const EdgeInsets.only(
+                            left: 20.0, right: 20.0, top: 10.0),
                         child: TextField(
                           controller: _textEditingController,
                           onChanged: (text) {
@@ -278,7 +278,7 @@ class _SongsListState extends State<SongsListForm> {
                             });
                           },
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.search),
+                            prefixIcon: const Icon(Icons.search),
                             hintText: "曲名を検索する",
                             suffixIcon: IconButton(
                               onPressed: () {
@@ -288,12 +288,12 @@ class _SongsListState extends State<SongsListForm> {
                                 });
                                 FocusScope.of(context).unfocus();
                               },
-                              icon: Icon(Icons.clear),
+                              icon: const Icon(Icons.clear),
                             ),
                           ),
                         )),
                     ListView(
-                      padding: EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(12.0),
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       children: songsList,

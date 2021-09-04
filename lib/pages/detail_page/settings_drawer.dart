@@ -9,8 +9,8 @@ import '../edit_song_info.dart';
 
 Drawer settingsDrawer(BuildContext context, int bpm, String title,
     String artist, String songKey, String docId) {
-  final double titleTextFont = 16;
-  final insertPadding = Padding(padding: EdgeInsets.all(10));
+  const titleTextFont = 16.0;
+  final insertPadding = const Padding(padding: EdgeInsets.all(10));
 
   return Drawer(
     child: Material(
@@ -18,7 +18,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
         padding: const EdgeInsets.all(25),
         child: ListView(
           children: [
-            Text(
+            const Text(
               "曲情報を編集する",
               style: TextStyle(
                 fontSize: titleTextFont,
@@ -47,7 +47,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               },
             ),
             insertPadding,
-            Text(
+            const Text(
               "メトロノームのサウンド",
               style: TextStyle(
                 fontSize: titleTextFont,
@@ -67,7 +67,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                         onChanged: (int newValue) {
                           model.metronomeSound = newValue;
                         },
-                        items: <int>[0, 1, 2]
+                        items: const <int>[0, 1, 2]
                             .map<DropdownMenuItem<int>>((int value) {
                           return DropdownMenuItem<int>(
                               value: value,
@@ -78,7 +78,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                       ));
                 })),
             insertPadding,
-            Text(
+            const Text(
               "カウントイン",
               style: TextStyle(
                 fontSize: titleTextFont,
@@ -97,7 +97,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 }),
             insertPadding,
             ElevatedButton(
-              child: Text("曲を削除する"),
+              child: const Text("曲を削除する"),
               //style: TextStyle(backgroundColor: Theme.of(context).errorColor)),
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.error),
@@ -105,15 +105,15 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 showDialog(
                     context: context,
                     builder: (_) => CupertinoAlertDialog(
-                          title: Text("確認"),
+                          title: const Text("確認"),
                           content: Text(title + "を削除してもよいですか？"),
                           actions: <Widget>[
                             TextButton(
-                              child: Text("キャンセル"),
+                              child: const Text("キャンセル"),
                               onPressed: () => Navigator.pop(context),
                             ),
                             TextButton(
-                                child: Text("OK"),
+                                child: const Text("OK"),
                                 onPressed: () async {
                                   Navigator.of(context)
                                       .popUntil((route) => route.isFirst);

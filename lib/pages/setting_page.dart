@@ -4,18 +4,18 @@ import 'package:my_app/models/theme_model.dart';
 import 'package:provider/provider.dart';
 
 class SettingPage extends StatelessWidget {
-  final List<DropdownMenuItem<int>> _themeList = [
+  final List<DropdownMenuItem<int>> _themeList = const [
     DropdownMenuItem(
       value: 0,
-      child: Text("自動"),
+      child: const Text("自動"),
     ),
     DropdownMenuItem(
       value: 1,
-      child: Text("明るい"),
+      child: const Text("明るい"),
     ),
     DropdownMenuItem(
       value: 2,
-      child: Text("ダーク"),
+      child: const Text("ダーク"),
     ),
   ];
 
@@ -24,7 +24,7 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('設定'),
+        title: const Text('設定'),
       ),
       body: SingleChildScrollView(
           child: Padding(
@@ -35,7 +35,7 @@ class SettingPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Flexible(flex: 1, child: Text("アプリテーマ：　")),
+                Flexible(flex: 1, child: const Text("アプリテーマ：　")),
                 Flexible(
                   flex: 1,
                   child: ButtonTheme(

@@ -55,7 +55,7 @@ class TabView extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.of(context).pop();
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
@@ -70,7 +70,7 @@ class TabView extends StatelessWidget {
           ),
           actions: <Widget>[
             IconButton(
-                icon: Icon(Icons.share),
+                icon: const Icon(Icons.share),
                 onPressed: () async {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
@@ -79,7 +79,7 @@ class TabView extends StatelessWidget {
                   );
                 }),
             IconButton(
-                icon: Icon(Icons.settings),
+                icon: const Icon(Icons.settings),
                 onPressed: () {
                   _scaffoldKey.currentState.openEndDrawer();
                 }),

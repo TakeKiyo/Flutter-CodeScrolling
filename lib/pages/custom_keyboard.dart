@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 class CustomKeyboard extends StatelessWidget {
   final ValueSetter<String> onTextInput;
   final VoidCallback onBackspace;
-  final Padding insertPadding = Padding(padding: const EdgeInsets.all(3.0));
+  final Padding insertPadding =
+      const Padding(padding: const EdgeInsets.all(3.0));
 
   CustomKeyboard({
     Key key,
@@ -45,7 +46,8 @@ class CustomKeyboard extends StatelessWidget {
       height: 40,
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         IconButton(
-            icon: Icon(Icons.keyboard_arrow_down_outlined, color: Colors.grey),
+            icon: const Icon(Icons.keyboard_arrow_down_outlined,
+                color: Colors.grey),
             onPressed: () {
               Provider.of<EditingSongModel>(context, listen: false)
                   .closeKeyboard();
@@ -58,9 +60,9 @@ class CustomKeyboard extends StatelessWidget {
                     readOnly: true,
                     showCursor: true,
                     decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
+                        enabledBorder: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent)),
-                        focusedBorder: UnderlineInputBorder(
+                        focusedBorder: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
@@ -70,20 +72,22 @@ class CustomKeyboard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     controller:
                         Provider.of<EditingSongModel>(context).controller,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     onChanged: (text) {
                       Provider.of<EditingSongModel>(context, listen: false)
                           .controller
                           .text = text;
                     }))),
         IconButton(
-            icon: Icon(Icons.keyboard_arrow_left_outlined, color: Colors.grey),
+            icon: const Icon(Icons.keyboard_arrow_left_outlined,
+                color: Colors.grey),
             onPressed: () {
               Provider.of<EditingSongModel>(context, listen: false)
                   .changeSelectionToLeft();
             }),
         IconButton(
-            icon: Icon(Icons.keyboard_arrow_right_outlined, color: Colors.grey),
+            icon: const Icon(Icons.keyboard_arrow_right_outlined,
+                color: Colors.grey),
             onPressed: () {
               Provider.of<EditingSongModel>(context, listen: false)
                   .changeSelectionToRight();
@@ -202,11 +206,13 @@ class TextKey extends StatelessWidget {
                 child: (label == "")
                     ? Text(
                         text,
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       )
                     : Text(
                         label,
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       ),
               ),
             ),
@@ -241,7 +247,8 @@ class BackspaceKey extends StatelessWidget {
             },
             child: Container(
               child: Center(
-                child: Icon(Icons.backspace_outlined, color: Colors.white),
+                child:
+                    const Icon(Icons.backspace_outlined, color: Colors.white),
               ),
             ),
           ),
@@ -294,7 +301,7 @@ class FunctionKey extends StatelessWidget {
               child: Center(
                 child: Text(
                   label,
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ),
