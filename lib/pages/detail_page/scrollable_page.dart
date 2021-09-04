@@ -123,7 +123,6 @@ class _ScrollPageState extends State<ScrollablePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Checkbox(
-            activeColor: Colors.blue,
             value: _lyricsDisplayed,
             onChanged: _handleCheckbox,
           ),

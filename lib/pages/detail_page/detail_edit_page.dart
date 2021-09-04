@@ -355,7 +355,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
                           .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
                   ),
-                  // child: Text("コードと歌詞を編集"),
                 ),
                 SimpleDialogOption(
                   onPressed: () => {
@@ -600,11 +599,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                       }).toList(),
                                                     ))),
                                             ElevatedButton(
-                                              child: const Text('追加',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Colors.orange),
+                                              child: const Text('追加'),
                                               onPressed: () async {
                                                 model.addEmptyList();
                                                 await Future.delayed(Duration(

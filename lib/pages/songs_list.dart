@@ -201,7 +201,7 @@ class _SongsListState extends State<SongsListForm> {
                   secondaryActions: [
                     IconSlideAction(
                       caption: '削除',
-                      color: Colors.red,
+                      color: Theme.of(context).colorScheme.error,
                       icon: Icons.delete,
                       onTap: () {
                         showDialog(

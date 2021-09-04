@@ -136,14 +136,16 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
           centerTitle: true,
           title: Text('基本情報を編集'),
           actions: [
-            TextButton(
-              child: Text("完了",
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  editSong();
-                }
-              },
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: TextButton(
+                child: Text("完了", style: TextStyle(fontSize: 18)),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    editSong();
+                  }
+                },
+              ),
             ),
           ],
         ),
@@ -168,7 +170,6 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                               child: Icon(Icons.music_note, size: 30.0)),
                           labelText: '曲名',
                         ),
-                        cursorColor: Colors.black,
                         onChanged: _handleTitle,
                         // ignore: missing_return
                         validator: (value) {
@@ -188,7 +189,6 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                               child: Icon(Icons.person, size: 30.0)),
                           labelText: 'アーティスト',
                         ),
-                        cursorColor: Colors.black,
                         onChanged: _handleArtist,
                         // ignore: missing_return
                         validator: (value) {
@@ -214,7 +214,10 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                                         fontSize: 25.0,
                                       )),
                                   style: OutlinedButton.styleFrom(
-                                    primary: Colors.black,
+                                    primary: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
                                     side: const BorderSide(),
                                   ),
                                   onPressed: () {
@@ -232,8 +235,6 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
                             ),
                           )),
                       Slider(
-                        activeColor: Colors.black,
-                        inactiveColor: Theme.of(context).primaryColorDark,
                         label: null,
                         value: _bpm.toDouble(),
                         divisions: 270,

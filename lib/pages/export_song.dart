@@ -22,6 +22,7 @@ class ExportSong extends StatelessWidget {
             children: <Widget>[
               Center(
                 child: QrImage(
+                  foregroundColor: Theme.of(context).textTheme.bodyText1.color,
                   data: docId,
                   size: 200,
                 ),

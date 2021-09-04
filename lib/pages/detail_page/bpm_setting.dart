@@ -87,7 +87,8 @@ class BpmSetting extends StatelessWidget {
                       child: Text(model.bpmTapText,
                           style: TextStyle(fontSize: tempoIconSize * 0.75)),
                       style: model.bpmTapCount % 5 != 0
-                          ? ElevatedButton.styleFrom(primary: Colors.red)
+                          ? ElevatedButton.styleFrom(
+                              primary: Theme.of(context).colorScheme.error)
                           : ElevatedButton.styleFrom()),
                 ),
               ],

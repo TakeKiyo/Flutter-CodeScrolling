@@ -105,7 +105,6 @@ class _CreateSongFormState extends State<CreateSong> {
               Navigator.pop(context);
             },
             child: CupertinoPicker(
-              backgroundColor: Theme.of(context).primaryColorLight,
               itemExtent: 40,
               children: _items.map(_pickerItem).toList(),
               onSelectedItemChanged: _onSelectedItemChanged,
@@ -205,7 +204,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Theme.of(context)
-                                                      .primaryTextTheme
+                                                      .textTheme
                                                       .caption
                                                       .color)),
                                         ]),
@@ -239,7 +238,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Theme.of(context)
-                                                  .primaryTextTheme
+                                                  .textTheme
                                                   .caption
                                                   .color),
                                         ),
@@ -293,7 +292,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                   "キー  ",
                                   style: TextStyle(
                                     color: Theme.of(context)
-                                        .primaryTextTheme
+                                        .textTheme
                                         .bodyText1
                                         .color,
                                     fontSize: 25.0,
@@ -303,7 +302,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                   child: Text((_key == "未選択") ? "キーを選択" : _key,
                                       style: TextStyle(
                                         color: Theme.of(context)
-                                            .primaryTextTheme
+                                            .textTheme
                                             .bodyText1
                                             .color,
                                         fontSize: 25.0,
@@ -328,15 +327,6 @@ class _CreateSongFormState extends State<CreateSong> {
                               fontSize: 25.0,
                             ),
                           )),
-                      Text(
-                        "いつでも変更可能です",
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).primaryTextTheme.caption.color,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       Slider(
                         label: null,
                         value: _bpm.toDouble(),
@@ -344,6 +334,26 @@ class _CreateSongFormState extends State<CreateSong> {
                         min: 30,
                         max: 300,
                         onChanged: _handleBpm,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 25.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.info_outline,
+                                color:
+                                    Theme.of(context).textTheme.caption.color),
+                            Padding(padding: const EdgeInsets.all(5.0)),
+                            Text(
+                              "これらの情報はいつでも変更可能です",
+                              style: TextStyle(
+                                color:
+                                    Theme.of(context).textTheme.caption.color,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

@@ -57,8 +57,11 @@ class CustomKeyboard extends StatelessWidget {
                 child: TextField(
                     readOnly: true,
                     showCursor: true,
-                    cursorColor: Colors.white,
                     decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),

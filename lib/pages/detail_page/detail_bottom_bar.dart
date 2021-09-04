@@ -10,7 +10,7 @@ Material detailBottomBar(BuildContext context) {
   final double bottomIconSIze = 36;
 
   return Material(
-    color: Theme.of(context).primaryColor.withOpacity(0.5),
+    elevation: 5.0,
     child: Container(
         width: MediaQuery.of(context).size.width,
         height: 100,
@@ -33,7 +33,6 @@ Material detailBottomBar(BuildContext context) {
                   onPressed: () {
                     print("Pressed: BPM");
                     showModalBottomSheet<void>(
-                      backgroundColor: Theme.of(context).primaryColor,
                       shape: const RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(32.0))),

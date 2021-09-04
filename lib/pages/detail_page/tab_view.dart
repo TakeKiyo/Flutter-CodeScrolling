@@ -62,6 +62,8 @@ class TabView extends StatelessWidget {
               }),
           title: Text(title),
           bottom: TabBar(
+            labelColor: Theme.of(context).textTheme.headline6.color,
+            indicatorColor: Theme.of(context).primaryColor,
             tabs: _tabs.map((TabInfo tab) {
               return Tab(text: tab.label);
             }).toList(),
