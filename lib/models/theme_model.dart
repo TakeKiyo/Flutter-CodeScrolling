@@ -27,12 +27,12 @@ class ThemeModel extends ChangeNotifier {
     switch (fetchedIndex) {
       case 0:
         _themeIndex = fetchedIndex;
-        _currentTheme = ThemeData(primarySwatch: Colors.white);
+        _currentTheme = ThemeData(primarySwatch: white);
         break;
 
       case 1:
         _themeIndex = fetchedIndex;
-        _currentTheme = ThemeData(primarySwatch: Colors.white);
+        _currentTheme = ThemeData(primarySwatch: white);
         break;
 
       case 2:
