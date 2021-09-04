@@ -120,7 +120,10 @@ class _CreateSongFormState extends State<CreateSong> {
   Widget _pickerItem(String str) {
     return Text(
       str,
-      style: const TextStyle(fontSize: 32),
+      style: TextStyle(
+        color: Theme.of(context).textTheme.bodyText1.color,
+        fontSize: 32,
+      ),
     );
   }
 
