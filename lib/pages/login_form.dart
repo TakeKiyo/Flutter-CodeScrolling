@@ -78,30 +78,52 @@ class _LoginFormState extends State<LoginForm> {
                 }
               },
             ),
-            OutlinedButton(
-              child: Text("ログイン", style: const TextStyle(fontSize: 25.0)),
-              style: OutlinedButton.styleFrom(
-                primary: Theme.of(context).textTheme.headline6.color,
-                side: const BorderSide(),
-              ),
-              onPressed: () async {
-                FocusScope.of(context).unfocus();
-                try {
-                  // if (await model.login("test2@gmail.com", "password")) {
-                  if (await model.login(_email, _password)) {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return SongsList();
-                      }),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: OutlinedButton(
+                child: Text("ログイン", style: const TextStyle(fontSize: 25.0)),
+                style: OutlinedButton.styleFrom(
+                  primary: Theme.of(context).textTheme.headline6.color,
+                  side: const BorderSide(),
+                ),
+                onPressed: () async {
+                  FocusScope.of(context).unfocus();
+                  try {
+                    if (await model.login(_email, _password)) {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) {
+                          return SongsList();
+                        }),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          content: const Text('エラーが発生しました。\n もう一度お試しください。'),
+                          duration: const Duration(seconds: 2),
+                          action: SnackBarAction(
+                            label: 'OK',
+                            onPressed: () {},
+                          ),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                        content: const Text('エラーが発生しました。\n もう一度お試しください。'),
+                        duration: const Duration(seconds: 2),
+                        action: SnackBarAction(
+                          label: 'OK',
+                          onPressed: () {},
+                        ),
+                      ),
                     );
-                  } else {
-                    print('ログイン失敗');
                   }
-                } catch (e) {
-                  print('error');
-                }
-              },
-            ),
+                },
+              ),
+            )
           ]),
         ),
       );
