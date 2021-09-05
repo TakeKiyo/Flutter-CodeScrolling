@@ -104,7 +104,7 @@ class _ScrollPageState extends State<ScrollablePage> {
               ),
             );
           },
-          child: Text("コードを編集する")));
+          child: const Text("コードを編集する")));
       bool noCode = true;
       if (codeListState.length > 0) {
         noCode = false;
@@ -115,7 +115,7 @@ class _ScrollPageState extends State<ScrollablePage> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-              Text('コードは追加されていません。'),
+              const Text('コードは追加されていません。'),
             ])));
         return displayedList;
       }
@@ -123,11 +123,10 @@ class _ScrollPageState extends State<ScrollablePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Checkbox(
-            activeColor: Colors.blue,
             value: _lyricsDisplayed,
             onChanged: _handleCheckbox,
           ),
-          Text("歌詞も表示する")
+          const Text("歌詞も表示する")
         ],
       ));
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
@@ -163,7 +162,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                 widget.rhythmList[listIndex - 1]) {
               list.add(Text(widget.rhythmList[listIndex]));
             } else {
-              list.add(Padding(
+              list.add(const Padding(
                 padding: const EdgeInsets.only(left: 24.0),
               ));
             }
@@ -245,7 +244,7 @@ class _ScrollPageState extends State<ScrollablePage> {
               ),
             ),
           ));
-          list.add(Text("|"));
+          list.add(const Text("|"));
         }
         displayedList.add(Row(children: list));
       }
@@ -283,8 +282,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                   ),
                 );
               },
-              child: Text("コードを編集する")),
-          Text("まだコードは追加されていません")
+              child: const Text("コードを編集する")),
+          const Text("まだコードは追加されていません")
         ],
       ));
     } else {
@@ -302,7 +301,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                   child: SingleChildScrollView(
                       controller: _scrollController,
                       child: ListView(
-                        padding: EdgeInsets.all(36.0),
+                        padding: const EdgeInsets.all(36.0),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         children: displayedWidget(),
@@ -323,11 +322,11 @@ class _ScrollPageState extends State<ScrollablePage> {
                                 width: 200,
                                 decoration: BoxDecoration(
                                     color: Colors.grey.withOpacity(0.9),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20))),
                                 child: TextButton(
-                                  child: Text("スクロールを\n再開する",
-                                      style: TextStyle(
+                                  child: const Text("スクロールを\n再開する",
+                                      style: const TextStyle(
                                           fontSize: 16, color: Colors.white)),
                                   style: ButtonStyle(
                                       shape: MaterialStateProperty.all(

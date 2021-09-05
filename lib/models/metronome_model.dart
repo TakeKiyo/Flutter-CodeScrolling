@@ -347,13 +347,13 @@ class MetronomeModel extends ChangeNotifier {
         scrollController.animateTo(
           _scrollOffset,
           curve: Curves.easeOut,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
         );
       } else {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent,
           curve: Curves.easeOut,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
         );
       }
     }

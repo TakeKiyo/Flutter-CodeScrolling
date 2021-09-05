@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 import '../../models/metronome_model.dart';
 
 class BpmSetting extends StatelessWidget {
-  final double tempoIconSize = 32;
-
   @override
   Widget build(BuildContext context) {
     return Consumer<MetronomeModel>(builder: (_, model, __) {
@@ -31,7 +29,7 @@ class BpmSetting extends StatelessWidget {
               children: [
                 Flexible(
                     flex: 1,
-                    child: Text(
+                    child: const Text(
                       "Tempo",
                       style: TextStyle(
                         fontSize: 32,
@@ -43,21 +41,19 @@ class BpmSetting extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                          icon: Icon(Icons.remove),
-                          iconSize: tempoIconSize,
+                          icon: const Icon(Icons.remove),
+                          iconSize: 32,
                           tooltip: 'Decrement',
                           onPressed: () {
                             model.tempoDown();
                           }),
                       Text(
                         model.tempoCount.toString(),
-                        style: TextStyle(
-                          fontSize: tempoIconSize * 2,
-                        ),
+                        style: const TextStyle(fontSize: 64),
                       ),
                       IconButton(
-                          icon: Icon(Icons.add),
-                          iconSize: tempoIconSize,
+                          icon: const Icon(Icons.add),
+                          iconSize: 32,
                           tooltip: 'Increment',
                           onPressed: () {
                             model.tempoUp();
@@ -85,9 +81,10 @@ class BpmSetting extends StatelessWidget {
                         model.bpmTapDetector();
                       },
                       child: Text(model.bpmTapText,
-                          style: TextStyle(fontSize: tempoIconSize * 0.75)),
+                          style: const TextStyle(fontSize: 24)),
                       style: model.bpmTapCount % 5 != 0
-                          ? ElevatedButton.styleFrom(primary: Colors.red)
+                          ? ElevatedButton.styleFrom(
+                              primary: Theme.of(context).colorScheme.error)
                           : ElevatedButton.styleFrom()),
                 ),
               ],

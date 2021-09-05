@@ -55,20 +55,22 @@ class TabView extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.of(context).pop();
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
               }),
           title: Text(title),
           bottom: TabBar(
+            labelColor: Theme.of(context).textTheme.headline6.color,
+            indicatorColor: Theme.of(context).primaryColor,
             tabs: _tabs.map((TabInfo tab) {
               return Tab(text: tab.label);
             }).toList(),
           ),
           actions: <Widget>[
             IconButton(
-                icon: Icon(Icons.share),
+                icon: const Icon(Icons.share),
                 onPressed: () async {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
@@ -77,7 +79,7 @@ class TabView extends StatelessWidget {
                   );
                 }),
             IconButton(
-                icon: Icon(Icons.settings),
+                icon: const Icon(Icons.settings),
                 onPressed: () {
                   _scaffoldKey.currentState.openEndDrawer();
                 }),
