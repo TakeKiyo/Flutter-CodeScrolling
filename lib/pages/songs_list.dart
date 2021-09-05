@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'create_song.dart';
 import 'detail_page/tab_view.dart';
+import 'login_form.dart';
 import 'setting_page.dart';
 
 class SongsList extends StatelessWidget {
@@ -315,6 +316,16 @@ class _SongsListState extends State<SongsListForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
             const Text('ログインしていません。'),
+            OutlinedButton(
+              child: const Text('ログインする'),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    fullscreenDialog: true, builder: (context) => LoginForm()));
+              },
+            )
           ]));
     }
   }
