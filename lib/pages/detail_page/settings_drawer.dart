@@ -25,6 +25,8 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               ),
             ),
             ListTile(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(9.0)),
               tileColor: Colors.grey,
               title: Text("曲名： $title\n"
                   "アーティスト： $artist\n"
@@ -57,24 +59,30 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 alignedDropdown: true,
                 child: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Container(
-                      color: Colors.grey,
-                      child: DropdownButton<int>(
-                        dropdownColor: Colors.grey,
-                        isExpanded: true,
-                        value: model.metronomeSoundsList
-                            .indexOf(model.metronomeSound),
-                        elevation: 16,
-                        onChanged: (int newValue) {
-                          model.metronomeSound = newValue;
-                        },
-                        items: const <int>[0, 1, 2]
-                            .map<DropdownMenuItem<int>>((int value) {
-                          return DropdownMenuItem<int>(
-                              value: value,
-                              child: Text(model.metronomeSoundsList[value]
-                                  .replaceAll("sounds/", "")
-                                  .replaceAll(".mp3", "")));
-                        }).toList(),
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(9)),
+                      child: Container(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<int>(
+                            dropdownColor: Colors.grey,
+                            isExpanded: true,
+                            value: model.metronomeSoundsList
+                                .indexOf(model.metronomeSound),
+                            elevation: 16,
+                            onChanged: (int newValue) {
+                              model.metronomeSound = newValue;
+                            },
+                            items: const <int>[0, 1, 2]
+                                .map<DropdownMenuItem<int>>((int value) {
+                              return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: Text(model.metronomeSoundsList[value]
+                                      .replaceAll("sounds/", "")
+                                      .replaceAll(".mp3", "")));
+                            }).toList(),
+                          ),
+                        ),
                       ));
                 })),
             insertPadding,
@@ -85,6 +93,8 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               ),
             ),
             ListTile(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(9.0)),
                 tileColor: Colors.grey,
                 title: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Text(
@@ -98,7 +108,6 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
             insertPadding,
             ElevatedButton(
               child: const Text("曲を削除する"),
-              //style: TextStyle(backgroundColor: Theme.of(context).errorColor)),
               style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.error),
               onPressed: () {
