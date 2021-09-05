@@ -179,7 +179,7 @@ class _SongsListState extends State<SongsListForm> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                  const Text('Loading...'),
+                  const Text(''),
                 ]));
           }
           if (snapshot.data.docs.length == 0) {
