@@ -10,9 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => AuthModel(),
-      child: MaterialApp(
-        home: _LoginCheck(),
-      ),
+      child: _LoginCheck(),
     );
   }
 }
