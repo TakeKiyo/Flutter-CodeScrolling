@@ -32,6 +32,7 @@ class ThemeModel extends ChangeNotifier {
     appBarTheme: AppBarTheme(
         //default color = primaryColor
         color: Colors.grey[200],
+        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20.0),
         toolbarTextStyle: const TextStyle(color: Colors.black, fontSize: 20.0),
         actionsIconTheme: const IconThemeData(color: Colors.black),
         iconTheme: const IconThemeData(color: Colors.black)),
@@ -62,6 +63,7 @@ class ThemeModel extends ChangeNotifier {
     appBarTheme: AppBarTheme(
         color: Colors.grey[850],
         brightness: Brightness.dark,
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         toolbarTextStyle: const TextStyle(color: Colors.white, fontSize: 20.0),
         actionsIconTheme: const IconThemeData(color: Colors.white),
         iconTheme: const IconThemeData(color: Colors.white)),
