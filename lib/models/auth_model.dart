@@ -3,13 +3,19 @@ import 'package:flutter/material.dart';
 
 class AuthModel extends ChangeNotifier {
   String _udid;
-  AuthModel(String s) {
-    this._udid = s;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  AuthModel() {
+    final User _currentUser = _auth.currentUser;
+    if (_currentUser != null) {
+      _user = _currentUser;
+      notifyListeners();
+    }
   }
   String get udid => _udid;
 
   User _user;
   User get user => _user;
+  bool get loggedIn => _user != null;
 
   // ログイン処理
   Future<bool> login(String email, String password) async {

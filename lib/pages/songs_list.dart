@@ -160,147 +160,156 @@ class _SongsListState extends State<SongsListForm> {
     }
 
     final _scrollController = ScrollController();
-
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('Songs')
-          .where("memberID",
-              arrayContains: Provider.of<AuthModel>(context).udid)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                const Text('Loading...'),
-              ]));
-        }
-        if (snapshot.data.docs.length == 0) {
-          return Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                const Text('保存された曲はありません'),
-                TextButton(
-                    onPressed: () {
-                      createSong();
-                    },
-                    child: const Text("サンプル曲を作成してみる"))
-              ]));
-        } else {
-          final List<DocumentSnapshot> documents = snapshot.data.docs;
-          songsList = [];
-          documents.forEach((doc) {
-            if (searchText == "" ||
-                doc["title"].toString().contains(searchText)) {
-              songsList.add(Slidable(
-                  controller: slidableController,
-                  actionExtentRatio: 0.2,
-                  actionPane: SlidableScrollActionPane(),
-                  secondaryActions: [
-                    IconSlideAction(
-                      caption: '削除',
-                      color: Theme.of(context).colorScheme.error,
-                      icon: Icons.delete,
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => CupertinoAlertDialog(
-                                  title: const Text("確認"),
-                                  content: Text("${doc["title"]}を削除してもよいですか？"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text("キャンセル"),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    TextButton(
-                                      child: const Text("OK"),
-                                      onPressed: () =>
-                                          deleteButtonClicked(doc.id),
-                                    ),
-                                  ],
-                                ));
+    if (Provider.of<AuthModel>(context, listen: false).loggedIn) {
+      return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('Songs')
+            .where("memberID",
+                arrayContains: Provider.of<AuthModel>(context).user.uid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                  const Text('Loading...'),
+                ]));
+          }
+          if (snapshot.data.docs.length == 0) {
+            return Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                  const Text('保存された曲はありません'),
+                  TextButton(
+                      onPressed: () {
+                        createSong();
                       },
-                    ),
-                  ],
-                  child: TextButton(
-                    onPressed: () {
-                      print(doc["bpm"]);
-                      Provider.of<MetronomeModel>(context, listen: false)
-                          .tempoCount = doc["bpm"];
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            var tempMap = doc.data() as Map;
-                            String artist = "";
-                            String songKey = "";
-                            if (tempMap.containsKey("artist")) {
-                              artist = tempMap["artist"];
-                            }
-                            if (tempMap.containsKey("key")) {
-                              songKey = tempMap["key"];
-                            }
-                            return TabView(
-                              bpm: doc["bpm"],
-                              title: doc["title"],
-                              artist: artist,
-                              songKey: songKey,
-                              docId: doc.id,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    child: Container(
-                      child: ListTile(
-                        title: Center(child: Text(doc["title"])),
+                      child: const Text("サンプル曲を作成してみる"))
+                ]));
+          } else {
+            final List<DocumentSnapshot> documents = snapshot.data.docs;
+            songsList = [];
+            documents.forEach((doc) {
+              if (searchText == "" ||
+                  doc["title"].toString().contains(searchText)) {
+                songsList.add(Slidable(
+                    controller: slidableController,
+                    actionExtentRatio: 0.2,
+                    actionPane: SlidableScrollActionPane(),
+                    secondaryActions: [
+                      IconSlideAction(
+                        caption: '削除',
+                        color: Theme.of(context).colorScheme.error,
+                        icon: Icons.delete,
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => CupertinoAlertDialog(
+                                    title: const Text("確認"),
+                                    content:
+                                        Text("${doc["title"]}を削除してもよいですか？"),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text("キャンセル"),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                      TextButton(
+                                        child: const Text("OK"),
+                                        onPressed: () =>
+                                            deleteButtonClicked(doc.id),
+                                      ),
+                                    ],
+                                  ));
+                        },
                       ),
-                    ),
-                  )));
-            }
-          });
-
-          return Scrollbar(
-              thickness: 8.0,
-              hoverThickness: 12.0,
-              child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 20.0, top: 10.0),
-                        child: TextField(
-                          controller: _textEditingController,
-                          onChanged: (text) {
-                            setState(() {
-                              searchText = text;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search),
-                            hintText: "曲名を検索する",
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                _textEditingController.clear();
-                                setState(() {
-                                  searchText = "";
-                                });
-                                FocusScope.of(context).unfocus();
-                              },
-                              icon: const Icon(Icons.clear),
-                            ),
+                    ],
+                    child: TextButton(
+                      onPressed: () {
+                        print(doc["bpm"]);
+                        Provider.of<MetronomeModel>(context, listen: false)
+                            .tempoCount = doc["bpm"];
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              var tempMap = doc.data() as Map;
+                              String artist = "";
+                              String songKey = "";
+                              if (tempMap.containsKey("artist")) {
+                                artist = tempMap["artist"];
+                              }
+                              if (tempMap.containsKey("key")) {
+                                songKey = tempMap["key"];
+                              }
+                              return TabView(
+                                bpm: doc["bpm"],
+                                title: doc["title"],
+                                artist: artist,
+                                songKey: songKey,
+                                docId: doc.id,
+                              );
+                            },
                           ),
-                        )),
-                    ListView(
-                      padding: const EdgeInsets.all(12.0),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: songsList,
-                    )
-                  ])));
-        }
-      },
-    );
+                        );
+                      },
+                      child: Container(
+                        child: ListTile(
+                          title: Center(child: Text(doc["title"])),
+                        ),
+                      ),
+                    )));
+              }
+            });
+
+            return Scrollbar(
+                thickness: 8.0,
+                hoverThickness: 12.0,
+                child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(children: <Widget>[
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20.0, top: 10.0),
+                          child: TextField(
+                            controller: _textEditingController,
+                            onChanged: (text) {
+                              setState(() {
+                                searchText = text;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.search),
+                              hintText: "曲名を検索する",
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  _textEditingController.clear();
+                                  setState(() {
+                                    searchText = "";
+                                  });
+                                  FocusScope.of(context).unfocus();
+                                },
+                                icon: const Icon(Icons.clear),
+                              ),
+                            ),
+                          )),
+                      ListView(
+                        padding: const EdgeInsets.all(12.0),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: songsList,
+                      )
+                    ])));
+          }
+        },
+      );
+    } else {
+      return Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+            const Text('ログインしていません。'),
+          ]));
+    }
   }
 }
