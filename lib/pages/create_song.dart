@@ -43,11 +43,11 @@ class _CreateSongFormState extends State<CreateSong> {
       showDialog(
           context: context,
           builder: (_) => CupertinoAlertDialog(
-                title: Text("エラー"),
-                content: Text("キーを選択してください。"),
+                title: const Text("エラー"),
+                content: const Text("キーを選択してください。"),
                 actions: <Widget>[
                   TextButton(
-                    child: Text('OK'),
+                    child: const Text('OK'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
@@ -58,16 +58,16 @@ class _CreateSongFormState extends State<CreateSong> {
       showDialog(
           context: context,
           builder: (_) => CupertinoAlertDialog(
-                title: Text("確認"),
+                title: const Text("確認"),
                 content: Text(
                     "以下の曲を作成します\n 曲名: ${_title.toString()}\n アーティスト: ${_artist.toString()}\n BPM: ${_bpm.toString()}\n キー: ${_key.toString()}"),
                 actions: <Widget>[
                   TextButton(
-                    child: Text("Cancel"),
+                    child: const Text("Cancel"),
                     onPressed: () => Navigator.pop(context),
                   ),
                   TextButton(
-                    child: Text("OK"),
+                    child: const Text("OK"),
                     onPressed: () async => createSong(),
                   ),
                 ],
@@ -105,7 +105,6 @@ class _CreateSongFormState extends State<CreateSong> {
               Navigator.pop(context);
             },
             child: CupertinoPicker(
-              backgroundColor: Theme.of(context).primaryColorLight,
               itemExtent: 40,
               children: _items.map(_pickerItem).toList(),
               onSelectedItemChanged: _onSelectedItemChanged,
@@ -121,7 +120,10 @@ class _CreateSongFormState extends State<CreateSong> {
   Widget _pickerItem(String str) {
     return Text(
       str,
-      style: const TextStyle(fontSize: 32),
+      style: TextStyle(
+        color: Theme.of(context).textTheme.bodyText1.color,
+        fontSize: 32,
+      ),
     );
   }
 
@@ -132,7 +134,7 @@ class _CreateSongFormState extends State<CreateSong> {
     });
   }
 
-  final List<String> _items = [
+  final List<String> _items = const [
     'C / Am',
     'C# / A#m',
     'D / Bm',
@@ -151,10 +153,10 @@ class _CreateSongFormState extends State<CreateSong> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('曲追加ページ'),
+          title: const Text('曲追加ページ'),
           actions: [
             TextButton(
-              child: Text("作成", style: TextStyle(fontSize: 18)),
+              child: const Text("作成", style: TextStyle(fontSize: 18)),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   createButtonClicked();
@@ -174,7 +176,7 @@ class _CreateSongFormState extends State<CreateSong> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                          padding: EdgeInsets.only(bottom: 10.0),
+                          padding: const EdgeInsets.only(bottom: 10.0),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
@@ -190,7 +192,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                       ),
                                     },
                                     style: TextButton.styleFrom(
-                                      padding: EdgeInsets.only(
+                                      padding: const EdgeInsets.only(
                                           top: 12.0, bottom: 12.0),
                                       textStyle: const TextStyle(fontSize: 16),
                                     ),
@@ -205,7 +207,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Theme.of(context)
-                                                      .primaryTextTheme
+                                                      .textTheme
                                                       .caption
                                                       .color)),
                                         ]),
@@ -223,7 +225,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                       ),
                                     },
                                     style: TextButton.styleFrom(
-                                      padding: EdgeInsets.only(
+                                      padding: const EdgeInsets.only(
                                           top: 12.0, bottom: 12.0),
                                       textStyle: const TextStyle(fontSize: 16),
                                     ),
@@ -239,7 +241,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Theme.of(context)
-                                                  .primaryTextTheme
+                                                  .textTheme
                                                   .caption
                                                   .color),
                                         ),
@@ -253,7 +255,7 @@ class _CreateSongFormState extends State<CreateSong> {
                           fontSize: 25.0,
                         ),
                         decoration: const InputDecoration(
-                          icon: Padding(
+                          icon: const Padding(
                               padding: EdgeInsets.only(top: 10.0),
                               child: Icon(Icons.music_note, size: 30.0)),
                           labelText: '曲名',
@@ -267,12 +269,10 @@ class _CreateSongFormState extends State<CreateSong> {
                         },
                       ),
                       TextFormField(
-                        style: const TextStyle(
-                          fontSize: 25.0,
-                        ),
+                        style: const TextStyle(fontSize: 25.0),
                         decoration: const InputDecoration(
                           icon: Padding(
-                              padding: EdgeInsets.only(top: 10.0),
+                              padding: const EdgeInsets.only(top: 10.0),
                               child: const Icon(Icons.person, size: 30.0)),
                           labelText: 'アーティスト',
                         ),
@@ -293,7 +293,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                   "キー  ",
                                   style: TextStyle(
                                     color: Theme.of(context)
-                                        .primaryTextTheme
+                                        .textTheme
                                         .bodyText1
                                         .color,
                                     fontSize: 25.0,
@@ -303,7 +303,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                   child: Text((_key == "未選択") ? "キーを選択" : _key,
                                       style: TextStyle(
                                         color: Theme.of(context)
-                                            .primaryTextTheme
+                                            .textTheme
                                             .bodyText1
                                             .color,
                                         fontSize: 25.0,
@@ -321,22 +321,13 @@ class _CreateSongFormState extends State<CreateSong> {
                                 ),
                               ])),
                       Padding(
-                          padding: EdgeInsets.only(top: 25.0),
+                          padding: const EdgeInsets.only(top: 25.0),
                           child: Text(
                             "BPM: $_bpm",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 25.0,
                             ),
                           )),
-                      Text(
-                        "いつでも変更可能です",
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).primaryTextTheme.caption.color,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       Slider(
                         label: null,
                         value: _bpm.toDouble(),
@@ -344,6 +335,26 @@ class _CreateSongFormState extends State<CreateSong> {
                         min: 30,
                         max: 300,
                         onChanged: _handleBpm,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 25.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.info_outline,
+                                color:
+                                    Theme.of(context).textTheme.caption.color),
+                            const Padding(padding: const EdgeInsets.all(5.0)),
+                            Text(
+                              "これらの情報はいつでも変更可能です",
+                              style: TextStyle(
+                                color:
+                                    Theme.of(context).textTheme.caption.color,
+                                fontSize: 15.0,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

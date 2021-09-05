@@ -18,11 +18,11 @@ class CountInDialog extends StatelessWidget {
           child: Consumer<MetronomeModel>(builder: (_, model, __) {
             return ListView(
               shrinkWrap: true,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               scrollDirection: Axis.horizontal,
               children: List.generate(model.countInTimes, (cNum) => cNum)
                   .map((cNum) => Container(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         child: Container(
                             width: 20,
                             height: 20,

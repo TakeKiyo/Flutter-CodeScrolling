@@ -13,7 +13,7 @@ class ExportSong extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('曲を共有'),
+          title: const Text('曲を共有'),
           actions: [],
         ),
         body: Container(
@@ -22,13 +22,14 @@ class ExportSong extends StatelessWidget {
             children: <Widget>[
               Center(
                 child: QrImage(
+                  foregroundColor: Theme.of(context).textTheme.bodyText1.color,
                   data: docId,
                   size: 200,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-                child: Text(
+                child: const Text(
                   "IDをコピーして共有することも可能です。",
                   textAlign: TextAlign.center,
                 ),

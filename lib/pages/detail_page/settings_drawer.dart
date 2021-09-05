@@ -9,33 +9,29 @@ import '../edit_song_info.dart';
 
 Drawer settingsDrawer(BuildContext context, int bpm, String title,
     String artist, String songKey, String docId) {
-  final double titleTextFont = 16;
-  final insertPadding = Padding(padding: EdgeInsets.all(10));
+  const titleTextFont = 16.0;
+  final insertPadding = const Padding(padding: EdgeInsets.all(10));
 
   return Drawer(
     child: Material(
-      color: Theme.of(context).primaryColor,
       child: Padding(
         padding: const EdgeInsets.all(25),
         child: ListView(
           children: [
-            Text(
-              "曲情報",
+            const Text(
+              "曲情報を編集する",
               style: TextStyle(
                 fontSize: titleTextFont,
               ),
             ),
             ListTile(
-              tileColor: Theme.of(context).primaryColorLight,
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("曲名：" + title),
-                  Text("アーティスト：" + artist),
-                  Text("キー：" + songKey),
-                  Text("BPM：" + bpm.toString()),
-                ],
-              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(9.0)),
+              tileColor: Colors.grey,
+              title: Text("曲名： $title\n"
+                  "アーティスト： $artist\n"
+                  "キー： $songKey\n"
+                  "BPM： $bpm"),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -53,7 +49,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
               },
             ),
             insertPadding,
-            Text(
+            const Text(
               "メトロノームのサウンド",
               style: TextStyle(
                 fontSize: titleTextFont,
@@ -63,35 +59,43 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 alignedDropdown: true,
                 child: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Container(
-                      color: Theme.of(context).primaryColorLight,
-                      child: DropdownButton<int>(
-                        isExpanded: true,
-                        dropdownColor: Theme.of(context).primaryColorLight,
-                        value: model.metronomeSoundsList
-                            .indexOf(model.metronomeSound),
-                        elevation: 16,
-                        onChanged: (int newValue) {
-                          model.metronomeSound = newValue;
-                        },
-                        items: <int>[0, 1, 2]
-                            .map<DropdownMenuItem<int>>((int value) {
-                          return DropdownMenuItem<int>(
-                              value: value,
-                              child: Text(model.metronomeSoundsList[value]
-                                  .replaceAll("sounds/", "")
-                                  .replaceAll(".mp3", "")));
-                        }).toList(),
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(9)),
+                      child: Container(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<int>(
+                            dropdownColor: Colors.grey,
+                            isExpanded: true,
+                            value: model.metronomeSoundsList
+                                .indexOf(model.metronomeSound),
+                            elevation: 16,
+                            onChanged: (int newValue) {
+                              model.metronomeSound = newValue;
+                            },
+                            items: const <int>[0, 1, 2]
+                                .map<DropdownMenuItem<int>>((int value) {
+                              return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: Text(model.metronomeSoundsList[value]
+                                      .replaceAll("sounds/", "")
+                                      .replaceAll(".mp3", "")));
+                            }).toList(),
+                          ),
+                        ),
                       ));
                 })),
             insertPadding,
-            Text(
+            const Text(
               "カウントイン",
               style: TextStyle(
                 fontSize: titleTextFont,
               ),
             ),
             ListTile(
-                tileColor: Theme.of(context).primaryColorLight,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(9.0)),
+                tileColor: Colors.grey,
                 title: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Text(
                     "回数：" + model.countInTimes.toString(),
@@ -103,20 +107,22 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 }),
             insertPadding,
             ElevatedButton(
-              child: Text("曲を削除する", style: TextStyle(color: Colors.red)),
+              child: const Text("曲を削除する"),
+              style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.error),
               onPressed: () {
                 showDialog(
                     context: context,
                     builder: (_) => CupertinoAlertDialog(
-                          title: Text("確認"),
+                          title: const Text("確認"),
                           content: Text(title + "を削除してもよいですか？"),
                           actions: <Widget>[
                             TextButton(
-                              child: Text("キャンセル"),
+                              child: const Text("キャンセル"),
                               onPressed: () => Navigator.pop(context),
                             ),
                             TextButton(
-                                child: Text("OK"),
+                                child: const Text("OK"),
                                 onPressed: () async {
                                   Navigator.of(context)
                                       .popUntil((route) => route.isFirst);

@@ -9,7 +9,7 @@ class ImportSongById extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('曲をインポート'),
+        title: const Text('曲をインポート'),
         actions: [],
       ),
       body: Center(child: ImportSongForm()),
@@ -35,15 +35,15 @@ class _ImportSongFormState extends State<ImportSongForm> {
     showDialog(
         context: context,
         builder: (_) => CupertinoAlertDialog(
-              title: Text("確認"),
-              content: Text("曲のインポートを開始します"),
+              title: const Text("確認"),
+              content: const Text("曲のインポートを開始します"),
               actions: <Widget>[
                 TextButton(
-                  child: Text("Cancel"),
+                  child: const Text("Cancel"),
                   onPressed: () => Navigator.pop(context),
                 ),
                 TextButton(
-                  child: Text("OK"),
+                  child: const Text("OK"),
                   onPressed: () async => importSong(copiedID),
                 ),
               ],
@@ -73,7 +73,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.red,
+              backgroundColor: Theme.of(context).colorScheme.error,
               content: const Text('曲が存在していません'),
               duration: const Duration(seconds: 5),
               action: SnackBarAction(
@@ -89,7 +89,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
           content: const Text('エラーが発生しました'),
           duration: const Duration(seconds: 5),
           action: SnackBarAction(
@@ -110,12 +110,10 @@ class _ImportSongFormState extends State<ImportSongForm> {
               child: Container(
                   padding: const EdgeInsets.all(30),
                   child: Column(children: <Widget>[
-                    Text(
+                    const Text(
                       "コピーしたIDをペーストしても \n 追加することができます",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                      ),
+                      style: TextStyle(fontSize: 14.0),
                     ),
                     TextFormField(
                       onChanged: _handleCopiedID,
@@ -127,7 +125,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 10.0),
+                      padding: const EdgeInsets.only(top: 10.0),
                       child: OutlinedButton(
                         child: const Text('曲をインポート'),
                         style: OutlinedButton.styleFrom(

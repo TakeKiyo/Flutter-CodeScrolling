@@ -60,7 +60,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
           .snapshots(),
       builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: Text("Loading"));
+          return Center(child: const Text("Loading"));
         }
         var songDocument = snapshot.data;
         var codeList = songDocument["codeList"].cast<String>();
@@ -115,8 +115,8 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                       ),
                     );
                   },
-                  child: Text("曲を編集する")),
-              Text("まだ歌詞は追加されていません")
+                  child: const Text("曲を編集する")),
+              const Text("まだ歌詞は追加されていません")
             ],
           ));
         } else {
@@ -159,7 +159,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                     ),
                   );
                 },
-                child: Text("曲を編集する")));
+                child: const Text("曲を編集する")));
             bool noLyrics = true;
             for (int listIndex = 0;
                 listIndex < lyricsList.length;
@@ -173,7 +173,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                    Text('歌詞は追加されていません。'),
+                    const Text('歌詞は追加されていません。'),
                   ])));
               return displayedList;
             }
@@ -183,21 +183,21 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
               if (separation.length != 0) {
                 if (listIndex == 0) {
                   displayedList.add(Text(separation[listIndex],
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         backgroundColor: Colors.black,
                       )));
                 } else {
                   if (separation[listIndex] != separation[listIndex - 1]) {
                     displayedList.add(Text(separation[listIndex],
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           backgroundColor: Colors.black,
                         )));
                   }
                 }
                 displayedList.add(Text(lyricsList[listIndex],
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                     )));
               }
@@ -218,7 +218,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                         child: SingleChildScrollView(
                             controller: _scrollController,
                             child: ListView(
-                              padding: EdgeInsets.all(36.0),
+                              padding: const EdgeInsets.all(36.0),
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               children: displayedWidget(),

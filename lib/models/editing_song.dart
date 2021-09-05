@@ -79,12 +79,11 @@ class EditingSongModel extends ChangeNotifier {
     for (int i = 0; i < fetchedRhythmList.length; i++) {
       _rhythmList.add(fetchedRhythmList[i]);
     }
-    if (fetchedRhythmList.length > 0){
+    if (fetchedRhythmList.length > 0) {
       _selectedRhythm = fetchedRhythmList.last;
-    }else{
+    } else {
       _selectedRhythm = "4/4";
     }
-
   }
 
   List<String> _lyricsList = [];
@@ -171,7 +170,7 @@ class EditingSongModel extends ChangeNotifier {
             (_codeFormOffsetList[listIndex] > deviceHeight / 2)
                 ? _codeFormOffsetList[listIndex] - (deviceHeight / 2)
                 : 0,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.easeOut,
           );
           break;
@@ -181,7 +180,7 @@ class EditingSongModel extends ChangeNotifier {
             (_lyricFormOffsetList[listIndex] > deviceHeight / 2)
                 ? _lyricFormOffsetList[listIndex] - (deviceHeight / 2)
                 : 0,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.easeOut,
           );
           break;
@@ -201,7 +200,7 @@ class EditingSongModel extends ChangeNotifier {
     if (editScrollController.hasClients) {
       editScrollController.animateTo(
         editScrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeOut,
       );
     }
