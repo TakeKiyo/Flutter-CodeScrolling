@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
+import 'package:my_app/pages/signin_form.dart';
 import 'package:my_app/pages/songs_list.dart';
 import 'package:provider/provider.dart';
 
@@ -79,7 +80,7 @@ class _LoginFormState extends State<LoginForm> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 20.0),
+              padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: OutlinedButton(
                 child: Text("ログイン", style: const TextStyle(fontSize: 25.0)),
                 style: OutlinedButton.styleFrom(
@@ -123,7 +124,21 @@ class _LoginFormState extends State<LoginForm> {
                   }
                 },
               ),
-            )
+            ),
+            OutlinedButton(
+              child: Text("新規登録はこちら", style: const TextStyle(fontSize: 25.0)),
+              style: OutlinedButton.styleFrom(
+                primary: Theme.of(context).textTheme.headline6.color,
+                side: const BorderSide(),
+              ),
+              onPressed: () async {
+                FocusScope.of(context).unfocus();
+                await Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return SigninForm();
+                }));
+              },
+            ),
           ]),
         ),
       );
