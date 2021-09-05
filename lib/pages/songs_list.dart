@@ -17,7 +17,13 @@ class SongsList extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('曲一覧'),
+          title: const Text(
+            'Bandout',
+            style: TextStyle(
+              fontFamily: 'Rochester',
+              fontSize: 35,
+            ),
+          ),
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: IconButton(
