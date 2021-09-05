@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Code Scrolling',
             theme: theme.currentTheme,
-            darkTheme: theme.darkTheme,
+            darkTheme: theme.themeIndex == 0 ? theme.darkTheme : null,
             home: SongsList(),
           );
         }));

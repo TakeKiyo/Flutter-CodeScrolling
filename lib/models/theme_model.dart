@@ -9,6 +9,7 @@ class ThemeModel extends ChangeNotifier {
   }
 
   final ThemeData _lightTheme = ThemeData(
+    primarySwatch: Colors.grey,
     primaryColorLight: Colors.blue[500],
     primaryColor: Colors.blue[800],
     primaryColorDark: Colors.blue[900],
@@ -32,8 +33,11 @@ class ThemeModel extends ChangeNotifier {
     appBarTheme: AppBarTheme(
         //default color = primaryColor
         color: Colors.grey[200],
-        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20.0),
+        foregroundColor: Colors.black,
+        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 20.0),
         toolbarTextStyle: const TextStyle(color: Colors.black, fontSize: 20.0),
+        textTheme: TextTheme(
+            headline6: TextStyle(color: Colors.black, fontSize: 20.0)),
         actionsIconTheme: const IconThemeData(color: Colors.black),
         iconTheme: const IconThemeData(color: Colors.black)),
     //チェックボックスの色をprimaryColorに合わせる。default = primarySwatch
@@ -42,6 +46,7 @@ class ThemeModel extends ChangeNotifier {
 
   //_lightTheme.copyWith() method doesn't work
   final ThemeData _darkTheme = ThemeData(
+    primarySwatch: Colors.grey,
     brightness: Brightness.dark,
     primaryColorLight: Colors.blue[500],
     primaryColor: Colors.blue[800],
@@ -65,6 +70,8 @@ class ThemeModel extends ChangeNotifier {
         brightness: Brightness.dark,
         titleTextStyle: TextStyle(color: Colors.white, fontSize: 20.0),
         toolbarTextStyle: const TextStyle(color: Colors.white, fontSize: 20.0),
+        textTheme: TextTheme(
+            headline6: TextStyle(color: Colors.white, fontSize: 20.0)),
         actionsIconTheme: const IconThemeData(color: Colors.white),
         iconTheme: const IconThemeData(color: Colors.white)),
     toggleableActiveColor: Colors.blue[800],
