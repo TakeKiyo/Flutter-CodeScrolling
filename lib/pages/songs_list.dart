@@ -39,24 +39,26 @@ class SongsList extends StatelessWidget {
           actions: [],
         ),
         body: SongsListForm(),
-        floatingActionButton: Container(
-            width: 70.0,
-            height: 70.0,
-            child: FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (context) {
-                        return CreateSong();
-                      }),
-                );
-              },
-              child: const Icon(
-                Icons.add,
-                size: 40.0,
-              ),
-            )));
+        floatingActionButton: context.watch<AuthModel>().loggedIn
+            ? Container(
+                width: 70.0,
+                height: 70.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (context) {
+                            return CreateSong();
+                          }),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    size: 40.0,
+                  ),
+                ))
+            : Container(child: null));
   }
 }
 
