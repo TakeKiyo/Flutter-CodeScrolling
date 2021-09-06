@@ -23,7 +23,7 @@ class CustomKeyboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      color: Colors.grey[800],
+      color: Colors.grey[800].withOpacity(0.8),
       child: Column(
         children: [
           buildRowSetting(context),
@@ -46,8 +46,8 @@ class CustomKeyboard extends StatelessWidget {
       height: 40,
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         IconButton(
-            icon: const Icon(Icons.keyboard_arrow_down_outlined,
-                color: Colors.grey),
+            icon: Icon(Icons.keyboard_arrow_down_outlined,
+                color: Colors.grey.withOpacity(0.8)),
             onPressed: () {
               Provider.of<EditingSongModel>(context, listen: false)
                   .closeKeyboard();
@@ -193,7 +193,7 @@ class TextKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 3.0),
         child: Material(
-          color: Colors.grey[600],
+          color: Colors.grey[500].withOpacity(0.8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -237,7 +237,7 @@ class BackspaceKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.grey[700],
+          color: Colors.grey[600].withOpacity(0.8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -275,11 +275,13 @@ class SpacerWidget extends StatelessWidget {
 class FunctionKey extends StatelessWidget {
   final String label;
   final int keyWidth;
+  final VoidCallback onTapped;
 
   const FunctionKey({
     Key key,
     this.label = "",
     this.keyWidth = 10,
+    this.onTapped,
   }) : super(key: key);
 
   @override
@@ -289,14 +291,12 @@ class FunctionKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.grey[700],
+          color: Colors.grey[600].withOpacity(0.8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
           child: InkWell(
-            onTap: () {
-              print("Tapped");
-            },
+            onTap: () => onTapped,
             child: Container(
               child: Center(
                 child: Text(

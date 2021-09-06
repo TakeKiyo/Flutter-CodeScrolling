@@ -123,7 +123,8 @@ class _DetailEditPageState extends State<DetailEditPage> {
         MediaQuery.of(context).size.height;
 
     void _showCustomKeyboard(context) {
-      Scaffold.of(context).showBottomSheet((BuildContext context) {
+      Scaffold.of(context)
+          .showBottomSheet((context, {backgroundColor: Colors.transparent}) {
         return CustomKeyboard(
           onTextInput: (myText) {
             Provider.of<EditingSongModel>(context, listen: false)
@@ -195,10 +196,9 @@ class _DetailEditPageState extends State<DetailEditPage> {
                     Provider.of<EditingSongModel>(context, listen: false)
                         .closeKeyboard();
                     Navigator.of(context).pop();
-                  } else {
-                    Provider.of<EditingSongModel>(context, listen: false)
-                        .openNormalKeyboard();
                   }
+                  Provider.of<EditingSongModel>(context, listen: false)
+                      .openNormalKeyboard();
                   Provider.of<EditingSongModel>(context, listen: false)
                       .scrollToTappedForm(listIndex: listIndex, mode: "lyrics");
                 },
