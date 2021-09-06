@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_udid/flutter_udid.dart';
+import 'package:my_app/models/auth_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/metronome_model.dart';
@@ -127,7 +127,10 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                                   Navigator.of(context)
                                       .popUntil((route) => route.isFirst);
                                   await Future.delayed(Duration(seconds: 1));
-                                  String udid = await FlutterUdid.udid;
+                                  String uid = Provider.of<AuthModel>(context,
+                                          listen: false)
+                                      .user
+                                      .uid;
                                   await FirebaseFirestore.instance
                                       .collection("Songs")
                                       .doc(docId)
@@ -144,7 +147,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                                           .doc(docId)
                                           .delete();
                                     } else {
-                                      memberIDList.remove(udid);
+                                      memberIDList.remove(uid);
                                       FirebaseFirestore.instance
                                           .collection("Songs")
                                           .doc(docId)

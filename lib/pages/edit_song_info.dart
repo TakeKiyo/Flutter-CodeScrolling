@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_udid/flutter_udid.dart';
+import 'package:my_app/models/auth_model.dart';
+import 'package:provider/provider.dart';
 
 class EditSongInfo extends StatefulWidget {
   final String artist;
@@ -64,7 +65,7 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
   }
 
   void editSong() async {
-    String udid = await FlutterUdid.udid;
+    String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
 
     FirebaseFirestore.instance.collection("Songs").doc(widget.docId).update({
       "title": _title,
@@ -72,7 +73,7 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
       "key": _key,
       "artist": _artist,
       "updatedAt": DateTime.now(),
-      "udid": udid,
+      "uid": uid,
       "type": "edit",
     });
     Navigator.of(context).popUntil((route) => route.isFirst);

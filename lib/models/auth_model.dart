@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthModel extends ChangeNotifier {
-  String _udid;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   AuthModel() {
     final User _currentUser = _auth.currentUser;
@@ -11,7 +10,6 @@ class AuthModel extends ChangeNotifier {
       notifyListeners();
     }
   }
-  String get udid => _udid;
 
   User _user;
   User get user => _user;

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_udid/flutter_udid.dart';
+import 'package:my_app/models/auth_model.dart';
+import 'package:provider/provider.dart';
 
 import 'import_song_by_id.dart';
 import 'import_song_page.dart';
@@ -76,15 +77,15 @@ class _CreateSongFormState extends State<CreateSong> {
   }
 
   void createSong() async {
-    String udid = await FlutterUdid.udid;
+    String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
 
     FirebaseFirestore.instance.collection("Songs").add({
       "title": _title,
       "bpm": _bpm,
       "key": _key,
       "artist": _artist,
-      "userID": udid,
-      "memberID": [udid],
+      "userID": uid,
+      "memberID": [uid],
       "codeList": [],
       "lyricsList": [],
       "createdAt": DateTime.now(),

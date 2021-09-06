@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_udid/flutter_udid.dart';
 import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +87,8 @@ class _SongsListState extends State<SongsListForm> {
   @override
   Widget build(BuildContext context) {
     void deleteButtonClicked(String docId) async {
-      String udid = await FlutterUdid.udid;
+      String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
+
       await FirebaseFirestore.instance
           .collection("Songs")
           .doc(docId)
@@ -99,7 +99,7 @@ class _SongsListState extends State<SongsListForm> {
         if (memberIDList.length == 1) {
           FirebaseFirestore.instance.collection('Songs').doc(docId).delete();
         } else {
-          memberIDList.remove(udid);
+          memberIDList.remove(uid);
           FirebaseFirestore.instance.collection("Songs").doc(docId).update({
             "type": "removeMember",
             "memberID": memberIDList,
@@ -111,7 +111,7 @@ class _SongsListState extends State<SongsListForm> {
     }
 
     void createSong() async {
-      String udid = await FlutterUdid.udid;
+      String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
 
       List<String> codeList = const [
         "A,A,A,A",
@@ -157,8 +157,8 @@ class _SongsListState extends State<SongsListForm> {
         "bpm": 120,
         "key": "C / Am",
         "artist": "サンプルアーティスト",
-        "userID": udid,
-        "memberID": [udid],
+        "userID": uid,
+        "memberID": [uid],
         "codeList": codeList,
         "lyricsList": lyricsList,
         "rhythmList": rhythmList,
@@ -174,7 +174,8 @@ class _SongsListState extends State<SongsListForm> {
         stream: FirebaseFirestore.instance
             .collection('Songs')
             .where("memberID",
-                arrayContains: Provider.of<AuthModel>(context).user.uid)
+                arrayContains:
+                    Provider.of<AuthModel>(context, listen: false).user.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
