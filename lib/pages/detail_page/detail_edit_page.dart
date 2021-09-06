@@ -179,13 +179,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
           List.generate(strings.length,
               (idx) => TextEditingController(text: strings[idx]));
 
-      Provider.of<EditingSongModel>(context, listen: false)
-              .lyricControllerList[listIndex]
-              .selection =
-          TextSelection.fromPosition(TextPosition(
-              offset: Provider.of<EditingSongModel>(context, listen: false)
-                  .lyricsList[listIndex]
-                  .length));
       lyrics.add(Flexible(
           child: Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 48.0),
@@ -202,9 +195,10 @@ class _DetailEditPageState extends State<DetailEditPage> {
                     Provider.of<EditingSongModel>(context, listen: false)
                         .closeKeyboard();
                     Navigator.of(context).pop();
+                  } else {
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .openNormalKeyboard();
                   }
-                  Provider.of<EditingSongModel>(context, listen: false)
-                      .openNormalKeyboard();
                   Provider.of<EditingSongModel>(context, listen: false)
                       .scrollToTappedForm(listIndex: listIndex, mode: "lyrics");
                 },
