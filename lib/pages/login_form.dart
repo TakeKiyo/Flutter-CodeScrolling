@@ -47,6 +47,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             actions: [],
           ),
+          extendBodyBehindAppBar: true,
           body: Center(
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
