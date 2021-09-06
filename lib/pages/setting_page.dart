@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/theme_model.dart';
-import 'package:my_app/pages/login_form.dart';
 import 'package:provider/provider.dart';
 
 class SettingPage extends StatelessWidget {
@@ -68,11 +67,8 @@ class SettingPage extends StatelessWidget {
                             onPressed: () async {
                               Provider.of<AuthModel>(context, listen: false)
                                   .logout();
-                              await Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) {
-                                  return LoginForm();
-                                }),
-                              );
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
                             },
                           )
                         : Container(
