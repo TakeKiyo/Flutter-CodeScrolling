@@ -89,7 +89,7 @@ class _SigninFormState extends State<SigninForm> {
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
                   try {
-                    if (await model.login(_email, _password)) {
+                    if (await model.signin(_email, _password)) {
                       await Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) {
                           return SongsList();

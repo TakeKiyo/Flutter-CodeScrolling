@@ -17,6 +17,27 @@ class AuthModel extends ChangeNotifier {
   User get user => _user;
   bool get loggedIn => _user != null;
 
+  // 新規登録処理
+  Future<bool> signin(String email, String password) async {
+    try {
+      UserCredential _userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      _user = _userCredential.user;
+      notifyListeners();
+      return true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   // ログイン処理
   Future<bool> login(String email, String password) async {
     try {
