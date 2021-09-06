@@ -62,6 +62,8 @@ class SettingPage extends StatelessWidget {
                         ? OutlinedButton(
                             child: const Text('ログアウトする'),
                             style: OutlinedButton.styleFrom(
+                              primary:
+                                  Theme.of(context).textTheme.headline6.color,
                               side: const BorderSide(),
                             ),
                             onPressed: () async {
