@@ -224,10 +224,13 @@ class EditingSongModel extends ChangeNotifier {
     }
   }
 
-  ///detail_edit_pageでTextFieldをTapする度に対応したTextEditingControllerを代入する
-  TextEditingController currentCodeController;
-  int controlBarIdx = 0;
-  int controlTimeIdx = 0;
+  ///detail_edit_pageでTextFieldをTapする度に対応した座標を代入する
+  int _controlBarIdx = 0;
+  get listIndex => _controlBarIdx;
+  int _controlTimeIdx = 0;
+  get idx => _controlTimeIdx;
+  TextEditingController _currentController;
+  get currentController => _currentController;
 
   bool _keyboardIsOpening = false;
   get keyboardIsOpening => _keyboardIsOpening;
@@ -260,51 +263,60 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeTextController(TextEditingController controller) {
-    this.currentCodeController = controller;
+  void changeTextController(int listIndex, int idx) {
+    _controlBarIdx = listIndex;
+    _controlTimeIdx = idx;
+    _currentController = _codeControllerList[listIndex][idx];
     notifyListeners();
   }
 
   void changeSelectionToLeft() {
-    final textSelection = currentCodeController.selection;
+    final textSelection =
+        _codeControllerList[_controlBarIdx][_controlTimeIdx].selection;
     if (textSelection.start > 0) {
-      currentCodeController.selection = TextSelection(
-          baseOffset: textSelection.start - 1,
-          extentOffset: textSelection.start - 1);
+      _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+          TextSelection(
+              baseOffset: textSelection.start - 1,
+              extentOffset: textSelection.start - 1);
     }
   }
 
   void changeSelectionToRight() {
-    final text = currentCodeController.text;
-    final textSelection = currentCodeController.selection;
+    final text = _codeControllerList[_controlBarIdx][_controlTimeIdx].text;
+    final textSelection =
+        _codeControllerList[_controlBarIdx][_controlTimeIdx].selection;
     if (text.length > textSelection.end) {
-      currentCodeController.selection = TextSelection(
-          baseOffset: textSelection.end + 1,
-          extentOffset: textSelection.end + 1);
+      _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+          TextSelection(
+              baseOffset: textSelection.end + 1,
+              extentOffset: textSelection.end + 1);
     }
   }
 
   void insertText(String myText) {
-    final text = currentCodeController.text;
-    final textSelection = currentCodeController.selection;
+    final text = _codeControllerList[_controlBarIdx][_controlTimeIdx].text;
+    final textSelection =
+        _codeControllerList[_controlBarIdx][_controlTimeIdx].selection;
     final newText = text.replaceRange(
       textSelection.start,
       textSelection.end,
       myText,
     );
     final myTextLength = myText.length;
-    currentCodeController.text = newText;
-    currentCodeController.selection = textSelection.copyWith(
+    _codeControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
+    _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+        textSelection.copyWith(
       baseOffset: textSelection.start + myTextLength,
       extentOffset: textSelection.start + myTextLength,
     );
-    editCodeList(newText, controlBarIdx, controlTimeIdx);
+    editCodeList(newText, _controlBarIdx, _controlTimeIdx);
     notifyListeners();
   }
 
   void backspace() {
-    final text = currentCodeController.text;
-    final textSelection = currentCodeController.selection;
+    final text = _codeControllerList[_controlBarIdx][_controlTimeIdx].text;
+    final textSelection =
+        _codeControllerList[_controlBarIdx][_controlTimeIdx].selection;
     final selectionLength = textSelection.end - textSelection.start;
 
     // There is a selection.
@@ -314,12 +326,13 @@ class EditingSongModel extends ChangeNotifier {
         textSelection.end,
         '',
       );
-      currentCodeController.text = newText;
-      currentCodeController.selection = textSelection.copyWith(
+      _codeControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
+      _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+          textSelection.copyWith(
         baseOffset: textSelection.start,
         extentOffset: textSelection.start,
       );
-      editCodeList(newText, controlBarIdx, controlTimeIdx);
+      editCodeList(newText, _controlBarIdx, _controlTimeIdx);
       notifyListeners();
     }
 
@@ -338,12 +351,13 @@ class EditingSongModel extends ChangeNotifier {
       newEnd,
       '',
     );
-    currentCodeController.text = newText;
-    currentCodeController.selection = textSelection.copyWith(
+    _codeControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
+    _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+        textSelection.copyWith(
       baseOffset: newStart,
       extentOffset: newStart,
     );
-    editCodeList(newText, controlBarIdx, controlTimeIdx);
+    editCodeList(newText, _controlBarIdx, _controlTimeIdx);
     notifyListeners();
   }
 

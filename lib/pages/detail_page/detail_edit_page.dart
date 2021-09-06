@@ -88,6 +88,10 @@ class _DetailEditPageState extends State<DetailEditPage> {
     _scrollController = ScrollController();
     Provider.of<EditingSongModel>(context, listen: false).editScrollController =
         _scrollController;
+    Provider.of<EditingSongModel>(context, listen: false).lyricControllerList =
+        null;
+    Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
+        null;
     WidgetsBinding.instance.addPostFrameCallback((cb) => _setEachOffsetList());
   }
 
@@ -166,17 +170,30 @@ class _DetailEditPageState extends State<DetailEditPage> {
       _globalLyricFormList.add(GlobalKey<FormState>());
       _globalCodeFormList.add(GlobalKey<FormState>());
 
-      final _lyricsController = TextEditingController(
-          text: Provider.of<EditingSongModel>(context, listen: false)
-              .lyricsList[listIndex]);
-      _lyricsController.selection = TextSelection.fromPosition(
-          TextPosition(offset: _lyricsController.text.length));
+      Provider.of<EditingSongModel>(context, listen: false)
+              .lyricControllerList =
+          TextEditingController(
+              text: Provider.of<EditingSongModel>(context, listen: false)
+                  .lyricsList[listIndex]);
+      Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
+          List.generate(strings.length,
+              (idx) => TextEditingController(text: strings[idx]));
+
+      Provider.of<EditingSongModel>(context, listen: false)
+              .lyricControllerList[listIndex]
+              .selection =
+          TextSelection.fromPosition(TextPosition(
+              offset: Provider.of<EditingSongModel>(context, listen: false)
+                  .lyricsList[listIndex]
+                  .length));
       lyrics.add(Flexible(
           child: Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 48.0),
               child: TextFormField(
                 key: _globalLyricFormList[listIndex],
-                controller: _lyricsController,
+                controller:
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .lyricControllerList[listIndex],
                 showCursor: true,
                 maxLines: null,
                 onTap: () {
@@ -198,9 +215,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
               ))));
 
       for (var i = 0; i < strings.length; i++) {
-        final _controller = TextEditingController(text: strings[i]);
-        _controller.selection = TextSelection.fromPosition(
-            TextPosition(offset: _controller.text.length));
         list.add(Flexible(
             child: TextField(
           key: i == 0 ? _globalCodeFormList[listIndex] : null,
@@ -219,16 +233,13 @@ class _DetailEditPageState extends State<DetailEditPage> {
                   .openKeyboard();
             }
             Provider.of<EditingSongModel>(context, listen: false)
-                .changeTextController(_controller);
-            Provider.of<EditingSongModel>(context, listen: false)
-                .controlBarIdx = listIndex;
-            Provider.of<EditingSongModel>(context, listen: false)
-                .controlTimeIdx = i;
+                .changeTextController(listIndex, i);
             Provider.of<EditingSongModel>(context, listen: false)
                 .scrollToTappedForm(listIndex: listIndex, mode: "code");
           },
           textAlign: TextAlign.center,
-          controller: _controller,
+          controller: Provider.of<EditingSongModel>(context, listen: false)
+              .codeControllerList[listIndex][i],
           onChanged: (text) {
             Provider.of<EditingSongModel>(context, listen: false)
                 .editCodeList(text, listIndex, i);
