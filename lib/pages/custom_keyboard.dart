@@ -71,11 +71,11 @@ class CustomKeyboard extends StatelessWidget {
                         filled: true),
                     textAlign: TextAlign.center,
                     controller:
-                        Provider.of<EditingSongModel>(context).controller,
+                        Provider.of<EditingSongModel>(context).currentCodeController,
                     style: const TextStyle(color: Colors.white),
                     onChanged: (text) {
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .controller
+                          .currentCodeController
                           .text = text;
                     }))),
         IconButton(

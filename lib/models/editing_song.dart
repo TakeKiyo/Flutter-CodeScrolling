@@ -165,7 +165,6 @@ class EditingSongModel extends ChangeNotifier {
     if (editScrollController.hasClients) {
       switch (mode) {
         case "code":
-          print(_codeFormOffsetList[listIndex]);
           editScrollController.animateTo(
             (_codeFormOffsetList[listIndex] > deviceHeight / 2)
                 ? _codeFormOffsetList[listIndex] - (deviceHeight / 2)
@@ -175,7 +174,6 @@ class EditingSongModel extends ChangeNotifier {
           );
           break;
         case "lyrics":
-          print(_lyricFormOffsetList[listIndex]);
           editScrollController.animateTo(
             (_lyricFormOffsetList[listIndex] > deviceHeight / 2)
                 ? _lyricFormOffsetList[listIndex] - (deviceHeight / 2)
@@ -206,10 +204,31 @@ class EditingSongModel extends ChangeNotifier {
     }
   }
 
+  List<TextEditingController> _lyricControllerList = [];
+  get lyricControllerList => _lyricControllerList;
+  set lyricControllerList(TextEditingController controller) {
+    if (controller == null) {
+      _lyricControllerList = [];
+    } else {
+      _lyricControllerList.add(controller);
+    }
+  }
+
+  List<List<TextEditingController>> _codeControllerList = [];
+  get codeControllerList => _codeControllerList;
+  set codeControllerList(List<TextEditingController> controllerList) {
+    if (controllerList == null) {
+      _codeControllerList = [];
+    } else {
+      _codeControllerList.add(controllerList);
+    }
+  }
+
   ///detail_edit_pageでTextFieldをTapする度に対応したTextEditingControllerを代入する
-  TextEditingController controller;
+  TextEditingController currentCodeController;
   int controlBarIdx = 0;
   int controlTimeIdx = 0;
+
   bool _keyboardIsOpening = false;
   get keyboardIsOpening => _keyboardIsOpening;
   double _keyboardBottomSpace = 0;
@@ -242,47 +261,40 @@ class EditingSongModel extends ChangeNotifier {
   }
 
   void changeTextController(TextEditingController controller) {
-    this.controller = controller;
+    this.currentCodeController = controller;
     notifyListeners();
   }
 
   void changeSelectionToLeft() {
-    final textSelection = controller.selection;
+    final textSelection = currentCodeController.selection;
     if (textSelection.start > 0) {
-      controller.selection = TextSelection(
+      currentCodeController.selection = TextSelection(
           baseOffset: textSelection.start - 1,
           extentOffset: textSelection.start - 1);
-      notifyListeners();
     }
   }
 
   void changeSelectionToRight() {
-    final text = controller.text;
-    final textSelection = controller.selection;
+    final text = currentCodeController.text;
+    final textSelection = currentCodeController.selection;
     if (text.length > textSelection.end) {
-      controller.selection = TextSelection(
+      currentCodeController.selection = TextSelection(
           baseOffset: textSelection.end + 1,
           extentOffset: textSelection.end + 1);
-      notifyListeners();
     }
   }
 
   void insertText(String myText) {
-    final text = controller.text;
-    final textSelection = controller.selection;
-    print(textSelection.start);
-    print(textSelection.end);
+    final text = currentCodeController.text;
+    final textSelection = currentCodeController.selection;
     final newText = text.replaceRange(
       textSelection.start,
       textSelection.end,
       myText,
     );
-    print(text);
-    print(textSelection.start);
-    print(textSelection.end);
     final myTextLength = myText.length;
-    controller.text = newText;
-    controller.selection = textSelection.copyWith(
+    currentCodeController.text = newText;
+    currentCodeController.selection = textSelection.copyWith(
       baseOffset: textSelection.start + myTextLength,
       extentOffset: textSelection.start + myTextLength,
     );
@@ -291,8 +303,8 @@ class EditingSongModel extends ChangeNotifier {
   }
 
   void backspace() {
-    final text = controller.text;
-    final textSelection = controller.selection;
+    final text = currentCodeController.text;
+    final textSelection = currentCodeController.selection;
     final selectionLength = textSelection.end - textSelection.start;
 
     // There is a selection.
@@ -302,8 +314,8 @@ class EditingSongModel extends ChangeNotifier {
         textSelection.end,
         '',
       );
-      controller.text = newText;
-      controller.selection = textSelection.copyWith(
+      currentCodeController.text = newText;
+      currentCodeController.selection = textSelection.copyWith(
         baseOffset: textSelection.start,
         extentOffset: textSelection.start,
       );
@@ -326,8 +338,8 @@ class EditingSongModel extends ChangeNotifier {
       newEnd,
       '',
     );
-    controller.text = newText;
-    controller.selection = textSelection.copyWith(
+    currentCodeController.text = newText;
+    currentCodeController.selection = textSelection.copyWith(
       baseOffset: newStart,
       extentOffset: newStart,
     );
