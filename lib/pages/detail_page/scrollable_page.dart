@@ -235,12 +235,11 @@ class _ScrollPageState extends State<ScrollablePage> {
                       ? Colors.amberAccent
                       : Colors.transparent,
                   child: child),
-              child: TextField(
+              child: TextFormField(
                 key: i == 0 ? _globalTextFormList[listIndex] : null,
                 enabled: false,
                 textAlign: TextAlign.center,
-                controller:
-                    TextEditingController(text: codeListState[listIndex][i]),
+                initialValue: codeListState[listIndex][i],
               ),
             ),
           ));
@@ -347,7 +346,9 @@ class _ScrollPageState extends State<ScrollablePage> {
             ],
           )),
           onTapDown: (_) {
-            Provider.of<MetronomeModel>(context, listen: false).unableScroll();
+            if (Provider.of<MetronomeModel>(context, listen: false).isPlaying)
+              Provider.of<MetronomeModel>(context, listen: false)
+                  .unableScroll();
           });
     }
   }
