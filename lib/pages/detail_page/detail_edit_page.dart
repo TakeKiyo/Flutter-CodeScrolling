@@ -462,7 +462,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
       body: Builder(
           builder: (context) => GestureDetector(
                 onTap: () => {
-                  FocusScope.of(context).unfocus(),
                   if (Provider.of<EditingSongModel>(context, listen: false)
                       .normalKeyboardIsOpen)
                     {
@@ -475,7 +474,8 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       Provider.of<EditingSongModel>(context, listen: false)
                           .closeKeyboard(),
                       Navigator.of(context).pop(),
-                    }
+                    },
+                  FocusScope.of(context).unfocus(),
                 },
                 child: Container(
                     child: Scrollbar(
