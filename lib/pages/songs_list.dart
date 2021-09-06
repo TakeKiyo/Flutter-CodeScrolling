@@ -2,13 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_udid/flutter_udid.dart';
 import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import 'create_song.dart';
 import 'detail_page/tab_view.dart';
+import 'login_form.dart';
 import 'setting_page.dart';
 
 class SongsList extends StatelessWidget {
@@ -38,24 +38,26 @@ class SongsList extends StatelessWidget {
           actions: [],
         ),
         body: SongsListForm(),
-        floatingActionButton: Container(
-            width: 70.0,
-            height: 70.0,
-            child: FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (context) {
-                        return CreateSong();
-                      }),
-                );
-              },
-              child: const Icon(
-                Icons.add,
-                size: 40.0,
-              ),
-            )));
+        floatingActionButton: context.watch<AuthModel>().loggedIn
+            ? Container(
+                width: 70.0,
+                height: 70.0,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (context) {
+                            return CreateSong();
+                          }),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    size: 40.0,
+                  ),
+                ))
+            : Container(child: null));
   }
 }
 
@@ -85,7 +87,8 @@ class _SongsListState extends State<SongsListForm> {
   @override
   Widget build(BuildContext context) {
     void deleteButtonClicked(String docId) async {
-      String udid = await FlutterUdid.udid;
+      String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
+
       await FirebaseFirestore.instance
           .collection("Songs")
           .doc(docId)
@@ -96,7 +99,7 @@ class _SongsListState extends State<SongsListForm> {
         if (memberIDList.length == 1) {
           FirebaseFirestore.instance.collection('Songs').doc(docId).delete();
         } else {
-          memberIDList.remove(udid);
+          memberIDList.remove(uid);
           FirebaseFirestore.instance.collection("Songs").doc(docId).update({
             "type": "removeMember",
             "memberID": memberIDList,
@@ -108,7 +111,7 @@ class _SongsListState extends State<SongsListForm> {
     }
 
     void createSong() async {
-      String udid = await FlutterUdid.udid;
+      String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
 
       List<String> codeList = const [
         "A,A,A,A",
@@ -154,8 +157,8 @@ class _SongsListState extends State<SongsListForm> {
         "bpm": 120,
         "key": "C / Am",
         "artist": "サンプルアーティスト",
-        "userID": udid,
-        "memberID": [udid],
+        "userID": uid,
+        "memberID": [uid],
         "codeList": codeList,
         "lyricsList": lyricsList,
         "rhythmList": rhythmList,
@@ -166,147 +169,167 @@ class _SongsListState extends State<SongsListForm> {
     }
 
     final _scrollController = ScrollController();
-
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('Songs')
-          .where("memberID",
-              arrayContains: Provider.of<AuthModel>(context).udid)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                const Text('Loading...'),
-              ]));
-        }
-        if (snapshot.data.docs.length == 0) {
-          return Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                const Text('保存された曲はありません'),
-                TextButton(
-                    onPressed: () {
-                      createSong();
-                    },
-                    child: const Text("サンプル曲を作成してみる"))
-              ]));
-        } else {
-          final List<DocumentSnapshot> documents = snapshot.data.docs;
-          songsList = [];
-          documents.forEach((doc) {
-            if (searchText == "" ||
-                doc["title"].toString().contains(searchText)) {
-              songsList.add(Slidable(
-                  controller: slidableController,
-                  actionExtentRatio: 0.2,
-                  actionPane: SlidableScrollActionPane(),
-                  secondaryActions: [
-                    IconSlideAction(
-                      caption: '削除',
-                      color: Theme.of(context).colorScheme.error,
-                      icon: Icons.delete,
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) => CupertinoAlertDialog(
-                                  title: const Text("確認"),
-                                  content: Text("${doc["title"]}を削除してもよいですか？"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text("キャンセル"),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    TextButton(
-                                      child: const Text("OK"),
-                                      onPressed: () =>
-                                          deleteButtonClicked(doc.id),
-                                    ),
-                                  ],
-                                ));
+    if (Provider.of<AuthModel>(context, listen: false).loggedIn) {
+      return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('Songs')
+            .where("memberID",
+                arrayContains:
+                    Provider.of<AuthModel>(context, listen: false).user.uid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                  const Text(''),
+                ]));
+          }
+          if (snapshot.data.docs.length == 0) {
+            return Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                  const Text('保存された曲はありません'),
+                  TextButton(
+                      onPressed: () {
+                        createSong();
                       },
-                    ),
-                  ],
-                  child: TextButton(
-                    onPressed: () {
-                      print(doc["bpm"]);
-                      Provider.of<MetronomeModel>(context, listen: false)
-                          .tempoCount = doc["bpm"];
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            var tempMap = doc.data() as Map;
-                            String artist = "";
-                            String songKey = "";
-                            if (tempMap.containsKey("artist")) {
-                              artist = tempMap["artist"];
-                            }
-                            if (tempMap.containsKey("key")) {
-                              songKey = tempMap["key"];
-                            }
-                            return TabView(
-                              bpm: doc["bpm"],
-                              title: doc["title"],
-                              artist: artist,
-                              songKey: songKey,
-                              docId: doc.id,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    child: Container(
-                      child: ListTile(
-                        title: Center(child: Text(doc["title"])),
+                      child: const Text("サンプル曲を作成してみる"))
+                ]));
+          } else {
+            final List<DocumentSnapshot> documents = snapshot.data.docs;
+            songsList = [];
+            documents.forEach((doc) {
+              if (searchText == "" ||
+                  doc["title"].toString().contains(searchText)) {
+                songsList.add(Slidable(
+                    controller: slidableController,
+                    actionExtentRatio: 0.2,
+                    actionPane: SlidableScrollActionPane(),
+                    secondaryActions: [
+                      IconSlideAction(
+                        caption: '削除',
+                        color: Theme.of(context).colorScheme.error,
+                        icon: Icons.delete,
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => CupertinoAlertDialog(
+                                    title: const Text("確認"),
+                                    content:
+                                        Text("${doc["title"]}を削除してもよいですか？"),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text("キャンセル"),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                      TextButton(
+                                        child: const Text("OK"),
+                                        onPressed: () =>
+                                            deleteButtonClicked(doc.id),
+                                      ),
+                                    ],
+                                  ));
+                        },
                       ),
-                    ),
-                  )));
-            }
-          });
-
-          return Scrollbar(
-              thickness: 8.0,
-              hoverThickness: 12.0,
-              child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(children: <Widget>[
-                    Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 20.0, top: 10.0),
-                        child: TextField(
-                          controller: _textEditingController,
-                          onChanged: (text) {
-                            setState(() {
-                              searchText = text;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search),
-                            hintText: "曲名を検索する",
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                _textEditingController.clear();
-                                setState(() {
-                                  searchText = "";
-                                });
-                                FocusScope.of(context).unfocus();
-                              },
-                              icon: const Icon(Icons.clear),
-                            ),
+                    ],
+                    child: TextButton(
+                      onPressed: () {
+                        print(doc["bpm"]);
+                        Provider.of<MetronomeModel>(context, listen: false)
+                            .tempoCount = doc["bpm"];
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              var tempMap = doc.data() as Map;
+                              String artist = "";
+                              String songKey = "";
+                              if (tempMap.containsKey("artist")) {
+                                artist = tempMap["artist"];
+                              }
+                              if (tempMap.containsKey("key")) {
+                                songKey = tempMap["key"];
+                              }
+                              return TabView(
+                                bpm: doc["bpm"],
+                                title: doc["title"],
+                                artist: artist,
+                                songKey: songKey,
+                                docId: doc.id,
+                              );
+                            },
                           ),
-                        )),
-                    ListView(
-                      padding: const EdgeInsets.all(12.0),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: songsList,
-                    )
-                  ])));
-        }
-      },
-    );
+                        );
+                      },
+                      child: Container(
+                        child: ListTile(
+                          title: Center(child: Text(doc["title"])),
+                        ),
+                      ),
+                    )));
+              }
+            });
+
+            return Scrollbar(
+                thickness: 8.0,
+                hoverThickness: 12.0,
+                child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(children: <Widget>[
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20.0, top: 10.0),
+                          child: TextField(
+                            controller: _textEditingController,
+                            onChanged: (text) {
+                              setState(() {
+                                searchText = text;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.search),
+                              hintText: "曲名を検索する",
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  _textEditingController.clear();
+                                  setState(() {
+                                    searchText = "";
+                                  });
+                                  FocusScope.of(context).unfocus();
+                                },
+                                icon: const Icon(Icons.clear),
+                              ),
+                            ),
+                          )),
+                      ListView(
+                        padding: const EdgeInsets.all(12.0),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: songsList,
+                      )
+                    ])));
+          }
+        },
+      );
+    } else {
+      return Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+            const Text('ログインしていません。'),
+            OutlinedButton(
+              child: const Text('ログインする'),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    fullscreenDialog: true, builder: (context) => LoginForm()));
+              },
+            )
+          ]));
+    }
   }
 }
