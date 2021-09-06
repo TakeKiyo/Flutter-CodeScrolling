@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_udid/flutter_udid.dart';
+import 'package:my_app/models/auth_model.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ImportSong extends StatelessWidget {
@@ -119,7 +120,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
   }
 
   void importSong(String docId) async {
-    String udid = await FlutterUdid.udid;
+    String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
     try {
       await FirebaseFirestore.instance
           .collection("Songs")
@@ -129,7 +130,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
         if (documentSnapshot.exists) {
           var document = documentSnapshot.data() as Map;
           List<String> memberIDList = document["memberID"].cast<String>();
-          memberIDList.add(udid);
+          memberIDList.add(uid);
           memberIDList = memberIDList.toSet().toList();
           FirebaseFirestore.instance.collection("Songs").doc(docId).update({
             "type": "addMember",

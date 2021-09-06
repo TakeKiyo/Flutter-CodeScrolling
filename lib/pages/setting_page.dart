@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/theme_model.dart';
 import 'package:provider/provider.dart';
 
@@ -28,36 +29,56 @@ class SettingPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
           child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(flex: 1, child: const Text("アプリテーマ：　")),
-                Flexible(
-                  flex: 1,
-                  child: ButtonTheme(
-                    alignedDropdown: true,
-                    child: Consumer<ThemeModel>(builder: (_, theme, __) {
-                      return DropdownButton<int>(
-                        isExpanded: true,
-                        value: theme.themeIndex,
-                        elevation: 16,
-                        onChanged: (int newValue) {
-                          theme.themeIndex = newValue;
-                        },
-                        items: _themeList,
-                      );
-                    }),
-                  ),
+              padding: const EdgeInsets.all(10.0),
+              child: Column(children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Flexible(flex: 1, child: const Text("アプリテーマ：　")),
+                        Flexible(
+                          flex: 1,
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child:
+                                Consumer<ThemeModel>(builder: (_, theme, __) {
+                              return DropdownButton<int>(
+                                isExpanded: true,
+                                value: theme.themeIndex,
+                                elevation: 16,
+                                onChanged: (int newValue) {
+                                  theme.themeIndex = newValue;
+                                },
+                                items: _themeList,
+                              );
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                    (Provider.of<AuthModel>(context, listen: false).loggedIn)
+                        ? OutlinedButton(
+                            child: const Text('ログアウトする'),
+                            style: OutlinedButton.styleFrom(
+                              primary:
+                                  Theme.of(context).textTheme.headline6.color,
+                              side: const BorderSide(),
+                            ),
+                            onPressed: () async {
+                              Provider.of<AuthModel>(context, listen: false)
+                                  .logout();
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
+                            },
+                          )
+                        : Container(
+                            child: null,
+                          )
+                  ],
                 ),
-              ],
-            ),
-          ],
-        ),
-      )),
+              ]))),
     );
   }
 }
