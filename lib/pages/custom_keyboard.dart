@@ -34,7 +34,7 @@ class CustomKeyboard extends StatelessWidget {
           insertPadding,
           buildRowThree(),
           insertPadding,
-          buildRowFour(),
+          buildRowFour(context),
           Padding(padding: EdgeInsets.only(bottom: 30))
         ],
       ),
@@ -150,12 +150,15 @@ class CustomKeyboard extends StatelessWidget {
     );
   }
 
-  Expanded buildRowFour() {
+  Expanded buildRowFour(BuildContext context) {
     return Expanded(
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         FunctionKey(
           label: "abc",
           keyWidth: 4,
+          onTapped: () {
+            FocusScope.of(context).unfocus();
+          },
         ),
         TextKey(
           text: " ",
@@ -166,6 +169,12 @@ class CustomKeyboard extends StatelessWidget {
         FunctionKey(
           label: "Done",
           keyWidth: 4,
+          onTapped: () {
+            Provider.of<EditingSongModel>(context, listen: false)
+                .closeKeyboard();
+            Navigator.of(context).pop();
+            FocusScope.of(context).unfocus();
+          },
         ),
       ]),
     );
@@ -296,7 +305,10 @@ class FunctionKey extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
           child: InkWell(
-            onTap: () => onTapped,
+            onTap: () {
+              onTapped();
+              print("tapped");
+            },
             child: Container(
               child: Center(
                 child: Text(
