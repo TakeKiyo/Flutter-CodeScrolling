@@ -33,6 +33,7 @@ Material detailBottomBar(BuildContext context) {
                   onPressed: () {
                     print("Pressed: BPM");
                     showModalBottomSheet<void>(
+                      backgroundColor: Theme.of(context).canvasColor,
                       shape: const RoundedRectangleBorder(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(32.0))),

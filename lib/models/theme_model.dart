@@ -42,6 +42,7 @@ class ThemeModel extends ChangeNotifier {
         iconTheme: const IconThemeData(color: Colors.black)),
     //チェックボックスの色をprimaryColorに合わせる。default = primarySwatch
     toggleableActiveColor: Colors.blue[800],
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.transparent),
   );
 
   //_lightTheme.copyWith() method doesn't work
@@ -86,6 +87,7 @@ class ThemeModel extends ChangeNotifier {
       selectionColor: Colors.blue[800],
       selectionHandleColor: Colors.blue[800],
     ),
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.transparent),
   );
   get darkTheme => _darkTheme;
 

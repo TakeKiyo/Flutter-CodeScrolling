@@ -23,7 +23,7 @@ class CustomKeyboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      color: Colors.grey[800].withOpacity(0.8),
+      color: Colors.grey[800].withOpacity(0.9),
       child: Column(
         children: [
           buildRowSetting(context),
@@ -47,7 +47,7 @@ class CustomKeyboard extends StatelessWidget {
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         IconButton(
             icon: Icon(Icons.keyboard_arrow_down_outlined,
-                color: Colors.grey.withOpacity(0.8)),
+                color: Colors.grey.withOpacity(0.9)),
             onPressed: () {
               Provider.of<EditingSongModel>(context, listen: false)
                   .closeKeyboard();
@@ -193,7 +193,7 @@ class TextKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 3.0),
         child: Material(
-          color: Colors.grey[500].withOpacity(0.8),
+          color: Colors.grey[500].withOpacity(0.9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -237,7 +237,7 @@ class BackspaceKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.grey[600].withOpacity(0.8),
+          color: Colors.grey[600].withOpacity(0.9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -291,7 +291,7 @@ class FunctionKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.grey[600].withOpacity(0.8),
+          color: Colors.grey[600].withOpacity(0.9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
