@@ -86,8 +86,8 @@ class _SigninFormState extends State<SigninForm> {
                       },
                       // ignore: missing_return
                       validator: (value) {
-                        if (value.isEmpty) {
-                          return 'パスワードを入力してください';
+                        if (value.length < 8) {
+                          return '8文字以上のパスワードを設定してください。';
                         }
                       },
                     ),
