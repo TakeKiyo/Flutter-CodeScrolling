@@ -69,14 +69,14 @@ class _CreateSongFormState extends State<CreateSong> {
                   ),
                   TextButton(
                     child: const Text("OK"),
-                    onPressed: () async => createSong(),
+                    onPressed: () => createSong(),
                   ),
                 ],
               ));
     }
   }
 
-  void createSong() async {
+  void createSong() {
     String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
 
     FirebaseFirestore.instance.collection("Songs").add({

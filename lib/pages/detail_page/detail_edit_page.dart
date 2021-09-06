@@ -304,7 +304,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
       }
     }
 
-    void submitCodeList(String docId) async {
+    void submitCodeList(String docId) {
       String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
       FirebaseFirestore.instance.collection("Songs").doc(docId).update({
         "codeList": formatCodeList(

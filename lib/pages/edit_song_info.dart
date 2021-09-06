@@ -64,7 +64,7 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
     });
   }
 
-  void editSong() async {
+  void editSong() {
     String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
 
     FirebaseFirestore.instance.collection("Songs").doc(widget.docId).update({
