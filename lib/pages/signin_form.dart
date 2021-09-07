@@ -106,26 +106,48 @@ class _SigninFormState extends State<SigninForm> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 try {
-                                  if (await model.signin(_email, _password)) {
+                                  String loginStatus =
+                                      await model.signin(_email, _password);
+                                  if (loginStatus == "ok") {
                                     await Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                         return SongsList();
                                       }),
                                     );
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        backgroundColor:
-                                            Theme.of(context).colorScheme.error,
-                                        content: const Text(
-                                            'エラーが発生しました。\n もう一度お試しください。'),
-                                        duration: const Duration(seconds: 2),
-                                        action: SnackBarAction(
-                                          label: 'OK',
-                                          onPressed: () {},
+                                    if (loginStatus == "email-already-in-use") {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          content: const Text(
+                                              'すでに使用されているメールアドレスです。'),
+                                          duration: const Duration(seconds: 2),
+                                          action: SnackBarAction(
+                                            label: 'OK',
+                                            onPressed: () {},
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          content: const Text(
+                                              'エラーが発生しました。\n もう一度お試しください。'),
+                                          duration: const Duration(seconds: 2),
+                                          action: SnackBarAction(
+                                            label: 'OK',
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      );
+                                    }
                                   }
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
