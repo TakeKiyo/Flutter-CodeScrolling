@@ -5,12 +5,7 @@ import 'package:my_app/models/theme_model.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingPage extends StatefulWidget {
-  @override
-  _SettingPageState createState() => _SettingPageState();
-}
-
-class _SettingPageState extends State<SettingPage> {
+class SettingPage extends StatelessWidget {
   final List<DropdownMenuItem<int>> _themeList = const [
     DropdownMenuItem(
       value: 0,
