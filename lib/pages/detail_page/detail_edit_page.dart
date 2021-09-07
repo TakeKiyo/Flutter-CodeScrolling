@@ -20,8 +20,46 @@ class DetailEditPage extends StatefulWidget {
 
 class _DetailEditPageState extends State<DetailEditPage> {
   ScrollController _scrollController;
-  final List<GlobalKey> _globalLyricFormList = [];
-  final List<GlobalKey> _globalCodeFormList = [];
+  List<GlobalKey> _globalLyricFormList = [];
+  List<GlobalKey> _globalCodeFormList = [];
+
+  //should be called before re-build
+  void _setTextFieldComponents() {
+    //initialize
+    _globalLyricFormList = [];
+    _globalCodeFormList = [];
+    Provider.of<EditingSongModel>(context, listen: false).lyricControllerList =
+        null;
+    Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
+        null;
+
+    //add GlobalKey
+    for (int listIndex = 0;
+        listIndex <
+            Provider.of<EditingSongModel>(context, listen: false)
+                .codeList
+                .length;
+        listIndex++) {
+      _globalLyricFormList.add(GlobalKey<FormState>());
+      _globalCodeFormList.add(GlobalKey<FormState>());
+
+      //add TextController
+      Provider.of<EditingSongModel>(context, listen: false)
+              .lyricControllerList =
+          TextEditingController(
+              text: Provider.of<EditingSongModel>(context, listen: false)
+                  .lyricsList[listIndex]);
+
+      Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
+          List.generate(
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .codeList[listIndex]
+                  .length,
+              (idx) => TextEditingController(
+                  text: Provider.of<EditingSongModel>(context, listen: false)
+                      .codeList[listIndex][idx]));
+    }
+  }
 
   double _getLyricLocale(int listIndex) {
     RenderBox box =
@@ -35,16 +73,13 @@ class _DetailEditPageState extends State<DetailEditPage> {
     return box.localToGlobal(Offset.zero).dy;
   }
 
-  void _resetOffsetList() {
+  //should be called after re-build
+  void _setEachOffsetList() {
     Provider.of<EditingSongModel>(context, listen: false).codeFormOffsetList =
         -1;
     Provider.of<EditingSongModel>(context, listen: false).lyricFormOffsetList =
         -1;
-  }
 
-  void _setEachOffsetList() {
-    print("set");
-    _resetOffsetList();
     switch (Provider.of<EditingSongModel>(context, listen: false).displayType) {
       case "code":
         for (int listIndex = 0;
@@ -88,10 +123,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
     _scrollController = ScrollController();
     Provider.of<EditingSongModel>(context, listen: false).editScrollController =
         _scrollController;
-    Provider.of<EditingSongModel>(context, listen: false).lyricControllerList =
-        null;
-    Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
-        null;
+    _setTextFieldComponents();
     WidgetsBinding.instance.addPostFrameCallback((cb) => _setEachOffsetList());
   }
 
@@ -167,18 +199,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
           ));
         }
       }
-
-      _globalLyricFormList.add(GlobalKey<FormState>());
-      _globalCodeFormList.add(GlobalKey<FormState>());
-
-      Provider.of<EditingSongModel>(context, listen: false)
-              .lyricControllerList =
-          TextEditingController(
-              text: Provider.of<EditingSongModel>(context, listen: false)
-                  .lyricsList[listIndex]);
-      Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
-          List.generate(strings.length,
-              (idx) => TextEditingController(text: strings[idx]));
 
       lyrics.add(Flexible(
           child: Padding(
@@ -614,6 +634,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                               child: const Text('追加'),
                                               onPressed: () async {
                                                 model.addEmptyList();
+                                                _setTextFieldComponents();
                                                 await Future.delayed(Duration(
                                                     milliseconds: 200));
                                                 model.scrollToEnd();
