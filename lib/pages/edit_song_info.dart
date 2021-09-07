@@ -35,16 +35,28 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
 
   TextEditingController _titleEditingController;
   TextEditingController _artistEditingController;
+  FixedExtentScrollController _cupertinoController;
+
   @override
   void initState() {
     super.initState();
     _titleEditingController = TextEditingController(text: widget.title);
     _artistEditingController = TextEditingController(text: widget.artist);
+    _selectedIndex = _items.indexOf(widget.songKey);
+    _cupertinoController =
+        FixedExtentScrollController(initialItem: _selectedIndex);
     _title = widget.title;
     _artist = widget.artist;
     _bpm = widget.bpm;
     _key = widget.songKey;
-    _selectedIndex = _items.indexOf(widget.songKey);
+  }
+
+  @override
+  void dispose() {
+    _titleEditingController.dispose();
+    _artistEditingController.dispose();
+    _cupertinoController.dispose();
+    super.dispose();
   }
 
   void _handleTitle(String inputText) {
@@ -82,20 +94,20 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
 
   void _showModalPicker(BuildContext context) {
     showModalBottomSheet<void>(
+      backgroundColor: Theme.of(context).canvasColor,
+      shape: const RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(32.0))),
       context: context,
       builder: (BuildContext context) {
         return Container(
           height: MediaQuery.of(context).size.height / 3,
           child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () {},
             child: CupertinoPicker(
               itemExtent: 40,
               children: _items.map(_pickerItem).toList(),
               onSelectedItemChanged: _onSelectedItemChanged,
-              scrollController:
-                  FixedExtentScrollController(initialItem: _selectedIndex),
+              scrollController: _cupertinoController,
             ),
           ),
         );
@@ -117,6 +129,8 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
     setState(() {
       _key = _items[index];
       _selectedIndex = index;
+      _cupertinoController =
+          FixedExtentScrollController(initialItem: _selectedIndex);
     });
   }
 
