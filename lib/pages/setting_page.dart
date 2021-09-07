@@ -75,8 +75,8 @@ class SettingPage extends StatelessWidget {
                     Padding(
                         padding: const EdgeInsets.only(left: 15.0),
                         child: ListTile(
-                          leading: Icon(Icons.lock),
-                          title: Text("プライバシーポリシーを見る"),
+                          leading: const Icon(Icons.lock),
+                          title: const Text("プライバシーポリシーを見る"),
                           onTap: () {
                             String privacyPolicyURL =
                                 "https://band-out.studio.site/privacyPolicy";
@@ -86,8 +86,8 @@ class SettingPage extends StatelessWidget {
                     Padding(
                         padding: const EdgeInsets.only(left: 15.0),
                         child: ListTile(
-                          leading: Icon(Icons.question_answer),
-                          title: Text("お問い合わせ"),
+                          leading: const Icon(Icons.question_answer),
+                          title: const Text("お問い合わせ"),
                           onTap: () {
                             String contactURL =
                                 "https://band-out.studio.site/contact";
