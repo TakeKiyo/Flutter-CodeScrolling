@@ -23,7 +23,7 @@ class CustomKeyboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      color: Colors.grey[800],
+      color: Colors.grey[800].withOpacity(0.9),
       child: Column(
         children: [
           buildRowSetting(context),
@@ -34,7 +34,7 @@ class CustomKeyboard extends StatelessWidget {
           insertPadding,
           buildRowThree(),
           insertPadding,
-          buildRowFour(),
+          buildRowFour(context),
           Padding(padding: EdgeInsets.only(bottom: 30))
         ],
       ),
@@ -46,8 +46,8 @@ class CustomKeyboard extends StatelessWidget {
       height: 40,
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         IconButton(
-            icon: const Icon(Icons.keyboard_arrow_down_outlined,
-                color: Colors.grey),
+            icon: Icon(Icons.keyboard_arrow_down_outlined,
+                color: Colors.grey.withOpacity(0.9)),
             onPressed: () {
               Provider.of<EditingSongModel>(context, listen: false)
                   .closeKeyboard();
@@ -70,12 +70,12 @@ class CustomKeyboard extends StatelessWidget {
                         fillColor: Colors.grey[600],
                         filled: true),
                     textAlign: TextAlign.center,
-                    controller:
-                        Provider.of<EditingSongModel>(context).controller,
+                    controller: Provider.of<EditingSongModel>(context)
+                        .currentController,
                     style: const TextStyle(color: Colors.white),
                     onChanged: (text) {
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .controller
+                          .currentController
                           .text = text;
                     }))),
         IconButton(
@@ -97,7 +97,7 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowOne() {
-    const rowTwoElem = ["1", "2", "3", "4", "5", "6", "7", "9", "♭", "♯"];
+    const rowTwoElem = ["1", "2", "3", "4", "5", "6", "7", "9"];
 
     return Expanded(
       child: Row(
@@ -112,7 +112,7 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowTwo() {
-    const rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "M", "m"];
+    const rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "♭", "♯"];
 
     return Expanded(
       child: Row(
@@ -127,13 +127,12 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowThree() {
-    const rowThreeElem = ["dim", "sus", "add", "alt", "/", "N.C."];
+    const rowThreeElem = ["M", "m", "dim", "sus", "add", "alt", "/"];
 
     return Expanded(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SpacerWidget(),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: rowThreeElem
@@ -150,12 +149,13 @@ class CustomKeyboard extends StatelessWidget {
     );
   }
 
-  Expanded buildRowFour() {
+  Expanded buildRowFour(BuildContext context) {
     return Expanded(
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        FunctionKey(
-          label: "abc",
-          keyWidth: 4,
+        TextKey(
+          text: "N.C.",
+          keyWidth: 6,
+          onTextInput: _textInputHandler,
         ),
         TextKey(
           text: " ",
@@ -166,6 +166,12 @@ class CustomKeyboard extends StatelessWidget {
         FunctionKey(
           label: "Done",
           keyWidth: 4,
+          onTapped: () {
+            Provider.of<EditingSongModel>(context, listen: false)
+                .closeKeyboard();
+            Navigator.of(context).pop();
+            FocusScope.of(context).unfocus();
+          },
         ),
       ]),
     );
@@ -193,7 +199,7 @@ class TextKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 3.0),
         child: Material(
-          color: Colors.grey[600],
+          color: Colors.grey[500].withOpacity(0.9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -237,7 +243,7 @@ class BackspaceKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.grey[700],
+          color: Colors.grey[600].withOpacity(0.9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
@@ -275,11 +281,13 @@ class SpacerWidget extends StatelessWidget {
 class FunctionKey extends StatelessWidget {
   final String label;
   final int keyWidth;
+  final VoidCallback onTapped;
 
   const FunctionKey({
     Key key,
     this.label = "",
     this.keyWidth = 10,
+    this.onTapped,
   }) : super(key: key);
 
   @override
@@ -289,13 +297,14 @@ class FunctionKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
-          color: Colors.grey[700],
+          color: Colors.grey[600].withOpacity(0.9),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),
           child: InkWell(
             onTap: () {
-              print("Tapped");
+              onTapped();
+              print("tapped");
             },
             child: Container(
               child: Center(

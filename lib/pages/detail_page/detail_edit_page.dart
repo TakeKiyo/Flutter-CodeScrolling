@@ -20,8 +20,46 @@ class DetailEditPage extends StatefulWidget {
 
 class _DetailEditPageState extends State<DetailEditPage> {
   ScrollController _scrollController;
-  final List<GlobalKey> _globalLyricFormList = [];
-  final List<GlobalKey> _globalCodeFormList = [];
+  List<GlobalKey> _globalLyricFormList = [];
+  List<GlobalKey> _globalCodeFormList = [];
+
+  //should be called before re-build
+  void _setTextFieldComponents() {
+    //initialize
+    _globalLyricFormList = [];
+    _globalCodeFormList = [];
+    Provider.of<EditingSongModel>(context, listen: false).lyricControllerList =
+        null;
+    Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
+        null;
+
+    //add GlobalKey
+    for (int listIndex = 0;
+        listIndex <
+            Provider.of<EditingSongModel>(context, listen: false)
+                .codeList
+                .length;
+        listIndex++) {
+      _globalLyricFormList.add(GlobalKey<FormState>());
+      _globalCodeFormList.add(GlobalKey<FormState>());
+
+      //add TextController
+      Provider.of<EditingSongModel>(context, listen: false)
+              .lyricControllerList =
+          TextEditingController(
+              text: Provider.of<EditingSongModel>(context, listen: false)
+                  .lyricsList[listIndex]);
+
+      Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
+          List.generate(
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .codeList[listIndex]
+                  .length,
+              (idx) => TextEditingController(
+                  text: Provider.of<EditingSongModel>(context, listen: false)
+                      .codeList[listIndex][idx]));
+    }
+  }
 
   double _getLyricLocale(int listIndex) {
     RenderBox box =
@@ -35,16 +73,13 @@ class _DetailEditPageState extends State<DetailEditPage> {
     return box.localToGlobal(Offset.zero).dy;
   }
 
-  void _resetOffsetList() {
+  //should be called after re-build
+  void _setEachOffsetList() {
     Provider.of<EditingSongModel>(context, listen: false).codeFormOffsetList =
         -1;
     Provider.of<EditingSongModel>(context, listen: false).lyricFormOffsetList =
         -1;
-  }
 
-  void _setEachOffsetList() {
-    print("set");
-    _resetOffsetList();
     switch (Provider.of<EditingSongModel>(context, listen: false).displayType) {
       case "code":
         for (int listIndex = 0;
@@ -88,6 +123,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
     _scrollController = ScrollController();
     Provider.of<EditingSongModel>(context, listen: false).editScrollController =
         _scrollController;
+    _setTextFieldComponents();
     WidgetsBinding.instance.addPostFrameCallback((cb) => _setEachOffsetList());
   }
 
@@ -119,7 +155,8 @@ class _DetailEditPageState extends State<DetailEditPage> {
         MediaQuery.of(context).size.height;
 
     void _showCustomKeyboard(context) {
-      Scaffold.of(context).showBottomSheet((BuildContext context) {
+      Scaffold.of(context)
+          .showBottomSheet((context, {backgroundColor: Colors.transparent}) {
         return CustomKeyboard(
           onTextInput: (myText) {
             Provider.of<EditingSongModel>(context, listen: false)
@@ -163,20 +200,14 @@ class _DetailEditPageState extends State<DetailEditPage> {
         }
       }
 
-      _globalLyricFormList.add(GlobalKey<FormState>());
-      _globalCodeFormList.add(GlobalKey<FormState>());
-
-      final _lyricsController = TextEditingController(
-          text: Provider.of<EditingSongModel>(context, listen: false)
-              .lyricsList[listIndex]);
-      _lyricsController.selection = TextSelection.fromPosition(
-          TextPosition(offset: _lyricsController.text.length));
       lyrics.add(Flexible(
           child: Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 48.0),
               child: TextFormField(
                 key: _globalLyricFormList[listIndex],
-                controller: _lyricsController,
+                controller:
+                    Provider.of<EditingSongModel>(context, listen: false)
+                        .lyricControllerList[listIndex],
                 showCursor: true,
                 maxLines: null,
                 onTap: () {
@@ -198,9 +229,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
               ))));
 
       for (var i = 0; i < strings.length; i++) {
-        final _controller = TextEditingController(text: strings[i]);
-        _controller.selection = TextSelection.fromPosition(
-            TextPosition(offset: _controller.text.length));
         list.add(Flexible(
             child: TextField(
           key: i == 0 ? _globalCodeFormList[listIndex] : null,
@@ -219,16 +247,13 @@ class _DetailEditPageState extends State<DetailEditPage> {
                   .openKeyboard();
             }
             Provider.of<EditingSongModel>(context, listen: false)
-                .changeTextController(_controller);
-            Provider.of<EditingSongModel>(context, listen: false)
-                .controlBarIdx = listIndex;
-            Provider.of<EditingSongModel>(context, listen: false)
-                .controlTimeIdx = i;
+                .changeTextController(listIndex, i);
             Provider.of<EditingSongModel>(context, listen: false)
                 .scrollToTappedForm(listIndex: listIndex, mode: "code");
           },
           textAlign: TextAlign.center,
-          controller: _controller,
+          controller: Provider.of<EditingSongModel>(context, listen: false)
+              .codeControllerList[listIndex][i],
           onChanged: (text) {
             Provider.of<EditingSongModel>(context, listen: false)
                 .editCodeList(text, listIndex, i);
@@ -457,7 +482,6 @@ class _DetailEditPageState extends State<DetailEditPage> {
       body: Builder(
           builder: (context) => GestureDetector(
                 onTap: () => {
-                  FocusScope.of(context).unfocus(),
                   if (Provider.of<EditingSongModel>(context, listen: false)
                       .normalKeyboardIsOpen)
                     {
@@ -470,7 +494,8 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       Provider.of<EditingSongModel>(context, listen: false)
                           .closeKeyboard(),
                       Navigator.of(context).pop(),
-                    }
+                    },
+                  FocusScope.of(context).unfocus(),
                 },
                 child: Container(
                     child: Scrollbar(
@@ -609,6 +634,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                               child: const Text('追加'),
                                               onPressed: () async {
                                                 model.addEmptyList();
+                                                _setTextFieldComponents();
                                                 await Future.delayed(Duration(
                                                     milliseconds: 200));
                                                 model.scrollToEnd();
