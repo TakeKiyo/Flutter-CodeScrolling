@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
+import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 class EditSongInfo extends StatefulWidget {
@@ -145,6 +146,8 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
               child: TextButton(
                 child: const Text("完了", style: TextStyle(fontSize: 18)),
                 onPressed: () {
+                  Provider.of<MetronomeModel>(context, listen: false)
+                      .forceStop();
                   if (_formKey.currentState.validate()) {
                     editSong();
                   }
