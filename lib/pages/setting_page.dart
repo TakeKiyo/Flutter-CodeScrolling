@@ -28,12 +28,12 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> _launchInBrowser(String url) async {
+    Future<void> _launchInWebViewOrVC(String url) async {
       if (await canLaunch(url)) {
         await launch(
           url,
-          forceSafariVC: false,
-          forceWebView: false,
+          forceSafariVC: true,
+          forceWebView: true,
           headers: <String, String>{'my_header_key': 'my_header_value'},
         );
       } else {
@@ -85,7 +85,7 @@ class _SettingPageState extends State<SettingPage> {
                           onTap: () {
                             String privacyPolicyURL =
                                 "https://band-out.studio.site/privacyPolicy";
-                            _launchInBrowser(privacyPolicyURL);
+                            _launchInWebViewOrVC(privacyPolicyURL);
                           },
                         )),
                     Padding(
@@ -96,7 +96,7 @@ class _SettingPageState extends State<SettingPage> {
                           onTap: () {
                             String contactURL =
                                 "https://band-out.studio.site/contact";
-                            _launchInBrowser(contactURL);
+                            _launchInWebViewOrVC(contactURL);
                           },
                         )),
                     (Provider.of<AuthModel>(context, listen: false).loggedIn)
