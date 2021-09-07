@@ -157,8 +157,20 @@ class MetronomeModel extends ChangeNotifier {
   int _metronomeContainerStatus = -1;
   get metronomeContainerStatus => _metronomeContainerStatus;
 
-  int _countInTimes = 4;
+  int _countInTimes = 1;
   get countInTimes => _countInTimes;
+  set countInTimes(int selectIndex) {
+    _countInTimes = _countInTimersList[selectIndex];
+    notifyListeners();
+  }
+
+  List<int> _countInTimersList = const [
+    0,
+    1,
+    2,
+    3,
+  ];
+  get countInTimesList => _countInTimersList;
 
   bool _isCountInPlaying = false;
   get isCountInPlaying => _isCountInPlaying;
@@ -179,7 +191,7 @@ class MetronomeModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void metronomeLoad() async {
+  Future<void> metronomeLoad() async {
     await _metronomePlayer.loadAll(_metronomeSoundsList);
     _isCountInPlaying = true;
     notifyListeners();
@@ -193,7 +205,8 @@ class MetronomeModel extends ChangeNotifier {
     }
 
     ///カウントアウト処理
-    if (metronomeContainerStatus >= _maxTickList.reduce(max) + 7) {
+    if (metronomeContainerStatus >=
+        _maxTickList.reduce(max) + _ticksPerRowList.last * 2) {
       forceStop();
     }
   }
@@ -201,7 +214,9 @@ class MetronomeModel extends ChangeNotifier {
   Future waitUntilCountInEnds() {
     const microseconds = 60000000;
     return Future.delayed(Duration(
-        microseconds: (microseconds / _tempoCount * (_countInTimes)).toInt()));
+        microseconds:
+            (microseconds / _tempoCount * (_countInTimes * _ticksPerRowList[0]))
+                .toInt()));
   }
 
   void metronomeStart() {
@@ -228,7 +243,8 @@ class MetronomeModel extends ChangeNotifier {
     decideRateToScroll();
 
     ///カウントインの処理
-    if (_isCountInPlaying && metronomeContainerStatus == _countInTimes) {
+    if (_isCountInPlaying &&
+        metronomeContainerStatus == _countInTimes * _ticksPerRowList[0]) {
       _isCountInPlaying = !_isCountInPlaying;
       _metronomeContainerStatus = 0;
     }

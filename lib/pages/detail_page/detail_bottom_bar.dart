@@ -84,16 +84,21 @@ Material detailBottomBar(BuildContext context) {
                             -1) {
                           Provider.of<MetronomeModel>(context, listen: false)
                               .metronomeLoad();
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (BuildContext context) {
-                                return CountInDialog();
-                              });
-                          await Provider.of<MetronomeModel>(context,
-                                  listen: false)
-                              .waitUntilCountInEnds()
-                              .then((_) => Navigator.of(context).pop());
+                          if (Provider.of<MetronomeModel>(context,
+                                      listen: false)
+                                  .countInTimes !=
+                              0) {
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CountInDialog();
+                                });
+                            await Provider.of<MetronomeModel>(context,
+                                    listen: false)
+                                .waitUntilCountInEnds()
+                                .then((_) => Navigator.of(context).pop());
+                          }
                         } else
                           Provider.of<MetronomeModel>(context, listen: false)
                               .metronomeStart();

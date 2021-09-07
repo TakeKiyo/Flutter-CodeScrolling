@@ -20,7 +20,7 @@ class CountInDialog extends StatelessWidget {
               shrinkWrap: true,
               padding: const EdgeInsets.all(10),
               scrollDirection: Axis.horizontal,
-              children: List.generate(model.countInTimes, (cNum) => cNum)
+              children: List.generate(model.ticksPerRowList[0], (cNum) => cNum)
                   .map((cNum) => Container(
                         padding: const EdgeInsets.all(5),
                         child: Container(
@@ -34,7 +34,7 @@ class CountInDialog extends StatelessWidget {
                               shape: BoxShape.circle,
                               color: model.metronomeContainerStatus >= 0
                                   ? (model.metronomeContainerStatus %
-                                              model.countInTimes ==
+                                              model.ticksPerRowList[0] ==
                                           cNum)
                                       ? Colors.orange
                                       : Colors.white
