@@ -97,7 +97,7 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowOne() {
-    const rowTwoElem = ["1", "2", "3", "4", "5", "6", "7", "9", "♭", "♯"];
+    const rowTwoElem = ["1", "2", "3", "4", "5", "6", "7", "9"];
 
     return Expanded(
       child: Row(
@@ -112,7 +112,7 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowTwo() {
-    const rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "M", "m"];
+    const rowOneElem = ["C", "D", "E", "F", "G", "A", "B", "♭", "♯"];
 
     return Expanded(
       child: Row(
@@ -127,13 +127,12 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowThree() {
-    const rowThreeElem = ["dim", "sus", "add", "alt", "/", "N.C."];
+    const rowThreeElem = ["M", "m", "dim", "sus", "add", "alt", "/"];
 
     return Expanded(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SpacerWidget(),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: rowThreeElem
@@ -153,12 +152,10 @@ class CustomKeyboard extends StatelessWidget {
   Expanded buildRowFour(BuildContext context) {
     return Expanded(
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        FunctionKey(
-          label: "abc",
-          keyWidth: 4,
-          onTapped: () {
-            FocusScope.of(context).unfocus();
-          },
+        TextKey(
+          text: "N.C.",
+          keyWidth: 6,
+          onTextInput: _textInputHandler,
         ),
         TextKey(
           text: " ",
