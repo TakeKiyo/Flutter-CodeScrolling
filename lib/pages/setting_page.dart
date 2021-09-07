@@ -78,7 +78,7 @@ class SettingPage extends StatelessWidget {
                           leading: const Icon(Icons.lock),
                           title: const Text("プライバシーポリシーを見る"),
                           onTap: () {
-                            String privacyPolicyURL =
+                            const String privacyPolicyURL =
                                 "https://band-out.studio.site/privacyPolicy";
                             _launchInWebViewOrVC(privacyPolicyURL);
                           },
@@ -89,7 +89,7 @@ class SettingPage extends StatelessWidget {
                           leading: const Icon(Icons.question_answer),
                           title: const Text("お問い合わせ"),
                           onTap: () {
-                            String contactURL =
+                            const String contactURL =
                                 "https://band-out.studio.site/contact";
                             _launchInWebViewOrVC(contactURL);
                           },
