@@ -241,7 +241,7 @@ class EditingSongModel extends ChangeNotifier {
 
   void openKeyboard() {
     _keyboardIsOpening = true;
-    _keyboardBottomSpace = 300;
+    _keyboardBottomSpace = 350;
     notifyListeners();
   }
 
