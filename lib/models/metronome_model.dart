@@ -237,7 +237,7 @@ class MetronomeModel extends ChangeNotifier {
   void changeMetronomeContainerColor() async {
     /// flashDuration=100000　はbpm=300（最大時）に合わせた数値
     const flashDuration = 100000;
-    _metronomeContainerColor = Colors.orange;
+    _metronomeContainerColor = Colors.orange.withOpacity(0.5);
     notifyListeners();
     await Future.delayed(Duration(microseconds: flashDuration));
     _metronomeContainerColor = Colors.transparent;

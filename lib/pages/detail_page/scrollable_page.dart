@@ -221,19 +221,22 @@ class _ScrollPageState extends State<ScrollablePage> {
                           addedRowBeatCount + maxColumnBeatCount &&
                       notifiedMetronomeContainerStatus <= maxRowBeatCount),
               builder: (context, containerStatus, child) => Container(
-                  color: (!Provider.of<MetronomeModel>(context, listen: false)
-                              .isCountInPlaying &&
-                          Provider.of<MetronomeModel>(context, listen: false)
-                                  .metronomeContainerStatus >=
-                              addedRowBeatCount + addedColumnBeatCount &&
-                          Provider.of<MetronomeModel>(context, listen: false)
-                                  .metronomeContainerStatus <
-                              addedRowBeatCount + maxColumnBeatCount &&
-                          Provider.of<MetronomeModel>(context, listen: false)
-                                  .metronomeContainerStatus <
-                              maxRowBeatCount)
-                      ? Colors.amberAccent
-                      : Colors.transparent,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: (!Provider.of<MetronomeModel>(context, listen: false)
+                                .isCountInPlaying &&
+                            Provider.of<MetronomeModel>(context, listen: false)
+                                    .metronomeContainerStatus >=
+                                addedRowBeatCount + addedColumnBeatCount &&
+                            Provider.of<MetronomeModel>(context, listen: false)
+                                    .metronomeContainerStatus <
+                                addedRowBeatCount + maxColumnBeatCount &&
+                            Provider.of<MetronomeModel>(context, listen: false)
+                                    .metronomeContainerStatus <
+                                maxRowBeatCount)
+                        ? Colors.orange.withOpacity(0.5)
+                        : Colors.transparent,
+                  ),
                   child: child),
               child: TextFormField(
                 key: i == 0 ? _globalTextFormList[listIndex] : null,
@@ -314,35 +317,36 @@ class _ScrollPageState extends State<ScrollablePage> {
                     shouldRebuild: (exScrollStatus, notifiedScrollStatus) =>
                         exScrollStatus != notifiedScrollStatus,
                     builder: (context, hasScrolledDuringPlaying, child) =>
-                        hasScrolledDuringPlaying &&
-                                Provider.of<MetronomeModel>(context,
-                                        listen: false)
-                                    .isPlaying
-                            ? Container(
-                                width: 200,
-                                decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.9),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20))),
-                                child: TextButton(
-                                  child: const Text("スクロールを\n再開する",
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.white)),
-                                  style: ButtonStyle(
-                                      shape: MaterialStateProperty.all(
-                                          (RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  )))),
-                                  onPressed: () {
-                                    Provider.of<MetronomeModel>(context,
-                                            listen: false)
-                                        .enableScroll();
-                                    Provider.of<MetronomeModel>(context,
-                                            listen: false)
-                                        .scrollToNowPlaying();
-                                  },
-                                ))
-                            : Container()),
+                        Visibility(
+                          visible: hasScrolledDuringPlaying &&
+                              Provider.of<MetronomeModel>(context,
+                                      listen: false)
+                                  .isPlaying,
+                          child: Container(
+                              width: 200,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.9),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20))),
+                              child: TextButton(
+                                child: const Text("スクロールを\n再開する",
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Colors.white)),
+                                style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(
+                                        (RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                )))),
+                                onPressed: () {
+                                  Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .enableScroll();
+                                  Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .scrollToNowPlaying();
+                                },
+                              )),
+                        )),
               )
             ],
           )),

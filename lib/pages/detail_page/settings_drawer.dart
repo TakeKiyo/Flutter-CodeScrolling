@@ -27,7 +27,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
             ListTile(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(9.0)),
-              tileColor: Colors.grey,
+              tileColor: Colors.grey.withOpacity(0.5),
               title: Text("曲名： $title\n"
                   "アーティスト： $artist\n"
                   "キー： $songKey\n"
@@ -60,7 +60,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 child: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Container(
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.grey.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(9)),
                       child: Container(
                         child: DropdownButtonHideUnderline(
@@ -95,7 +95,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
             ListTile(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(9.0)),
-                tileColor: Colors.grey,
+                tileColor: Colors.grey.withOpacity(0.5),
                 title: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Text(
                     "回数：" + model.countInTimes.toString(),
