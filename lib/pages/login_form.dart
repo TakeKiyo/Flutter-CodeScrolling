@@ -123,28 +123,86 @@ class _LoginFormState extends State<LoginForm> {
                                 if (_formKey.currentState.validate()) {
                                   // FocusScope.of(context).unfocus();
                                   try {
-                                    if (await model.login(_email, _password)) {
+                                    String loginStatus =
+                                        await model.login(_email, _password);
+                                    if (loginStatus == "ok") {
                                       await Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) {
                                           return SongsList();
                                         }),
                                       );
                                     } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          backgroundColor: Theme.of(context)
-                                              .colorScheme
-                                              .error,
-                                          content: const Text(
-                                              'エラーが発生しました。\n もう一度お試しください。'),
-                                          duration: const Duration(seconds: 2),
-                                          action: SnackBarAction(
-                                            label: 'OK',
-                                            onPressed: () {},
+                                      if (loginStatus == "invalid-email") {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                            content:
+                                                const Text('不正なメールアドレスです。'),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            action: SnackBarAction(
+                                              label: 'OK',
+                                              onPressed: () {},
+                                            ),
                                           ),
-                                        ),
-                                      );
+                                        );
+                                      } else if (loginStatus ==
+                                          "user-not-found") {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                            content:
+                                                const Text('間違ったメールアドレスです。'),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            action: SnackBarAction(
+                                              label: 'OK',
+                                              onPressed: () {},
+                                            ),
+                                          ),
+                                        );
+                                      } else if (loginStatus ==
+                                          "wrong-password") {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                            content:
+                                                const Text('パスワードが間違っています。'),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            action: SnackBarAction(
+                                              label: 'OK',
+                                              onPressed: () {},
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                            content: const Text(
+                                                'エラーが発生しました。\n もう一度お試しください。'),
+                                            duration:
+                                                const Duration(seconds: 2),
+                                            action: SnackBarAction(
+                                              label: 'OK',
+                                              onPressed: () {},
+                                            ),
+                                          ),
+                                        );
+                                      }
                                     }
                                   } catch (e) {
                                     ScaffoldMessenger.of(context).showSnackBar(

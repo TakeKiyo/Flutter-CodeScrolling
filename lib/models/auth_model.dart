@@ -35,16 +35,23 @@ class AuthModel extends ChangeNotifier {
   }
 
   // ログイン処理
-  Future<bool> login(String email, String password) async {
+  Future<String> login(String email, String password) async {
     try {
       UserCredential _userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       _user = _userCredential.user;
       notifyListeners();
-      return true;
+      return "ok";
     } on FirebaseAuthException catch (e) {
-      print(e);
-      return false;
+      if (e.code == "invalid-email") {
+        return "invalid-email";
+      } else if (e.code == "user-not-found") {
+        return "user-not-found";
+      } else if (e.code == "wrong-password") {
+        return "wrong-password";
+      } else {
+        return "false";
+      }
     }
   }
 
