@@ -160,17 +160,12 @@ class MetronomeModel extends ChangeNotifier {
   int _countInTimes = 1;
   get countInTimes => _countInTimes;
   set countInTimes(int selectIndex) {
-    _countInTimes = _countInTimersList[selectIndex];
+    _countInTimes = _countInTimesList[selectIndex];
     notifyListeners();
   }
 
-  List<int> _countInTimersList = const [
-    0,
-    1,
-    2,
-    3,
-  ];
-  get countInTimesList => _countInTimersList;
+  final List<int> _countInTimesList = const [0, 1, 2, 3];
+  get countInTimesList => _countInTimesList;
 
   bool _isCountInPlaying = false;
   get isCountInPlaying => _isCountInPlaying;
