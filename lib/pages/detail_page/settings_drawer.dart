@@ -27,7 +27,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
             ListTile(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(9.0)),
-              tileColor: Colors.grey,
+              tileColor: Colors.grey.withOpacity(0.5),
               title: Text("曲名： $title\n"
                   "アーティスト： $artist\n"
                   "キー： $songKey\n"
@@ -60,7 +60,7 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 child: Consumer<MetronomeModel>(builder: (_, model, __) {
                   return Container(
                       decoration: BoxDecoration(
-                          color: Colors.grey,
+                          color: Colors.grey.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(9)),
                       child: Container(
                         child: DropdownButtonHideUnderline(
@@ -92,19 +92,32 @@ Drawer settingsDrawer(BuildContext context, int bpm, String title,
                 fontSize: titleTextFont,
               ),
             ),
-            ListTile(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(9.0)),
-                tileColor: Colors.grey,
-                title: Consumer<MetronomeModel>(builder: (_, model, __) {
-                  return Text(
-                    "回数：" + model.countInTimes.toString(),
-                  );
-                }),
-                onTap: () {
-                  print("Count-in Times");
-                  //TODO
-                }),
+            ButtonTheme(
+                alignedDropdown: true,
+                child: Consumer<MetronomeModel>(builder: (_, model, __) {
+                  return Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(9)),
+                      child: Container(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<int>(
+                            dropdownColor: Colors.grey,
+                            isExpanded: true,
+                            value: model.countInTimes,
+                            elevation: 16,
+                            onChanged: (int newValue) {
+                              model.countInTimes = newValue;
+                            },
+                            items: model.countInTimesList
+                                .map<DropdownMenuItem<int>>((int value) {
+                              return DropdownMenuItem<int>(
+                                  value: value, child: Text("$value小節"));
+                            }).toList(),
+                          ),
+                        ),
+                      ));
+                })),
             insertPadding,
             ElevatedButton(
               child: const Text("曲を削除する"),

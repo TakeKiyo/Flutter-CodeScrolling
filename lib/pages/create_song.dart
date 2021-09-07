@@ -14,12 +14,26 @@ class CreateSong extends StatefulWidget {
 
 class _CreateSongFormState extends State<CreateSong> {
   final _formKey = GlobalKey<FormState>();
+  FixedExtentScrollController _cupertinoController;
 
   String _title = "";
   int _bpm = 120;
   String _artist = "";
   String _key = "未選択";
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _cupertinoController =
+        FixedExtentScrollController(initialItem: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _cupertinoController.dispose();
+    super.dispose();
+  }
 
   void _handleTitle(String inputText) {
     setState(() {
@@ -97,20 +111,20 @@ class _CreateSongFormState extends State<CreateSong> {
 
   void _showModalPicker(BuildContext context) {
     showModalBottomSheet<void>(
+      backgroundColor: Theme.of(context).canvasColor,
+      shape: const RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(32.0))),
       context: context,
       builder: (BuildContext context) {
         return Container(
           height: MediaQuery.of(context).size.height / 3,
           child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () {},
             child: CupertinoPicker(
               itemExtent: 40,
               children: _items.map(_pickerItem).toList(),
               onSelectedItemChanged: _onSelectedItemChanged,
-              scrollController:
-                  FixedExtentScrollController(initialItem: _selectedIndex),
+              scrollController: _cupertinoController,
             ),
           ),
         );
@@ -132,6 +146,8 @@ class _CreateSongFormState extends State<CreateSong> {
     setState(() {
       _key = _items[index];
       _selectedIndex = index;
+      _cupertinoController =
+          FixedExtentScrollController(initialItem: _selectedIndex);
     });
   }
 

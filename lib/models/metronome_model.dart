@@ -157,8 +157,15 @@ class MetronomeModel extends ChangeNotifier {
   int _metronomeContainerStatus = -1;
   get metronomeContainerStatus => _metronomeContainerStatus;
 
-  int _countInTimes = 4;
+  int _countInTimes = 1;
   get countInTimes => _countInTimes;
+  set countInTimes(int selectIndex) {
+    _countInTimes = _countInTimesList[selectIndex];
+    notifyListeners();
+  }
+
+  final List<int> _countInTimesList = const [0, 1, 2, 3];
+  get countInTimesList => _countInTimesList;
 
   bool _isCountInPlaying = false;
   get isCountInPlaying => _isCountInPlaying;
@@ -179,7 +186,7 @@ class MetronomeModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void metronomeLoad() async {
+  Future<void> metronomeLoad() async {
     await _metronomePlayer.loadAll(_metronomeSoundsList);
     _isCountInPlaying = true;
     notifyListeners();
@@ -193,7 +200,8 @@ class MetronomeModel extends ChangeNotifier {
     }
 
     ///カウントアウト処理
-    if (metronomeContainerStatus >= _maxTickList.reduce(max) + 7) {
+    if (metronomeContainerStatus >=
+        _maxTickList.reduce(max) + _ticksPerRowList.last * 2) {
       forceStop();
     }
   }
@@ -201,7 +209,9 @@ class MetronomeModel extends ChangeNotifier {
   Future waitUntilCountInEnds() {
     const microseconds = 60000000;
     return Future.delayed(Duration(
-        microseconds: (microseconds / _tempoCount * (_countInTimes)).toInt()));
+        microseconds:
+            (microseconds / _tempoCount * (_countInTimes * _ticksPerRowList[0]))
+                .toInt()));
   }
 
   void metronomeStart() {
@@ -228,7 +238,8 @@ class MetronomeModel extends ChangeNotifier {
     decideRateToScroll();
 
     ///カウントインの処理
-    if (_isCountInPlaying && metronomeContainerStatus == _countInTimes) {
+    if (_isCountInPlaying &&
+        metronomeContainerStatus == _countInTimes * _ticksPerRowList[0]) {
       _isCountInPlaying = !_isCountInPlaying;
       _metronomeContainerStatus = 0;
     }
@@ -237,7 +248,7 @@ class MetronomeModel extends ChangeNotifier {
   void changeMetronomeContainerColor() async {
     /// flashDuration=100000　はbpm=300（最大時）に合わせた数値
     const flashDuration = 100000;
-    _metronomeContainerColor = Colors.orange;
+    _metronomeContainerColor = Colors.orange.withOpacity(0.5);
     notifyListeners();
     await Future.delayed(Duration(microseconds: flashDuration));
     _metronomeContainerColor = Colors.transparent;

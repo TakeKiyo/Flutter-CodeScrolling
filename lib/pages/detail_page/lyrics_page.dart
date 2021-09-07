@@ -94,6 +94,8 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                   onPressed: () {
                     Provider.of<MetronomeModel>(context, listen: false)
                         .tempoCount = widget.bpm;
+                    Provider.of<MetronomeModel>(context, listen: false)
+                        .forceStop();
                     Provider.of<EditingSongModel>(context, listen: false)
                         .codeList = [];
                     Provider.of<EditingSongModel>(context, listen: false)
