@@ -22,7 +22,7 @@ class CustomKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 350,
       color: Colors.grey[800].withOpacity(0.9),
       child: Column(
         children: [
@@ -34,7 +34,9 @@ class CustomKeyboard extends StatelessWidget {
           insertPadding,
           buildRowThree(),
           insertPadding,
-          buildRowFour(context),
+          buildRowFour(),
+          insertPadding,
+          buildRowFive(context),
           Padding(padding: EdgeInsets.only(bottom: 30))
         ],
       ),
@@ -97,7 +99,7 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowOne() {
-    const rowTwoElem = ["1", "2", "3", "4", "5", "6", "7", "9"];
+    const rowTwoElem = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
     return Expanded(
       child: Row(
@@ -127,7 +129,33 @@ class CustomKeyboard extends StatelessWidget {
   }
 
   Expanded buildRowThree() {
-    const rowThreeElem = ["M", "m", "dim", "sus", "add", "alt", "/"];
+    const rowThreeElem = [
+      "M",
+      "m",
+      "φ",
+      "dim",
+      "aug",
+      "alt",
+      "sus",
+      "add",
+      "omit",
+    ];
+
+    return Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: rowThreeElem
+            .map((elm) => TextKey(
+                  text: elm,
+                  onTextInput: _textInputHandler,
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Expanded buildRowFour() {
+    const rowFourElem = ["/", "on", "(", ")", "･/･", "N.C.", "-"];
 
     return Expanded(
       child: Row(
@@ -135,7 +163,7 @@ class CustomKeyboard extends StatelessWidget {
         children: [
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: rowThreeElem
+              children: rowFourElem
                   .map((elm) => TextKey(
                         text: elm,
                         onTextInput: _textInputHandler,
@@ -149,14 +177,10 @@ class CustomKeyboard extends StatelessWidget {
     );
   }
 
-  Expanded buildRowFour(BuildContext context) {
+  Expanded buildRowFive(BuildContext context) {
     return Expanded(
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        TextKey(
-          text: "N.C.",
-          keyWidth: 6,
-          onTextInput: _textInputHandler,
-        ),
+        SpacerWidget(),
         TextKey(
           text: " ",
           label: "space",
@@ -204,6 +228,7 @@ class TextKey extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
           child: InkWell(
+            borderRadius: BorderRadius.circular(5),
             onTap: () {
               onTextInput?.call(text);
             },
@@ -239,7 +264,7 @@ class BackspaceKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 6,
+      width: MediaQuery.of(context).size.width / 10,
       child: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Material(
@@ -248,6 +273,7 @@ class BackspaceKey extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
           ),
           child: InkWell(
+            borderRadius: BorderRadius.circular(5),
             onTap: () {
               onBackspace?.call();
             },
