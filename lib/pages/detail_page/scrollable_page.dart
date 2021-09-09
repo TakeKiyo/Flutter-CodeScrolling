@@ -166,20 +166,22 @@ class _ScrollPageState extends State<ScrollablePage> {
           }
         }
 
-        _globalTextFormList.add(GlobalKey<FormState>());
-
-        ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
-        WidgetsBinding.instance.addPostFrameCallback((cb) {
+        if (_globalTextFormList.length < codeListState.length) {
+          _globalTextFormList.add(GlobalKey<FormState>());
           Provider.of<MetronomeModel>(context, listen: false)
-              .textFormOffsetList = _getLocaleAndSize(listIndex);
-          print("after");
-        });
+              .setMaxTickList(codeListState[listIndex].length, listIndex);
 
-        Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
-            widget.rhythmList;
+          ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Provider.of<MetronomeModel>(context, listen: false)
+                .textFormOffsetList = _getLocaleAndSize(listIndex);
+          });
+        }
 
-        Provider.of<MetronomeModel>(context, listen: false)
-            .setMaxTickList(codeListState[listIndex].length, listIndex);
+        //rebuild時最初に一度だけ入力すれば良い
+        if (listIndex == 0)
+          Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
+              widget.rhythmList;
 
         int eachBeatCount(int index) {
           return Provider.of<MetronomeModel>(context, listen: false)
