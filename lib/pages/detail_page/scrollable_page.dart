@@ -47,6 +47,7 @@ class _ScrollPageState extends State<ScrollablePage> {
     Provider.of<MetronomeModel>(context, listen: false).scrollController =
         _scrollController;
     Provider.of<MetronomeModel>(context, listen: false).textFormOffsetList = -1;
+    print("init");
   }
 
   @override
@@ -129,15 +130,31 @@ class _ScrollPageState extends State<ScrollablePage> {
           const Text("歌詞も表示する")
         ],
       ));
+
+      Widget _displayText(String text) {
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Card(
+            color: Theme.of(context).textTheme.headline6.color,
+            child: Text(
+              text,
+              style: TextStyle(
+                letterSpacing: 1,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: Theme.of(context).canvasColor,
+              ),
+            ),
+          ),
+        );
+      }
+
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
-        List<Widget> list = [];
+        final List<Widget> list = [];
         if (widget.separationList.length != 0) {
           if (listIndex == 0) {
-            displayedList.add(Text(widget.separationList[listIndex],
-                style: TextStyle(
-                  color: Colors.white,
-                  backgroundColor: Colors.black,
-                )));
+            displayedList
+                .add(_displayText(" ${widget.separationList[listIndex]} "));
             if (_lyricsDisplayed) {
               displayedList.add(Text(widget.lyricsList[listIndex]));
             }
@@ -145,13 +162,10 @@ class _ScrollPageState extends State<ScrollablePage> {
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
-              displayedList.add(Text(widget.separationList[listIndex],
-                  style: TextStyle(
-                    color: Colors.white,
-                    backgroundColor: Colors.black,
-                  )));
+              displayedList
+                  .add(_displayText(" ${widget.separationList[listIndex]} "));
             } else {
-              displayedList.add(Text(""));
+              displayedList.add(_displayText(""));
             }
 
             if (_lyricsDisplayed) {
@@ -175,6 +189,7 @@ class _ScrollPageState extends State<ScrollablePage> {
         WidgetsBinding.instance.addPostFrameCallback((cb) {
           Provider.of<MetronomeModel>(context, listen: false)
               .textFormOffsetList = _getLocaleAndSize(listIndex);
+          print("after");
         });
 
         Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
@@ -250,7 +265,6 @@ class _ScrollPageState extends State<ScrollablePage> {
         }
         displayedList.add(Row(children: list));
       }
-
       return displayedList;
     }
 
@@ -272,18 +286,20 @@ class _ScrollPageState extends State<ScrollablePage> {
                     .separationList = [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .lyricsList = widget.lyricsList;
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    fullscreenDialog: true,
-                    builder: (context) {
-                      return DetailEditPage(
-                        bpm: widget.bpm,
-                        title: widget.title,
-                        docId: widget.docId,
-                      );
-                    },
-                  ),
-                );
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) {
+                          return DetailEditPage(
+                            bpm: widget.bpm,
+                            title: widget.title,
+                            docId: widget.docId,
+                          );
+                        },
+                      ),
+                    )
+                    .then((_) => print("back!"));
               },
               child: const Text("コードを編集する")),
           const Text("まだコードは追加されていません")

@@ -168,27 +168,37 @@ class _DetailEditPageState extends State<DetailEditPage> {
       });
     }
 
+    Widget _displayText(String text) {
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: Card(
+          color: Theme.of(context).textTheme.headline6.color,
+          child: Text(
+            text,
+            style: TextStyle(
+              letterSpacing: 1,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: Theme.of(context).canvasColor,
+            ),
+          ),
+        ),
+      );
+    }
+
     Widget getCodeListWidgets(context, List<String> strings, int listIndex,
         List<String> separationList, List<String> rhythmList) {
       List<Widget> separationText = [];
       List<Widget> lyrics = [];
       List<Widget> list = [];
       if (listIndex == 0) {
-        separationText.add(Text(separationList[listIndex],
-            style: const TextStyle(
-              color: Colors.white,
-              backgroundColor: Colors.black,
-            )));
+        separationText.add(_displayText(separationList[listIndex]));
         list.add(Text(rhythmList[listIndex]));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
-          separationText.add(Text(separationList[listIndex],
-              style: const TextStyle(
-                color: Colors.white,
-                backgroundColor: Colors.black,
-              )));
+          separationText.add(_displayText(separationList[listIndex]));
         } else {
-          separationText.add(const Text(""));
+          separationText.add(_displayText(""));
         }
 
         if (rhythmList[listIndex] != rhythmList[listIndex - 1]) {
@@ -295,6 +305,9 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       onPressed: () {
                         Provider.of<EditingSongModel>(context, listen: false)
                             .duplicateList(listIndex);
+                        _setTextFieldComponents();
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((cb) => _setEachOffsetList());
                         Navigator.pop(context);
                       },
                     ),
@@ -551,7 +564,10 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                         "A",
                                                         "B",
                                                         "C",
-                                                        "サビ"
+                                                        "D",
+                                                        "間奏",
+                                                        "サビ",
+                                                        "Outro",
                                                       ].map<
                                                               DropdownMenuItem<
                                                                   String>>(
