@@ -167,6 +167,10 @@ class _ScrollPageState extends State<ScrollablePage> {
         }
 
         if (_globalTextFormList.length < codeListState.length) {
+          if (listIndex == 0)
+            Provider.of<MetronomeModel>(context, listen: false)
+                .ticksPerRowList = widget.rhythmList;
+
           _globalTextFormList.add(GlobalKey<FormState>());
           Provider.of<MetronomeModel>(context, listen: false)
               .setMaxTickList(codeListState[listIndex].length, listIndex);
@@ -177,11 +181,6 @@ class _ScrollPageState extends State<ScrollablePage> {
                 .textFormOffsetList = _getLocaleAndSize(listIndex);
           });
         }
-
-        //rebuild時最初に一度だけ入力すれば良い
-        if (listIndex == 0)
-          Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
-              widget.rhythmList;
 
         int eachBeatCount(int index) {
           return Provider.of<MetronomeModel>(context, listen: false)
