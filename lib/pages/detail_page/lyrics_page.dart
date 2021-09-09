@@ -6,7 +6,7 @@ import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
-import './style/separation_text.dart';
+import './style/display_text_style.dart';
 import 'detail_edit_page.dart';
 
 class LyricsPage extends StatefulWidget {

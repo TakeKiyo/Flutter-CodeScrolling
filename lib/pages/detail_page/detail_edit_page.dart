@@ -5,7 +5,7 @@ import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
-import './style/separation_text.dart';
+import './style/display_text_style.dart';
 import '../custom_keyboard.dart';
 import 'detail_page.dart';
 
@@ -175,19 +175,19 @@ class _DetailEditPageState extends State<DetailEditPage> {
       List<Widget> lyrics = [];
       List<Widget> list = [];
       if (listIndex == 0) {
-        separationText
-            .add(separationTextStyle(context, " ${separationList[listIndex]} "));
-        list.add(Text(rhythmList[listIndex]));
+        separationText.add(
+            separationTextStyle(context, " ${separationList[listIndex]} "));
+        list.add(rhythmTextStyle(rhythmList[listIndex]));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
-          separationText
-              .add(separationTextStyle(context, " ${separationList[listIndex]} "));
+          separationText.add(
+              separationTextStyle(context, " ${separationList[listIndex]} "));
         } else {
           separationText.add(separationTextStyle(context, ""));
         }
 
         if (rhythmList[listIndex] != rhythmList[listIndex - 1]) {
-          list.add(Text(rhythmList[listIndex]));
+          list.add(rhythmTextStyle(rhythmList[listIndex]));
         } else {
           list.add(const Padding(
             padding: const EdgeInsets.only(left: 24.0),

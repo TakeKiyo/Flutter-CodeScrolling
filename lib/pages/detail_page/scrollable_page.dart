@@ -3,7 +3,7 @@ import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
-import './style/separation_text.dart';
+import './style/display_text_style.dart';
 import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
@@ -141,7 +141,7 @@ class _ScrollPageState extends State<ScrollablePage> {
             if (_lyricsDisplayed) {
               displayedList.add(Text(widget.lyricsList[listIndex]));
             }
-            list.add(Text(widget.rhythmList[listIndex]));
+            list.add(rhythmTextStyle(widget.rhythmList[listIndex]));
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
@@ -157,7 +157,7 @@ class _ScrollPageState extends State<ScrollablePage> {
 
             if (widget.rhythmList[listIndex] !=
                 widget.rhythmList[listIndex - 1]) {
-              list.add(Text(widget.rhythmList[listIndex]));
+              list.add(rhythmTextStyle(widget.rhythmList[listIndex]));
             } else {
               list.add(const Padding(
                 padding: const EdgeInsets.only(left: 24.0),
