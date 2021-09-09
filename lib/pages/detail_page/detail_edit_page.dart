@@ -276,6 +276,9 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       onPressed: () {
                         Provider.of<EditingSongModel>(context, listen: false)
                             .deleteOneLine(listIndex);
+                        _setTextFieldComponents();
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((cb) => _setEachOffsetList());
                         Navigator.pop(context);
                       },
                     ),
