@@ -5,6 +5,7 @@ import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
+import './style/separation_text.dart';
 import '../custom_keyboard.dart';
 import 'detail_page.dart';
 
@@ -168,37 +169,21 @@ class _DetailEditPageState extends State<DetailEditPage> {
       });
     }
 
-    Widget _displayText(String text) {
-      return Align(
-        alignment: Alignment.centerLeft,
-        child: Card(
-          color: Theme.of(context).textTheme.headline6.color,
-          child: Text(
-            text,
-            style: TextStyle(
-              letterSpacing: 1,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color: Theme.of(context).canvasColor,
-            ),
-          ),
-        ),
-      );
-    }
-
     Widget getCodeListWidgets(context, List<String> strings, int listIndex,
         List<String> separationList, List<String> rhythmList) {
       List<Widget> separationText = [];
       List<Widget> lyrics = [];
       List<Widget> list = [];
       if (listIndex == 0) {
-        separationText.add(_displayText(separationList[listIndex]));
+        separationText
+            .add(separationTextStyle(context, separationList[listIndex]));
         list.add(Text(rhythmList[listIndex]));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
-          separationText.add(_displayText(separationList[listIndex]));
+          separationText
+              .add(separationTextStyle(context, separationList[listIndex]));
         } else {
-          separationText.add(_displayText(""));
+          separationText.add(separationTextStyle(context, ""));
         }
 
         if (rhythmList[listIndex] != rhythmList[listIndex - 1]) {

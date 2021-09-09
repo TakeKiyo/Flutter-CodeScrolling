@@ -3,6 +3,7 @@ import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
+import './style/separation_text.dart';
 import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
@@ -131,30 +132,12 @@ class _ScrollPageState extends State<ScrollablePage> {
         ],
       ));
 
-      Widget _displayText(String text) {
-        return Align(
-          alignment: Alignment.centerLeft,
-          child: Card(
-            color: Theme.of(context).textTheme.headline6.color,
-            child: Text(
-              text,
-              style: TextStyle(
-                letterSpacing: 1,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-                color: Theme.of(context).canvasColor,
-              ),
-            ),
-          ),
-        );
-      }
-
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
         final List<Widget> list = [];
         if (widget.separationList.length != 0) {
           if (listIndex == 0) {
-            displayedList
-                .add(_displayText(" ${widget.separationList[listIndex]} "));
+            displayedList.add(separationTextStyle(
+                context, " ${widget.separationList[listIndex]} "));
             if (_lyricsDisplayed) {
               displayedList.add(Text(widget.lyricsList[listIndex]));
             }
@@ -162,10 +145,10 @@ class _ScrollPageState extends State<ScrollablePage> {
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
-              displayedList
-                  .add(_displayText(" ${widget.separationList[listIndex]} "));
+              displayedList.add(separationTextStyle(
+                  context, " ${widget.separationList[listIndex]} "));
             } else {
-              displayedList.add(_displayText(""));
+              displayedList.add(separationTextStyle(context, ""));
             }
 
             if (_lyricsDisplayed) {
