@@ -19,21 +19,18 @@ Widget separationTextStyle(context, String text) {
 }
 
 Widget rhythmTextStyle(String rhythm) {
-  final rhythmNumerator = rhythm.split("/")[0];
-  final rhythmDenominator = rhythm.split("/")[1];
-  return Align(
-    alignment: Alignment.bottomLeft,
-    child: Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Text(
-        "$rhythmNumerator\nー\n$rhythmDenominator",
-        style: TextStyle(
-          height: 0.5,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-        textAlign: TextAlign.center,
+  final rhythmNumerator = rhythm?.split("/")[0];
+  final rhythmDenominator = rhythm?.split("/")[1];
+  return Padding(
+    padding: const EdgeInsets.only(top: 8.0),
+    child: Text(
+      "$rhythmNumerator\nー\n$rhythmDenominator",
+      style: TextStyle(
+        height: 0.5,
+        fontWeight: FontWeight.bold,
+        fontSize: 16,
       ),
+      textAlign: TextAlign.center,
     ),
   );
 }
