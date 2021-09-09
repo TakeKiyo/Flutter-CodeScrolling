@@ -190,7 +190,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
           list.add(rhythmTextStyle(rhythmList[listIndex]));
         } else {
           list.add(const Padding(
-            padding: const EdgeInsets.only(left: 24.0),
+            padding: const EdgeInsets.only(left: 16.0),
           ));
         }
       }
