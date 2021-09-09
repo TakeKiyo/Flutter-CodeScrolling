@@ -185,12 +185,12 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                 listIndex++) {
               if (separation.length != 0) {
                 if (listIndex == 0) {
-                  displayedList
-                      .add(separationTextStyle(context, separation[listIndex]));
+                  displayedList.add(separationTextStyle(
+                      context, " ${separation[listIndex]} "));
                 } else {
                   if (separation[listIndex] != separation[listIndex - 1]) {
-                    displayedList.add(
-                        separationTextStyle(context, separation[listIndex]));
+                    displayedList.add(separationTextStyle(
+                        context, " ${separation[listIndex]} "));
                   }
                 }
                 displayedList.add(Text(lyricsList[listIndex],

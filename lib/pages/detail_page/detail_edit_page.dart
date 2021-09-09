@@ -176,12 +176,12 @@ class _DetailEditPageState extends State<DetailEditPage> {
       List<Widget> list = [];
       if (listIndex == 0) {
         separationText
-            .add(separationTextStyle(context, separationList[listIndex]));
+            .add(separationTextStyle(context, " ${separationList[listIndex]} "));
         list.add(Text(rhythmList[listIndex]));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
           separationText
-              .add(separationTextStyle(context, separationList[listIndex]));
+              .add(separationTextStyle(context, " ${separationList[listIndex]} "));
         } else {
           separationText.add(separationTextStyle(context, ""));
         }
