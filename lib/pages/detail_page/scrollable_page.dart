@@ -212,7 +212,7 @@ class _ScrollPageState extends State<ScrollablePage> {
           final int maxColumnBeatCount =
               addedColumnBeatCount + eachBeatCount(listIndex);
 
-          list.add(Flexible(
+          list.add(Expanded(
             child: Selector<MetronomeModel, int>(
               selector: (context, model) => model.metronomeContainerStatus,
 
@@ -230,6 +230,7 @@ class _ScrollPageState extends State<ScrollablePage> {
               builder: (context, containerStatus, child) => Padding(
                 padding: const EdgeInsets.only(right: 3),
                 child: Container(
+                    height: 32,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: (!Provider.of<MetronomeModel>(context,
@@ -252,14 +253,12 @@ class _ScrollPageState extends State<ScrollablePage> {
                     ),
                     child: child),
               ),
-              child: TextFormField(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  codeListState[listIndex][i],
                   key: i == 0 ? _globalTextFormList[listIndex] : null,
-                  enabled: false,
-                  maxLines: null,
                   textAlign: TextAlign.center,
-                  controller:
-                      Provider.of<EditingSongModel>(context, listen: false)
-                          .codeControllerList[listIndex][i],
                   style: TextStyle(
                       letterSpacing: -1,
                       fontWeight: FontWeight.bold,
@@ -267,9 +266,8 @@ class _ScrollPageState extends State<ScrollablePage> {
                       fontFeatures: [
                         FontFeature.enable('subs'),
                       ]),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                  )),
+                ),
+              ),
             ),
           ));
 
