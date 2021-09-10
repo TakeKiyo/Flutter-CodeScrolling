@@ -48,7 +48,6 @@ class _ScrollPageState extends State<ScrollablePage> {
     Provider.of<MetronomeModel>(context, listen: false).scrollController =
         _scrollController;
     Provider.of<MetronomeModel>(context, listen: false).textFormOffsetList = -1;
-    print("init");
   }
 
   @override
@@ -142,6 +141,7 @@ class _ScrollPageState extends State<ScrollablePage> {
               displayedList.add(Text(widget.lyricsList[listIndex]));
             }
             list.add(rhythmTextStyle(widget.rhythmList[listIndex]));
+            list.add(insertionContainer(context, "double"));
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
@@ -158,10 +158,16 @@ class _ScrollPageState extends State<ScrollablePage> {
             if (widget.rhythmList[listIndex] !=
                 widget.rhythmList[listIndex - 1]) {
               list.add(rhythmTextStyle(widget.rhythmList[listIndex]));
+              list.add(insertionContainer(context, "double"));
             } else {
               list.add(const Padding(
                 padding: const EdgeInsets.only(left: 16.0),
               ));
+              if (widget.separationList[listIndex] !=
+                  widget.separationList[listIndex - 1]) {
+                list.add(insertionContainer(context, "double"));
+              } else
+                list.add(insertionContainer(context));
             }
           }
         }
@@ -238,14 +244,21 @@ class _ScrollPageState extends State<ScrollablePage> {
                   ),
                   child: child),
               child: TextFormField(
-                key: i == 0 ? _globalTextFormList[listIndex] : null,
-                enabled: false,
-                textAlign: TextAlign.center,
-                initialValue: codeListState[listIndex][i],
-              ),
+                  key: i == 0 ? _globalTextFormList[listIndex] : null,
+                  enabled: false,
+                  textAlign: TextAlign.center,
+                  initialValue: codeListState[listIndex][i],
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  )),
             ),
           ));
-          list.add(const Text("|"));
+
+          if (listIndex == codeListState.length - 1 &&
+              i == codeListState[listIndex].length - 1) {
+            list.add(insertionContainer(context, "last"));
+          } else
+            list.add(insertionContainer(context));
         }
         displayedList.add(Row(children: list));
       }

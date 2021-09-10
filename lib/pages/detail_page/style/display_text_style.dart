@@ -34,3 +34,45 @@ Widget rhythmTextStyle(String rhythm) {
     ),
   );
 }
+
+///調や拍がが変わったら二重線,最後の拍なら終始線
+Widget insertionContainer(context, [String type]) {
+  return Container(
+      height: 32,
+      width: 4,
+      decoration: BoxDecoration(
+        border: type == "double"
+            ? Border(
+                left: BorderSide(
+                  color: Theme.of(context).textTheme.headline6.color,
+                  width: 0.5,
+                  style: BorderStyle.solid,
+                ),
+                right: BorderSide(
+                  color: Theme.of(context).textTheme.headline6.color,
+                  width: 0.5,
+                  style: BorderStyle.solid,
+                ),
+              )
+            : type == "last"
+                ? Border(
+                    left: BorderSide(
+                      color: Theme.of(context).textTheme.headline6.color,
+                      width: 0.5,
+                      style: BorderStyle.solid,
+                    ),
+                    right: BorderSide(
+                      color: Theme.of(context).textTheme.headline6.color,
+                      width: 1.5,
+                      style: BorderStyle.solid,
+                    ),
+                  )
+                : Border(
+                    left: BorderSide(
+                      color: Theme.of(context).textTheme.headline6.color,
+                      width: 0.5,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+      ));
+}
