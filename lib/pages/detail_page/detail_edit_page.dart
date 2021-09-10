@@ -5,6 +5,7 @@ import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
+import './style/display_text_style.dart';
 import '../custom_keyboard.dart';
 import 'detail_page.dart';
 
@@ -174,28 +175,22 @@ class _DetailEditPageState extends State<DetailEditPage> {
       List<Widget> lyrics = [];
       List<Widget> list = [];
       if (listIndex == 0) {
-        separationText.add(Text(separationList[listIndex],
-            style: const TextStyle(
-              color: Colors.white,
-              backgroundColor: Colors.black,
-            )));
-        list.add(Text(rhythmList[listIndex]));
+        separationText.add(
+            separationTextStyle(context, " ${separationList[listIndex]} "));
+        list.add(rhythmTextStyle(rhythmList[listIndex]));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
-          separationText.add(Text(separationList[listIndex],
-              style: const TextStyle(
-                color: Colors.white,
-                backgroundColor: Colors.black,
-              )));
+          separationText.add(
+              separationTextStyle(context, " ${separationList[listIndex]} "));
         } else {
-          separationText.add(const Text(""));
+          separationText.add(separationTextStyle(context, ""));
         }
 
         if (rhythmList[listIndex] != rhythmList[listIndex - 1]) {
-          list.add(Text(rhythmList[listIndex]));
+          list.add(rhythmTextStyle(rhythmList[listIndex]));
         } else {
           list.add(const Padding(
-            padding: const EdgeInsets.only(left: 24.0),
+            padding: const EdgeInsets.only(left: 16.0),
           ));
         }
       }
@@ -281,6 +276,9 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       onPressed: () {
                         Provider.of<EditingSongModel>(context, listen: false)
                             .deleteOneLine(listIndex);
+                        _setTextFieldComponents();
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((cb) => _setEachOffsetList());
                         Navigator.pop(context);
                       },
                     ),
@@ -295,6 +293,9 @@ class _DetailEditPageState extends State<DetailEditPage> {
                       onPressed: () {
                         Provider.of<EditingSongModel>(context, listen: false)
                             .duplicateList(listIndex);
+                        _setTextFieldComponents();
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((cb) => _setEachOffsetList());
                         Navigator.pop(context);
                       },
                     ),
@@ -551,7 +552,10 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                                         "A",
                                                         "B",
                                                         "C",
-                                                        "サビ"
+                                                        "D",
+                                                        "間奏",
+                                                        "サビ",
+                                                        "Outro",
                                                       ].map<
                                                               DropdownMenuItem<
                                                                   String>>(

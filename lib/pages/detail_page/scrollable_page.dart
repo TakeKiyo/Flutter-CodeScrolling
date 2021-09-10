@@ -3,6 +3,7 @@ import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
+import './style/display_text_style.dart';
 import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
@@ -129,29 +130,25 @@ class _ScrollPageState extends State<ScrollablePage> {
           const Text("歌詞も表示する")
         ],
       ));
+
       for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
-        List<Widget> list = [];
+        final List<Widget> list = [];
         if (widget.separationList.length != 0) {
           if (listIndex == 0) {
-            displayedList.add(Text(widget.separationList[listIndex],
-                style: TextStyle(
-                  color: Colors.white,
-                  backgroundColor: Colors.black,
-                )));
+            displayedList.add(separationTextStyle(
+                context, " ${widget.separationList[listIndex]} "));
             if (_lyricsDisplayed) {
               displayedList.add(Text(widget.lyricsList[listIndex]));
             }
-            list.add(Text(widget.rhythmList[listIndex]));
+            list.add(rhythmTextStyle(widget.rhythmList[listIndex]));
+            list.add(insertionContainer(context, "double"));
           } else {
             if (widget.separationList[listIndex] !=
                 widget.separationList[listIndex - 1]) {
-              displayedList.add(Text(widget.separationList[listIndex],
-                  style: TextStyle(
-                    color: Colors.white,
-                    backgroundColor: Colors.black,
-                  )));
+              displayedList.add(separationTextStyle(
+                  context, " ${widget.separationList[listIndex]} "));
             } else {
-              displayedList.add(Text(""));
+              displayedList.add(separationTextStyle(context, ""));
             }
 
             if (_lyricsDisplayed) {
@@ -160,28 +157,36 @@ class _ScrollPageState extends State<ScrollablePage> {
 
             if (widget.rhythmList[listIndex] !=
                 widget.rhythmList[listIndex - 1]) {
-              list.add(Text(widget.rhythmList[listIndex]));
+              list.add(rhythmTextStyle(widget.rhythmList[listIndex]));
+              list.add(insertionContainer(context, "double"));
             } else {
               list.add(const Padding(
-                padding: const EdgeInsets.only(left: 24.0),
+                padding: const EdgeInsets.only(left: 16.0),
               ));
+              if (widget.separationList[listIndex] !=
+                  widget.separationList[listIndex - 1]) {
+                list.add(insertionContainer(context, "double"));
+              } else
+                list.add(insertionContainer(context));
             }
           }
         }
 
-        _globalTextFormList.add(GlobalKey<FormState>());
+        if (_globalTextFormList.length < codeListState.length) {
+          if (listIndex == 0)
+            Provider.of<MetronomeModel>(context, listen: false)
+                .ticksPerRowList = widget.rhythmList;
 
-        ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
-        WidgetsBinding.instance.addPostFrameCallback((cb) {
+          _globalTextFormList.add(GlobalKey<FormState>());
           Provider.of<MetronomeModel>(context, listen: false)
-              .textFormOffsetList = _getLocaleAndSize(listIndex);
-        });
+              .setMaxTickList(codeListState[listIndex].length, listIndex);
 
-        Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
-            widget.rhythmList;
-
-        Provider.of<MetronomeModel>(context, listen: false)
-            .setMaxTickList(codeListState[listIndex].length, listIndex);
+          ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Provider.of<MetronomeModel>(context, listen: false)
+                .textFormOffsetList = _getLocaleAndSize(listIndex);
+          });
+        }
 
         int eachBeatCount(int index) {
           return Provider.of<MetronomeModel>(context, listen: false)
@@ -220,37 +225,50 @@ class _ScrollPageState extends State<ScrollablePage> {
                       notifiedMetronomeContainerStatus <=
                           addedRowBeatCount + maxColumnBeatCount &&
                       notifiedMetronomeContainerStatus <= maxRowBeatCount),
-              builder: (context, containerStatus, child) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: (!Provider.of<MetronomeModel>(context, listen: false)
-                                .isCountInPlaying &&
-                            Provider.of<MetronomeModel>(context, listen: false)
-                                    .metronomeContainerStatus >=
-                                addedRowBeatCount + addedColumnBeatCount &&
-                            Provider.of<MetronomeModel>(context, listen: false)
-                                    .metronomeContainerStatus <
-                                addedRowBeatCount + maxColumnBeatCount &&
-                            Provider.of<MetronomeModel>(context, listen: false)
-                                    .metronomeContainerStatus <
-                                maxRowBeatCount)
-                        ? Colors.orange.withOpacity(0.5)
-                        : Colors.transparent,
-                  ),
-                  child: child),
-              child: TextFormField(
-                key: i == 0 ? _globalTextFormList[listIndex] : null,
-                enabled: false,
-                textAlign: TextAlign.center,
-                initialValue: codeListState[listIndex][i],
+              builder: (context, containerStatus, child) => Padding(
+                padding: const EdgeInsets.only(right: 3),
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: (!Provider.of<MetronomeModel>(context,
+                                      listen: false)
+                                  .isCountInPlaying &&
+                              Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .metronomeContainerStatus >=
+                                  addedRowBeatCount + addedColumnBeatCount &&
+                              Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .metronomeContainerStatus <
+                                  addedRowBeatCount + maxColumnBeatCount &&
+                              Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .metronomeContainerStatus <
+                                  maxRowBeatCount)
+                          ? Colors.orange.withOpacity(0.5)
+                          : Colors.transparent,
+                    ),
+                    child: child),
               ),
+              child: TextFormField(
+                  key: i == 0 ? _globalTextFormList[listIndex] : null,
+                  enabled: false,
+                  textAlign: TextAlign.center,
+                  initialValue: codeListState[listIndex][i],
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  )),
             ),
           ));
-          list.add(const Text("|"));
+
+          if (listIndex == codeListState.length - 1 &&
+              i == codeListState[listIndex].length - 1) {
+            list.add(insertionContainer(context, "last"));
+          } else
+            list.add(insertionContainer(context));
         }
         displayedList.add(Row(children: list));
       }
-
       return displayedList;
     }
 
@@ -272,18 +290,20 @@ class _ScrollPageState extends State<ScrollablePage> {
                     .separationList = [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .lyricsList = widget.lyricsList;
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    fullscreenDialog: true,
-                    builder: (context) {
-                      return DetailEditPage(
-                        bpm: widget.bpm,
-                        title: widget.title,
-                        docId: widget.docId,
-                      );
-                    },
-                  ),
-                );
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                        fullscreenDialog: true,
+                        builder: (context) {
+                          return DetailEditPage(
+                            bpm: widget.bpm,
+                            title: widget.title,
+                            docId: widget.docId,
+                          );
+                        },
+                      ),
+                    )
+                    .then((_) => print("back!"));
               },
               child: const Text("コードを編集する")),
           const Text("まだコードは追加されていません")

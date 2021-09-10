@@ -6,6 +6,7 @@ import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
+import './style/display_text_style.dart';
 import 'detail_edit_page.dart';
 
 class LyricsPage extends StatefulWidget {
@@ -184,18 +185,12 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                 listIndex++) {
               if (separation.length != 0) {
                 if (listIndex == 0) {
-                  displayedList.add(Text(separation[listIndex],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        backgroundColor: Colors.black,
-                      )));
+                  displayedList.add(separationTextStyle(
+                      context, " ${separation[listIndex]} "));
                 } else {
                   if (separation[listIndex] != separation[listIndex - 1]) {
-                    displayedList.add(Text(separation[listIndex],
-                        style: const TextStyle(
-                          color: Colors.white,
-                          backgroundColor: Colors.black,
-                        )));
+                    displayedList.add(separationTextStyle(
+                        context, " ${separation[listIndex]} "));
                   }
                 }
                 displayedList.add(Text(lyricsList[listIndex],
