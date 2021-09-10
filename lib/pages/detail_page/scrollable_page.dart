@@ -261,6 +261,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                       Provider.of<EditingSongModel>(context, listen: false)
                           .codeControllerList[listIndex][i],
                   style: TextStyle(
+                      letterSpacing: -1,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                       fontFeatures: [
