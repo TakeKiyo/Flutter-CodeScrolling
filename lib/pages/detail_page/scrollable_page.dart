@@ -253,6 +253,7 @@ class _ScrollPageState extends State<ScrollablePage> {
               child: TextFormField(
                   key: i == 0 ? _globalTextFormList[listIndex] : null,
                   enabled: false,
+                  maxLines: null,
                   textAlign: TextAlign.center,
                   initialValue: codeListState[listIndex][i],
                   decoration: InputDecoration(
