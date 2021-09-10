@@ -225,24 +225,31 @@ class _ScrollPageState extends State<ScrollablePage> {
                       notifiedMetronomeContainerStatus <=
                           addedRowBeatCount + maxColumnBeatCount &&
                       notifiedMetronomeContainerStatus <= maxRowBeatCount),
-              builder: (context, containerStatus, child) => Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: (!Provider.of<MetronomeModel>(context, listen: false)
-                                .isCountInPlaying &&
-                            Provider.of<MetronomeModel>(context, listen: false)
-                                    .metronomeContainerStatus >=
-                                addedRowBeatCount + addedColumnBeatCount &&
-                            Provider.of<MetronomeModel>(context, listen: false)
-                                    .metronomeContainerStatus <
-                                addedRowBeatCount + maxColumnBeatCount &&
-                            Provider.of<MetronomeModel>(context, listen: false)
-                                    .metronomeContainerStatus <
-                                maxRowBeatCount)
-                        ? Colors.orange.withOpacity(0.5)
-                        : Colors.transparent,
-                  ),
-                  child: child),
+              builder: (context, containerStatus, child) => Padding(
+                padding: const EdgeInsets.only(right: 3),
+                child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: (!Provider.of<MetronomeModel>(context,
+                                      listen: false)
+                                  .isCountInPlaying &&
+                              Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .metronomeContainerStatus >=
+                                  addedRowBeatCount + addedColumnBeatCount &&
+                              Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .metronomeContainerStatus <
+                                  addedRowBeatCount + maxColumnBeatCount &&
+                              Provider.of<MetronomeModel>(context,
+                                          listen: false)
+                                      .metronomeContainerStatus <
+                                  maxRowBeatCount)
+                          ? Colors.orange.withOpacity(0.5)
+                          : Colors.transparent,
+                    ),
+                    child: child),
+              ),
               child: TextFormField(
                   key: i == 0 ? _globalTextFormList[listIndex] : null,
                   enabled: false,
