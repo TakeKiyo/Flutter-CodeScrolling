@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
@@ -255,7 +257,15 @@ class _ScrollPageState extends State<ScrollablePage> {
                   enabled: false,
                   maxLines: null,
                   textAlign: TextAlign.center,
-                  initialValue: codeListState[listIndex][i],
+                  controller:
+                      Provider.of<EditingSongModel>(context, listen: false)
+                          .codeControllerList[listIndex][i],
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFeatures: [
+                        FontFeature.enable('subs'),
+                      ]),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                   )),
@@ -325,7 +335,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                   child: SingleChildScrollView(
                       controller: _scrollController,
                       child: ListView(
-                        padding: const EdgeInsets.all(36.0),
+                        padding: const EdgeInsets.all(20.0),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         children: displayedWidget(),
