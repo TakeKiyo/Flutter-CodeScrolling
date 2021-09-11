@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -254,6 +256,13 @@ class _DetailEditPageState extends State<DetailEditPage> {
                 .scrollToTappedForm(listIndex: listIndex, mode: "code");
           },
           textAlign: TextAlign.center,
+          style: TextStyle(
+              letterSpacing: -1,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              fontFeatures: [
+                FontFeature.enable('subs'),
+              ]),
           controller: Provider.of<EditingSongModel>(context, listen: false)
               .codeControllerList[listIndex][i],
           onChanged: (text) {
