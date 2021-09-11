@@ -82,7 +82,8 @@ Material detailBottomBar(BuildContext context) {
                         if (Provider.of<MetronomeModel>(context, listen: false)
                                 .metronomeContainerStatus ==
                             -1) {
-                          Provider.of<MetronomeModel>(context, listen: false)
+                          await Provider.of<MetronomeModel>(context,
+                                  listen: false)
                               .metronomeLoad();
                           if (Provider.of<MetronomeModel>(context,
                                       listen: false)
