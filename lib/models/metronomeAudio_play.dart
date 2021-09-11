@@ -5,7 +5,7 @@ class MetronomeAudioPlay {
   static AudioPlayer audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY)
     ..setReleaseMode(ReleaseMode.STOP);
 
-  static AudioCache metronomePlayer = AudioCache();
+  static AudioCache metronomePlayer = AudioCache(fixedPlayer: audioPlayer);
 
   static Future<void> loadAll(List<String> metronomeSoundList) async {
     await metronomePlayer.loadAll(metronomeSoundList);
