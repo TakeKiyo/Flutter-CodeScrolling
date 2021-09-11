@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -178,6 +180,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
         separationText.add(
             separationTextStyle(context, " ${separationList[listIndex]} "));
         list.add(rhythmTextStyle(rhythmList[listIndex]));
+        list.add(insertionContainer(context, "double"));
       } else {
         if (separationList[listIndex] != separationList[listIndex - 1]) {
           separationText.add(
@@ -188,10 +191,16 @@ class _DetailEditPageState extends State<DetailEditPage> {
 
         if (rhythmList[listIndex] != rhythmList[listIndex - 1]) {
           list.add(rhythmTextStyle(rhythmList[listIndex]));
+          list.add(insertionContainer(context, "double"));
         } else {
           list.add(const Padding(
             padding: const EdgeInsets.only(left: 16.0),
           ));
+
+          if (separationList[listIndex] != separationList[listIndex - 1]) {
+            list.add(insertionContainer(context, "double"));
+          } else
+            list.add(insertionContainer(context));
         }
       }
 
@@ -247,6 +256,13 @@ class _DetailEditPageState extends State<DetailEditPage> {
                 .scrollToTappedForm(listIndex: listIndex, mode: "code");
           },
           textAlign: TextAlign.center,
+          style: TextStyle(
+              letterSpacing: -1,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              fontFeatures: [
+                FontFeature.enable('subs'),
+              ]),
           controller: Provider.of<EditingSongModel>(context, listen: false)
               .codeControllerList[listIndex][i],
           onChanged: (text) {
@@ -254,7 +270,17 @@ class _DetailEditPageState extends State<DetailEditPage> {
                 .editCodeList(text, listIndex, i);
           },
         )));
-        list.add(const Text("|"));
+
+        if (listIndex ==
+                Provider.of<EditingSongModel>(context, listen: false)
+                        .codeList
+                        .length -
+                    1 &&
+            i == strings.length - 1) {
+          list.add(insertionContainer(context, "last"));
+        } else {
+          list.add(insertionContainer(context));
+        }
       }
       list.add(IconButton(
           icon: const Icon(Icons.more_vert),

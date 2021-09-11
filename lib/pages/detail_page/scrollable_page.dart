@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
@@ -210,7 +212,7 @@ class _ScrollPageState extends State<ScrollablePage> {
           final int maxColumnBeatCount =
               addedColumnBeatCount + eachBeatCount(listIndex);
 
-          list.add(Flexible(
+          list.add(Expanded(
             child: Selector<MetronomeModel, int>(
               selector: (context, model) => model.metronomeContainerStatus,
 
@@ -228,6 +230,7 @@ class _ScrollPageState extends State<ScrollablePage> {
               builder: (context, containerStatus, child) => Padding(
                 padding: const EdgeInsets.only(right: 3),
                 child: Container(
+                    height: 32,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: (!Provider.of<MetronomeModel>(context,
@@ -250,14 +253,21 @@ class _ScrollPageState extends State<ScrollablePage> {
                     ),
                     child: child),
               ),
-              child: TextFormField(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  codeListState[listIndex][i],
                   key: i == 0 ? _globalTextFormList[listIndex] : null,
-                  enabled: false,
                   textAlign: TextAlign.center,
-                  initialValue: codeListState[listIndex][i],
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                  )),
+                  style: TextStyle(
+                      letterSpacing: -1,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFeatures: [
+                        FontFeature.enable('subs'),
+                      ]),
+                ),
+              ),
             ),
           ));
 
@@ -324,7 +334,7 @@ class _ScrollPageState extends State<ScrollablePage> {
                   child: SingleChildScrollView(
                       controller: _scrollController,
                       child: ListView(
-                        padding: const EdgeInsets.all(36.0),
+                        padding: const EdgeInsets.all(20.0),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         children: displayedWidget(),
