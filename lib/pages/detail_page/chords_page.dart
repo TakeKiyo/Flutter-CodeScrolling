@@ -312,70 +312,72 @@ class _ChordsPageState extends State<ChordsPage> {
       ));
     } else {
       return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-              child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Scrollbar(
-                  controller: _scrollController,
-                  isAlwaysShown: false,
-                  thickness: 8.0,
-                  hoverThickness: 12.0,
-                  child: SingleChildScrollView(
-                      controller: _scrollController,
-                      child: ListView(
-                        padding: const EdgeInsets.all(20.0),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: displayedWidget(),
-                      ))),
-              Positioned(
-                bottom: 5,
-                child: Selector<MetronomeModel, bool>(
-                    selector: (context, model) =>
-                        model.hasScrolledDuringPlaying,
-                    shouldRebuild: (exScrollStatus, notifiedScrollStatus) =>
-                        exScrollStatus != notifiedScrollStatus,
-                    builder: (context, hasScrolledDuringPlaying, child) =>
-                        Visibility(
-                          visible: hasScrolledDuringPlaying &&
-                              Provider.of<MetronomeModel>(context,
-                                      listen: false)
-                                  .isPlaying,
-                          child: Container(
-                              width: 200,
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.9),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20))),
-                              child: TextButton(
-                                child: const Text("スクロールを\n再開する",
-                                    style: const TextStyle(
-                                        fontSize: 16, color: Colors.white)),
-                                style: ButtonStyle(
-                                    shape: MaterialStateProperty.all(
-                                        (RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                )))),
-                                onPressed: () {
-                                  Provider.of<MetronomeModel>(context,
-                                          listen: false)
-                                      .enableScroll();
-                                  Provider.of<MetronomeModel>(context,
-                                          listen: false)
-                                      .scrollToNowPlaying();
-                                },
-                              )),
-                        )),
-              )
-            ],
-          )),
-          onTapDown: (_) {
-            if (Provider.of<MetronomeModel>(context, listen: false).isPlaying)
-              Provider.of<MetronomeModel>(context, listen: false)
-                  .unableScroll();
-          });
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+            child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Scrollbar(
+                controller: _scrollController,
+                isAlwaysShown: false,
+                thickness: 8.0,
+                hoverThickness: 12.0,
+                child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: ListView(
+                      padding: const EdgeInsets.all(20.0),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: displayedWidget(),
+                    ))),
+            Positioned(
+              bottom: 5,
+              child: Selector<MetronomeModel, bool>(
+                  selector: (context, model) => model.hasScrolledDuringPlaying,
+                  shouldRebuild: (exScrollStatus, notifiedScrollStatus) =>
+                      exScrollStatus != notifiedScrollStatus,
+                  builder: (context, hasScrolledDuringPlaying, child) =>
+                      Visibility(
+                        visible: hasScrolledDuringPlaying &&
+                            Provider.of<MetronomeModel>(context, listen: false)
+                                .isPlaying,
+                        child: Container(
+                            width: 200,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.9),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20))),
+                            child: TextButton(
+                              child: const Text("スクロールを\n再開する",
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white)),
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                      (RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              )))),
+                              onPressed: () {
+                                Provider.of<MetronomeModel>(context,
+                                        listen: false)
+                                    .enableScroll();
+                                Provider.of<MetronomeModel>(context,
+                                        listen: false)
+                                    .scrollToNowPlaying();
+                              },
+                            )),
+                      )),
+            )
+          ],
+        )),
+        onTapDown: (_) {
+          if (Provider.of<MetronomeModel>(context, listen: false).isPlaying)
+            Provider.of<MetronomeModel>(context, listen: false).unableScroll();
+        },
+        onPanDown: (_) {
+          if (Provider.of<MetronomeModel>(context, listen: false).isPlaying)
+            Provider.of<MetronomeModel>(context, listen: false).unableScroll();
+        },
+      );
     }
   }
 }
