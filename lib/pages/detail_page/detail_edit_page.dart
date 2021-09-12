@@ -7,9 +7,9 @@ import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
+import './chords_page.dart';
 import './style/display_text_style.dart';
 import '../custom_keyboard.dart';
-import 'detail_page.dart';
 
 class DetailEditPage extends StatefulWidget {
   final int bpm;
@@ -24,27 +24,27 @@ class DetailEditPage extends StatefulWidget {
 class _DetailEditPageState extends State<DetailEditPage> {
   ScrollController _scrollController;
   List<GlobalKey> _globalLyricFormList = [];
-  List<GlobalKey> _globalCodeFormList = [];
+  List<GlobalKey> _globalChordFormList = [];
 
   //should be called before re-build
   void _setTextFieldComponents() {
     //initialize
     _globalLyricFormList = [];
-    _globalCodeFormList = [];
+    _globalChordFormList = [];
     Provider.of<EditingSongModel>(context, listen: false).lyricControllerList =
         null;
-    Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
+    Provider.of<EditingSongModel>(context, listen: false).chordControllerList =
         null;
 
     //add GlobalKey
     for (int listIndex = 0;
         listIndex <
             Provider.of<EditingSongModel>(context, listen: false)
-                .codeList
+                .chordList
                 .length;
         listIndex++) {
       _globalLyricFormList.add(GlobalKey<FormState>());
-      _globalCodeFormList.add(GlobalKey<FormState>());
+      _globalChordFormList.add(GlobalKey<FormState>());
 
       //add TextController
       Provider.of<EditingSongModel>(context, listen: false)
@@ -53,14 +53,14 @@ class _DetailEditPageState extends State<DetailEditPage> {
               text: Provider.of<EditingSongModel>(context, listen: false)
                   .lyricsList[listIndex]);
 
-      Provider.of<EditingSongModel>(context, listen: false).codeControllerList =
+      Provider.of<EditingSongModel>(context, listen: false).chordControllerList =
           List.generate(
               Provider.of<EditingSongModel>(context, listen: false)
-                  .codeList[listIndex]
+                  .chordList[listIndex]
                   .length,
               (idx) => TextEditingController(
                   text: Provider.of<EditingSongModel>(context, listen: false)
-                      .codeList[listIndex][idx]));
+                      .chordList[listIndex][idx]));
     }
   }
 
@@ -70,39 +70,39 @@ class _DetailEditPageState extends State<DetailEditPage> {
     return box.localToGlobal(Offset.zero).dy;
   }
 
-  double _getCodeLocale(int listIndex) {
+  double _getChordLocale(int listIndex) {
     RenderBox box =
-        _globalCodeFormList[listIndex].currentContext.findRenderObject();
+        _globalChordFormList[listIndex].currentContext.findRenderObject();
     return box.localToGlobal(Offset.zero).dy;
   }
 
   //should be called after re-build
   void _setEachOffsetList() {
-    Provider.of<EditingSongModel>(context, listen: false).codeFormOffsetList =
+    Provider.of<EditingSongModel>(context, listen: false).chordFormOffsetList =
         -1;
     Provider.of<EditingSongModel>(context, listen: false).lyricFormOffsetList =
         -1;
 
     switch (Provider.of<EditingSongModel>(context, listen: false).displayType) {
-      case "code":
+      case "chord":
         for (int listIndex = 0;
             listIndex <
                 Provider.of<EditingSongModel>(context, listen: false)
-                    .codeList
+                    .chordList
                     .length;
             listIndex++)
           Provider.of<EditingSongModel>(context, listen: false)
-              .codeFormOffsetList = _getCodeLocale(listIndex);
+              .chordFormOffsetList = _getChordLocale(listIndex);
         break;
       case "both":
         for (int listIndex = 0;
             listIndex <
                 Provider.of<EditingSongModel>(context, listen: false)
-                    .codeList
+                    .chordList
                     .length;
             listIndex++) {
           Provider.of<EditingSongModel>(context, listen: false)
-              .codeFormOffsetList = _getCodeLocale(listIndex);
+              .chordFormOffsetList = _getChordLocale(listIndex);
           Provider.of<EditingSongModel>(context, listen: false)
               .lyricFormOffsetList = _getLyricLocale(listIndex);
         }
@@ -111,7 +111,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
         for (int listIndex = 0;
             listIndex <
                 Provider.of<EditingSongModel>(context, listen: false)
-                    .codeList
+                    .chordList
                     .length;
             listIndex++)
           Provider.of<EditingSongModel>(context, listen: false)
@@ -136,20 +136,20 @@ class _DetailEditPageState extends State<DetailEditPage> {
     super.dispose();
   }
 
-  List<String> formatCodeList(List<List<String>> codeList) {
-    List<String> formattedCodeList = [];
-    for (int i = 0; i < codeList.length; i++) {
-      List<String> oneLineCodeList = codeList[i];
+  List<String> formatChordList(List<List<String>> chordList) {
+    List<String> formattedChordList = [];
+    for (int i = 0; i < chordList.length; i++) {
+      List<String> oneLineChordList = chordList[i];
       String tmp = "";
-      for (int j = 0; j < oneLineCodeList.length; j++) {
-        tmp += oneLineCodeList[j];
-        if (j != oneLineCodeList.length - 1) {
+      for (int j = 0; j < oneLineChordList.length; j++) {
+        tmp += oneLineChordList[j];
+        if (j != oneLineChordList.length - 1) {
           tmp += ",";
         }
       }
-      formattedCodeList.add(tmp);
+      formattedChordList.add(tmp);
     }
-    return formattedCodeList;
+    return formattedChordList;
   }
 
   @override
@@ -171,7 +171,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
       });
     }
 
-    Widget getCodeListWidgets(context, List<String> strings, int listIndex,
+    Widget getChordListWidgets(context, List<String> strings, int listIndex,
         List<String> separationList, List<String> rhythmList) {
       List<Widget> separationText = [];
       List<Widget> lyrics = [];
@@ -235,7 +235,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
       for (var i = 0; i < strings.length; i++) {
         list.add(Flexible(
             child: TextField(
-          key: i == 0 ? _globalCodeFormList[listIndex] : null,
+          key: i == 0 ? _globalChordFormList[listIndex] : null,
           showCursor: true,
           readOnly: true,
           onTap: () {
@@ -253,7 +253,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
             Provider.of<EditingSongModel>(context, listen: false)
                 .changeTextController(listIndex, i);
             Provider.of<EditingSongModel>(context, listen: false)
-                .scrollToTappedForm(listIndex: listIndex, mode: "code");
+                .scrollToTappedForm(listIndex: listIndex, mode: "chord");
           },
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -264,16 +264,16 @@ class _DetailEditPageState extends State<DetailEditPage> {
                 FontFeature.enable('subs'),
               ]),
           controller: Provider.of<EditingSongModel>(context, listen: false)
-              .codeControllerList[listIndex][i],
+              .chordControllerList[listIndex][i],
           onChanged: (text) {
             Provider.of<EditingSongModel>(context, listen: false)
-                .editCodeList(text, listIndex, i);
+                .editChordList(text, listIndex, i);
           },
         )));
 
         if (listIndex ==
                 Provider.of<EditingSongModel>(context, listen: false)
-                        .codeList
+                        .chordList
                         .length -
                     1 &&
             i == strings.length - 1) {
@@ -343,7 +343,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
         ]);
       } else if (Provider.of<EditingSongModel>(context, listen: false)
               .displayType ==
-          "code") {
+          "chord") {
         return Column(children: <Widget>[
           Row(children: separationText),
           Row(children: list)
@@ -356,11 +356,11 @@ class _DetailEditPageState extends State<DetailEditPage> {
       }
     }
 
-    void submitCodeList(String docId) {
+    void submitChordList(String docId) {
       String uid = Provider.of<AuthModel>(context, listen: false).user.uid;
       FirebaseFirestore.instance.collection("Songs").doc(docId).update({
-        "codeList": formatCodeList(
-            Provider.of<EditingSongModel>(context, listen: false).codeList),
+        "codeList": formatChordList(
+            Provider.of<EditingSongModel>(context, listen: false).chordList),
         "separation": Provider.of<EditingSongModel>(context, listen: false)
             .separationList,
         "rhythmList":
@@ -373,7 +373,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
       });
       Navigator.of(context).pop(
         MaterialPageRoute(builder: (context) {
-          return DetailPage();
+          return ChordsPage();
         }),
       );
     }
@@ -412,19 +412,19 @@ class _DetailEditPageState extends State<DetailEditPage> {
                   onPressed: () => {
                     Navigator.pop(context),
                     Provider.of<EditingSongModel>(context, listen: false)
-                        .setDisplayType("code")
+                        .setDisplayType("chord")
                   },
                   child: CheckboxListTile(
                     title: const Text("コードのみ"),
                     value: Provider.of<EditingSongModel>(context, listen: false)
                             .displayType ==
-                        "code",
+                        "chord",
                     controlAffinity: ListTileControlAffinity
                         .leading, //  <-- leading Checkbox
                     onChanged: (e) => {
                       Navigator.pop(context),
                       Provider.of<EditingSongModel>(context, listen: false)
-                          .setDisplayType("code"),
+                          .setDisplayType("chord"),
                       WidgetsBinding.instance
                           .addPostFrameCallback((cb) => _setEachOffsetList()),
                     },
@@ -501,7 +501,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                     .closeKeyboard();
                 Navigator.of(context).pop();
               }
-              submitCodeList(widget.docId);
+              submitChordList(widget.docId);
             },
           ),
         ],
@@ -540,11 +540,11 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   for (int idx = 0;
-                                      idx < model.codeList.length;
+                                      idx < model.chordList.length;
                                       idx++)
-                                    getCodeListWidgets(
+                                    getChordListWidgets(
                                         context,
-                                        model.codeList[idx],
+                                        model.chordList[idx],
                                         idx,
                                         model.separationList,
                                         model.rhythmList),

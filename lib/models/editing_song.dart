@@ -8,8 +8,8 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<List<String>> _codeList = [];
-  get codeList => _codeList;
+  List<List<String>> _chordList = [];
+  get chordList => _chordList;
 
   int _selectedBeatCount = 4;
   get selectedBeatCount => _selectedBeatCount;
@@ -21,7 +21,7 @@ class EditingSongModel extends ChangeNotifier {
 
   void addEmptyList() {
     var emptyList = List.filled(_selectedBeatCount, "");
-    _codeList.add(emptyList);
+    _chordList.add(emptyList);
     _separationList.add(_selectedSeparation);
     _rhythmList.add(_selectedRhythm);
     _lyricsList.add("");
@@ -30,10 +30,10 @@ class EditingSongModel extends ChangeNotifier {
 
   void duplicateList(int listIndex) {
     List<String> duplicatedList = [];
-    for (int i = 0; i < _codeList[listIndex].length; i++) {
-      duplicatedList.add(_codeList[listIndex][i]);
+    for (int i = 0; i < _chordList[listIndex].length; i++) {
+      duplicatedList.add(_chordList[listIndex][i]);
     }
-    _codeList.add(duplicatedList);
+    _chordList.add(duplicatedList);
     String duplicatedSeparation = _separationList[listIndex];
     _separationList.add(duplicatedSeparation);
     String duplicatedRhythm = _rhythmList[listIndex];
@@ -100,28 +100,28 @@ class EditingSongModel extends ChangeNotifier {
   }
 
   // 曲の詳細画面から、編集画面に遷移するときに呼ばれる
-  set codeList(List<String> fetchedCodeList) {
-    _codeList = [];
-    for (int i = 0; i < fetchedCodeList.length; i++) {
-      List<String> oneLineCode = fetchedCodeList[i].split(",");
+  set chordList(List<String> fetchedChordList) {
+    _chordList = [];
+    for (int i = 0; i < fetchedChordList.length; i++) {
+      List<String> oneLineChord = fetchedChordList[i].split(",");
       List<String> tmp = [];
-      for (int j = 0; j < oneLineCode.length; j++) {
-        tmp.add(oneLineCode[j]);
+      for (int j = 0; j < oneLineChord.length; j++) {
+        tmp.add(oneLineChord[j]);
       }
-      _codeList.add(tmp);
+      _chordList.add(tmp);
     }
   }
 
   void deleteOneLine(int listIndex) {
-    _codeList.removeAt(listIndex);
+    _chordList.removeAt(listIndex);
     _separationList.removeAt(listIndex);
     _rhythmList.removeAt((listIndex));
     _lyricsList.removeAt(listIndex);
     notifyListeners();
   }
 
-  void editCodeList(String code, int barIdx, int timeIdx) {
-    _codeList[barIdx][timeIdx] = code;
+  void editChordList(String chord, int barIdx, int timeIdx) {
+    _chordList[barIdx][timeIdx] = chord;
   }
 
   int _scrollSpeed = 30000;
@@ -134,20 +134,20 @@ class EditingSongModel extends ChangeNotifier {
   ///detailEditPageビルド時に代入
   ScrollController editScrollController;
 
-  List<double> _codeFormOffsetList = [];
+  List<double> _chordFormOffsetList = [];
   List<double> _lyricFormOffsetList = [];
-  get codeFormOffsetList => _codeFormOffsetList;
+  get chordFormOffsetList => _chordFormOffsetList;
   get lyricFormOffsetList => _lyricFormOffsetList;
 
   double deviceHeight = 0;
 
-  set codeFormOffsetList(double yOffset) {
+  set chordFormOffsetList(double yOffset) {
     double tmp = yOffset;
     if (yOffset == -1) {
       //scrollablePage呼び出し時に初期化
-      _codeFormOffsetList = [];
+      _chordFormOffsetList = [];
     } else {
-      _codeFormOffsetList.add(tmp + editScrollController.offset);
+      _chordFormOffsetList.add(tmp + editScrollController.offset);
     }
   }
 
@@ -164,10 +164,10 @@ class EditingSongModel extends ChangeNotifier {
   void scrollToTappedForm({int listIndex, String mode}) {
     if (editScrollController.hasClients) {
       switch (mode) {
-        case "code":
+        case "chord":
           editScrollController.animateTo(
-            (_codeFormOffsetList[listIndex] > deviceHeight / 2)
-                ? _codeFormOffsetList[listIndex] - (deviceHeight / 2)
+            (_chordFormOffsetList[listIndex] > deviceHeight / 2)
+                ? _chordFormOffsetList[listIndex] - (deviceHeight / 2)
                 : 0,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeOut,
@@ -214,13 +214,13 @@ class EditingSongModel extends ChangeNotifier {
     }
   }
 
-  List<List<TextEditingController>> _codeControllerList = [];
-  get codeControllerList => _codeControllerList;
-  set codeControllerList(List<TextEditingController> controllerList) {
+  List<List<TextEditingController>> _chordControllerList = [];
+  get chordControllerList => _chordControllerList;
+  set chordControllerList(List<TextEditingController> controllerList) {
     if (controllerList == null) {
-      _codeControllerList = [];
+      _chordControllerList = [];
     } else {
-      _codeControllerList.add(controllerList);
+      _chordControllerList.add(controllerList);
     }
   }
 
@@ -266,15 +266,15 @@ class EditingSongModel extends ChangeNotifier {
   void changeTextController(int listIndex, int idx) {
     _controlBarIdx = listIndex;
     _controlTimeIdx = idx;
-    _currentController = _codeControllerList[listIndex][idx];
+    _currentController = _chordControllerList[listIndex][idx];
     notifyListeners();
   }
 
   void changeSelectionToLeft() {
     final textSelection =
-        _codeControllerList[_controlBarIdx][_controlTimeIdx].selection;
+        _chordControllerList[_controlBarIdx][_controlTimeIdx].selection;
     if (textSelection.start > 0) {
-      _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+      _chordControllerList[_controlBarIdx][_controlTimeIdx].selection =
           TextSelection(
               baseOffset: textSelection.start - 1,
               extentOffset: textSelection.start - 1);
@@ -282,11 +282,11 @@ class EditingSongModel extends ChangeNotifier {
   }
 
   void changeSelectionToRight() {
-    final text = _codeControllerList[_controlBarIdx][_controlTimeIdx].text;
+    final text = _chordControllerList[_controlBarIdx][_controlTimeIdx].text;
     final textSelection =
-        _codeControllerList[_controlBarIdx][_controlTimeIdx].selection;
+        _chordControllerList[_controlBarIdx][_controlTimeIdx].selection;
     if (text.length > textSelection.end) {
-      _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+      _chordControllerList[_controlBarIdx][_controlTimeIdx].selection =
           TextSelection(
               baseOffset: textSelection.end + 1,
               extentOffset: textSelection.end + 1);
@@ -294,29 +294,29 @@ class EditingSongModel extends ChangeNotifier {
   }
 
   void insertText(String myText) {
-    final text = _codeControllerList[_controlBarIdx][_controlTimeIdx].text;
+    final text = _chordControllerList[_controlBarIdx][_controlTimeIdx].text;
     final textSelection =
-        _codeControllerList[_controlBarIdx][_controlTimeIdx].selection;
+        _chordControllerList[_controlBarIdx][_controlTimeIdx].selection;
     final newText = text.replaceRange(
       textSelection.start,
       textSelection.end,
       myText,
     );
     final myTextLength = myText.length;
-    _codeControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
-    _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+    _chordControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
+    _chordControllerList[_controlBarIdx][_controlTimeIdx].selection =
         textSelection.copyWith(
       baseOffset: textSelection.start + myTextLength,
       extentOffset: textSelection.start + myTextLength,
     );
-    editCodeList(newText, _controlBarIdx, _controlTimeIdx);
+    editChordList(newText, _controlBarIdx, _controlTimeIdx);
     notifyListeners();
   }
 
   void backspace() {
-    final text = _codeControllerList[_controlBarIdx][_controlTimeIdx].text;
+    final text = _chordControllerList[_controlBarIdx][_controlTimeIdx].text;
     final textSelection =
-        _codeControllerList[_controlBarIdx][_controlTimeIdx].selection;
+        _chordControllerList[_controlBarIdx][_controlTimeIdx].selection;
     final selectionLength = textSelection.end - textSelection.start;
 
     // There is a selection.
@@ -326,13 +326,13 @@ class EditingSongModel extends ChangeNotifier {
         textSelection.end,
         '',
       );
-      _codeControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
-      _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+      _chordControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
+      _chordControllerList[_controlBarIdx][_controlTimeIdx].selection =
           textSelection.copyWith(
         baseOffset: textSelection.start,
         extentOffset: textSelection.start,
       );
-      editCodeList(newText, _controlBarIdx, _controlTimeIdx);
+      editChordList(newText, _controlBarIdx, _controlTimeIdx);
       notifyListeners();
     }
 
@@ -351,13 +351,13 @@ class EditingSongModel extends ChangeNotifier {
       newEnd,
       '',
     );
-    _codeControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
-    _codeControllerList[_controlBarIdx][_controlTimeIdx].selection =
+    _chordControllerList[_controlBarIdx][_controlTimeIdx].text = newText;
+    _chordControllerList[_controlBarIdx][_controlTimeIdx].selection =
         textSelection.copyWith(
       baseOffset: newStart,
       extentOffset: newStart,
     );
-    editCodeList(newText, _controlBarIdx, _controlTimeIdx);
+    editChordList(newText, _controlBarIdx, _controlTimeIdx);
     notifyListeners();
   }
 
