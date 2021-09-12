@@ -31,78 +31,79 @@ class _TabViewState extends State<TabView> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Provider.of<MetronomeModel>(context, listen: false).forceStop();
-              }),
-          title: Text(widget.title),
-          bottom: TabBar(
-            labelColor: Theme.of(context).textTheme.headline6.color,
-            indicatorColor: Theme.of(context).primaryColor,
-            tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
-          ),
-          actions: <Widget>[
-            IconButton(
-                icon: const Icon(Icons.share),
-                onPressed: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return ExportSong(docId: widget.docId);
+      child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('Songs')
+              .doc(widget.docId)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: Text("Loading"));
+            }
+            var songDocument = snapshot.data;
+            var chordList = songDocument["codeList"].cast<String>();
+            // separationがあるか判定
+            Map<String, dynamic> dataMap =
+                songDocument.data() as Map<String, dynamic>;
+            List<String> separationList;
+            List<String> rhythmList;
+            List<String> lyricsList;
+            if (dataMap.containsKey('separation')) {
+              separationList = songDocument["separation"].cast<String>();
+            } else {
+              separationList = [];
+            }
+            if (dataMap.containsKey('rhythmList')) {
+              rhythmList = songDocument["rhythmList"].cast<String>();
+            } else {
+              rhythmList = [];
+            }
+            if (dataMap.containsKey("lyricsList")) {
+              lyricsList = songDocument["lyricsList"].cast<String>();
+            } else {
+              lyricsList = [];
+            }
+            return Scaffold(
+              key: _scaffoldKey,
+              appBar: AppBar(
+                centerTitle: true,
+                leading: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Provider.of<MetronomeModel>(context, listen: false)
+                          .forceStop();
                     }),
-                  );
-                }),
-            IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {
-                  _scaffoldKey.currentState.openEndDrawer();
-                }),
-          ],
-        ),
-        body: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('Songs')
-                .doc(widget.docId)
-                .snapshots(),
-            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: Text("Loading"));
-              }
-              var songDocument = snapshot.data;
-              var chordList = songDocument["codeList"].cast<String>();
-              // separationがあるか判定
-              Map<String, dynamic> dataMap =
-                  songDocument.data() as Map<String, dynamic>;
-              List<String> separation;
-              List<String> rhythmList;
-              List<String> lyricsList;
-              if (dataMap.containsKey('separation')) {
-                separation = songDocument["separation"].cast<String>();
-              } else {
-                separation = [];
-              }
-              if (dataMap.containsKey('rhythmList')) {
-                rhythmList = songDocument["rhythmList"].cast<String>();
-              } else {
-                rhythmList = [];
-              }
-              if (dataMap.containsKey("lyricsList")) {
-                lyricsList = songDocument["lyricsList"].cast<String>();
-              } else {
-                lyricsList = [];
-              }
-              return TabBarView(children: [
+                title: Text(widget.title),
+                bottom: TabBar(
+                  labelColor: Theme.of(context).textTheme.headline6.color,
+                  indicatorColor: Theme.of(context).primaryColor,
+                  tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
+                ),
+                actions: <Widget>[
+                  IconButton(
+                      icon: const Icon(Icons.share),
+                      onPressed: () async {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) {
+                            return ExportSong(docId: widget.docId);
+                          }),
+                        );
+                      }),
+                  IconButton(
+                      icon: const Icon(Icons.settings),
+                      onPressed: () {
+                        _scaffoldKey.currentState.openEndDrawer();
+                      }),
+                ],
+              ),
+              body: TabBarView(children: [
                 ChordsPage(
                     chordList: chordList,
                     bpm: widget.bpm,
                     title: widget.title,
                     docId: widget.docId,
-                    separationList: separation,
+                    separationList: separationList,
                     rhythmList: rhythmList,
                     lyricsList: lyricsList),
                 LyricsPage(
@@ -110,15 +111,17 @@ class _TabViewState extends State<TabView> {
                     bpm: widget.bpm,
                     title: widget.title,
                     docId: widget.docId,
-                    separationList: separation,
+                    separationList: separationList,
                     rhythmList: rhythmList,
                     lyricsList: lyricsList),
-              ]);
-            }),
-        bottomNavigationBar: detailBottomBar(context),
-        endDrawer: settingsDrawer(context, widget.bpm, widget.title,
-            widget.artist, widget.songKey, widget.docId),
-      ),
+              ]),
+              bottomNavigationBar: Visibility(
+                  visible: chordList.length != 0,
+                  child: detailBottomBar(context)),
+              endDrawer: settingsDrawer(context, widget.bpm, widget.title,
+                  widget.artist, widget.songKey, widget.docId),
+            );
+          }),
     );
   }
 }

@@ -114,20 +114,7 @@ class _ChordsPageState extends State<ChordsPage> {
             );
           },
           child: const Text("コードを編集する")));
-      bool noChord = true;
-      if (chordListState.length > 0) {
-        noChord = false;
-      }
 
-      if (noChord) {
-        displayedList.add(Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-              const Text('コードは追加されていません。'),
-            ])));
-        return displayedList;
-      }
       displayedList.add(Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -306,20 +293,18 @@ class _ChordsPageState extends State<ChordsPage> {
                     .separationList = [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .lyricsList = widget.lyricsList;
-                Navigator.of(context)
-                    .push(
-                      MaterialPageRoute(
-                        fullscreenDialog: true,
-                        builder: (context) {
-                          return DetailEditPage(
-                            bpm: widget.bpm,
-                            title: widget.title,
-                            docId: widget.docId,
-                          );
-                        },
-                      ),
-                    )
-                    .then((_) => print("back!"));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    fullscreenDialog: true,
+                    builder: (context) {
+                      return DetailEditPage(
+                        bpm: widget.bpm,
+                        title: widget.title,
+                        docId: widget.docId,
+                      );
+                    },
+                  ),
+                );
               },
               child: const Text("コードを編集する")),
           const Text("まだコードは追加されていません")
