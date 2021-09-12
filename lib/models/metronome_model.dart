@@ -312,7 +312,6 @@ class MetronomeModel extends ChangeNotifier {
     }
   }
 
-  /// codeNumList : 一列あたりの小節数を受けてmetronomeContainerStatusの列ごとの最大数をリスト化
   void setMaxTickList(int fetchedBarNum, [int listIndex]) {
     if (fetchedBarNum == -1) {
       //scrollablePage呼び出し時に初期化

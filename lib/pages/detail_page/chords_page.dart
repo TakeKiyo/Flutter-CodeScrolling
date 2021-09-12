@@ -69,14 +69,14 @@ class _ChordsPageState extends State<ChordsPage> {
     Provider.of<MetronomeModel>(context, listen: false).deviceHeight =
         MediaQuery.of(context).size.height;
 
-    List<List<String>> codeListState = [];
+    List<List<String>> chordListState = [];
     for (int i = 0; i < widget.chordList.length; i++) {
-      List<String> oneLineCode = widget.chordList[i].split(",");
+      List<String> oneLineChord = widget.chordList[i].split(",");
       List<String> tmp = [];
-      for (int j = 0; j < oneLineCode.length; j++) {
-        tmp.add(oneLineCode[j]);
+      for (int j = 0; j < oneLineChord.length; j++) {
+        tmp.add(oneLineChord[j]);
       }
-      codeListState.add(tmp);
+      chordListState.add(tmp);
     }
 
     List<Widget> displayedWidget() {
@@ -98,7 +98,7 @@ class _ChordsPageState extends State<ChordsPage> {
                   .setDisplayType("both");
             } else {
               Provider.of<EditingSongModel>(context, listen: false)
-                  .setDisplayType("code");
+                  .setDisplayType("chord");
             }
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -114,12 +114,12 @@ class _ChordsPageState extends State<ChordsPage> {
             );
           },
           child: const Text("コードを編集する")));
-      bool noCode = true;
-      if (codeListState.length > 0) {
-        noCode = false;
+      bool noChord = true;
+      if (chordListState.length > 0) {
+        noChord = false;
       }
 
-      if (noCode) {
+      if (noChord) {
         displayedList.add(Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +139,7 @@ class _ChordsPageState extends State<ChordsPage> {
         ],
       ));
 
-      for (int listIndex = 0; listIndex < codeListState.length; listIndex++) {
+      for (int listIndex = 0; listIndex < chordListState.length; listIndex++) {
         final List<Widget> list = [];
         if (widget.separationList.length != 0) {
           if (listIndex == 0) {
@@ -180,14 +180,14 @@ class _ChordsPageState extends State<ChordsPage> {
           }
         }
 
-        if (_globalTextFormList.length < codeListState.length) {
+        if (_globalTextFormList.length < chordListState.length) {
           if (listIndex == 0)
             Provider.of<MetronomeModel>(context, listen: false)
                 .ticksPerRowList = widget.rhythmList;
 
           _globalTextFormList.add(GlobalKey<FormState>());
           Provider.of<MetronomeModel>(context, listen: false)
-              .setMaxTickList(codeListState[listIndex].length, listIndex);
+              .setMaxTickList(chordListState[listIndex].length, listIndex);
 
           ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -201,14 +201,14 @@ class _ChordsPageState extends State<ChordsPage> {
               .ticksPerRowList[index];
         }
 
-        for (var i = 0; i < codeListState[listIndex].length; i++) {
+        for (var i = 0; i < chordListState[listIndex].length; i++) {
           int addedRowBeatCount = 0;
           for (var j = 0; j < listIndex; j++) {
-            addedRowBeatCount += eachBeatCount(j) * codeListState[j].length;
+            addedRowBeatCount += eachBeatCount(j) * chordListState[j].length;
           }
 
           final int maxRowBeatCount = addedRowBeatCount +
-              eachBeatCount(listIndex) * codeListState[listIndex].length;
+              eachBeatCount(listIndex) * chordListState[listIndex].length;
 
           int addedColumnBeatCount = 0;
           for (var j = 0; j < i; j++) {
@@ -262,7 +262,7 @@ class _ChordsPageState extends State<ChordsPage> {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  codeListState[listIndex][i],
+                  chordListState[listIndex][i],
                   key: i == 0 ? _globalTextFormList[listIndex] : null,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -277,8 +277,8 @@ class _ChordsPageState extends State<ChordsPage> {
             ),
           ));
 
-          if (listIndex == codeListState.length - 1 &&
-              i == codeListState[listIndex].length - 1) {
+          if (listIndex == chordListState.length - 1 &&
+              i == chordListState[listIndex].length - 1) {
             list.add(insertionContainer(context, "last"));
           } else
             list.add(insertionContainer(context));
