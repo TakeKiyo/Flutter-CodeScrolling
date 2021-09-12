@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quiver/async.dart';
 
-void audioPlayerHandler(AudioPlayerState value) => null;
+import './metronomeAudio_play.dart';
 
 class MetronomeModel extends ChangeNotifier {
   bool _isPlaying = false;
@@ -124,12 +123,6 @@ class MetronomeModel extends ChangeNotifier {
     _bpmTapText = "TAPで計測開始";
   }
 
-  AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY)
-    ..setReleaseMode(ReleaseMode.STOP);
-  AudioCache _metronomePlayer = AudioCache(
-      fixedPlayer: AudioPlayer(mode: PlayerMode.LOW_LATENCY)
-        ..setReleaseMode(ReleaseMode.STOP));
-
   String _metronomeSound = "sounds/Metronome.mp3";
   get metronomeSound => _metronomeSound;
   set metronomeSound(int selectedIndex) {
@@ -179,7 +172,7 @@ class MetronomeModel extends ChangeNotifier {
     metronomeClear();
     _isPlaying = false;
     _metronomeContainerStatus = -1;
-    _metronomePlayer?.clearCache();
+    MetronomeAudioPlay.clearCache();
     _hasScrolledDuringPlaying = false;
     _scrollOffset = 0.0;
     scrollToNowPlaying();
@@ -187,10 +180,10 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   Future<void> metronomeLoad() async {
-    await _metronomePlayer.loadAll(_metronomeSoundsList);
     if (scrollController.hasClients) {
       scrollController.jumpTo(scrollController.initialScrollOffset);
     }
+    await MetronomeAudioPlay.loadAll(_metronomeSoundsList);
     _isCountInPlaying = true;
     notifyListeners();
     metronomeStart();
@@ -227,14 +220,8 @@ class MetronomeModel extends ChangeNotifier {
   }
 
   void metronomeRingSound() {
-    _metronomePlayer.play(_metronomeSound,
-        volume: _soundVolume,
-        mode: PlayerMode.LOW_LATENCY,
-        stayAwake: true,
-        isNotification: true);
-
-    ///下記のコードが無いとiOSでのみエラーを吐く。
-    _audioPlayer.monitorNotificationStateChanges(audioPlayerHandler);
+    ///MetronomeAudioPlay.play(_metronomeSound, _soundVolume); <= not for now
+    SystemSound.play(SystemSoundType.click);
 
     changeMetronomeCountStatus();
     changeMetronomeContainerColor();
@@ -268,7 +255,7 @@ class MetronomeModel extends ChangeNotifier {
     } else {
       _soundVolume = 1;
     }
-    _audioPlayer.setVolume(_soundVolume);
+    MetronomeAudioPlay.setVolume(_soundVolume);
     notifyListeners();
   }
 
