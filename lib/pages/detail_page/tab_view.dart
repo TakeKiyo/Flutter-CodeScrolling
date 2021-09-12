@@ -4,9 +4,9 @@ import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import '../export_song.dart';
+import 'codes_page.dart';
 import 'detail_bottom_bar.dart';
 import 'lyrics_page.dart';
-import 'scrollable_page.dart';
 import 'settings_drawer.dart';
 
 class TabView extends StatefulWidget {
@@ -97,7 +97,7 @@ class _TabViewState extends State<TabView> {
                 lyricsList = [];
               }
               return TabBarView(children: [
-                ScrollablePage(
+                CodesPage(
                     codeList: codeList,
                     bpm: widget.bpm,
                     title: widget.title,

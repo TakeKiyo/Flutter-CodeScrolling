@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import './style/display_text_style.dart';
 import 'detail_edit_page.dart';
 
-class ScrollablePage extends StatefulWidget {
-  ScrollablePage(
+class CodesPage extends StatefulWidget {
+  CodesPage(
       {this.codeList,
       this.bpm,
       this.title,
@@ -26,10 +26,10 @@ class ScrollablePage extends StatefulWidget {
   final List<String> lyricsList;
 
   @override
-  _ScrollPageState createState() => _ScrollPageState();
+  _CodesPageState createState() => _CodesPageState();
 }
 
-class _ScrollPageState extends State<ScrollablePage> {
+class _CodesPageState extends State<CodesPage> {
   bool _lyricsDisplayed = false;
   void _handleCheckbox(bool e) {
     setState(() {
