@@ -7,9 +7,9 @@ import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:provider/provider.dart';
 
+import './scrollable_page.dart';
 import './style/display_text_style.dart';
 import '../custom_keyboard.dart';
-import 'detail_page.dart';
 
 class DetailEditPage extends StatefulWidget {
   final int bpm;
@@ -373,7 +373,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
       });
       Navigator.of(context).pop(
         MaterialPageRoute(builder: (context) {
-          return DetailPage();
+          return ScrollablePage();
         }),
       );
     }

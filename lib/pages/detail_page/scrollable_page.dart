@@ -9,8 +9,14 @@ import './style/display_text_style.dart';
 import 'detail_edit_page.dart';
 
 class ScrollablePage extends StatefulWidget {
-  ScrollablePage(this.codeList, this.bpm, this.title, this.docId,
-      this.separationList, this.rhythmList, this.lyricsList);
+  ScrollablePage(
+      {this.codeList,
+      this.bpm,
+      this.title,
+      this.docId,
+      this.separationList,
+      this.rhythmList,
+      this.lyricsList});
   final List<String> codeList;
   final int bpm;
   final String title;

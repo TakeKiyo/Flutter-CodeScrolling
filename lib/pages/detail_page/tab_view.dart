@@ -1,18 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import '../export_song.dart';
 import 'detail_bottom_bar.dart';
-import 'detail_page.dart';
 import 'lyrics_page.dart';
+import 'scrollable_page.dart';
 import 'settings_drawer.dart';
-
-class TabInfo {
-  String label;
-  Widget widget;
-  TabInfo(this.label, this.widget);
-}
 
 class TabView extends StatefulWidget {
   final int bpm;
@@ -34,27 +29,8 @@ class _TabViewState extends State<TabView> {
 
   @override
   Widget build(BuildContext context) {
-    final List<TabInfo> _tabs = [
-      TabInfo(
-          "CODE",
-          DetailPage(
-              bpm: widget.bpm,
-              title: widget.title,
-              artist: widget.artist,
-              songKey: widget.songKey,
-              docId: widget.docId)),
-      TabInfo(
-          "Lyrics",
-          LyricsPage(
-              bpm: widget.bpm,
-              title: widget.title,
-              artist: widget.artist,
-              songKey: widget.songKey,
-              docId: widget.docId)),
-    ];
-
     return DefaultTabController(
-      length: _tabs.length,
+      length: 2,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -69,9 +45,7 @@ class _TabViewState extends State<TabView> {
           bottom: TabBar(
             labelColor: Theme.of(context).textTheme.headline6.color,
             indicatorColor: Theme.of(context).primaryColor,
-            tabs: _tabs.map((TabInfo tab) {
-              return Tab(text: tab.label);
-            }).toList(),
+            tabs: [Tab(text: "Code"), Tab(text: "Lyrics")],
           ),
           actions: <Widget>[
             IconButton(
@@ -90,7 +64,55 @@ class _TabViewState extends State<TabView> {
                 }),
           ],
         ),
-        body: TabBarView(children: _tabs.map((tab) => tab.widget).toList()),
+        body: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('Songs')
+                .doc(widget.docId)
+                .snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: Text("Loading"));
+              }
+              var songDocument = snapshot.data;
+              var codeList = songDocument["codeList"].cast<String>();
+              // separationがあるか判定
+              Map<String, dynamic> dataMap =
+                  songDocument.data() as Map<String, dynamic>;
+              List<String> separation;
+              List<String> rhythmList;
+              List<String> lyricsList;
+              if (dataMap.containsKey('separation')) {
+                separation = songDocument["separation"].cast<String>();
+              } else {
+                separation = [];
+              }
+              if (dataMap.containsKey('rhythmList')) {
+                rhythmList = songDocument["rhythmList"].cast<String>();
+              } else {
+                rhythmList = [];
+              }
+              if (dataMap.containsKey("lyricsList")) {
+                lyricsList = songDocument["lyricsList"].cast<String>();
+              } else {
+                lyricsList = [];
+              }
+              return TabBarView(children: [
+                ScrollablePage(
+                    codeList: codeList,
+                    bpm: widget.bpm,
+                    title: widget.title,
+                    docId: widget.docId,
+                    separationList: separation,
+                    rhythmList: rhythmList,
+                    lyricsList: lyricsList),
+                LyricsPage(
+                    bpm: widget.bpm,
+                    title: widget.title,
+                    artist: widget.artist,
+                    songKey: widget.songKey,
+                    docId: widget.docId),
+              ]);
+            }),
         bottomNavigationBar: detailBottomBar(context),
         endDrawer: settingsDrawer(context, widget.bpm, widget.title,
             widget.artist, widget.songKey, widget.docId),
