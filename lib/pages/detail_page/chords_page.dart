@@ -8,16 +8,16 @@ import 'package:provider/provider.dart';
 import './style/display_text_style.dart';
 import 'detail_edit_page.dart';
 
-class CodesPage extends StatefulWidget {
-  CodesPage(
-      {this.codeList,
+class ChordsPage extends StatefulWidget {
+  ChordsPage(
+      {this.chordList,
       this.bpm,
       this.title,
       this.docId,
       this.separationList,
       this.rhythmList,
       this.lyricsList});
-  final List<String> codeList;
+  final List<String> chordList;
   final int bpm;
   final String title;
   final String docId;
@@ -26,10 +26,10 @@ class CodesPage extends StatefulWidget {
   final List<String> lyricsList;
 
   @override
-  _CodesPageState createState() => _CodesPageState();
+  _ChordsPageState createState() => _ChordsPageState();
 }
 
-class _CodesPageState extends State<CodesPage> {
+class _ChordsPageState extends State<ChordsPage> {
   bool _lyricsDisplayed = false;
   void _handleCheckbox(bool e) {
     setState(() {
@@ -70,8 +70,8 @@ class _CodesPageState extends State<CodesPage> {
         MediaQuery.of(context).size.height;
 
     List<List<String>> codeListState = [];
-    for (int i = 0; i < widget.codeList.length; i++) {
-      List<String> oneLineCode = widget.codeList[i].split(",");
+    for (int i = 0; i < widget.chordList.length; i++) {
+      List<String> oneLineCode = widget.chordList[i].split(",");
       List<String> tmp = [];
       for (int j = 0; j < oneLineCode.length; j++) {
         tmp.add(oneLineCode[j]);
@@ -85,8 +85,8 @@ class _CodesPageState extends State<CodesPage> {
           onPressed: () {
             Provider.of<MetronomeModel>(context, listen: false).tempoCount =
                 widget.bpm;
-            Provider.of<EditingSongModel>(context, listen: false).codeList =
-                widget.codeList;
+            Provider.of<EditingSongModel>(context, listen: false).chordList =
+                widget.chordList;
             Provider.of<EditingSongModel>(context, listen: false)
                 .separationList = widget.separationList;
             Provider.of<EditingSongModel>(context, listen: false).rhythmList =
@@ -288,7 +288,7 @@ class _CodesPageState extends State<CodesPage> {
       return displayedList;
     }
 
-    if (widget.codeList.length == 0) {
+    if (widget.chordList.length == 0) {
       return Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -298,7 +298,7 @@ class _CodesPageState extends State<CodesPage> {
                 Provider.of<MetronomeModel>(context, listen: false).tempoCount =
                     widget.bpm;
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
-                Provider.of<EditingSongModel>(context, listen: false).codeList =
+                Provider.of<EditingSongModel>(context, listen: false).chordList =
                     [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .rhythmList = [];

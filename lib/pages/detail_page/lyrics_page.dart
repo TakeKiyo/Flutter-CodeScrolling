@@ -10,7 +10,7 @@ import 'detail_edit_page.dart';
 
 class LyricsPage extends StatefulWidget {
   LyricsPage(
-      {this.codeList,
+      {this.chordList,
       this.bpm,
       this.title,
       this.artist,
@@ -18,7 +18,7 @@ class LyricsPage extends StatefulWidget {
       this.separationList,
       this.rhythmList,
       this.lyricsList});
-  final List<String> codeList;
+  final List<String> chordList;
   final int bpm;
   final String title;
   final String docId;
@@ -74,7 +74,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                 Provider.of<MetronomeModel>(context, listen: false).tempoCount =
                     widget.bpm;
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
-                Provider.of<EditingSongModel>(context, listen: false).codeList =
+                Provider.of<EditingSongModel>(context, listen: false).chordList =
                     [];
                 Provider.of<EditingSongModel>(context, listen: false)
                     .rhythmList = [];
@@ -101,8 +101,8 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
       ));
     } else {
       List<List<String>> codeListState = [];
-      for (int i = 0; i < widget.codeList.length; i++) {
-        List<String> oneLineCode = widget.codeList[i].split(",");
+      for (int i = 0; i < widget.chordList.length; i++) {
+        List<String> oneLineCode = widget.chordList[i].split(",");
         List<String> tmp = [];
         for (int j = 0; j < oneLineCode.length; j++) {
           tmp.add(oneLineCode[j]);
@@ -116,8 +116,8 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
             onPressed: () {
               Provider.of<MetronomeModel>(context, listen: false).tempoCount =
                   widget.bpm;
-              Provider.of<EditingSongModel>(context, listen: false).codeList =
-                  widget.codeList;
+              Provider.of<EditingSongModel>(context, listen: false).chordList =
+                  widget.chordList;
               Provider.of<EditingSongModel>(context, listen: false)
                   .separationList = widget.separationList;
               Provider.of<EditingSongModel>(context, listen: false).rhythmList =

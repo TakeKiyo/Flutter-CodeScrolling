@@ -4,7 +4,7 @@ import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import '../export_song.dart';
-import 'codes_page.dart';
+import 'chords_page.dart';
 import 'detail_bottom_bar.dart';
 import 'lyrics_page.dart';
 import 'settings_drawer.dart';
@@ -45,7 +45,7 @@ class _TabViewState extends State<TabView> {
           bottom: TabBar(
             labelColor: Theme.of(context).textTheme.headline6.color,
             indicatorColor: Theme.of(context).primaryColor,
-            tabs: [Tab(text: "Code"), Tab(text: "Lyrics")],
+            tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
           ),
           actions: <Widget>[
             IconButton(
@@ -74,7 +74,7 @@ class _TabViewState extends State<TabView> {
                 return Center(child: Text("Loading"));
               }
               var songDocument = snapshot.data;
-              var codeList = songDocument["codeList"].cast<String>();
+              var chordList = songDocument["codeList"].cast<String>();
               // separationがあるか判定
               Map<String, dynamic> dataMap =
                   songDocument.data() as Map<String, dynamic>;
@@ -97,8 +97,8 @@ class _TabViewState extends State<TabView> {
                 lyricsList = [];
               }
               return TabBarView(children: [
-                CodesPage(
-                    codeList: codeList,
+                ChordsPage(
+                    chordList: chordList,
                     bpm: widget.bpm,
                     title: widget.title,
                     docId: widget.docId,
@@ -106,7 +106,7 @@ class _TabViewState extends State<TabView> {
                     rhythmList: rhythmList,
                     lyricsList: lyricsList),
                 LyricsPage(
-                    codeList: codeList,
+                    chordList: chordList,
                     bpm: widget.bpm,
                     title: widget.title,
                     docId: widget.docId,
