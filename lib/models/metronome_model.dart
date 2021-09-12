@@ -188,6 +188,9 @@ class MetronomeModel extends ChangeNotifier {
 
   Future<void> metronomeLoad() async {
     await _metronomePlayer.loadAll(_metronomeSoundsList);
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(scrollController.initialScrollOffset);
+    }
     _isCountInPlaying = true;
     notifyListeners();
     metronomeStart();
