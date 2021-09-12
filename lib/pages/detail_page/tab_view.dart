@@ -14,18 +14,23 @@ class TabInfo {
   TabInfo(this.label, this.widget);
 }
 
-class TabView extends StatelessWidget {
+class TabView extends StatefulWidget {
   final int bpm;
   final String title;
   final String docId;
   final String artist;
   final String songKey;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   TabView(
       {Key key, this.bpm, this.title, this.artist, this.songKey, this.docId})
       : super(key: key);
+
+  @override
+  _TabViewState createState() => _TabViewState();
+}
+
+class _TabViewState extends State<TabView> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +38,19 @@ class TabView extends StatelessWidget {
       TabInfo(
           "CODE",
           DetailPage(
-              bpm: bpm,
-              title: title,
-              artist: artist,
-              songKey: songKey,
-              docId: docId)),
+              bpm: widget.bpm,
+              title: widget.title,
+              artist: widget.artist,
+              songKey: widget.songKey,
+              docId: widget.docId)),
       TabInfo(
           "Lyrics",
           LyricsPage(
-              bpm: bpm,
-              title: title,
-              artist: artist,
-              songKey: songKey,
-              docId: docId)),
+              bpm: widget.bpm,
+              title: widget.title,
+              artist: widget.artist,
+              songKey: widget.songKey,
+              docId: widget.docId)),
     ];
 
     return DefaultTabController(
@@ -60,7 +65,7 @@ class TabView extends StatelessWidget {
                 Navigator.of(context).pop();
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
               }),
-          title: Text(title),
+          title: Text(widget.title),
           bottom: TabBar(
             labelColor: Theme.of(context).textTheme.headline6.color,
             indicatorColor: Theme.of(context).primaryColor,
@@ -74,7 +79,7 @@ class TabView extends StatelessWidget {
                 onPressed: () async {
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
-                      return ExportSong(docId: docId);
+                      return ExportSong(docId: widget.docId);
                     }),
                   );
                 }),
@@ -87,7 +92,8 @@ class TabView extends StatelessWidget {
         ),
         body: TabBarView(children: _tabs.map((tab) => tab.widget).toList()),
         bottomNavigationBar: detailBottomBar(context),
-        endDrawer: settingsDrawer(context, bpm, title, artist, songKey, docId),
+        endDrawer: settingsDrawer(context, widget.bpm, widget.title,
+            widget.artist, widget.songKey, widget.docId),
       ),
     );
   }
