@@ -106,11 +106,13 @@ class _TabViewState extends State<TabView> {
                     rhythmList: rhythmList,
                     lyricsList: lyricsList),
                 LyricsPage(
+                    codeList: codeList,
                     bpm: widget.bpm,
                     title: widget.title,
-                    artist: widget.artist,
-                    songKey: widget.songKey,
-                    docId: widget.docId),
+                    docId: widget.docId,
+                    separationList: separation,
+                    rhythmList: rhythmList,
+                    lyricsList: lyricsList),
               ]);
             }),
         bottomNavigationBar: detailBottomBar(context),
