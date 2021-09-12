@@ -210,7 +210,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                     },
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.only(
-                                          top: 12.0, bottom: 12.0),
+                                          top: 2.0, bottom: 2.0),
                                       textStyle: const TextStyle(fontSize: 16),
                                     ),
                                     child: Column(
@@ -243,7 +243,7 @@ class _CreateSongFormState extends State<CreateSong> {
                                     },
                                     style: TextButton.styleFrom(
                                       padding: const EdgeInsets.only(
-                                          top: 12.0, bottom: 12.0),
+                                          top: 2.0, bottom: 2.0),
                                       textStyle: const TextStyle(fontSize: 16),
                                     ),
                                     child: Column(
@@ -363,7 +363,8 @@ class _CreateSongFormState extends State<CreateSong> {
                                     Theme.of(context).textTheme.caption.color),
                             const Padding(padding: const EdgeInsets.all(5.0)),
                             Text(
-                              "これらの情報はいつでも変更可能です",
+                              "これらの情報は\nいつでも変更可能です",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color:
                                     Theme.of(context).textTheme.caption.color,
