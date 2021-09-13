@@ -140,7 +140,12 @@ class _ChordsPageState extends State<ChordsPage> {
           _globalTextFormList.add(GlobalKey<FormState>());
           Provider.of<MetronomeModel>(context, listen: false)
               .setMaxTickList(chordListState[listIndex].length, listIndex);
+        }
 
+        if (Provider.of<MetronomeModel>(context, listen: false)
+                .textFormOffsetList
+                .length <
+            chordListState.length) {
           ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Provider.of<MetronomeModel>(context, listen: false)
