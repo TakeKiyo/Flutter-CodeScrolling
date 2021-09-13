@@ -8,7 +8,8 @@ import '../../models/metronome_model.dart';
 import '../edit_song_info.dart';
 
 class SettingSongInfo extends StatelessWidget {
-  SettingSongInfo({this.bpm, this.title, this.artist, this.songKey, this.docId});
+  SettingSongInfo(
+      {this.bpm, this.title, this.artist, this.songKey, this.docId});
   final int bpm;
   final String title;
   final String artist;
