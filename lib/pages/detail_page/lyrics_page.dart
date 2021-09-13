@@ -112,34 +112,6 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
 
       List<Widget> displayedWidget() {
         List<Widget> displayedList = [];
-        displayedList.add(TextButton(
-            onPressed: () {
-              Provider.of<MetronomeModel>(context, listen: false).tempoCount =
-                  widget.bpm;
-              Provider.of<EditingSongModel>(context, listen: false).chordList =
-                  widget.chordList;
-              Provider.of<EditingSongModel>(context, listen: false)
-                  .separationList = widget.separationList;
-              Provider.of<EditingSongModel>(context, listen: false).rhythmList =
-                  widget.rhythmList;
-              Provider.of<EditingSongModel>(context, listen: false).lyricsList =
-                  widget.lyricsList;
-              Provider.of<EditingSongModel>(context, listen: false)
-                  .setDisplayType("lyrics");
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (context) {
-                    return DetailEditPage(
-                      bpm: widget.bpm,
-                      title: widget.title,
-                      docId: widget.docId,
-                    );
-                  },
-                ),
-              );
-            },
-            child: const Text("曲を編集する")));
         bool noLyrics = true;
         for (int listIndex = 0;
             listIndex < widget.lyricsList.length;

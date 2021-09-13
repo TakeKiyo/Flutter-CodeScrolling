@@ -176,6 +176,7 @@ class MetronomeModel extends ChangeNotifier {
     _hasScrolledDuringPlaying = false;
     _scrollOffset = 0.0;
     scrollToNowPlaying();
+    print("forceStop");
     notifyListeners();
   }
 

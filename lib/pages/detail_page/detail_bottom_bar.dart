@@ -125,7 +125,6 @@ Material detailBottomBar(BuildContext context) {
               iconSize: bottomIconSIze,
               onPressed: () {
                 Provider.of<MetronomeModel>(context, listen: false).forceStop();
-                print("Pressed: Stop");
               },
             ),
           ),

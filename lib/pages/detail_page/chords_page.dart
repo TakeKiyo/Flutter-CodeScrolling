@@ -30,15 +30,6 @@ class ChordsPage extends StatefulWidget {
 }
 
 class _ChordsPageState extends State<ChordsPage> {
-  bool _lyricsDisplayed = false;
-  void _handleCheckbox(bool e) {
-    setState(() {
-      _lyricsDisplayed = e;
-      Provider.of<MetronomeModel>(context, listen: false).textFormOffsetList =
-          -1;
-    });
-  }
-
   ScrollController _scrollController;
   final List<GlobalKey> _globalTextFormList = [];
 
@@ -81,46 +72,18 @@ class _ChordsPageState extends State<ChordsPage> {
 
     List<Widget> displayedWidget() {
       List<Widget> displayedList = [];
-      displayedList.add(TextButton(
-          onPressed: () {
-            Provider.of<MetronomeModel>(context, listen: false).tempoCount =
-                widget.bpm;
-            Provider.of<EditingSongModel>(context, listen: false).chordList =
-                widget.chordList;
-            Provider.of<EditingSongModel>(context, listen: false)
-                .separationList = widget.separationList;
-            Provider.of<EditingSongModel>(context, listen: false).rhythmList =
-                widget.rhythmList;
-            Provider.of<EditingSongModel>(context, listen: false).lyricsList =
-                widget.lyricsList;
-            if (_lyricsDisplayed) {
-              Provider.of<EditingSongModel>(context, listen: false)
-                  .setDisplayType("both");
-            } else {
-              Provider.of<EditingSongModel>(context, listen: false)
-                  .setDisplayType("chord");
-            }
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                fullscreenDialog: true,
-                builder: (context) {
-                  return DetailEditPage(
-                    bpm: widget.bpm,
-                    title: widget.title,
-                    docId: widget.docId,
-                  );
-                },
-              ),
-            );
-          },
-          child: const Text("コードを編集する")));
 
       displayedList.add(Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Checkbox(
-            value: _lyricsDisplayed,
-            onChanged: _handleCheckbox,
+            value: Provider.of<EditingSongModel>(context).lyricsDisplayed,
+            onChanged: (bool e) {
+              Provider.of<MetronomeModel>(context, listen: false)
+                  .textFormOffsetList = -1;
+              Provider.of<EditingSongModel>(context, listen: false)
+                  .handleCheckbox(e);
+            },
           ),
           const Text("歌詞も表示する")
         ],
@@ -132,7 +95,8 @@ class _ChordsPageState extends State<ChordsPage> {
           if (listIndex == 0) {
             displayedList.add(separationTextStyle(
                 context, " ${widget.separationList[listIndex]} "));
-            if (_lyricsDisplayed) {
+            if (Provider.of<EditingSongModel>(context, listen: false)
+                .lyricsDisplayed) {
               displayedList.add(Text(widget.lyricsList[listIndex]));
             }
             list.add(rhythmTextStyle(widget.rhythmList[listIndex]));
@@ -146,7 +110,8 @@ class _ChordsPageState extends State<ChordsPage> {
               displayedList.add(separationTextStyle(context, ""));
             }
 
-            if (_lyricsDisplayed) {
+            if (Provider.of<EditingSongModel>(context, listen: false)
+                .lyricsDisplayed) {
               displayedList.add(Text(widget.lyricsList[listIndex]));
             }
 

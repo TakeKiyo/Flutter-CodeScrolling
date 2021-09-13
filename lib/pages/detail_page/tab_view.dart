@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import '../export_song.dart';
 import 'chords_page.dart';
 import 'detail_bottom_bar.dart';
+import 'detail_edit_page.dart';
 import 'lyrics_page.dart';
 import 'settings_drawer.dart';
 
@@ -29,6 +31,12 @@ class _TabViewState extends State<TabView> {
 
   @override
   Widget build(BuildContext context) {
+    Future<bool> _willPopCallback() async {
+      Navigator.of(context).pop();
+      Provider.of<MetronomeModel>(context, listen: false).forceStop();
+      return false;
+    }
+
     return DefaultTabController(
       length: 2,
       child: StreamBuilder(
@@ -63,63 +71,109 @@ class _TabViewState extends State<TabView> {
             } else {
               lyricsList = [];
             }
-            return Scaffold(
-              key: _scaffoldKey,
-              appBar: AppBar(
-                centerTitle: true,
-                leading: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Provider.of<MetronomeModel>(context, listen: false)
-                          .forceStop();
-                    }),
-                title: Text(widget.title),
-                bottom: TabBar(
-                  labelColor: Theme.of(context).textTheme.headline6.color,
-                  indicatorColor: Theme.of(context).primaryColor,
-                  tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
-                ),
-                actions: <Widget>[
-                  IconButton(
-                      icon: const Icon(Icons.share),
-                      onPressed: () async {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) {
-                            return ExportSong(docId: widget.docId);
-                          }),
-                        );
-                      }),
-                  IconButton(
-                      icon: const Icon(Icons.settings),
+            return WillPopScope(
+              onWillPop: _willPopCallback,
+              child: Scaffold(
+                key: _scaffoldKey,
+                appBar: AppBar(
+                  leading: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios),
                       onPressed: () {
-                        _scaffoldKey.currentState.openEndDrawer();
+                        Navigator.of(context).pop();
+                        Provider.of<MetronomeModel>(context, listen: false)
+                            .forceStop();
                       }),
-                ],
+                  bottom: TabBar(
+                    labelColor: Theme.of(context).textTheme.headline6.color,
+                    indicatorColor: Theme.of(context).primaryColor,
+                    tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
+                  ),
+                  actions: <Widget>[
+                    IconButton(
+                        icon: const Icon(Icons.format_size), onPressed: () {}),
+                    IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          Provider.of<MetronomeModel>(context, listen: false)
+                              .tempoCount = widget.bpm;
+                          Provider.of<EditingSongModel>(context, listen: false)
+                              .chordList = chordList;
+                          Provider.of<EditingSongModel>(context, listen: false)
+                              .separationList = separationList;
+                          Provider.of<EditingSongModel>(context, listen: false)
+                              .rhythmList = rhythmList;
+                          Provider.of<EditingSongModel>(context, listen: false)
+                              .lyricsList = lyricsList;
+                          if (DefaultTabController.of(context).index == 0) {
+                            if (Provider.of<EditingSongModel>(context,
+                                    listen: false)
+                                .lyricsDisplayed) {
+                              Provider.of<EditingSongModel>(context,
+                                      listen: false)
+                                  .setDisplayType("both");
+                            } else {
+                              Provider.of<EditingSongModel>(context,
+                                      listen: false)
+                                  .setDisplayType("chord");
+                            }
+                          } else {
+                            Provider.of<EditingSongModel>(context,
+                                    listen: false)
+                                .setDisplayType("lyrics");
+                          }
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              fullscreenDialog: true,
+                              builder: (context) {
+                                return DetailEditPage(
+                                  bpm: widget.bpm,
+                                  title: widget.title,
+                                  docId: widget.docId,
+                                );
+                              },
+                            ),
+                          );
+                        }),
+                    IconButton(
+                        icon: const Icon(Icons.share),
+                        onPressed: () async {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return ExportSong(docId: widget.docId);
+                            }),
+                          );
+                        }),
+                    IconButton(
+                        icon: const Icon(Icons.settings),
+                        onPressed: () {
+                          _scaffoldKey.currentState.openEndDrawer();
+                        }),
+                  ],
+                ),
+                body: TabBarView(children: [
+                  ChordsPage(
+                      chordList: chordList,
+                      bpm: widget.bpm,
+                      title: widget.title,
+                      docId: widget.docId,
+                      separationList: separationList,
+                      rhythmList: rhythmList,
+                      lyricsList: lyricsList),
+                  LyricsPage(
+                      chordList: chordList,
+                      bpm: widget.bpm,
+                      title: widget.title,
+                      docId: widget.docId,
+                      separationList: separationList,
+                      rhythmList: rhythmList,
+                      lyricsList: lyricsList),
+                ]),
+                bottomNavigationBar: Visibility(
+                    visible: chordList.length != 0,
+                    child: detailBottomBar(context)),
+                endDrawer: settingsDrawer(context, widget.bpm, widget.title,
+                    widget.artist, widget.songKey, widget.docId),
               ),
-              body: TabBarView(children: [
-                ChordsPage(
-                    chordList: chordList,
-                    bpm: widget.bpm,
-                    title: widget.title,
-                    docId: widget.docId,
-                    separationList: separationList,
-                    rhythmList: rhythmList,
-                    lyricsList: lyricsList),
-                LyricsPage(
-                    chordList: chordList,
-                    bpm: widget.bpm,
-                    title: widget.title,
-                    docId: widget.docId,
-                    separationList: separationList,
-                    rhythmList: rhythmList,
-                    lyricsList: lyricsList),
-              ]),
-              bottomNavigationBar: Visibility(
-                  visible: chordList.length != 0,
-                  child: detailBottomBar(context)),
-              endDrawer: settingsDrawer(context, widget.bpm, widget.title,
-                  widget.artist, widget.songKey, widget.docId),
             );
           }),
     );

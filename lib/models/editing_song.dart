@@ -8,6 +8,13 @@ class EditingSongModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _lyricsDisplayed = false;
+  get lyricsDisplayed => _lyricsDisplayed;
+  void handleCheckbox(bool e) {
+    _lyricsDisplayed = e;
+    notifyListeners();
+  }
+
   List<List<String>> _chordList = [];
   get chordList => _chordList;
 
