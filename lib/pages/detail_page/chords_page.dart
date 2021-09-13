@@ -353,8 +353,12 @@ class _ChordsPageState extends State<ChordsPage> {
             )
           ],
         )),
-        onVerticalDragDown: (_) {
-          if (Provider.of<MetronomeModel>(context, listen: false).isPlaying)
+        onPanDown: (_) {
+          if (Provider.of<MetronomeModel>(context, listen: false).isPlaying &&
+              _scrollController.offset !=
+                  _scrollController.initialScrollOffset &&
+              _scrollController.offset !=
+                  _scrollController.position.maxScrollExtent)
             Provider.of<MetronomeModel>(context, listen: false).unableScroll();
         },
       );

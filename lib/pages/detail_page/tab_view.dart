@@ -9,7 +9,7 @@ import 'chords_page.dart';
 import 'detail_bottom_bar.dart';
 import 'detail_edit_page.dart';
 import 'lyrics_page.dart';
-import 'settings_drawer.dart';
+import 'setting_song_information.dart';
 
 class TabView extends StatefulWidget {
   final int bpm;
@@ -27,14 +27,10 @@ class TabView extends StatefulWidget {
 }
 
 class _TabViewState extends State<TabView> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     Future<bool> _willPopCallback() async {
-      Navigator.of(context).pop();
-      Provider.of<MetronomeModel>(context, listen: false).forceStop();
-      return false;
+      return true;
     }
 
     return DefaultTabController(
@@ -74,7 +70,6 @@ class _TabViewState extends State<TabView> {
             return WillPopScope(
               onWillPop: _willPopCallback,
               child: Scaffold(
-                key: _scaffoldKey,
                 appBar: !Provider.of<MetronomeModel>(context).isPlaying
                     ? AppBar(
                         leading: IconButton(
@@ -156,12 +151,24 @@ class _TabViewState extends State<TabView> {
                           IconButton(
                               icon: const Icon(Icons.settings),
                               onPressed: () {
-                                _scaffoldKey.currentState.openEndDrawer();
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      fullscreenDialog: true,
+                                      builder: (context) {
+                                        return SettingSongInfo(
+                                          bpm: widget.bpm,
+                                          title: widget.title,
+                                          docId: widget.docId,
+                                          songKey: widget.songKey,
+                                          artist: widget.artist,
+                                        );
+                                      }),
+                                );
                               }),
                         ],
                       )
                     : AppBar(
-                        primary: false,
+                        automaticallyImplyLeading: false,
                         flexibleSpace: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -196,8 +203,6 @@ class _TabViewState extends State<TabView> {
                 bottomNavigationBar: Visibility(
                     visible: chordList.length != 0,
                     child: detailBottomBar(context)),
-                endDrawer: settingsDrawer(context, widget.bpm, widget.title,
-                    widget.artist, widget.songKey, widget.docId),
               ),
             );
           }),
