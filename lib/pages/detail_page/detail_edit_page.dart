@@ -53,7 +53,8 @@ class _DetailEditPageState extends State<DetailEditPage> {
               text: Provider.of<EditingSongModel>(context, listen: false)
                   .lyricsList[listIndex]);
 
-      Provider.of<EditingSongModel>(context, listen: false).chordControllerList =
+      Provider.of<EditingSongModel>(context, listen: false)
+              .chordControllerList =
           List.generate(
               Provider.of<EditingSongModel>(context, listen: false)
                   .chordList[listIndex]
@@ -548,132 +549,118 @@ class _DetailEditPageState extends State<DetailEditPage> {
                                         idx,
                                         model.separationList,
                                         model.rhythmList),
+                                  Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 5),
+                                            child: ButtonTheme(
+                                                alignedDropdown: true,
+                                                child: DropdownButton<String>(
+                                                  value:
+                                                      model.selectedSeparation,
+                                                  elevation: 16,
+                                                  onChanged: (String newValue) {
+                                                    model.setSelectedSeparation(
+                                                        newValue);
+                                                  },
+                                                  items: <String>[
+                                                    "Intro",
+                                                    "A",
+                                                    "B",
+                                                    "C",
+                                                    "D",
+                                                    "間奏",
+                                                    "サビ",
+                                                    "Outro",
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                            String>(
+                                                        value: value,
+                                                        child: Text(value));
+                                                  }).toList(),
+                                                ))),
+                                        Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 5),
+                                            child: ButtonTheme(
+                                                alignedDropdown: true,
+                                                child: DropdownButton<String>(
+                                                  value: model.selectedRhythm,
+                                                  elevation: 16,
+                                                  onChanged: (String newValue) {
+                                                    model.setSelectedRhythm(
+                                                        newValue);
+                                                  },
+                                                  items: const <String>[
+                                                    "4/4",
+                                                    "3/4",
+                                                    "2/4",
+                                                    "6/8",
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                            String>(
+                                                        value: value,
+                                                        child: Text(value));
+                                                  }).toList(),
+                                                ))),
+                                        Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 5),
+                                            child: ButtonTheme(
+                                                alignedDropdown: true,
+                                                child: DropdownButton<int>(
+                                                  value:
+                                                      model.selectedBeatCount,
+                                                  elevation: 16,
+                                                  onChanged: (int newValue) {
+                                                    model.setSelectedBeatCount(
+                                                        newValue);
+                                                  },
+                                                  items: const <int>[
+                                                    1,
+                                                    2,
+                                                    3,
+                                                    4,
+                                                    5,
+                                                    6
+                                                  ].map<DropdownMenuItem<int>>(
+                                                      (int value) {
+                                                    return DropdownMenuItem<
+                                                            int>(
+                                                        value: value,
+                                                        child: Text(
+                                                            value.toString() +
+                                                                '小節'));
+                                                  }).toList(),
+                                                ))),
+                                      ]),
                                   Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 24.0),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 5),
-                                                child: ButtonTheme(
-                                                    alignedDropdown: true,
-                                                    child:
-                                                        DropdownButton<String>(
-                                                      value: model
-                                                          .selectedSeparation,
-                                                      elevation: 16,
-                                                      onChanged:
-                                                          (String newValue) {
-                                                        model
-                                                            .setSelectedSeparation(
-                                                                newValue);
-                                                      },
-                                                      items: <String>[
-                                                        "Intro",
-                                                        "A",
-                                                        "B",
-                                                        "C",
-                                                        "D",
-                                                        "間奏",
-                                                        "サビ",
-                                                        "Outro",
-                                                      ].map<
-                                                              DropdownMenuItem<
-                                                                  String>>(
-                                                          (String value) {
-                                                        return DropdownMenuItem<
-                                                                String>(
-                                                            value: value,
-                                                            child: Text(value));
-                                                      }).toList(),
-                                                    ))),
-                                            Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 5),
-                                                child: ButtonTheme(
-                                                    alignedDropdown: true,
-                                                    child:
-                                                        DropdownButton<String>(
-                                                      value:
-                                                          model.selectedRhythm,
-                                                      elevation: 16,
-                                                      onChanged:
-                                                          (String newValue) {
-                                                        model.setSelectedRhythm(
-                                                            newValue);
-                                                      },
-                                                      items: const <String>[
-                                                        "4/4",
-                                                        "3/4",
-                                                        "2/4",
-                                                        "6/8",
-                                                      ].map<
-                                                              DropdownMenuItem<
-                                                                  String>>(
-                                                          (String value) {
-                                                        return DropdownMenuItem<
-                                                                String>(
-                                                            value: value,
-                                                            child: Text(value));
-                                                      }).toList(),
-                                                    ))),
-                                            Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 5),
-                                                child: ButtonTheme(
-                                                    alignedDropdown: true,
-                                                    child: DropdownButton<int>(
-                                                      value: model
-                                                          .selectedBeatCount,
-                                                      elevation: 16,
-                                                      onChanged:
-                                                          (int newValue) {
-                                                        model
-                                                            .setSelectedBeatCount(
-                                                                newValue);
-                                                      },
-                                                      items: const <int>[
-                                                        1,
-                                                        2,
-                                                        3,
-                                                        4,
-                                                        5,
-                                                        6
-                                                      ].map<
-                                                              DropdownMenuItem<
-                                                                  int>>(
-                                                          (int value) {
-                                                        return DropdownMenuItem<
-                                                                int>(
-                                                            value: value,
-                                                            child: Text(value
-                                                                    .toString() +
-                                                                '小節'));
-                                                      }).toList(),
-                                                    ))),
-                                            ElevatedButton(
-                                              child: const Text('追加'),
-                                              onPressed: () async {
-                                                model.addEmptyList();
-                                                _setTextFieldComponents();
-                                                await Future.delayed(Duration(
-                                                    milliseconds: 200));
-                                                model.scrollToEnd();
-                                                WidgetsBinding.instance
-                                                    .addPostFrameCallback((cb) =>
-                                                        _setEachOffsetList());
-                                              },
-                                            )
-                                          ])),
+                                      child: ElevatedButton(
+                                        child: const Text('追加'),
+                                        onPressed: () async {
+                                          model.addEmptyList();
+                                          _setTextFieldComponents();
+                                          await Future.delayed(
+                                              Duration(milliseconds: 200));
+                                          model.scrollToEnd();
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback(
+                                                  (cb) => _setEachOffsetList());
+                                        },
+                                      ))
                                 ],
                               );
                             })),
