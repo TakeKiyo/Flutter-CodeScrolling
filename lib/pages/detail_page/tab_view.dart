@@ -75,81 +75,104 @@ class _TabViewState extends State<TabView> {
               onWillPop: _willPopCallback,
               child: Scaffold(
                 key: _scaffoldKey,
-                appBar: AppBar(
-                  leading: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Provider.of<MetronomeModel>(context, listen: false)
-                            .forceStop();
-                      }),
-                  bottom: TabBar(
-                    labelColor: Theme.of(context).textTheme.headline6.color,
-                    indicatorColor: Theme.of(context).primaryColor,
-                    tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
-                  ),
-                  actions: <Widget>[
-                    IconButton(
-                        icon: const Icon(Icons.format_size), onPressed: () {}),
-                    IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          Provider.of<MetronomeModel>(context, listen: false)
-                              .tempoCount = widget.bpm;
-                          Provider.of<EditingSongModel>(context, listen: false)
-                              .chordList = chordList;
-                          Provider.of<EditingSongModel>(context, listen: false)
-                              .separationList = separationList;
-                          Provider.of<EditingSongModel>(context, listen: false)
-                              .rhythmList = rhythmList;
-                          Provider.of<EditingSongModel>(context, listen: false)
-                              .lyricsList = lyricsList;
-                          if (DefaultTabController.of(context).index == 0) {
-                            if (Provider.of<EditingSongModel>(context,
-                                    listen: false)
-                                .lyricsDisplayed) {
-                              Provider.of<EditingSongModel>(context,
+                appBar: !Provider.of<MetronomeModel>(context).isPlaying
+                    ? AppBar(
+                        leading: IconButton(
+                            icon: const Icon(Icons.arrow_back_ios),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Provider.of<MetronomeModel>(context,
                                       listen: false)
-                                  .setDisplayType("both");
-                            } else {
-                              Provider.of<EditingSongModel>(context,
-                                      listen: false)
-                                  .setDisplayType("chord");
-                            }
-                          } else {
-                            Provider.of<EditingSongModel>(context,
-                                    listen: false)
-                                .setDisplayType("lyrics");
-                          }
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              fullscreenDialog: true,
-                              builder: (context) {
-                                return DetailEditPage(
-                                  bpm: widget.bpm,
-                                  title: widget.title,
-                                  docId: widget.docId,
-                                );
-                              },
-                            ),
-                          );
-                        }),
-                    IconButton(
-                        icon: const Icon(Icons.share),
-                        onPressed: () async {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) {
-                              return ExportSong(docId: widget.docId);
+                                  .forceStop();
                             }),
-                          );
-                        }),
-                    IconButton(
-                        icon: const Icon(Icons.settings),
-                        onPressed: () {
-                          _scaffoldKey.currentState.openEndDrawer();
-                        }),
-                  ],
-                ),
+                        bottom: TabBar(
+                          labelColor:
+                              Theme.of(context).textTheme.headline6.color,
+                          indicatorColor: Theme.of(context).primaryColor,
+                          tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
+                        ),
+                        actions: <Widget>[
+                          IconButton(
+                              icon: const Icon(Icons.format_size),
+                              onPressed: () {}),
+                          IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                Provider.of<MetronomeModel>(context,
+                                        listen: false)
+                                    .tempoCount = widget.bpm;
+                                Provider.of<EditingSongModel>(context,
+                                        listen: false)
+                                    .chordList = chordList;
+                                Provider.of<EditingSongModel>(context,
+                                        listen: false)
+                                    .separationList = separationList;
+                                Provider.of<EditingSongModel>(context,
+                                        listen: false)
+                                    .rhythmList = rhythmList;
+                                Provider.of<EditingSongModel>(context,
+                                        listen: false)
+                                    .lyricsList = lyricsList;
+                                if (DefaultTabController.of(context).index ==
+                                    0) {
+                                  if (Provider.of<EditingSongModel>(context,
+                                          listen: false)
+                                      .lyricsDisplayed) {
+                                    Provider.of<EditingSongModel>(context,
+                                            listen: false)
+                                        .setDisplayType("both");
+                                  } else {
+                                    Provider.of<EditingSongModel>(context,
+                                            listen: false)
+                                        .setDisplayType("chord");
+                                  }
+                                } else {
+                                  Provider.of<EditingSongModel>(context,
+                                          listen: false)
+                                      .setDisplayType("lyrics");
+                                }
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    fullscreenDialog: true,
+                                    builder: (context) {
+                                      return DetailEditPage(
+                                        bpm: widget.bpm,
+                                        title: widget.title,
+                                        docId: widget.docId,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                          IconButton(
+                              icon: const Icon(Icons.share),
+                              onPressed: () async {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) {
+                                    return ExportSong(docId: widget.docId);
+                                  }),
+                                );
+                              }),
+                          IconButton(
+                              icon: const Icon(Icons.settings),
+                              onPressed: () {
+                                _scaffoldKey.currentState.openEndDrawer();
+                              }),
+                        ],
+                      )
+                    : AppBar(
+                        primary: false,
+                        flexibleSpace: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TabBar(
+                                labelColor:
+                                    Theme.of(context).textTheme.headline6.color,
+                                indicatorColor: Theme.of(context).primaryColor,
+                                tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
+                              ),
+                            ]),
+                      ),
                 body: TabBarView(children: [
                   ChordsPage(
                       chordList: chordList,
