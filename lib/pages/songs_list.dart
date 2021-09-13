@@ -237,7 +237,7 @@ class _SongsListState extends State<SongsListForm> {
                     ],
                     child: TextButton(
                       onPressed: () {
-                        print(doc["bpm"]);
+                        // print(doc["bpm"]);
                         Provider.of<MetronomeModel>(context, listen: false)
                             .tempoCount = doc["bpm"];
                         Navigator.of(context).push(

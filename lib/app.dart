@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
         ],
         child: Consumer<ThemeModel>(builder: (context, theme, _) {
           return MaterialApp(
-            title: 'Code Scrolling',
+            debugShowCheckedModeBanner: false,
+            title: 'Bandout',
             theme: theme.currentTheme,
             darkTheme: theme.themeIndex == 0 ? theme.darkTheme : null,
             home: HomePage(),

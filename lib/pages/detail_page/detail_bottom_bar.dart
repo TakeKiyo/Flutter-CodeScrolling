@@ -31,7 +31,7 @@ Material detailBottomBar(BuildContext context) {
                       shape: MaterialStateProperty.all(CircleBorder())),
                   child: child,
                   onPressed: () {
-                    print("Pressed: BPM");
+                    // print("Pressed: BPM");
                     showModalBottomSheet<void>(
                       backgroundColor: Theme.of(context).canvasColor,
                       shape: const RoundedRectangleBorder(
@@ -78,7 +78,7 @@ Material detailBottomBar(BuildContext context) {
                       onPressed: () async {
                         Provider.of<MetronomeModel>(context, listen: false)
                             .switchPlayStatus();
-                        print("Pressed: Play");
+                        // print("Pressed: Play");
                         if (Provider.of<MetronomeModel>(context, listen: false)
                                 .metronomeContainerStatus ==
                             -1) {
@@ -113,7 +113,7 @@ Material detailBottomBar(BuildContext context) {
                             .metronomeClear();
                         Provider.of<MetronomeModel>(context, listen: false)
                             .switchPlayStatus();
-                        print("Pressed: Pause");
+                        // print("Pressed: Pause");
                       },
                     ),
             ),

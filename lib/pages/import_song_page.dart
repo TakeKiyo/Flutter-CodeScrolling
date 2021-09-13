@@ -111,7 +111,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    print('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+    // print('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: const Text('no Permission')),
@@ -155,7 +155,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
         }
       });
     } catch (e) {
-      print(e);
+      // print(e);
       qrScanned = false;
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(

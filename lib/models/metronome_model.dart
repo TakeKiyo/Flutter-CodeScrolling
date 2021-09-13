@@ -111,7 +111,7 @@ class MetronomeModel extends ChangeNotifier {
       } else if (_tempoCount > bpmMax) {
         _tempoCount = bpmMax;
       }
-      print("$_bpmCalculateList");
+      // print("$_bpmCalculateList");
       resetBpmTapCount();
       notifyListeners();
     }
