@@ -75,7 +75,8 @@ class _TabViewState extends State<TabView> {
                         leading: IconButton(
                             icon: const Icon(Icons.arrow_back_ios),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.of(context)
+                                  .popUntil((route) => route.isFirst);
                               Provider.of<MetronomeModel>(context,
                                       listen: false)
                                   .forceStop();
