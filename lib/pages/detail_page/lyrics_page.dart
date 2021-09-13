@@ -13,8 +13,8 @@ class LyricsPage extends StatefulWidget {
       {this.chordList,
       this.bpm,
       this.title,
-      this.artist,
       this.docId,
+      this.artist,
       this.separationList,
       this.rhythmList,
       this.lyricsList});
@@ -112,23 +112,17 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
 
       List<Widget> displayedWidget() {
         List<Widget> displayedList = [];
-        bool noLyrics = true;
-        for (int listIndex = 0;
-            listIndex < widget.lyricsList.length;
-            listIndex++) {
-          if (widget.lyricsList[listIndex] != "") {
-            noLyrics = false;
-          }
-        }
-        if (noLyrics) {
-          displayedList.add(Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                const Text('歌詞は追加されていません。'),
-              ])));
-          return displayedList;
-        }
+        displayedList.add(Padding(
+            padding: EdgeInsets.all(15.0),
+            child: Center(
+              child: Text(
+                "${widget.title} / ${widget.artist}",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            )));
         for (int listIndex = 0;
             listIndex < widget.lyricsList.length;
             listIndex++) {
@@ -165,7 +159,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                     child: SingleChildScrollView(
                         controller: _scrollController,
                         child: ListView(
-                          padding: const EdgeInsets.all(36.0),
+                          padding: const EdgeInsets.all(20.0),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           children: displayedWidget(),

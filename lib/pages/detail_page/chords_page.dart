@@ -14,6 +14,7 @@ class ChordsPage extends StatefulWidget {
       this.bpm,
       this.title,
       this.docId,
+      this.artist,
       this.separationList,
       this.rhythmList,
       this.lyricsList});
@@ -21,6 +22,7 @@ class ChordsPage extends StatefulWidget {
   final int bpm;
   final String title;
   final String docId;
+  final String artist;
   final List<String> separationList;
   final List<String> rhythmList;
   final List<String> lyricsList;
@@ -72,6 +74,18 @@ class _ChordsPageState extends State<ChordsPage> {
 
     List<Widget> displayedWidget() {
       List<Widget> displayedList = [];
+
+      displayedList.add(Padding(
+          padding: EdgeInsets.all(15.0),
+          child: Center(
+            child: Text(
+              "${widget.title} / ${widget.artist}",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          )));
 
       displayedList.add(Row(
         mainAxisAlignment: MainAxisAlignment.center,
