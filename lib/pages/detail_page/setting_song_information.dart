@@ -59,43 +59,44 @@ class SettingSongInfo extends StatelessWidget {
                   );
                 },
               ),
-              insertPadding,
-              const Text(
-                "メトロノームのサウンド",
-                style: TextStyle(
-                  fontSize: titleTextFont,
-                ),
-              ),
-              ButtonTheme(
-                  alignedDropdown: true,
-                  child: Consumer<MetronomeModel>(builder: (_, model, __) {
-                    return Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(9)),
-                        child: Container(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<int>(
-                              dropdownColor: Colors.grey,
-                              isExpanded: true,
-                              value: model.metronomeSoundsList
-                                  .indexOf(model.metronomeSound),
-                              elevation: 16,
-                              onChanged: (int newValue) {
-                                model.metronomeSound = newValue;
-                              },
-                              items: const <int>[0, 1, 2]
-                                  .map<DropdownMenuItem<int>>((int value) {
-                                return DropdownMenuItem<int>(
-                                    value: value,
-                                    child: Text(model.metronomeSoundsList[value]
-                                        .replaceAll("sounds/", "")
-                                        .replaceAll(".mp3", "")));
-                              }).toList(),
-                            ),
-                          ),
-                        ));
-                  })),
+              //TODO
+              // insertPadding,
+              // const Text(
+              //   "メトロノームのサウンド",
+              //   style: TextStyle(
+              //     fontSize: titleTextFont,
+              //   ),
+              // ),
+              // ButtonTheme(
+              //     alignedDropdown: true,
+              //     child: Consumer<MetronomeModel>(builder: (_, model, __) {
+              //       return Container(
+              //           decoration: BoxDecoration(
+              //               color: Colors.grey.withOpacity(0.5),
+              //               borderRadius: BorderRadius.circular(9)),
+              //           child: Container(
+              //             child: DropdownButtonHideUnderline(
+              //               child: DropdownButton<int>(
+              //                 dropdownColor: Colors.grey,
+              //                 isExpanded: true,
+              //                 value: model.metronomeSoundsList
+              //                     .indexOf(model.metronomeSound),
+              //                 elevation: 16,
+              //                 onChanged: (int newValue) {
+              //                   model.metronomeSound = newValue;
+              //                 },
+              //                 items: const <int>[0, 1, 2]
+              //                     .map<DropdownMenuItem<int>>((int value) {
+              //                   return DropdownMenuItem<int>(
+              //                       value: value,
+              //                       child: Text(model.metronomeSoundsList[value]
+              //                           .replaceAll("sounds/", "")
+              //                           .replaceAll(".mp3", "")));
+              //                 }).toList(),
+              //               ),
+              //             ),
+              //           ));
+              //     })),
               insertPadding,
               const Text(
                 "カウントイン",
