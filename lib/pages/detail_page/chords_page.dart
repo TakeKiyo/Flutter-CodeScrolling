@@ -6,7 +6,6 @@ import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
 import './style/display_text_style.dart';
-import 'detail_edit_page.dart';
 
 class ChordsPage extends StatefulWidget {
   ChordsPage(
@@ -86,6 +85,18 @@ class _ChordsPageState extends State<ChordsPage> {
               ),
             ),
           )));
+
+      if (chordListState
+              .every((chordList) => chordList.every((chord) => chord == "")) ||
+          widget.chordList.length == 0) {
+        displayedList.add(Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+              const Text('まだコードは追加されていません。'),
+            ])));
+        return displayedList;
+      }
 
       displayedList.add(Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -266,109 +277,71 @@ class _ChordsPageState extends State<ChordsPage> {
       return displayedList;
     }
 
-    if (widget.chordList.length == 0) {
-      return Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          TextButton(
-              onPressed: () {
-                Provider.of<MetronomeModel>(context, listen: false).tempoCount =
-                    widget.bpm;
-                Provider.of<MetronomeModel>(context, listen: false).forceStop();
-                Provider.of<EditingSongModel>(context, listen: false)
-                    .chordList = [];
-                Provider.of<EditingSongModel>(context, listen: false)
-                    .rhythmList = [];
-                Provider.of<EditingSongModel>(context, listen: false)
-                    .separationList = [];
-                Provider.of<EditingSongModel>(context, listen: false)
-                    .lyricsList = widget.lyricsList;
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    fullscreenDialog: true,
-                    builder: (context) {
-                      return DetailEditPage(
-                        bpm: widget.bpm,
-                        title: widget.title,
-                        docId: widget.docId,
-                      );
-                    },
-                  ),
-                );
-              },
-              child: const Text("コードを編集する")),
-          const Text("まだコードは追加されていません")
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+          child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Scrollbar(
+              controller: _scrollController,
+              isAlwaysShown: false,
+              thickness: 8.0,
+              hoverThickness: 12.0,
+              child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: ListView(
+                    padding: const EdgeInsets.all(20.0),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: displayedWidget(),
+                  ))),
+          Positioned(
+            bottom: 5,
+            child: Selector<MetronomeModel, bool>(
+                selector: (context, model) => model.hasScrolledDuringPlaying,
+                shouldRebuild: (exScrollStatus, notifiedScrollStatus) =>
+                    exScrollStatus != notifiedScrollStatus,
+                builder: (context, hasScrolledDuringPlaying, child) =>
+                    Visibility(
+                      visible: hasScrolledDuringPlaying &&
+                          Provider.of<MetronomeModel>(context, listen: false)
+                              .isPlaying,
+                      child: Container(
+                          width: 200,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.9),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20))),
+                          child: TextButton(
+                            child: const Text("スクロールを\n再開する",
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.white)),
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                    (RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            )))),
+                            onPressed: () {
+                              Provider.of<MetronomeModel>(context,
+                                      listen: false)
+                                  .enableScroll();
+                              Provider.of<MetronomeModel>(context,
+                                      listen: false)
+                                  .scrollToNowPlaying();
+                            },
+                          )),
+                    )),
+          )
         ],
-      ));
-    } else {
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: Container(
-            child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Scrollbar(
-                controller: _scrollController,
-                isAlwaysShown: false,
-                thickness: 8.0,
-                hoverThickness: 12.0,
-                child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: ListView(
-                      padding: const EdgeInsets.all(20.0),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: displayedWidget(),
-                    ))),
-            Positioned(
-              bottom: 5,
-              child: Selector<MetronomeModel, bool>(
-                  selector: (context, model) => model.hasScrolledDuringPlaying,
-                  shouldRebuild: (exScrollStatus, notifiedScrollStatus) =>
-                      exScrollStatus != notifiedScrollStatus,
-                  builder: (context, hasScrolledDuringPlaying, child) =>
-                      Visibility(
-                        visible: hasScrolledDuringPlaying &&
-                            Provider.of<MetronomeModel>(context, listen: false)
-                                .isPlaying,
-                        child: Container(
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.9),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20))),
-                            child: TextButton(
-                              child: const Text("スクロールを\n再開する",
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Colors.white)),
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all(
-                                      (RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              )))),
-                              onPressed: () {
-                                Provider.of<MetronomeModel>(context,
-                                        listen: false)
-                                    .enableScroll();
-                                Provider.of<MetronomeModel>(context,
-                                        listen: false)
-                                    .scrollToNowPlaying();
-                              },
-                            )),
-                      )),
-            )
-          ],
-        )),
-        onPanDown: (_) {
-          if (Provider.of<MetronomeModel>(context, listen: false).isPlaying &&
-              _scrollController.offset !=
-                  _scrollController.initialScrollOffset &&
-              _scrollController.offset !=
-                  _scrollController.position.maxScrollExtent)
-            Provider.of<MetronomeModel>(context, listen: false).unableScroll();
-        },
-      );
-    }
+      )),
+      onPanDown: (_) {
+        if (Provider.of<MetronomeModel>(context, listen: false).isPlaying &&
+            _scrollController.offset != _scrollController.initialScrollOffset &&
+            _scrollController.offset !=
+                _scrollController.position.maxScrollExtent)
+          Provider.of<MetronomeModel>(context, listen: false).unableScroll();
+      },
+    );
   }
 }
