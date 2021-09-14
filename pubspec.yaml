@@ -72,10 +72,6 @@ flutter:
     #   - images/a_dot_ham.jpeg
 
     assets:
-        - assets/sounds/Click.mp3
-        - assets/sounds/Metronome.mp3
-        - assets/sounds/MetronomeUp.mp3
-        - assets/sounds/WoodBlock.mp3
         - assets/icons/easter-bunny.svg
         - assets/icons/turtle.svg
 

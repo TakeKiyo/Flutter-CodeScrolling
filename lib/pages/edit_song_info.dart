@@ -5,6 +5,8 @@ import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
+import 'detail_page/tab_view.dart';
+
 class EditSongInfo extends StatefulWidget {
   final String artist;
   final String title;
@@ -90,6 +92,20 @@ class _EditSongInfoFormState extends State<EditSongInfo> {
       "type": "edit",
     });
     Navigator.of(context).popUntil((route) => route.isFirst);
+    Provider.of<MetronomeModel>(context, listen: false).tempoCount = _bpm;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return TabView(
+            bpm: _bpm,
+            title: _title,
+            artist: _artist,
+            songKey: _key,
+            docId: widget.docId,
+          );
+        },
+      ),
+    );
   }
 
   void _showModalPicker(BuildContext context) {

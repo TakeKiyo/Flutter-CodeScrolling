@@ -5,9 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/editing_song.dart';
+import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
 
-import './chords_page.dart';
 import './style/display_text_style.dart';
 import '../custom_keyboard.dart';
 
@@ -372,11 +372,10 @@ class _DetailEditPageState extends State<DetailEditPage> {
         "uid": uid,
         "type": "edit",
       });
-      Navigator.of(context).pop(
-        MaterialPageRoute(builder: (context) {
-          return ChordsPage();
-        }),
-      );
+      Provider.of<MetronomeModel>(context, listen: false).setMaxTickList(-1);
+      Provider.of<MetronomeModel>(context, listen: false).textFormOffsetList =
+          -1;
+      Navigator.of(context).pop("edited");
     }
 
     void showDisplayTypeDialog() {

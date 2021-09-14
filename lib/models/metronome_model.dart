@@ -123,6 +123,8 @@ class MetronomeModel extends ChangeNotifier {
     _bpmTapText = "TAPで計測開始";
   }
 
+  //TODO
+  /*
   String _metronomeSound = "sounds/Metronome.mp3";
   get metronomeSound => _metronomeSound;
   set metronomeSound(int selectedIndex) {
@@ -136,6 +138,7 @@ class MetronomeModel extends ChangeNotifier {
     "sounds/WoodBlock.mp3",
   ];
   get metronomeSoundsList => _metronomeSoundsList;
+   */
 
   Metronome _metronomeTimer;
   StreamSubscription<DateTime> _metronomeSubscription;
@@ -176,6 +179,7 @@ class MetronomeModel extends ChangeNotifier {
     _hasScrolledDuringPlaying = false;
     _scrollOffset = 0.0;
     scrollToNowPlaying();
+    //print("forceStop");
     notifyListeners();
   }
 
@@ -183,7 +187,7 @@ class MetronomeModel extends ChangeNotifier {
     if (scrollController.hasClients) {
       scrollController.jumpTo(scrollController.initialScrollOffset);
     }
-    await MetronomeAudioPlay.loadAll(_metronomeSoundsList);
+    //await MetronomeAudioPlay.loadAll(_metronomeSoundsList);
     _isCountInPlaying = true;
     notifyListeners();
     metronomeStart();
