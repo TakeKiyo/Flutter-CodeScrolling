@@ -43,7 +43,10 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
     super.initState();
     _isScrolling = false;
     _scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((_) => showToast());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients &&
+          _scrollController.position.maxScrollExtent != 0) showToast();
+    });
   }
 
   @override
@@ -216,54 +219,6 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
               ),
             )),
       ),
-      // Positioned(
-      //     bottom: 30.0,
-      //     left: 10.0,
-      //     child: SvgPicture.asset(
-      //       turtleIcon,
-      //       color: Theme.of(context).iconTheme.color,
-      //       semanticsLabel: 'turtle',
-      //       width: 30.0,
-      //     )),
-      // Positioned(
-      //     bottom: 20.0,
-      //     left: 25.0,
-      //     right: 35.0,
-      //     child: Slider(
-      //       value: _scrollSpeed,
-      //       min: 0.0,
-      //       max: 60.0,
-      //       divisions: 60,
-      //       onChanged: (double value) {
-      //         setState(() {
-      //           _scrollSpeed = value;
-      //         });
-      //         Provider.of<EditingSongModel>(context, listen: false)
-      //             .setScrollSpeed(_scrollSpeed);
-      //       },
-      //       onChangeEnd: (double value) {
-      //         if (_isScrolling == true) {
-      //           _scrollController.jumpTo(_scrollController.offset);
-      //           _scrollController.animateTo(
-      //             _scrollController.position.maxScrollExtent,
-      //             curve: Curves.easeOut,
-      //             duration: Duration(
-      //                 milliseconds:
-      //                     Provider.of<EditingSongModel>(context, listen: false)
-      //                         .scrollSpeed),
-      //           );
-      //         }
-      //       },
-      //     )),
-      // Positioned(
-      //     bottom: 32.0,
-      //     right: 15.0,
-      //     child: SvgPicture.asset(
-      //       rabbitIcon,
-      //       color: Theme.of(context).iconTheme.color,
-      //       semanticsLabel: 'rabbit',
-      //       width: 30.0,
-      //     )),
     ]);
   }
 }
