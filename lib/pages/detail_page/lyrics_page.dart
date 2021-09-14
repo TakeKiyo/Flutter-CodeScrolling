@@ -123,6 +123,23 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
                 ),
               ),
             )));
+        bool noLyrics = true;
+        for (int listIndex = 0;
+            listIndex < widget.lyricsList.length;
+            listIndex++) {
+          if (widget.lyricsList[listIndex] != "") {
+            noLyrics = false;
+          }
+        }
+        if (noLyrics) {
+          displayedList.add(Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                const Text('歌詞は追加されていません。'),
+              ])));
+          return displayedList;
+        }
         for (int listIndex = 0;
             listIndex < widget.lyricsList.length;
             listIndex++) {

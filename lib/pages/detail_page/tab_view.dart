@@ -93,7 +93,7 @@ class _TabViewState extends State<TabView> {
                               onPressed: () {}),
                           IconButton(
                               icon: const Icon(Icons.edit),
-                              onPressed: () {
+                              onPressed: () async {
                                 Provider.of<MetronomeModel>(context,
                                         listen: false)
                                     .tempoCount = widget.bpm;
@@ -127,7 +127,8 @@ class _TabViewState extends State<TabView> {
                                           listen: false)
                                       .setDisplayType("lyrics");
                                 }
-                                Navigator.of(context).push(
+                                String _result =
+                                    await Navigator.of(context).push(
                                   MaterialPageRoute(
                                     fullscreenDialog: true,
                                     builder: (context) {
@@ -139,6 +140,11 @@ class _TabViewState extends State<TabView> {
                                     },
                                   ),
                                 );
+                                if (_result == "edited") {
+                                  setState(() {
+                                    ///完了ボタンを押したらリビルド
+                                  });
+                                }
                               }),
                           IconButton(
                               icon: const Icon(Icons.share),

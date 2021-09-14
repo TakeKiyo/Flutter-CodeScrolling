@@ -146,20 +146,21 @@ class _ChordsPageState extends State<ChordsPage> {
           }
         }
 
-        if (_globalTextFormList.length < chordListState.length) {
-          if (listIndex == 0)
-            Provider.of<MetronomeModel>(context, listen: false)
-                .ticksPerRowList = widget.rhythmList;
+        if (listIndex == 0)
+          Provider.of<MetronomeModel>(context, listen: false).ticksPerRowList =
+              widget.rhythmList;
 
+        if (_globalTextFormList.length < chordListState.length) {
           _globalTextFormList.add(GlobalKey<FormState>());
-          Provider.of<MetronomeModel>(context, listen: false)
-              .setMaxTickList(chordListState[listIndex].length, listIndex);
         }
 
         if (Provider.of<MetronomeModel>(context, listen: false)
                 .textFormOffsetList
                 .length <
             chordListState.length) {
+          Provider.of<MetronomeModel>(context, listen: false)
+              .setMaxTickList(chordListState[listIndex].length, listIndex);
+
           ///列ごとビルドされ、その時にビルドされたTextFormの位置dyをMetronomeModelに渡す
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Provider.of<MetronomeModel>(context, listen: false)
