@@ -45,7 +45,12 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
     _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients &&
-          _scrollController.position.maxScrollExtent != 0) showToast();
+          _scrollController.position.maxScrollExtent != 0) {
+        showToast();
+        setState(() {
+          ///スクロールスライドバーを表示
+        });
+      }
     });
   }
 
