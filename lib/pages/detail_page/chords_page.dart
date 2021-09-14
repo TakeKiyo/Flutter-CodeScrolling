@@ -111,7 +111,10 @@ class _ChordsPageState extends State<ChordsPage> {
                 context, " ${widget.separationList[listIndex]} "));
             if (Provider.of<EditingSongModel>(context, listen: false)
                 .lyricsDisplayed) {
-              displayedList.add(Text(widget.lyricsList[listIndex]));
+              displayedList.add(Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(widget.lyricsList[listIndex]),
+              ));
             }
             list.add(rhythmTextStyle(widget.rhythmList[listIndex]));
             list.add(insertionContainer(context, "double"));
@@ -126,7 +129,10 @@ class _ChordsPageState extends State<ChordsPage> {
 
             if (Provider.of<EditingSongModel>(context, listen: false)
                 .lyricsDisplayed) {
-              displayedList.add(Text(widget.lyricsList[listIndex]));
+              displayedList.add(Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(widget.lyricsList[listIndex]),
+              ));
             }
 
             if (widget.rhythmList[listIndex] !=
