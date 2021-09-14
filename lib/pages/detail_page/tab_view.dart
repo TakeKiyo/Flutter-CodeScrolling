@@ -88,9 +88,10 @@ class _TabViewState extends State<TabView> {
                           tabs: [Tab(text: "Chord"), Tab(text: "Lyrics")],
                         ),
                         actions: <Widget>[
-                          IconButton(
-                              icon: const Icon(Icons.format_size),
-                              onPressed: () {}),
+                          //TODO
+                          // IconButton(
+                          //     icon: const Icon(Icons.format_size),
+                          //     onPressed: () {}),
                           IconButton(
                               icon: const Icon(Icons.edit),
                               onPressed: () async {
