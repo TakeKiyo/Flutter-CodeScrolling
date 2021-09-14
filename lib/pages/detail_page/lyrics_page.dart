@@ -82,17 +82,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
 
     List<Widget> displayedWidget() {
       List<Widget> displayedList = [];
-      displayedList.add(Padding(
-          padding: EdgeInsets.all(15.0),
-          child: Center(
-            child: Text(
-              "${widget.title} / ${widget.artist}",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          )));
+      displayedList.add(songNameStyle(widget.title, widget.artist));
 
       if (widget.lyricsList.every((lyric) => lyric == "") ||
           widget.lyricsList.length == 0) {

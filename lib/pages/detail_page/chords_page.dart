@@ -74,17 +74,7 @@ class _ChordsPageState extends State<ChordsPage> {
     List<Widget> displayedWidget() {
       List<Widget> displayedList = [];
 
-      displayedList.add(Padding(
-          padding: EdgeInsets.all(15.0),
-          child: Center(
-            child: Text(
-              "${widget.title} / ${widget.artist}",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          )));
+      displayedList.add(songNameStyle(widget.title, widget.artist));
 
       if (chordListState
               .every((chordList) => chordList.every((chord) => chord == "")) ||

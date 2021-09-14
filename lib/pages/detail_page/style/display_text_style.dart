@@ -1,5 +1,19 @@
 import 'package:flutter/material.dart';
 
+Widget songNameStyle(String title, String artist) {
+  return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Center(
+        child: Text(
+          "$title / $artist",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ));
+}
+
 Widget separationTextStyle(context, String text) {
   return Align(
     alignment: Alignment.centerLeft,
