@@ -174,7 +174,7 @@ class EditingSongModel extends ChangeNotifier {
         case "chord":
           editScrollController.animateTo(
             (_chordFormOffsetList[listIndex] > deviceHeight / 2)
-                ? _chordFormOffsetList[listIndex] - (deviceHeight / 3)
+                ? _chordFormOffsetList[listIndex] - (deviceHeight / 2)
                 : 0,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeOut,
@@ -183,7 +183,7 @@ class EditingSongModel extends ChangeNotifier {
         case "lyrics":
           editScrollController.animateTo(
             (_lyricFormOffsetList[listIndex] > deviceHeight / 2)
-                ? _lyricFormOffsetList[listIndex] - (deviceHeight / 3)
+                ? _lyricFormOffsetList[listIndex] - (deviceHeight / 2)
                 : 0,
             duration: const Duration(milliseconds: 500),
             curve: Curves.easeOut,
