@@ -76,9 +76,7 @@ class _ChordsPageState extends State<ChordsPage> {
 
       displayedList.add(songNameStyle(widget.title, widget.artist));
 
-      if (chordListState
-              .every((chordList) => chordList.every((chord) => chord == "")) ||
-          widget.chordList.length == 0) {
+      if (widget.chordList.length == 0) {
         displayedList.add(Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
