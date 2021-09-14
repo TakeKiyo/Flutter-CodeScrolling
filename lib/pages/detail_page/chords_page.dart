@@ -92,11 +92,11 @@ class _ChordsPageState extends State<ChordsPage> {
         children: [
           Checkbox(
             value: Provider.of<EditingSongModel>(context).lyricsDisplayed,
-            onChanged: (bool e) {
+            onChanged: (bool isChecked) {
               Provider.of<MetronomeModel>(context, listen: false)
                   .textFormOffsetList = -1;
               Provider.of<EditingSongModel>(context, listen: false)
-                  .handleCheckbox(e);
+                  .handleCheckbox(isChecked);
             },
           ),
           const Text("歌詞も表示する")

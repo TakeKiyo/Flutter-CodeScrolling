@@ -10,8 +10,8 @@ class EditingSongModel extends ChangeNotifier {
 
   bool _lyricsDisplayed = false;
   get lyricsDisplayed => _lyricsDisplayed;
-  void handleCheckbox(bool e) {
-    _lyricsDisplayed = e;
+  void handleCheckbox(bool isChecked) {
+    _lyricsDisplayed = isChecked;
     notifyListeners();
   }
 
