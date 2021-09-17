@@ -15,8 +15,9 @@ class DetailEditPage extends StatefulWidget {
   final int bpm;
   final String title;
   final String docId;
+  final String artist;
 
-  DetailEditPage({this.bpm, this.title, this.docId});
+  DetailEditPage({this.bpm, this.title, this.docId, this.artist});
 
   _DetailEditPageState createState() => _DetailEditPageState();
 }
@@ -544,6 +545,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
+                                  songNameStyle(widget.title, widget.artist),
                                   for (int idx = 0;
                                       idx < model.chordList.length;
                                       idx++)

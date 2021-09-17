@@ -137,6 +137,7 @@ class _TabViewState extends State<TabView> {
                                         bpm: widget.bpm,
                                         title: widget.title,
                                         docId: widget.docId,
+                                        artist: widget.artist,
                                       );
                                     },
                                   ),
