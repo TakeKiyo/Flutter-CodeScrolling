@@ -15,8 +15,9 @@ class DetailEditPage extends StatefulWidget {
   final int bpm;
   final String title;
   final String docId;
+  final String artist;
 
-  DetailEditPage({this.bpm, this.title, this.docId});
+  DetailEditPage({this.bpm, this.title, this.docId, this.artist});
 
   _DetailEditPageState createState() => _DetailEditPageState();
 }
@@ -161,15 +162,20 @@ class _DetailEditPageState extends State<DetailEditPage> {
     void _showCustomKeyboard(context) {
       Scaffold.of(context)
           .showBottomSheet((context, {backgroundColor: Colors.transparent}) {
-        return CustomKeyboard(
-          onTextInput: (myText) {
+            return CustomKeyboard(
+              onTextInput: (myText) {
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .insertText(myText);
+              },
+              onBackspace: Provider.of<EditingSongModel>(context, listen: false)
+                  .backspace,
+            );
+          })
+          .closed
+          .whenComplete(() {
             Provider.of<EditingSongModel>(context, listen: false)
-                .insertText(myText);
-          },
-          onBackspace:
-              Provider.of<EditingSongModel>(context, listen: false).backspace,
-        );
-      });
+                .closeKeyboard();
+          });
     }
 
     Widget getChordListWidgets(context, List<String> strings, int listIndex,
@@ -539,6 +545,7 @@ class _DetailEditPageState extends State<DetailEditPage> {
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
+                                  songNameStyle(widget.title, widget.artist),
                                   for (int idx = 0;
                                       idx < model.chordList.length;
                                       idx++)

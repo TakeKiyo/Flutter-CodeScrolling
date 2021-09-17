@@ -235,15 +235,21 @@ class TextKey extends StatelessWidget {
             child: Container(
               child: Center(
                 child: (label == "")
-                    ? Text(
-                        text,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
+                    ? FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          text,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16),
+                        ),
                       )
-                    : Text(
-                        label,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
+                    : FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          label,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16),
+                        ),
                       ),
               ),
             ),

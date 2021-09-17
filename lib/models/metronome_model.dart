@@ -225,7 +225,8 @@ class MetronomeModel extends ChangeNotifier {
 
   void metronomeRingSound() {
     ///MetronomeAudioPlay.play(_metronomeSound, _soundVolume); <= not for now
-    SystemSound.play(SystemSoundType.click);
+
+    if (_soundVolume != 0) SystemSound.play(SystemSoundType.click);
 
     changeMetronomeCountStatus();
     changeMetronomeContainerColor();
@@ -259,7 +260,7 @@ class MetronomeModel extends ChangeNotifier {
     } else {
       _soundVolume = 1;
     }
-    MetronomeAudioPlay.setVolume(_soundVolume);
+    //MetronomeAudioPlay.setVolume(_soundVolume);
     notifyListeners();
   }
 
