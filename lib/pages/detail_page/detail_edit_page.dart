@@ -161,15 +161,20 @@ class _DetailEditPageState extends State<DetailEditPage> {
     void _showCustomKeyboard(context) {
       Scaffold.of(context)
           .showBottomSheet((context, {backgroundColor: Colors.transparent}) {
-        return CustomKeyboard(
-          onTextInput: (myText) {
+            return CustomKeyboard(
+              onTextInput: (myText) {
+                Provider.of<EditingSongModel>(context, listen: false)
+                    .insertText(myText);
+              },
+              onBackspace: Provider.of<EditingSongModel>(context, listen: false)
+                  .backspace,
+            );
+          })
+          .closed
+          .whenComplete(() {
             Provider.of<EditingSongModel>(context, listen: false)
-                .insertText(myText);
-          },
-          onBackspace:
-              Provider.of<EditingSongModel>(context, listen: false).backspace,
-        );
-      });
+                .closeKeyboard();
+          });
     }
 
     Widget getChordListWidgets(context, List<String> strings, int listIndex,
