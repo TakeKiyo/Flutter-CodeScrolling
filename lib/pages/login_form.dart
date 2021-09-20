@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/models/auth_model.dart';
+import 'package:my_app/pages/reset_password.dart';
 import 'package:my_app/pages/songs_list.dart';
 import 'package:provider/provider.dart';
 
@@ -222,6 +223,20 @@ class _LoginFormState extends State<LoginForm> {
                                 }
                               }),
                         ),
+                        TextButton(
+                            child: Text("パスワードを忘れた方はこちら",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).textTheme.caption.color,
+                                  fontSize: 15.0,
+                                )),
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+                              await Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return ResetPassword();
+                              }));
+                            }),
                       ]),
                     )),
               ])));
