@@ -95,8 +95,70 @@ class _ResetPasswordState extends State<ResetPassword> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  // FocusScope.of(context).unfocus();
-                                  print('aa');
+                                  String _result = await model
+                                      .sendPasswordResetEmail(_email);
+                                  if (_result == 'success') {
+                                    FocusScope.of(context).unfocus();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor: Colors.grey,
+                                        content:
+                                            const Text('パスワード設定用のメールを送信しました'),
+                                        duration: const Duration(seconds: 2),
+                                        action: SnackBarAction(
+                                          label: 'OK',
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                  } else {
+                                    print(_result);
+                                    if (_result == "invalid-email") {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        backgroundColor:
+                                            Theme.of(context).colorScheme.error,
+                                        content: const Text('無効なメールアドレスです。'),
+                                        duration: const Duration(seconds: 2),
+                                        action: SnackBarAction(
+                                          label: 'OK',
+                                          onPressed: () {},
+                                        ),
+                                      ));
+                                    } else if (_result == "user-not-found") {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          content:
+                                              const Text('メールアドレスが登録されていません'),
+                                          duration: const Duration(seconds: 2),
+                                          action: SnackBarAction(
+                                            label: 'OK',
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                          content: const Text("メール送信に失敗しました"),
+                                          duration: const Duration(seconds: 2),
+                                          action: SnackBarAction(
+                                            label: 'OK',
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  }
                                 }
                               }),
                         ),
