@@ -159,7 +159,7 @@ class _LoginFormState extends State<LoginForm> {
                                                 .colorScheme
                                                 .error,
                                             content:
-                                                const Text('間違ったメールアドレスです。'),
+                                                const Text('メールアドレスが登録されていません'),
                                             duration:
                                                 const Duration(seconds: 2),
                                             action: SnackBarAction(
