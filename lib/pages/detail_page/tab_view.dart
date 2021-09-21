@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +45,18 @@ class _TabViewState extends State<TabView> {
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return Center(child: Text("Loading"));
+              return Scaffold(
+                  body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const Padding(padding: EdgeInsets.only(top: 10.0)),
+                    const Text("Loading"),
+                  ],
+                ),
+              ));
             }
             var songDocument = snapshot.data;
             var chordList = songDocument["codeList"].cast<String>();
