@@ -42,7 +42,7 @@ class _TabViewState extends State<TabView> {
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return Scaffold(body: Center(child: Text("Loading")));
+              return Scaffold(body: Center(child: const Text("Loading")));
             }
             var songDocument = snapshot.data;
             var chordList = songDocument["codeList"].cast<String>();
