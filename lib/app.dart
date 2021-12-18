@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/editing_song.dart';
 import 'package:my_app/models/metronome_model.dart';
@@ -32,6 +33,16 @@ class MyApp extends StatelessWidget {
             theme: theme.currentTheme,
             darkTheme: theme.themeIndex == 0 ? theme.darkTheme : null,
             home: HomePage(),
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale("en"),
+              const Locale("ja"),
+            ],
+            locale: Locale('ja', 'JP'),
           );
         }));
   }

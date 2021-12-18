@@ -55,6 +55,16 @@ class AuthModel extends ChangeNotifier {
     }
   }
 
+  Future sendPasswordResetEmail(String email) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return 'success';
+    } catch (error) {
+      return error.code;
+    }
+  }
+
   // ログアウト処理
   Future<void> logout() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
