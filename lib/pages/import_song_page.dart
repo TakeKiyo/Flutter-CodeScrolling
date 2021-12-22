@@ -51,7 +51,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
               content: const Text("曲のインポートを開始します"),
               actions: <Widget>[
                 TextButton(
-                  child: const Text("Cancel"),
+                  child: const Text("キャンセル"),
                   onPressed: () => Navigator.pop(context),
                 ),
                 TextButton(
@@ -100,7 +100,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
               content: const Text("QRコードを認識しました。\n曲のインポートを開始します"),
               actions: <Widget>[
                 TextButton(
-                  child: const Text("Cancel"),
+                  child: const Text("キャンセル"),
                   onPressed: () => {qrScanned = false, Navigator.pop(context)},
                 ),
                 TextButton(
@@ -114,7 +114,8 @@ class _ImportSongFormState extends State<ImportSongForm> {
     // print('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text('no Permission')),
+        SnackBar(
+            content: const Text('カメラ機能が許可されていません。\n 設定>プライバシーから許可することができます。')),
       );
     }
   }
