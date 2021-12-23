@@ -40,7 +40,7 @@ class _ImportSongFormState extends State<ImportSongForm> {
               content: const Text("曲のインポートを開始します"),
               actions: <Widget>[
                 TextButton(
-                  child: const Text("Cancel"),
+                  child: const Text("キャンセル"),
                   onPressed: () => Navigator.pop(context),
                 ),
                 TextButton(
