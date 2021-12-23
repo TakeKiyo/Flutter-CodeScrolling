@@ -78,7 +78,7 @@ class _CreateSongFormState extends State<CreateSong> {
                     "以下の曲を作成します\n 曲名: ${_title.toString()}\n アーティスト: ${_artist.toString()}\n BPM: ${_bpm.toString()}\n キー: ${_key.toString()}"),
                 actions: <Widget>[
                   TextButton(
-                    child: const Text("Cancel"),
+                    child: const Text("キャンセル"),
                     onPressed: () => Navigator.pop(context),
                   ),
                   TextButton(
