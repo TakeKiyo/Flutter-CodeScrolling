@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:my_app/models/auth_model.dart';
 import 'package:my_app/models/metronome_model.dart';
+import 'package:my_app/services/anchored_adaptive_banner.dart';
 import 'package:provider/provider.dart';
 
 import 'create_song.dart';
@@ -278,6 +279,7 @@ class _SongsListState extends State<SongsListForm> {
                 child: SingleChildScrollView(
                     controller: _scrollController,
                     child: Column(children: <Widget>[
+                      AnchoredAdaptiveBanner(),
                       Padding(
                           padding: const EdgeInsets.only(
                               left: 20.0, right: 20.0, top: 10.0),
