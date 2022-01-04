@@ -83,8 +83,8 @@ class _TabViewState extends State<TabView> {
               lyricsList = [];
             }
             return WillPopScope(
-              onWillPop: _willPopCallback,
-              child: Scaffold(
+                onWillPop: _willPopCallback,
+                child: Scaffold(
                   appBar: !Provider.of<MetronomeModel>(context).isPlaying
                       ? AppBar(
                           leading: IconButton(
@@ -230,16 +230,23 @@ class _TabViewState extends State<TabView> {
                         rhythmList: rhythmList,
                         lyricsList: lyricsList),
                   ]),
-                  bottomNavigationBar: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AnchoredAdaptiveBanner(),
-                        Visibility(
-                            visible: chordList.length != 0,
-                            child: detailBottomBar(context)),
-                      ])),
-            );
+                  bottomNavigationBar: Visibility(
+                      visible: chordList.length != 0,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            detailBottomBar(context),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 10,
+                                right: 15,
+                                left: 15,
+                              ),
+                              child: AnchoredAdaptiveBanner(),
+                            )
+                          ])),
+                ));
           }),
     );
   }
