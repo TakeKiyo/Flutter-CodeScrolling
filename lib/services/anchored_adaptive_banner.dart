@@ -69,7 +69,6 @@ class _AnchoredAdaptiveBannerState extends State<AnchoredAdaptiveBanner> {
             _anchoredAdaptiveAd != null &&
             _isLoaded) {
           return Container(
-            color: Colors.green,
             width: _anchoredAdaptiveAd.size.width.toDouble(),
             height: _anchoredAdaptiveAd.size.height.toDouble(),
             child: AdWidget(ad: _anchoredAdaptiveAd),
