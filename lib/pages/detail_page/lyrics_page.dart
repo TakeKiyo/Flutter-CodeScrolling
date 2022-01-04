@@ -159,7 +159,7 @@ class _ScrollLyricsPageState extends State<LyricsPage> {
         visible: _scrollController.hasClients &&
             _scrollController.position.maxScrollExtent != 0,
         child: Positioned(
-            bottom: 30.0,
+            bottom: 15.0,
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Padding(
